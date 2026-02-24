@@ -7,9 +7,12 @@ export default function App() {
   return (
     <AnimatePresence mode="wait">
       <Routes>
-        <Route path="/library/*" element={<LibraryPage />} />
-        <Route path="/simulator/*" element={<SimulatorPage />} />
-        <Route path="*" element={<Navigate to="/library" replace />} />
+        <Route path="/components/*" element={<LibraryPage />} />
+        <Route path="/flows/*" element={<SimulatorPage />} />
+        {/* Legacy redirects */}
+        <Route path="/library/*" element={<Navigate to="/components" replace />} />
+        <Route path="/simulator/*" element={<Navigate to="/flows" replace />} />
+        <Route path="*" element={<Navigate to="/components" replace />} />
       </Routes>
     </AnimatePresence>
   )

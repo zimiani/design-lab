@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Pencil, Check, RotateCcw } from 'lucide-react'
 import type { FlowScreen, Flow } from './flowRegistry'
 import { getBaseFlow } from './flowRegistry'
@@ -118,6 +119,7 @@ export default function AnnotationsPanel({
   screenIndex,
   onFlowEdited,
 }: AnnotationsPanelProps) {
+  const navigate = useNavigate()
   const [specEditing, setSpecEditing] = useState(false)
   const [specDraft, setSpecDraft] = useState(flow.specContent ?? '')
 
@@ -287,12 +289,14 @@ export default function AnnotationsPanel({
           </p>
           <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
             {currentScreen.componentsUsed.map((c) => (
-              <span
+              <button
                 key={c}
-                className="px-[var(--token-spacing-2)] py-[1px] bg-shell-hover rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary"
+                type="button"
+                onClick={() => navigate(`/components?selected=${encodeURIComponent(c)}`)}
+                className="px-[var(--token-spacing-2)] py-[1px] bg-shell-hover rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary hover:bg-shell-active hover:text-shell-text transition-colors cursor-pointer"
               >
                 {c}
-              </span>
+              </button>
             ))}
           </div>
         </div>

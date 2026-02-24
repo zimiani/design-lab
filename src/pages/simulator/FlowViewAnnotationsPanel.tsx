@@ -1,13 +1,21 @@
 import { useState, useCallback } from 'react'
-import { Pencil, Check, Play, Monitor, GitBranch, AlertTriangle } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Pencil, Check, Play, Monitor, GitBranch, AlertTriangle, RotateCcw, Save, History } from 'lucide-react'
 import type { Node } from '@xyflow/react'
 import type { Flow } from './flowRegistry'
+import type { FlowVersion } from './flowVersionStore'
+import SaveVersionDialog from './SaveVersionDialog'
 
 interface FlowViewAnnotationsPanelProps {
   flow: Flow
   selectedNode: Node | null
   onOpenInPrototype: () => void
   onNodeUpdate: (nodeId: string, label: string, description: string) => void
+  onResetToLinear?: () => void
+  versions?: FlowVersion[]
+  suggestedVersion?: string
+  onSaveVersion?: (version: string, description: string) => void
+  onRestoreVersion?: (version: FlowVersion) => void
 }
 
 function EditableField({
@@ -116,7 +124,15 @@ export default function FlowViewAnnotationsPanel({
   selectedNode,
   onOpenInPrototype,
   onNodeUpdate,
+  onResetToLinear,
+  versions = [],
+  suggestedVersion = '1.0',
+  onSaveVersion,
+  onRestoreVersion,
 }: FlowViewAnnotationsPanelProps) {
+  const navigate = useNavigate()
+  const [confirmReset, setConfirmReset] = useState(false)
+  const [showVersionDialog, setShowVersionDialog] = useState(false)
   const handleLabelSave = useCallback(
     (label: string) => {
       if (selectedNode) {
@@ -215,12 +231,14 @@ export default function FlowViewAnnotationsPanel({
               </p>
               <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
                 {linkedScreen.componentsUsed.map((c) => (
-                  <span
+                  <button
                     key={c}
-                    className="px-[var(--token-spacing-2)] py-[1px] bg-shell-hover rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary"
+                    type="button"
+                    onClick={() => navigate(`/components?selected=${encodeURIComponent(c)}`)}
+                    className="px-[var(--token-spacing-2)] py-[1px] bg-shell-hover rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary hover:bg-shell-active hover:text-shell-text transition-colors cursor-pointer"
                   >
                     {c}
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>
@@ -258,6 +276,75 @@ export default function FlowViewAnnotationsPanel({
         </div>
       )}
 
+      {/* Versions / Changelog */}
+      {onSaveVersion && (
+        <div className="p-[var(--token-spacing-md)] border-t border-shell-border">
+          <div className="flex items-center justify-between mb-[var(--token-spacing-2)]">
+            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider flex items-center gap-[4px]">
+              <History size={11} />
+              Versions
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowVersionDialog(true)}
+              className="text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[4px]"
+            >
+              <Save size={11} />
+              Save
+            </button>
+          </div>
+
+          {versions.length === 0 ? (
+            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary">
+              No versions saved yet
+            </p>
+          ) : (
+            <div className="flex flex-col gap-[var(--token-spacing-2)] max-h-[200px] overflow-y-auto">
+              {[...versions].reverse().map((v) => (
+                <div
+                  key={v.id}
+                  className="flex items-start justify-between gap-[var(--token-spacing-2)] py-[var(--token-spacing-1)]"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-[var(--token-spacing-1)]">
+                      <span className="text-[length:var(--token-font-size-caption)] font-mono font-medium text-shell-selected-text">
+                        v{v.version}
+                      </span>
+                      <span className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary">
+                        {new Date(v.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-[length:var(--token-font-size-caption)] text-shell-text-secondary truncate">
+                      {v.description}
+                    </p>
+                  </div>
+                  {onRestoreVersion && (
+                    <button
+                      type="button"
+                      onClick={() => onRestoreVersion(v)}
+                      className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text shrink-0 cursor-pointer"
+                    >
+                      Restore
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {showVersionDialog && onSaveVersion && (
+        <SaveVersionDialog
+          suggestedVersion={suggestedVersion}
+          onClose={() => setShowVersionDialog(false)}
+          onSave={(version, description) => {
+            onSaveVersion(version, description)
+            setShowVersionDialog(false)
+          }}
+        />
+      )}
+
       {/* Flow info */}
       <div className="p-[var(--token-spacing-md)] border-t border-shell-border mt-auto">
         <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
@@ -277,6 +364,48 @@ export default function FlowViewAnnotationsPanel({
             <span className="text-shell-text">{flow.screens.length}</span>
           </div>
         </div>
+
+        {/* Reset to linear — with confirmation */}
+        {onResetToLinear && (
+          <div className="mt-[var(--token-spacing-3)]">
+            {confirmReset ? (
+              <div className="flex flex-col gap-[var(--token-spacing-2)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-error">
+                  Reset the flow graph to a linear layout? This will undo all custom positioning and connections.
+                </p>
+                <div className="flex gap-[var(--token-spacing-2)]">
+                  <button
+                    type="button"
+                    onClick={() => setConfirmReset(false)}
+                    className="flex-1 py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary rounded-[var(--token-radius-sm)] cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onResetToLinear()
+                      setConfirmReset(false)
+                    }}
+                    className="flex-1 py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-error bg-error/10 border border-error/30 rounded-[var(--token-radius-sm)] font-medium hover:bg-error/20 cursor-pointer flex items-center justify-center gap-[4px]"
+                  >
+                    <RotateCcw size={11} />
+                    Reset
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirmReset(true)}
+                className="w-full flex items-center justify-center gap-[4px] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-error rounded-[var(--token-radius-sm)] transition-colors cursor-pointer"
+              >
+                <RotateCcw size={11} />
+                Reset to linear
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </aside>
   )

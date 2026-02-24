@@ -1,5 +1,7 @@
 import type { ComponentType } from 'react'
 import { getFlowOverrides } from './flowStore'
+import { getDynamicFlows, type DynamicFlowDef } from './dynamicFlowStore'
+import { createPlaceholderComponent } from '../../flows/PlaceholderScreen'
 
 export interface FlowScreen {
   id: string
@@ -21,12 +23,55 @@ export interface Flow {
   area: string
   screens: FlowScreen[]
   specContent?: string
+  isDynamic?: boolean
 }
 
 const flows = new Map<string, Flow>()
 
 export function registerFlow(flow: Flow): void {
   flows.set(flow.id, flow)
+}
+
+export function unregisterFlow(id: string): void {
+  flows.delete(id)
+}
+
+/** Register a dynamic flow from the dynamicFlowStore data model. */
+export function registerDynamicFlow(def: DynamicFlowDef): void {
+  const flow: Flow = {
+    id: def.id,
+    name: def.name,
+    description: def.description,
+    area: def.area,
+    specContent: def.specContent,
+    isDynamic: true,
+    screens: def.screens.map((s) => ({
+      id: s.id,
+      title: s.title,
+      description: s.description,
+      componentsUsed: s.componentsUsed,
+      component: createPlaceholderComponent(s.title, s.description),
+    })),
+  }
+  flows.set(flow.id, flow)
+}
+
+/** Hydrate all dynamic flows from localStorage into the registry. */
+export function hydrateDynamicFlows(): void {
+  const dynamicFlows = getDynamicFlows()
+  for (const def of dynamicFlows) {
+    registerDynamicFlow(def)
+  }
+}
+
+/** Re-register a single dynamic flow (after adding/removing screens). */
+export function refreshDynamicFlow(id: string): void {
+  // Re-read from localStorage and re-register
+  const dynamicFlows = getDynamicFlows()
+  const def = dynamicFlows.find((f) => f.id === id)
+  if (def) {
+    registerDynamicFlow(def)
+  }
 }
 
 /** Returns the flow with localStorage overrides merged in. */

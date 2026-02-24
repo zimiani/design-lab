@@ -60,7 +60,7 @@ export default function ComponentPreview({ meta }: ComponentPreviewProps) {
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <p className="text-[length:var(--token-font-size-caption)] font-medium text-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+    <p className="text-[length:var(--token-font-size-caption)] font-medium text-text-secondary uppercase tracking-wider mb-[var(--token-spacing-2)]">
       {children}
     </p>
   )
