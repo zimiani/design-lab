@@ -4,12 +4,13 @@ import Screen2_PixDeposit from './Screen2_PixDeposit'
 import Screen3_PixPayment from './Screen3_PixPayment'
 import Screen4_Processing from './Screen4_Processing'
 import Screen5_Confirmed from './Screen5_Confirmed'
+import specContent from './spec.md?raw'
 
 registerFlow({
   id: 'deposit-pix',
   name: 'Deposit via PIX',
   area: 'Transactions',
-  specPath: '/src/flows/deposit/spec.md',
+  specContent,
   screens: [
     {
       id: 'add-funds',

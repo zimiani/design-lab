@@ -10,9 +10,12 @@ interface FlowPlayerProps {
 }
 
 export default function FlowPlayer({ flowId }: FlowPlayerProps) {
-  const flow = getFlow(flowId)
   const [screenIdx, setScreenIdx] = useState(0)
   const [direction, setDirection] = useState(1)
+  const [editVersion, setEditVersion] = useState(0)
+
+  // Re-read flow from registry + localStorage on each render / edit
+  const flow = getFlow(flowId)
 
   const goNext = useCallback(() => {
     if (flow && screenIdx < flow.screens.length - 1) {
@@ -33,6 +36,11 @@ export default function FlowPlayer({ flowId }: FlowPlayerProps) {
     setScreenIdx(0)
   }, [])
 
+  const handleFlowEdited = useCallback(() => {
+    // Bump version to force re-render with fresh localStorage data
+    setEditVersion((v) => v + 1)
+  }, [])
+
   if (!flow) {
     return (
       <div className="flex-1 flex items-center justify-center text-text-tertiary">
@@ -41,7 +49,9 @@ export default function FlowPlayer({ flowId }: FlowPlayerProps) {
     )
   }
 
-  const current = flow.screens[screenIdx]
+  // Guard against screen index out of range after edits
+  const safeIdx = Math.min(screenIdx, flow.screens.length - 1)
+  const current = flow.screens[safeIdx]
 
   const slideVariants = {
     enter: (d: number) => ({ x: d > 0 ? 300 : -300, opacity: 0 }),
@@ -49,14 +59,17 @@ export default function FlowPlayer({ flowId }: FlowPlayerProps) {
     exit: (d: number) => ({ x: d > 0 ? -300 : 300, opacity: 0 }),
   }
 
+  // Use editVersion in key to suppress unused warning
+  const _version = editVersion
+
   return (
-    <div className="flex-1 flex overflow-hidden">
+    <div className="flex-1 flex overflow-hidden" data-version={_version}>
       {/* Center: Phone + controls */}
       <div className="flex-1 flex flex-col items-center justify-center gap-[var(--token-spacing-lg)] bg-neutral-100 py-[var(--token-spacing-md)]">
         <PhoneFrame>
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
-              key={screenIdx}
+              key={safeIdx}
               custom={direction}
               variants={slideVariants}
               initial="enter"
@@ -75,18 +88,18 @@ export default function FlowPlayer({ flowId }: FlowPlayerProps) {
           <button
             type="button"
             onClick={goBack}
-            disabled={screenIdx === 0}
+            disabled={safeIdx === 0}
             className="w-[40px] h-[40px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-surface-primary border border-border-default hover:bg-surface-secondary transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronLeft size={18} />
           </button>
           <span className="text-[length:var(--token-font-size-body-sm)] text-text-secondary min-w-[80px] text-center">
-            {screenIdx + 1} / {flow.screens.length}
+            {safeIdx + 1} / {flow.screens.length}
           </span>
           <button
             type="button"
             onClick={goNext}
-            disabled={screenIdx === flow.screens.length - 1}
+            disabled={safeIdx === flow.screens.length - 1}
             className="w-[40px] h-[40px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-surface-primary border border-border-default hover:bg-surface-secondary transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ChevronRight size={18} />
@@ -102,7 +115,12 @@ export default function FlowPlayer({ flowId }: FlowPlayerProps) {
       </div>
 
       {/* Right: Annotations */}
-      <AnnotationsPanel flow={flow} currentScreen={current} screenIndex={screenIdx} />
+      <AnnotationsPanel
+        flow={flow}
+        currentScreen={current}
+        screenIndex={safeIdx}
+        onFlowEdited={handleFlowEdited}
+      />
     </div>
   )
 }
