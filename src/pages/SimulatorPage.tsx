@@ -1,16 +1,78 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+
+/* Force flow registrations */
+import '../flows/deposit'
+
+import FlowSidebar from './simulator/FlowSidebar'
+import FlowPlayer from './simulator/FlowPlayer'
+import { getAllFlows } from './simulator/flowRegistry'
 
 export default function SimulatorPage() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [selectedFlowId, setSelectedFlowId] = useState<string | null>(null)
+  const isSimulator = location.pathname.startsWith('/simulator')
+
+  useEffect(() => {
+    if (!selectedFlowId) {
+      const all = getAllFlows()
+      if (all.length > 0) setSelectedFlowId(all[0].id)
+    }
+  }, [selectedFlowId])
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="min-h-screen bg-background"
+      className="h-screen flex flex-col bg-background"
     >
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-text-secondary">App Simulator — Coming soon</p>
+      {/* Top bar */}
+      <header className="h-[48px] flex items-center justify-between px-[var(--token-spacing-md)] border-b border-border-default bg-surface-primary shrink-0">
+        <h1 className="text-[length:var(--token-font-size-heading-sm)] font-semibold text-text-primary">
+          Picnic Design Lab
+        </h1>
+        <nav className="flex gap-[var(--token-spacing-1)]">
+          <Link
+            to="/library"
+            className={`px-[var(--token-spacing-3)] py-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-body-sm)] font-medium transition-colors no-underline ${
+              !isSimulator
+                ? 'bg-brand-50 text-interactive-default'
+                : 'text-text-secondary hover:bg-surface-secondary'
+            }`}
+            onClick={(e) => {
+              e.preventDefault()
+              navigate('/library')
+            }}
+          >
+            Library
+          </Link>
+          <Link
+            to="/simulator"
+            className={`px-[var(--token-spacing-3)] py-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-body-sm)] font-medium transition-colors no-underline ${
+              isSimulator
+                ? 'bg-brand-50 text-interactive-default'
+                : 'text-text-secondary hover:bg-surface-secondary'
+            }`}
+          >
+            Simulator
+          </Link>
+        </nav>
+      </header>
+
+      {/* Main content */}
+      <div className="flex-1 flex overflow-hidden">
+        <FlowSidebar selectedFlowId={selectedFlowId} onSelect={setSelectedFlowId} />
+        {selectedFlowId ? (
+          <FlowPlayer flowId={selectedFlowId} />
+        ) : (
+          <div className="flex-1 flex items-center justify-center text-text-tertiary">
+            Select a flow from the sidebar
+          </div>
+        )}
       </div>
     </motion.div>
   )
