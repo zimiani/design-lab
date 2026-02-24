@@ -1,3 +1,7 @@
 export * from './foundations'
 export * from './inputs'
+export * from './display'
+export * from './feedback'
+export * from './navigation'
+export * from './layout'
 export * from './registry'
