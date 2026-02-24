@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand Colors */
+  --color-brand-50: var(--token-brand-50);
+  --color-brand-100: var(--token-brand-100);
+  --color-brand-200: var(--token-brand-200);
+  --color-brand-300: var(--token-brand-300);
+  --color-brand-400: var(--token-brand-400);
+  --color-brand-500: var(--token-brand-500);
+  --color-brand-600: var(--token-brand-600);
+  --color-brand-700: var(--token-brand-700);
+  --color-brand-800: var(--token-brand-800);
+  --color-brand-900: var(--token-brand-900);
+
+  /* Semantic Colors */
+  --color-success: var(--token-success);
+  --color-success-light: var(--token-success-light);
+  --color-warning: var(--token-warning);
+  --color-warning-light: var(--token-warning-light);
+  --color-error: var(--token-error);
+  --color-error-light: var(--token-error-light);
+  --color-info: var(--token-info);
+  --color-info-light: var(--token-info-light);
+
+  /* Surface Colors */
+  --color-background: var(--token-background);
+  --color-surface-primary: var(--token-surface-primary);
+  --color-surface-secondary: var(--token-surface-secondary);
+  --color-surface-elevated: var(--token-surface-elevated);
+
+  /* Text Colors */
+  --color-text-primary: var(--token-text-primary);
+  --color-text-secondary: var(--token-text-secondary);
+  --color-text-tertiary: var(--token-text-tertiary);
+  --color-text-inverse: var(--token-text-inverse);
+
+  /* Interactive Colors */
+  --color-interactive-default: var(--token-interactive-default);
+  --color-interactive-hover: var(--token-interactive-hover);
+  --color-interactive-pressed: var(--token-interactive-pressed);
+  --color-interactive-disabled: var(--token-interactive-disabled);
+
+  /* Border Colors */
+  --color-border-default: var(--token-border-default);
+  --color-border-strong: var(--token-border-strong);
+
+  /* Neutrals */
+  --color-neutral-50: var(--token-neutral-50);
+  --color-neutral-100: var(--token-neutral-100);
+  --color-neutral-200: var(--token-neutral-200);
+  --color-neutral-300: var(--token-neutral-300);
+  --color-neutral-400: var(--token-neutral-400);
+  --color-neutral-500: var(--token-neutral-500);
+  --color-neutral-600: var(--token-neutral-600);
+  --color-neutral-700: var(--token-neutral-700);
+  --color-neutral-800: var(--token-neutral-800);
+  --color-neutral-900: var(--token-neutral-900);
+
+  /* Spacing */
+  --spacing-0: var(--token-spacing-0);
+  --spacing-0_5: var(--token-spacing-0-5);
+  --spacing-1: var(--token-spacing-1);
+  --spacing-2: var(--token-spacing-2);
+  --spacing-3: var(--token-spacing-3);
+  --spacing-4: var(--token-spacing-4);
+  --spacing-5: var(--token-spacing-5);
+  --spacing-6: var(--token-spacing-6);
+  --spacing-8: var(--token-spacing-8);
+  --spacing-10: var(--token-spacing-10);
+  --spacing-12: var(--token-spacing-12);
+  --spacing-16: var(--token-spacing-16);
+  --spacing-20: var(--token-spacing-20);
+
+  /* Border Radius */
+  --radius-none: var(--token-radius-none);
+  --radius-sm: var(--token-radius-sm);
+  --radius-md: var(--token-radius-md);
+  --radius-lg: var(--token-radius-lg);
+  --radius-xl: var(--token-radius-xl);
+  --radius-full: var(--token-radius-full);
+
+  /* Shadows */
+  --shadow-sm: var(--token-shadow-sm);
+  --shadow-md: var(--token-shadow-md);
+  --shadow-lg: var(--token-shadow-lg);
+
+  /* Font Family */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--token-background);
+    color: var(--token-text-primary);
+    line-height: 1.5;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}

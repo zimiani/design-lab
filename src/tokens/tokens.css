@@ -1,0 +1,27 @@
+/* Design Tokens — CSS Custom Properties */
+/* Populated by Milestone 2 */
+
+:root {
+  /* Placeholder tokens for initial build */
+  --token-brand-500: #00C853;
+  --token-background: #F8F9FA;
+  --token-surface-primary: #FFFFFF;
+  --token-surface-secondary: #F1F3F5;
+  --token-surface-elevated: #FFFFFF;
+  --token-text-primary: #1A1A2E;
+  --token-text-secondary: #6B7280;
+  --token-text-tertiary: #9CA3AF;
+  --token-text-inverse: #FFFFFF;
+  --token-border-default: #E5E7EB;
+  --token-border-strong: #D1D5DB;
+  --token-neutral-50: #F9FAFB;
+  --token-neutral-100: #F3F4F6;
+  --token-neutral-200: #E5E7EB;
+  --token-neutral-300: #D1D5DB;
+  --token-neutral-400: #9CA3AF;
+  --token-neutral-500: #6B7280;
+  --token-neutral-600: #4B5563;
+  --token-neutral-700: #374151;
+  --token-neutral-800: #1F2937;
+  --token-neutral-900: #111827;
+}
