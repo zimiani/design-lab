@@ -1,4 +1,4 @@
-import { Monitor, GitBranch, AlertTriangle, Undo2, Redo2 } from 'lucide-react'
+import { RiComputerLine, RiGitBranchLine, RiErrorWarningLine, RiExternalLinkLine, RiCursorLine, RiStackLine, RiFlashlightLine, RiArrowGoBackLine, RiArrowGoForwardLine } from '@remixicon/react'
 import type { FlowNodeType } from './flowGraph.types'
 
 interface FloatingCanvasToolbarProps {
@@ -55,23 +55,35 @@ export default function FloatingCanvasToolbar({
     <div className="absolute bottom-[16px] left-1/2 -translate-x-1/2 z-10 flex items-center gap-[2px] px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] bg-shell-surface border border-shell-border rounded-[var(--token-radius-full)] shadow-lg">
       {/* Node creation tools */}
       <ToolbarButton onClick={() => onAddNode('screen')} title="Add Screen (S)">
-        <Monitor size={14} />
+        <RiComputerLine size={14} />
       </ToolbarButton>
       <ToolbarButton onClick={() => onAddNode('decision')} title="Add Decision (D)">
-        <GitBranch size={14} />
+        <RiGitBranchLine size={14} />
       </ToolbarButton>
       <ToolbarButton onClick={() => onAddNode('error')} title="Add Error State (E)">
-        <AlertTriangle size={14} />
+        <RiErrorWarningLine size={14} />
+      </ToolbarButton>
+      <ToolbarButton onClick={() => onAddNode('flow-reference')} title="Add Flow Reference (F)">
+        <RiExternalLinkLine size={14} />
+      </ToolbarButton>
+      <ToolbarButton onClick={() => onAddNode('action')} title="Add Action (A)">
+        <RiCursorLine size={14} />
+      </ToolbarButton>
+      <ToolbarButton onClick={() => onAddNode('overlay')} title="Add Overlay (O)">
+        <RiStackLine size={14} />
+      </ToolbarButton>
+      <ToolbarButton onClick={() => onAddNode('state')} title="Add State (T)">
+        <RiFlashlightLine size={14} />
       </ToolbarButton>
 
       <Divider />
 
       {/* Undo / Redo */}
       <ToolbarButton onClick={() => onUndo?.()} title="Undo (Ctrl+Z)" disabled={!canUndo}>
-        <Undo2 size={14} />
+        <RiArrowGoBackLine size={14} />
       </ToolbarButton>
       <ToolbarButton onClick={() => onRedo?.()} title="Redo (Ctrl+Y)" disabled={!canRedo}>
-        <Redo2 size={14} />
+        <RiArrowGoForwardLine size={14} />
       </ToolbarButton>
     </div>
   )

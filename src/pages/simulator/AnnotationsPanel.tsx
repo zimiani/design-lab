@@ -1,7 +1,9 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Pencil, Check, RotateCcw } from 'lucide-react'
+import { RiPencilLine, RiCheckLine, RiRefreshLine, RiHistoryLine, RiSaveLine } from '@remixicon/react'
 import type { FlowScreen, Flow } from './flowRegistry'
+import type { FlowVersion, VersionTag } from './flowVersionStore'
+import SaveVersionDialog from './SaveVersionDialog'
 import { getBaseFlow } from './flowRegistry'
 import {
   setFlowName,
@@ -10,12 +12,17 @@ import {
   setScreenOverride,
   resetFlowOverrides,
 } from './flowStore'
+import { syncScreenTitleToNode } from './flowGraphSync'
 
 interface AnnotationsPanelProps {
   flow: Flow
   currentScreen: FlowScreen
   screenIndex: number
   onFlowEdited: () => void
+  versions?: FlowVersion[]
+  suggestedVersion?: string
+  onSaveVersion?: (version: string, description: string, tag: VersionTag, screenIds?: string[]) => void
+  onViewVersion?: (version: FlowVersion) => void
 }
 
 function EditableField({
@@ -87,7 +94,7 @@ function EditableField({
             onClick={handleSave}
             className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px]"
           >
-            <Check size={12} />
+            <RiCheckLine size={12} />
             Save
           </button>
         </div>
@@ -105,7 +112,7 @@ function EditableField({
       className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-1)] px-[var(--token-spacing-1)] py-[2px] -mx-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
     >
       <span className="flex-1">{value || '(empty)'}</span>
-      <Pencil
+      <RiPencilLine
         size={12}
         className="shrink-0 mt-[3px] text-shell-text-tertiary"
       />
@@ -118,8 +125,13 @@ export default function AnnotationsPanel({
   currentScreen,
   screenIndex,
   onFlowEdited,
+  versions = [],
+  suggestedVersion = '1.0',
+  onSaveVersion,
+  onViewVersion,
 }: AnnotationsPanelProps) {
   const navigate = useNavigate()
+  const [showVersionDialog, setShowVersionDialog] = useState(false)
   const [specEditing, setSpecEditing] = useState(false)
   const [specDraft, setSpecDraft] = useState(flow.specContent ?? '')
 
@@ -176,6 +188,7 @@ export default function AnnotationsPanel({
   const handleScreenTitleSave = useCallback(
     (title: string) => {
       setScreenOverride(flow.id, currentScreen.id, 'title', title)
+      syncScreenTitleToNode(flow.id, currentScreen.id, title)
       onFlowEdited()
     },
     [flow.id, currentScreen.id, onFlowEdited],
@@ -220,7 +233,7 @@ export default function AnnotationsPanel({
               title="Reset all edits"
               className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-error font-medium cursor-pointer flex items-center gap-[2px]"
             >
-              <RotateCcw size={11} />
+              <RiRefreshLine size={11} />
               Reset
             </button>
           )}
@@ -308,8 +321,8 @@ export default function AnnotationsPanel({
           </p>
           <div className="flex flex-col gap-[var(--token-spacing-1)]">
             <div className="flex justify-between text-[length:var(--token-font-size-body-sm)]">
-              <span className="text-shell-text-secondary">Area</span>
-              <span className="text-shell-text">{flow.area}</span>
+              <span className="text-shell-text-secondary">Domain</span>
+              <span className="text-shell-text">{flow.domain}</span>
             </div>
             <div className="flex justify-between text-[length:var(--token-font-size-body-sm)]">
               <span className="text-shell-text-secondary">Total screens</span>
@@ -339,7 +352,7 @@ export default function AnnotationsPanel({
                 }}
                 className="text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px]"
               >
-                <Pencil size={11} />
+                <RiPencilLine size={11} />
                 Edit
               </button>
             )}
@@ -367,7 +380,7 @@ export default function AnnotationsPanel({
                   onClick={handleSpecSave}
                   className="px-[var(--token-spacing-3)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-shell-bg bg-shell-selected-text hover:bg-[#6EE7A0] rounded-[var(--token-radius-sm)] font-medium cursor-pointer flex items-center gap-[4px]"
                 >
-                  <Check size={12} />
+                  <RiCheckLine size={12} />
                   Save
                 </button>
               </div>
@@ -389,7 +402,86 @@ export default function AnnotationsPanel({
             </button>
           )}
         </div>
+
+        {/* Versions */}
+        {onSaveVersion && (
+          <div className="mt-[var(--token-spacing-lg)] pt-[var(--token-spacing-lg)] border-t border-shell-border">
+            <div className="flex items-center justify-between mb-[var(--token-spacing-2)]">
+              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider flex items-center gap-[4px]">
+                <RiHistoryLine size={11} />
+                Versions
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowVersionDialog(true)}
+                className="text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[4px]"
+              >
+                <RiSaveLine size={11} />
+                Save
+              </button>
+            </div>
+
+            {versions.length === 0 ? (
+              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary">
+                No versions saved yet
+              </p>
+            ) : (
+              <div className="flex flex-col gap-[var(--token-spacing-2)] max-h-[200px] overflow-y-auto">
+                {[...versions].reverse().map((v) => {
+                  const tagColor = v.tag === 'production' ? 'bg-[#60A5FA]'
+                    : v.tag === 'exploration' ? 'bg-[#FBBF24]'
+                    : 'bg-[#4ADE80]'
+                  return (
+                    <div
+                      key={v.id}
+                      className="flex items-start justify-between gap-[var(--token-spacing-2)] py-[var(--token-spacing-1)]"
+                    >
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-[var(--token-spacing-1)]">
+                          <div className={`w-[6px] h-[6px] rounded-full shrink-0 ${tagColor}`} />
+                          <span className="text-[length:var(--token-font-size-caption)] font-mono font-medium text-shell-selected-text">
+                            v{v.version}
+                          </span>
+                          <span className="text-[length:10px] text-shell-text-tertiary">
+                            {v.tag}
+                          </span>
+                          <span className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary">
+                            {new Date(v.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-[length:var(--token-font-size-caption)] text-shell-text-secondary truncate pl-[10px]">
+                          {v.description}
+                        </p>
+                      </div>
+                      {onViewVersion && (
+                        <button
+                          type="button"
+                          onClick={() => onViewVersion(v)}
+                          className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text shrink-0 cursor-pointer"
+                        >
+                          View
+                        </button>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
+
+      {showVersionDialog && onSaveVersion && (
+        <SaveVersionDialog
+          suggestedVersion={suggestedVersion}
+          currentScreenIds={flow.screens.map(s => s.id)}
+          onClose={() => setShowVersionDialog(false)}
+          onSave={(version, description, tag, screenIds) => {
+            onSaveVersion(version, description, tag, screenIds)
+            setShowVersionDialog(false)
+          }}
+        />
+      )}
     </aside>
   )
 }

@@ -1,0 +1,214 @@
+import { useState, useMemo, useEffect, useRef } from 'react'
+import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
+import Header from '../../library/navigation/Header'
+import BaseLayout from '../../library/layout/BaseLayout'
+import StickyFooter from '../../library/layout/StickyFooter'
+import Stack from '../../library/layout/Stack'
+import BottomSheet from '../../library/layout/BottomSheet'
+import Button from '../../library/inputs/Button'
+import CurrencyInput from '../../library/inputs/CurrencyInput'
+import Divider from '../../library/foundations/Divider'
+import ListItem from '../../library/display/ListItem'
+import Avatar from '../../library/display/Avatar'
+import DataList from '../../library/display/DataList'
+import Banner from '../../library/display/Banner'
+import { DataListSkeleton, BannerSkeleton } from '../../library/feedback/Skeleton'
+
+const MOCK_RATE = 5.4583
+const USD_ICON = 'https://flagcdn.com/w80/us.png'
+const BRL_ICON = 'https://flagcdn.com/w80/br.png'
+
+const PAYMENT_METHODS = [
+  {
+    id: 'brl',
+    title: 'Real Brasileiro',
+    subtitle: 'Pague de sua conta bancária com Pix',
+    icon: BRL_ICON,
+  },
+  {
+    id: 'usd',
+    title: 'Dólar Americano',
+    subtitle: 'Pague de sua conta americana com transferência ACH',
+    icon: USD_ICON,
+  },
+  {
+    id: 'eur',
+    title: 'Euro',
+    subtitle: 'Pague de sua conta internacional com SEPA',
+    icon: 'https://flagcdn.com/w80/eu.png',
+  },
+  {
+    id: 'crypto',
+    title: 'Criptomoedas',
+    subtitle: 'Transferência via carteira ou corretora',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/128px-Bitcoin.svg.png',
+  },
+]
+
+function rawDigitsFromAmount(amount: number): string {
+  if (amount <= 0) return ''
+  return Math.round(amount * 100).toString()
+}
+
+type CalcState = 'idle' | 'loading' | 'ready'
+
+export default function Screen1_AmountEntry({ onNext, onBack }: FlowScreenProps) {
+  const [usdValue, setUsdValue] = useState('')
+  const [brlValue, setBrlValue] = useState('')
+  const [lastEdited, setLastEdited] = useState<'usd' | 'brl'>('usd')
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const [selectedMethod, setSelectedMethod] = useState('brl')
+  const [calcState, setCalcState] = useState<CalcState>('idle')
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const usdAmount = parseInt(usdValue || '0', 10) / 100
+  const brlAmount = parseInt(brlValue || '0', 10) / 100
+
+  const displayUsd = lastEdited === 'usd' ? usdValue : rawDigitsFromAmount(brlAmount / MOCK_RATE)
+  const displayBrl = lastEdited === 'brl' ? brlValue : rawDigitsFromAmount(usdAmount * MOCK_RATE)
+
+  const effectiveUsd = parseInt(displayUsd || '0', 10) / 100
+  const isValid = effectiveUsd >= 1
+
+  // Simulate calculation when amount becomes valid
+  useEffect(() => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+
+    if (isValid) {
+      setCalcState('loading')
+      timerRef.current = setTimeout(() => setCalcState('ready'), 1200)
+    } else {
+      setCalcState('idle')
+    }
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [isValid, usdValue, brlValue])
+
+  const handleUsdChange = (value: string) => {
+    setUsdValue(value)
+    setLastEdited('usd')
+  }
+
+  const handleBrlChange = (value: string) => {
+    setBrlValue(value)
+    setLastEdited('brl')
+  }
+
+  const handleSelectMethod = (id: string) => {
+    setSelectedMethod(id)
+    setSheetOpen(false)
+  }
+
+  const currentMethod = useMemo(
+    () => PAYMENT_METHODS.find((m) => m.id === selectedMethod) ?? PAYMENT_METHODS[0],
+    [selectedMethod],
+  )
+
+  return (
+    <BaseLayout>
+      <Header title="" onClose={onBack} />
+
+      <Stack gap="none">
+        <CurrencyInput
+          label="Receba"
+          value={displayUsd}
+          onChange={handleUsdChange}
+          tokenIcon={USD_ICON}
+        />
+
+        <Divider />
+
+        <CurrencyInput
+          label="Pague"
+          value={displayBrl}
+          onChange={handleBrlChange}
+          tokenIcon={BRL_ICON}
+        />
+
+        <ListItem
+          title="Você paga em"
+          subtitle={currentMethod.title}
+          inverted
+          right={
+            <Button variant="secondary" size="sm" onPress={() => setSheetOpen(true)}>
+              Mudar
+            </Button>
+          }
+          trailing={null}
+        />
+      </Stack>
+
+      {/* Transaction details — loading skeleton (mirrors DataList + Banner layout) */}
+      {calcState === 'loading' && (
+        <Stack gap="none">
+          <DataListSkeleton rows={5} />
+          <BannerSkeleton />
+        </Stack>
+      )}
+
+      {/* Transaction details — ready */}
+      {calcState === 'ready' && (
+        <Stack gap="none">
+          <DataList
+            data={[
+              { label: 'Meio de pagamento', value: 'Transferência Pix' },
+              { label: 'Estimativa de entrega', value: '5 minutos' },
+              {
+                label: 'Nossa taxa',
+                value: (
+                  <span className="text-[var(--color-feedback-success)] font-medium">Grátis</span>
+                ),
+              },
+              {
+                label: 'Outros custos',
+                info: () => {},
+                value: (
+                  <span className="flex items-center gap-[var(--token-spacing-1)]">
+                    <span className="text-content-tertiary line-through">R$ 28,32</span>
+                    <span className="text-[var(--color-feedback-success)] font-medium">Grátis</span>
+                  </span>
+                ),
+              },
+              {
+                label: 'VET',
+                info: () => {},
+                value: 'US$ 1 ⇄ R$ 5,4434',
+              },
+            ]}
+          />
+
+          <Banner
+            variant="success"
+            title="Benefício aplicado: Converta sem taxas"
+          />
+        </Stack>
+      )}
+
+      <StickyFooter>
+        <Button fullWidth disabled={!isValid || calcState !== 'ready'} onPress={onNext}>
+          Continuar
+        </Button>
+      </StickyFooter>
+
+      <BottomSheet
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        title="Como quer pagar?"
+      >
+        <Stack gap="none">
+          {PAYMENT_METHODS.map((method) => (
+            <ListItem
+              key={method.id}
+              title={method.title}
+              subtitle={method.subtitle}
+              left={<Avatar src={method.icon} size="md" />}
+              onPress={() => handleSelectMethod(method.id)}
+            />
+          ))}
+        </Stack>
+      </BottomSheet>
+    </BaseLayout>
+  )
+}

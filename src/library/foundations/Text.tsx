@@ -55,7 +55,7 @@ export default function Text({
     align === 'center' ? 'text-center' : align === 'right' ? 'text-right' : 'text-left'
 
   return (
-    <Tag className={`${variantStyles[variant]} ${alignClass} ${className}`} style={colorStyle}>
+    <Tag data-component="Text" className={`${variantStyles[variant]} ${alignClass} ${className}`} style={colorStyle}>
       {children}
     </Tag>
   )
@@ -63,8 +63,8 @@ export default function Text({
 
 registerComponent({
   name: 'Text',
-  category: 'foundations',
-  description: 'Wraps all text content, enforcing the type scale.',
+  category: 'foundations-removed',
+  description: 'Typography primitive enforcing the type scale. Use for all text content — headings, body, captions.',
   component: Text,
   variants: [
     'display',

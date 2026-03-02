@@ -1,10 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Plus } from 'lucide-react'
+import { RiAddLine } from '@remixicon/react'
 
 /* Force page registrations */
 import '../flows/deposit'
+import '../flows/deposit-v2'
 import '../flows/perks'
+import '../flows/withdrawal'
+import '../flows/invest-earn'
 
 import AppHeader from '../components/AppHeader'
 import PageGalleryCanvas from './gallery/PageGalleryCanvas'
@@ -56,7 +59,7 @@ export default function PageGalleryPage() {
             onClick={() => setShowNewDialog(true)}
             className="flex items-center gap-[var(--token-spacing-1)] px-[var(--token-spacing-3)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] font-medium text-shell-bg bg-shell-selected-text rounded-[var(--token-radius-sm)] cursor-pointer hover:bg-[#6EE7A0] transition-colors"
           >
-            <Plus size={14} />
+            <RiAddLine size={14} />
             New Page
           </button>
         }

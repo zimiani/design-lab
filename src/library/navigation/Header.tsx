@@ -1,45 +1,64 @@
 import type { ReactNode } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { RiArrowLeftLine, RiCloseLine } from '@remixicon/react'
+import IconButton from '../inputs/IconButton'
 import { registerComponent } from '../registry'
+import { cn } from '../../lib/cn'
+import { useLayout } from '../layout/LayoutProvider'
 
 export interface HeaderProps {
-  title?: string
+  title: string
+  description?: string
   onBack?: () => void
+  onClose?: () => void
   rightAction?: ReactNode
   className?: string
 }
 
 export default function Header({
   title,
+  description,
   onBack,
+  onClose,
   rightAction,
   className = '',
 }: HeaderProps) {
+  const { isDesktop } = useLayout()
+  const showLeftButton = !isDesktop && (onBack || onClose)
+
   return (
-    <div
-      className={`
-        flex flex-col items-start justify-start gap-2 h-fit
-        pt-[var(--safe-area-top,0px)]
-        px-[var(--token-spacing-md)]
-        ${className}
-      `}
-    >
-      <div className="w-[40px] shrink-0 bg-neutral-100 rounded-full">
-        {onBack && (
-          <button
-            type="button"
-            onClick={onBack}
-            className="w-[40px] h-[40px] flex items-center justify-center rounded-[var(--token-radius-full)] hover:bg-surface-secondary transition-colors cursor-pointer"
-          >
-            <ArrowLeft size={22} className="text-content-primary" />
-          </button>
+    <div data-component="Header" className={cn('w-full flex flex-col gap-[var(--token-spacing-2)]', className)}>
+      {/* Top actions row */}
+      <div className="flex items-center justify-between w-full">
+        <div className="flex flex-1 items-center">
+          {showLeftButton && (
+            <IconButton
+              variant="base"
+              icon={onBack
+                ? <RiArrowLeftLine size={24} className="text-content-primary" />
+                : <RiCloseLine size={24} className="text-content-primary" />
+              }
+              onPress={onBack || onClose}
+            />
+          )}
+        </div>
+
+        {rightAction && (
+          <div className="flex items-center gap-[var(--token-spacing-3)]">
+            {rightAction}
+          </div>
         )}
       </div>
-      <h1 className="flex-1 text-center text-[length:var(--token-font-size-heading-lg)] leading-[var(--token-line-height-heading-lg)] font-semibold tracking-[-1px] text-content-primary truncate">
-        {title}
-      </h1>
-      <div className="w-[40px] shrink-0 flex justify-end">
-        {rightAction}
+
+      {/* Title + description */}
+      <div className="flex flex-col gap-[var(--token-spacing-2)]">
+        <h1 className="text-[length:var(--token-font-size-heading-lg)] leading-[var(--token-line-height-heading-lg)] font-semibold tracking-[-0.6px] text-content-primary m-0">
+          {title}
+        </h1>
+        {description && (
+          <p className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] text-content-secondary m-0">
+            {description}
+          </p>
+        )}
       </div>
     </div>
   )
@@ -47,12 +66,14 @@ export default function Header({
 
 registerComponent({
   name: 'Header',
-  category: 'navigation',
-  description: 'App header with back button, title, and right action.',
+  category: 'presentation',
+  description: 'Screen header with back or close button, large title, and optional right action. Back and close are mutually exclusive. Right action should use IconButton variant="base".',
   component: Header,
   props: [
-    { name: 'title', type: 'string', required: false, description: 'Header title' },
-    { name: 'onBack', type: '() => void', required: false, description: 'Back button handler' },
-    { name: 'rightAction', type: 'ReactNode', required: false, description: 'Right action element' },
+    { name: 'title', type: 'string', required: true, description: 'Screen title (30px semibold)' },
+    { name: 'description', type: 'string', required: false, description: 'Page description below the title' },
+    { name: 'onBack', type: '() => void', required: false, description: 'Back arrow handler — mutually exclusive with onClose' },
+    { name: 'onClose', type: '() => void', required: false, description: 'Close (X) handler — mutually exclusive with onBack' },
+    { name: 'rightAction', type: 'ReactNode', required: false, description: 'Additional action element on the right — use IconButton variant="base"' },
   ],
 })

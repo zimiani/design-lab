@@ -45,7 +45,7 @@ export default function PinInput({
     : 'border-border-default focus:border-interactive-default'
 
   return (
-    <div className={`flex flex-col items-center gap-[var(--token-spacing-2)] ${className}`}>
+    <div data-component="PinInput" className={`flex flex-col items-center gap-[var(--token-spacing-2)] ${className}`}>
       <div className="flex gap-[var(--token-spacing-2)]">
         {Array.from({ length }, (_, i) => (
           <input
@@ -82,7 +82,7 @@ export default function PinInput({
 registerComponent({
   name: 'PinInput',
   category: 'inputs',
-  description: '4-6 digit code input for verification flows.',
+  description: 'Digit-by-digit code entry. Use for OTP verification, PIN setup, and confirmation codes.',
   component: PinInput,
   props: [
     { name: 'length', type: '4 | 5 | 6', required: false, defaultValue: '6', description: 'Number of digits' },

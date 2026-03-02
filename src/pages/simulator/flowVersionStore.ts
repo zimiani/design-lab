@@ -1,20 +1,33 @@
 /**
  * Manual version history for flow graphs — like a changelog.
- * Users explicitly save named versions with a number and description.
+ * Users explicitly save named versions with a number, description, and tag.
  */
 
 import type { Node, Edge } from '@xyflow/react'
+import { getFlowOverrides } from './flowStore'
+import { getFlow } from './flowRegistry'
 
 const STORAGE_KEY = 'picnic-design-lab:flow-versions'
+
+export type VersionTag = 'exploration' | 'milestone' | 'production'
 
 export interface FlowVersion {
   id: string
   flowId: string
   version: string       // e.g. "1.0", "1.1", "2.0"
   description: string   // what changed — user-written
+  tag: VersionTag       // type of version
+  // Graph state
   nodes: Node[]
   edges: Edge[]
+  // Flow metadata snapshot
+  flowName: string
+  flowDescription: string
+  // Screen overrides snapshot
+  screenOverrides: Record<string, { title?: string; description?: string }>
   createdAt: string
+  /** Optional subset/order of screen IDs for this version. When present, only these screens are shown. */
+  screenIds?: string[]
 }
 
 // ── localStorage layer ──
@@ -44,18 +57,39 @@ export function saveVersion(
   description: string,
   nodes: Node[],
   edges: Edge[],
+  tag: VersionTag = 'milestone',
+  screenIds?: string[],
 ): FlowVersion {
   const all = readAll()
   if (!all[flowId]) all[flowId] = []
+
+  // Capture current flow metadata
+  const flow = getFlow(flowId)
+  const overrides = getFlowOverrides(flowId)
+
+  // Build screen overrides snapshot
+  const screenOverrides: Record<string, { title?: string; description?: string }> = {}
+  if (overrides.screens) {
+    for (const [screenId, so] of Object.entries(overrides.screens)) {
+      if (so.title || so.description) {
+        screenOverrides[screenId] = { title: so.title, description: so.description }
+      }
+    }
+  }
 
   const entry: FlowVersion = {
     id: `v-${Date.now()}`,
     flowId,
     version,
     description,
+    tag,
     nodes: JSON.parse(JSON.stringify(nodes)),
     edges: JSON.parse(JSON.stringify(edges)),
+    flowName: flow?.name ?? '',
+    flowDescription: flow?.description ?? '',
+    screenOverrides,
     createdAt: new Date().toISOString(),
+    ...(screenIds ? { screenIds } : {}),
   }
 
   all[flowId].push(entry)
@@ -95,4 +129,30 @@ export function suggestNextVersion(flowId: string): string {
     }
   }
   return `${versions.length + 1}.0`
+}
+
+// ── Active version per flow ──
+// Tracks which version is currently being viewed for each flow (in-memory only).
+
+const activeVersions = new Map<string, string | null>()
+
+/** Get the active version ID for a flow, or null if viewing current state. */
+export function getActiveVersion(flowId: string): string | null {
+  return activeVersions.get(flowId) ?? null
+}
+
+/** Set the active version for a flow. Pass null to go back to current state. */
+export function setActiveVersion(flowId: string, versionId: string | null): void {
+  if (versionId === null) {
+    activeVersions.delete(flowId)
+  } else {
+    activeVersions.set(flowId, versionId)
+  }
+}
+
+/** Get the active FlowVersion object (with screenIds etc.), or null. */
+export function getActiveFlowVersion(flowId: string): FlowVersion | null {
+  const vId = getActiveVersion(flowId)
+  if (!vId) return null
+  return getVersion(flowId, vId)
 }

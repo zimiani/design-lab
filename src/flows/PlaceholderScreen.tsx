@@ -1,9 +1,10 @@
 import type { FlowScreenProps } from '../pages/simulator/flowRegistry'
-import ScreenLayout from '../library/layout/ScreenLayout'
+import BaseLayout from '../library/layout/BaseLayout'
+import StickyFooter from '../library/layout/StickyFooter'
 import Header from '../library/navigation/Header'
 import EmptyState from '../library/feedback/EmptyState'
 import Button from '../library/inputs/Button'
-import { Monitor } from 'lucide-react'
+import { RiComputerLine } from '@remixicon/react'
 
 interface PlaceholderScreenProps extends FlowScreenProps {
   screenTitle: string
@@ -15,22 +16,38 @@ export default function PlaceholderScreen({
   screenDescription,
   onNext,
   onBack,
+  overlays,
+  onOpenOverlay,
 }: PlaceholderScreenProps) {
   return (
-    <ScreenLayout
-      header={<Header title={screenTitle} onBack={onBack} />}
-      bottomCTA={
-        <Button variant="primary" size="lg" onPress={onNext} fullWidth>Next</Button>
-      }
-    >
-      <div className="flex-1 flex items-center justify-center px-[var(--token-spacing-md)]">
+    <BaseLayout>
+      <Header title={screenTitle} onBack={onBack} />
+      <div className="flex-1 flex flex-col items-center justify-center gap-[var(--token-spacing-md)]">
         <EmptyState
-          icon={<Monitor size={32} className="text-interactive-foreground" />}
+          icon={<RiComputerLine size={32} className="text-interactive-foreground" />}
           title={screenTitle}
           description={screenDescription || 'This screen is a placeholder. Build the actual screen component to replace it.'}
         />
+        {overlays && overlays.length > 0 && (
+          <div className="flex flex-col gap-[var(--token-spacing-2)] w-full px-[var(--token-spacing-md)]">
+            {overlays.map((overlay) => (
+              <Button
+                key={overlay.nodeId}
+                variant="secondary"
+                size="md"
+                onPress={() => onOpenOverlay?.(overlay.nodeId)}
+                fullWidth
+              >
+                {overlay.triggerLabel ?? overlay.label}
+              </Button>
+            ))}
+          </div>
+        )}
       </div>
-    </ScreenLayout>
+      <StickyFooter>
+        <Button variant="primary" size="lg" onPress={onNext} fullWidth>Next</Button>
+      </StickyFooter>
+    </BaseLayout>
   )
 }
 

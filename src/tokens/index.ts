@@ -16,6 +16,29 @@ export const colors = {
     800: '#006A2A',
     900: '#00501F',
   },
+  /* Picnic brand palettes */
+  brandCore: {
+    100: '#14B876',
+    300: '#29A372',
+    500: '#1A4D3D',
+  },
+  brandLime: {
+    100: '#E8F9B8',
+    200: '#CDED74',
+    300: '#CDF460',
+    500: '#A3D41C',
+    900: '#38632B',
+  },
+  brandGrape: {
+    100: '#C0BAF7',
+    300: '#2F289F',
+    500: '#242060',
+  },
+  brandGuava: {
+    100: '#F39AA9',
+    300: '#ED795E',
+    500: '#994633',
+  },
   semantic: {
     success: '#16A34A',
     successLight: '#DCFCE7',
@@ -25,6 +48,14 @@ export const colors = {
     errorLight: '#FEE2E2',
     info: '#2563EB',
     infoLight: '#DBEAFE',
+  },
+  feedback: {
+    success: '#10B981',
+    successShade: '#107050',
+    critical: '#B91C1C',
+    criticalShade: '#7F1D1D',
+    warning: '#EAB308',
+    warningShade: '#451A03',
   },
   neutral: {
     50: '#F9FAFB',
@@ -40,21 +71,34 @@ export const colors = {
   },
   surface: {
     background: '#F5F6F8',
+    screen: '#FFFFFF',
     primary: '#FFFFFF',
     secondary: '#F0F1F3',
     elevated: '#FFFFFF',
+    shade: '#ECEFEB',
+    dark: '#CCD2C8',
   },
   content: {
-    primary: '#1d211a',
-    secondary: '#4B5563',
-    tertiary: '#9CA3AF',
+    primary: '#171717',
+    secondary: '#454745',
+    tertiary: '#7C7C7C',
     inverse: '#FFFFFF',
+    numberPositive: '#10B981',
+    numberNegative: '#F87171',
   },
   interactive: {
+    accent: '#B3F53D',
+    accentHover: '#DFFC6F',
+    accentDisabled: '#E0EBE7',
     default: '#c8f91f',
     hover: '#aad41a',
     pressed: '#8cae16',
     disabled: '#D1D5DB',
+    primary: '#211D1A',
+    primaryHover: '#005C3D',
+    primaryDisabled: '#8FA39D',
+    secondary: '#DBE0D8',
+    secondaryHover: '#C5CDC0',
   },
   border: {
     default: '#E5E7EB',
@@ -89,42 +133,42 @@ export const spacingNamed = {
 
 export const typography = {
   display: {
-    fontSize: '32px',
-    lineHeight: '40px',
+    fontSize: '36px',
+    lineHeight: '44px',
     fontWeight: 600,
   },
   'heading-lg': {
+    fontSize: '30px',
+    lineHeight: '38px',
+    fontWeight: 600,
+  },
+  'heading-md': {
     fontSize: '24px',
     lineHeight: '32px',
     fontWeight: 600,
   },
-  'heading-md': {
+  'heading-sm': {
     fontSize: '20px',
     lineHeight: '28px',
     fontWeight: 600,
   },
-  'heading-sm': {
-    fontSize: '17px',
-    lineHeight: '24px',
-    fontWeight: 500,
-  },
   'body-lg': {
-    fontSize: '17px',
-    lineHeight: '24px',
+    fontSize: '18px',
+    lineHeight: '28px',
     fontWeight: 400,
   },
   'body-md': {
-    fontSize: '15px',
-    lineHeight: '20px',
+    fontSize: '16px',
+    lineHeight: '24px',
     fontWeight: 400,
   },
   'body-sm': {
-    fontSize: '13px',
-    lineHeight: '18px',
+    fontSize: '14px',
+    lineHeight: '20px',
     fontWeight: 400,
   },
   caption: {
-    fontSize: '11px',
+    fontSize: '12px',
     lineHeight: '16px',
     fontWeight: 400,
   },

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import type { NodeProps } from '@xyflow/react'
-import { FileText, GitBranch } from 'lucide-react'
+import { RiFileTextLine, RiGitBranchLine } from '@remixicon/react'
 import type { PageNodeData } from '../pageGallery.types'
 
 function PageCardNode({ data, selected }: NodeProps) {
@@ -20,7 +20,7 @@ function PageCardNode({ data, selected }: NodeProps) {
     >
       {/* Header bar */}
       <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] bg-shell-hover">
-        <FileText size={14} className="text-shell-selected-text shrink-0" />
+        <RiFileTextLine size={14} className="text-shell-selected-text shrink-0" />
         <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-shell-text truncate flex-1">
           {nodeData.label}
         </span>
@@ -41,7 +41,7 @@ function PageCardNode({ data, selected }: NodeProps) {
           </span>
           {nodeData.flowCount > 0 && (
             <span className="flex items-center gap-[2px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary">
-              <GitBranch size={10} />
+              <RiGitBranchLine size={10} />
               {nodeData.flowCount}
             </span>
           )}

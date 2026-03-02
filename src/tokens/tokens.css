@@ -88,43 +88,43 @@
   /* ── Typography ── */
   --token-font-family: "Inter", system-ui, -apple-system, sans-serif;
 
-  /* Display */
-  --token-font-size-display: 32px;
-  --token-line-height-display: 40px;
+  /* Display — 36/44, semibold */
+  --token-font-size-display: 36px;
+  --token-line-height-display: 44px;
   --token-font-weight-display: 600;
 
-  /* Heading LG */
-  --token-font-size-heading-lg: 24px;
-  --token-line-height-heading-lg: 32px;
+  /* Heading LG — 30/38, semibold */
+  --token-font-size-heading-lg: 30px;
+  --token-line-height-heading-lg: 38px;
   --token-font-weight-heading-lg: 600;
 
-  /* Heading MD */
-  --token-font-size-heading-md: 20px;
-  --token-line-height-heading-md: 28px;
+  /* Heading MD — 24/32, semibold */
+  --token-font-size-heading-md: 24px;
+  --token-line-height-heading-md: 32px;
   --token-font-weight-heading-md: 600;
 
-  /* Heading SM */
-  --token-font-size-heading-sm: 17px;
-  --token-line-height-heading-sm: 24px;
-  --token-font-weight-heading-sm: 500;
+  /* Heading SM — 20/28, semibold */
+  --token-font-size-heading-sm: 20px;
+  --token-line-height-heading-sm: 28px;
+  --token-font-weight-heading-sm: 600;
 
-  /* Body LG */
-  --token-font-size-body-lg: 16px;
-  --token-line-height-body-lg: 24px;
+  /* Body LG — 18/28, normal */
+  --token-font-size-body-lg: 18px;
+  --token-line-height-body-lg: 28px;
   --token-font-weight-body-lg: 400;
 
-  /* Body MD */
-  --token-font-size-body-md: 15px;
-  --token-line-height-body-md: 20px;
+  /* Body MD — 16/24, normal (base) */
+  --token-font-size-body-md: 16px;
+  --token-line-height-body-md: 24px;
   --token-font-weight-body-md: 400;
 
-  /* Body SM */
-  --token-font-size-body-sm: 13px;
-  --token-line-height-body-sm: 18px;
+  /* Body SM — 14/20, normal */
+  --token-font-size-body-sm: 14px;
+  --token-line-height-body-sm: 20px;
   --token-font-weight-body-sm: 400;
 
-  /* Caption */
-  --token-font-size-caption: 11px;
+  /* Caption — 12/16, normal */
+  --token-font-size-caption: 12px;
   --token-line-height-caption: 16px;
   --token-font-weight-caption: 400;
 

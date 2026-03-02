@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Pencil, Check, FileText, GitBranch, Package } from 'lucide-react'
+import { RiPencilLine, RiCheckLine, RiFileTextLine, RiGitBranchLine, RiArchiveLine } from '@remixicon/react'
 import type { Node } from '@xyflow/react'
 import type { Page } from './pageRegistry'
 import type { PageNodeData } from './pageGallery.types'
@@ -92,7 +92,7 @@ function EditableField({
             onClick={handleSave}
             className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px]"
           >
-            <Check size={12} />
+            <RiCheckLine size={12} />
             Save
           </button>
         </div>
@@ -110,7 +110,7 @@ function EditableField({
       className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-1)] px-[var(--token-spacing-1)] py-[2px] -mx-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
     >
       <span className="flex-1">{value || '(empty)'}</span>
-      <Pencil
+      <RiPencilLine
         size={12}
         className="shrink-0 mt-[3px] text-shell-text-tertiary"
       />
@@ -153,7 +153,7 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
           {/* Page type badge */}
           <div className="mb-[var(--token-spacing-lg)]">
             <div className="flex items-center gap-[var(--token-spacing-2)] text-shell-selected-text">
-              <FileText size={14} />
+              <RiFileTextLine size={14} />
               <span className="text-[length:var(--token-font-size-caption)] font-semibold uppercase tracking-wider">
                 Page
               </span>
@@ -230,7 +230,7 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
                     to={`/components?selected=${encodeURIComponent(comp)}`}
                     className="flex items-center gap-[2px] px-[var(--token-spacing-2)] py-[1px] bg-shell-hover rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary hover:text-shell-selected-text cursor-pointer transition-colors no-underline"
                   >
-                    <Package size={10} />
+                    <RiArchiveLine size={10} />
                     {comp}
                   </Link>
                 ))}
@@ -251,7 +251,7 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
                     to={`/flows?flow=${encodeURIComponent(ref.flowId)}`}
                     className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover text-left transition-colors no-underline"
                   >
-                    <GitBranch size={12} className="text-shell-text-tertiary shrink-0" />
+                    <RiGitBranchLine size={12} className="text-shell-text-tertiary shrink-0" />
                     <div className="min-w-0">
                       <p className="text-[length:var(--token-font-size-body-sm)] text-shell-text truncate">
                         {ref.flowName}

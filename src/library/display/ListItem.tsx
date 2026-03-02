@@ -1,82 +1,135 @@
 import type { ReactNode } from 'react'
-import { motion } from 'framer-motion'
-import { ChevronRight } from 'lucide-react'
+import { RiArrowRightSLine } from '@remixicon/react'
 import { registerComponent } from '../registry'
+import { cn } from '../../lib/cn'
 
 export interface ListItemProps {
-  icon?: ReactNode
-  label: string
-  description?: string
-  rightValue?: string
-  showChevron?: boolean
+  title: string
+  subtitle?: string
+  left?: ReactNode
+  right?: ReactNode
+  trailing?: ReactNode
   onPress?: () => void
   disabled?: boolean
+  inverted?: boolean
   className?: string
 }
 
 export default function ListItem({
-  icon,
-  label,
-  description,
-  rightValue,
-  showChevron = true,
+  title,
+  subtitle,
+  left,
+  right,
+  trailing,
   onPress,
   disabled = false,
-  className = '',
+  inverted = false,
+  className,
 }: ListItemProps) {
-  return (
-    <motion.button
-      type="button"
-      whileTap={disabled ? undefined : { backgroundColor: 'var(--token-surface-secondary)' }}
-      transition={{ duration: 0.15 }}
-      onClick={onPress}
-      disabled={disabled}
-      className={`
-        flex items-center w-full px-[var(--token-spacing-md)] py-[var(--token-spacing-3)]
-        bg-transparent text-left
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-        ${className}
-      `}
-    >
-      {icon && (
-        <span className="shrink-0 mr-[var(--token-spacing-3)] p-[var(--token-spacing-3)] rounded-full bg-[var(--token-neutral-100)] text-text-secondary">
-          {icon}
-        </span>
+  const showTrailing = trailing !== undefined ? trailing !== null : !!onPress
+  const trailingContent = trailing ?? (
+    onPress ? <RiArrowRightSLine size={20} className="text-[var(--color-content-tertiary)]" /> : null
+  )
+
+  const content = (
+    <div className="flex items-center gap-[var(--token-spacing-3)] w-full">
+      {left && (
+        <div className="shrink-0 flex items-center justify-center">
+          {left}
+        </div>
       )}
-      <div className="flex-1 min-w-0">
-        <p className="text-[length:16px] leading-[var(--token-line-height-body-md)] font-semibold text-text-primary truncate">
-          {label}
-        </p>
-        {description && (
-          <p className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-neutral-700 truncate">
-            {description}
-          </p>
+
+      <div className="flex-1 min-w-0 flex flex-col justify-center">
+        {inverted ? (
+          <>
+            <span className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-[var(--color-content-secondary)] line-clamp-2">
+              {title}
+            </span>
+            {subtitle && (
+              <span className="text-[length:var(--token-font-size-body-md)] font-semibold leading-[var(--token-line-height-body-md)] tracking-[-0.16px] text-[var(--color-content-primary)] truncate">
+                {subtitle}
+              </span>
+            )}
+          </>
+        ) : (
+          <>
+            <span className="text-[length:var(--token-font-size-body-md)] font-semibold leading-[var(--token-line-height-body-md)] tracking-[-0.16px] text-[var(--color-content-primary)] truncate">
+              {title}
+            </span>
+            {subtitle && (
+              <span className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-[var(--color-content-secondary)] line-clamp-2">
+                {subtitle}
+              </span>
+            )}
+          </>
         )}
       </div>
-      {rightValue && (
-        <span className="shrink-0 ml-[var(--token-spacing-2)] text-[length:var(--token-font-size-body-md)] text-text-secondary">
-          {rightValue}
-        </span>
+
+      {right && (
+        <div className="shrink-0 flex items-center">
+          {right}
+        </div>
       )}
-      {showChevron && (
-        <ChevronRight size={18} className="shrink-0 ml-[var(--token-spacing-1)] text-text-tertiary" />
+
+      {showTrailing && (
+        <div className="shrink-0 flex items-center">
+          {trailingContent}
+        </div>
       )}
-    </motion.button>
+    </div>
+  )
+
+  const baseClasses = 'bg-[var(--color-surface-primary)] rounded-[var(--token-radius-lg)] px-[var(--token-spacing-3)] py-[var(--token-spacing-4)]'
+
+  if (onPress) {
+    return (
+      <button
+        data-component="ListItem"
+        type="button"
+        onClick={onPress}
+        disabled={disabled}
+        className={cn(
+          'w-full flex items-start text-left transition-colors',
+          baseClasses,
+          disabled
+            ? 'opacity-50 cursor-not-allowed'
+            : 'cursor-pointer hover:bg-[var(--color-surface-shade)]',
+          className,
+        )}
+      >
+        {content}
+      </button>
+    )
+  }
+
+  return (
+    <div
+      data-component="ListItem"
+      className={cn(
+        'w-full flex items-start',
+        baseClasses,
+        disabled && 'opacity-50',
+        className,
+      )}
+    >
+      {content}
+    </div>
   )
 }
 
 registerComponent({
   name: 'ListItem',
-  category: 'display',
-  description: 'List row with icon, label, description, right value, and chevron.',
+  category: 'navigation',
+  description: 'Row of content with flexible slots. Use for navigation, settings, asset lists, and any row-based layout.',
   component: ListItem,
   props: [
-    { name: 'icon', type: 'ReactNode', required: false, description: 'Left icon' },
-    { name: 'label', type: 'string', required: true, description: 'Primary text' },
-    { name: 'description', type: 'string', required: false, description: 'Secondary text' },
-    { name: 'rightValue', type: 'string', required: false, description: 'Right-aligned value' },
-    { name: 'showChevron', type: 'boolean', required: false, defaultValue: 'true', description: 'Show right chevron' },
-    { name: 'onPress', type: '() => void', required: false, description: 'Press handler' },
+    { name: 'title', type: 'string', required: true, description: 'Primary text' },
+    { name: 'subtitle', type: 'string', required: false, description: 'Secondary text' },
+    { name: 'left', type: 'ReactNode', required: false, description: 'Left slot: avatar, icon, checkbox, radio, etc.' },
+    { name: 'right', type: 'ReactNode', required: false, description: 'Right slot 1: icon, button, tag, toggle, text, etc.' },
+    { name: 'trailing', type: 'ReactNode', required: false, description: 'Right slot 2: chevron (auto-shown when onPress is set), pass null to hide' },
+    { name: 'onPress', type: '() => void', required: false, description: 'Click handler — renders as button and auto-adds chevron trailing' },
     { name: 'disabled', type: 'boolean', required: false, defaultValue: 'false', description: 'Disable interaction' },
+    { name: 'inverted', type: 'boolean', required: false, defaultValue: 'false', description: 'Swap title/subtitle emphasis (subtitle becomes bold)' },
   ],
 })

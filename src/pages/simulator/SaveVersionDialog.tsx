@@ -1,24 +1,36 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { RiCloseLine } from '@remixicon/react'
+import type { VersionTag } from './flowVersionStore'
 
 interface SaveVersionDialogProps {
   suggestedVersion: string
   onClose: () => void
-  onSave: (version: string, description: string) => void
+  onSave: (version: string, description: string, tag: VersionTag, screenIds?: string[]) => void
+  /** Current screen IDs (for "Include screen set" option) */
+  currentScreenIds?: string[]
 }
+
+const tagOptions: { value: VersionTag; label: string; color: string; description: string }[] = [
+  { value: 'milestone', label: 'Milestone', color: 'bg-[#4ADE80]', description: 'Design review, feature ready' },
+  { value: 'exploration', label: 'Exploration', color: 'bg-[#FBBF24]', description: 'UX test, alternative, draft' },
+  { value: 'production', label: 'Production', color: 'bg-[#60A5FA]', description: 'Currently live in the app' },
+]
 
 export default function SaveVersionDialog({
   suggestedVersion,
   onClose,
   onSave,
+  currentScreenIds,
 }: SaveVersionDialogProps) {
   const [version, setVersion] = useState(suggestedVersion)
   const [description, setDescription] = useState('')
+  const [tag, setTag] = useState<VersionTag>('milestone')
+  const [includeScreenSet, setIncludeScreenSet] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!version.trim() || !description.trim()) return
-    onSave(version.trim(), description.trim())
+    onSave(version.trim(), description.trim(), tag, includeScreenSet && currentScreenIds ? currentScreenIds : undefined)
   }
 
   return (
@@ -47,7 +59,7 @@ export default function SaveVersionDialog({
             onClick={onClose}
             className="w-[28px] h-[28px] flex items-center justify-center rounded-[var(--token-radius-sm)] text-shell-text-tertiary hover:text-shell-text hover:bg-shell-hover transition-colors cursor-pointer"
           >
-            <X size={16} />
+            <RiCloseLine size={16} />
           </button>
         </div>
 
@@ -68,6 +80,33 @@ export default function SaveVersionDialog({
           </div>
 
           <div>
+            <label className="block text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+              Tag
+            </label>
+            <div className="flex gap-[var(--token-spacing-2)]">
+              {tagOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setTag(opt.value)}
+                  className={`
+                    flex-1 flex flex-col items-center gap-[4px] py-[var(--token-spacing-2)] px-[var(--token-spacing-2)]
+                    rounded-[var(--token-radius-sm)] border text-[length:var(--token-font-size-caption)]
+                    transition-colors cursor-pointer
+                    ${tag === opt.value
+                      ? 'border-shell-selected-text bg-shell-selected-text/10 text-shell-text'
+                      : 'border-shell-border text-shell-text-secondary hover:border-shell-active'
+                    }
+                  `}
+                >
+                  <div className={`w-[8px] h-[8px] rounded-full ${opt.color}`} />
+                  <span className="font-medium">{opt.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
             <label className="block text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
               What changed? *
             </label>
@@ -80,6 +119,23 @@ export default function SaveVersionDialog({
             />
           </div>
         </div>
+
+        {/* Include screen set */}
+        {currentScreenIds && currentScreenIds.length > 0 && (
+          <div className="px-[var(--token-spacing-md)] pb-[var(--token-spacing-2)]">
+            <label className="flex items-center gap-[var(--token-spacing-2)] cursor-pointer">
+              <input
+                type="checkbox"
+                checked={includeScreenSet}
+                onChange={(e) => setIncludeScreenSet(e.target.checked)}
+                className="accent-[#4ADE80]"
+              />
+              <span className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary">
+                Include current screen set ({currentScreenIds.length} screens)
+              </span>
+            </label>
+          </div>
+        )}
 
         {/* Actions */}
         <div className="flex justify-end gap-[var(--token-spacing-2)] p-[var(--token-spacing-md)] border-t border-shell-border">

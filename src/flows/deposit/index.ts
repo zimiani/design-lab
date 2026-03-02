@@ -12,7 +12,7 @@ const screenDefs = [
     id: 'add-funds',
     title: 'Add Funds',
     description: 'Method selection: PIX, TED, or Crypto. User chooses PIX for instant free transfer.',
-    componentsUsed: ['Header', 'ScreenLayout', 'ListItem', 'Text', 'Divider', 'Icon'],
+    componentsUsed: ['Header', 'BaseLayout', 'ListItem', 'Text', 'Divider', 'Icon'],
     component: Screen1_AddFunds,
   },
   {
@@ -26,7 +26,7 @@ const screenDefs = [
     id: 'pix-payment',
     title: 'PIX Payment',
     description: 'QR code and copy-paste PIX code for payment. 10-minute expiration timer.',
-    componentsUsed: ['Header', 'ScreenLayout', 'Card', 'Text', 'Divider', 'Badge', 'Button', 'Toast', 'Spacer'],
+    componentsUsed: ['Header', 'BaseLayout', 'Card', 'Text', 'Divider', 'Badge', 'Button', 'Toast', 'Spacer'],
     component: Screen3_PixPayment,
   },
   {
@@ -61,7 +61,7 @@ registerFlow({
   id: 'deposit-pix',
   name: 'Deposit via PIX',
   description: 'User deposits BRL into their Picnic account using PIX, Brazil\'s instant payment system. Funds are converted to USD at the current exchange rate and credited to their crypto wallet balance.',
-  area: 'Transactions',
+  domain: 'add-funds',
   specContent,
   screens: screenDefs.map((s) => ({ ...s, pageId: s.id })),
 })

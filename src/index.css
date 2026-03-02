@@ -43,6 +43,40 @@
   --color-interactive-secondary: var(--token-interactive-secondary);
   --color-interactive-foreground: var(--token-interactive-foreground);
 
+  /* Picnic Brand Palettes */
+  --color-brand-core-100: #14B876;
+  --color-brand-core-300: #29A372;
+  --color-brand-core-500: #1A4D3D;
+  --color-brand-lime-100: #E8F9B8;
+  --color-brand-lime-200: #CDED74;
+  --color-brand-lime-300: #CDF460;
+  --color-brand-lime-500: #A3D41C;
+  --color-brand-lime-900: #38632B;
+  --color-brand-grape-100: #C0BAF7;
+  --color-brand-grape-300: #2F289F;
+  --color-brand-grape-500: #242060;
+  --color-brand-guava-100: #F39AA9;
+  --color-brand-guava-300: #ED795E;
+  --color-brand-guava-500: #994633;
+
+  /* Feedback Colors (Picnic) */
+  --color-feedback-success: #10B981;
+  --color-feedback-critical: #B91C1C;
+  --color-feedback-warning: #EAB308;
+
+  /* Surface extras */
+  --color-surface-shade: #ECEFEB;
+  --color-surface-dark: #CCD2C8;
+
+  /* Interactive extras */
+  --color-interactive-accent: #B3F53D;
+  --color-interactive-accent-hover: #DFFC6F;
+  --color-interactive-primary: #211D1A;
+
+  /* Content extras */
+  --color-content-number-positive: #10B981;
+  --color-content-number-negative: #F87171;
+
   /* Border Colors */
   --color-border-default: var(--token-border-default);
   --color-border-strong: var(--token-border-strong);
@@ -117,6 +151,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'ss01' 1, 'ss03' 1, 'cv05' 1, 'cv10' 1, 'calt' 1, 'liga' 1;
   }
 
   body {
@@ -131,9 +166,6 @@
 }
 
 /* React Flow dark theme overrides to match shell chrome */
-.react-flow__pane {
-  background-color: var(--color-shell-bg);
-}
 
 .react-flow__edge-path {
   stroke: #4ADE80;

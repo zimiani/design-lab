@@ -37,7 +37,7 @@ export default function TextInput({
   }
 
   return (
-    <div className={`flex flex-col gap-[var(--token-spacing-1)] ${className}`}>
+    <div data-component="TextInput" className={`flex flex-col gap-[var(--token-spacing-1)] ${className}`}>
       {label && (
         <label className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium text-text-primary">
           {label}
@@ -84,7 +84,7 @@ export default function TextInput({
 registerComponent({
   name: 'TextInput',
   category: 'inputs',
-  description: 'Text input with label, helper text, error state, prefix/suffix.',
+  description: 'Standard text field with label, validation, and helper text. Use for names, emails, and general form input.',
   component: TextInput,
   props: [
     { name: 'label', type: 'string', required: false, description: 'Input label' },

@@ -1,13 +1,16 @@
 import { useState, useMemo } from 'react'
-import { Info } from 'lucide-react'
+import { RiInformationLine } from '@remixicon/react'
 import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
 import Header from '../../library/navigation/Header'
-import FormLayout from '../../library/layout/FormLayout'
+import BaseLayout from '../../library/layout/BaseLayout'
+import StickyFooter from '../../library/layout/StickyFooter'
+import Stack from '../../library/layout/Stack'
 import CurrencyInput from '../../library/inputs/CurrencyInput'
 import Card from '../../library/display/Card'
 import Text from '../../library/foundations/Text'
 import Amount from '../../library/display/Amount'
 import Button from '../../library/inputs/Button'
+import Link from '../../library/foundations/Link'
 
 const MOCK_RATE = 5.12
 
@@ -19,51 +22,46 @@ export default function Screen4_Conversion({ onNext, onBack }: FlowScreenProps) 
   const isValid = brlAmount >= 10
 
   return (
-    <FormLayout
-      header={<Header title="Converter" onBack={onBack} />}
-      submitButton={
+    <BaseLayout>
+      <Header title="Converter" onBack={onBack} />
+      <Stack>
+        <CurrencyInput
+          label="Valor em BRL"
+          value={value}
+          onChange={setValue}
+          helperText="Mín R$ 10,00 · Máx R$ 100.000,00"
+        />
+
+        {isValid && (
+          <Card variant="flat">
+            <Stack gap="sm">
+              <Text variant="body-sm" color="content-secondary">
+                Você receberá aproximadamente
+              </Text>
+              <Amount value={usdAmount} currency="$" size="lg" />
+              <Text variant="caption" color="content-tertiary">
+                Câmbio: 1 USD = {MOCK_RATE.toFixed(2)} BRL
+              </Text>
+            </Stack>
+          </Card>
+        )}
+
+        <Link
+          linkText="Como calculamos sua economia"
+          leadingIcon={<RiInformationLine size={14} className="text-interactive-foreground" />}
+          onLinkPress={onNext}
+        />
+
+        <Text variant="caption" color="content-tertiary" align="center">
+          Consultar os Termos de Serviço
+        </Text>
+      </Stack>
+
+      <StickyFooter>
         <Button fullWidth size="lg" disabled={!isValid} onPress={onNext}>
           Converter agora
         </Button>
-      }
-    >
-      <CurrencyInput
-        label="Valor em BRL"
-        value={value}
-        onChange={setValue}
-        helperText="Mín R$ 10,00 · Máx R$ 100.000,00"
-      />
-
-      {isValid && (
-        <Card variant="outlined">
-          <Text variant="body-sm" color="text-secondary">
-            Você receberá aproximadamente
-          </Text>
-          <div className="mt-[var(--token-spacing-2)]">
-            <Amount value={usdAmount} currency="$" size="lg" />
-          </div>
-          <div className="flex items-center gap-[var(--token-spacing-1)] mt-[var(--token-spacing-2)]">
-            <Text variant="caption" color="text-tertiary">
-              Câmbio: 1 USD = {MOCK_RATE.toFixed(2)} BRL
-            </Text>
-          </div>
-        </Card>
-      )}
-
-      <button
-        type="button"
-        className="flex items-center gap-[var(--token-spacing-2)] cursor-pointer"
-        onClick={onNext}
-      >
-        <Info size={14} className="text-interactive-foreground" />
-        <Text variant="body-sm" className="text-interactive-foreground">
-          Como calculamos sua economia
-        </Text>
-      </button>
-
-      <Text variant="caption" color="text-tertiary" align="center">
-        Consultar os Termos de Serviço
-      </Text>
-    </FormLayout>
+      </StickyFooter>
+    </BaseLayout>
   )
 }

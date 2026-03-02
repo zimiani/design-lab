@@ -17,7 +17,7 @@ export default function EmptyState({
   className = '',
 }: EmptyStateProps) {
   return (
-    <div className={`flex flex-col items-center text-center px-[var(--token-spacing-xl)] py-[var(--token-spacing-2xl)] ${className}`}>
+    <div data-component="EmptyState" className={`flex flex-col items-center text-center px-[var(--token-spacing-xl)] py-[var(--token-spacing-2xl)] ${className}`}>
       {icon && (
         <div className="mb-[var(--token-spacing-md)] text-text-tertiary">{icon}</div>
       )}
@@ -37,7 +37,7 @@ export default function EmptyState({
 registerComponent({
   name: 'EmptyState',
   category: 'feedback',
-  description: 'Empty state with icon, title, description, and CTA.',
+  description: 'Placeholder for empty screens. Use when a list, search, or page has no content to display.',
   component: EmptyState,
   props: [
     { name: 'icon', type: 'ReactNode', required: false, description: 'Illustration icon' },

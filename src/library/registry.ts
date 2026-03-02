@@ -2,7 +2,7 @@ import type { ComponentType } from 'react'
 
 export interface ComponentMeta {
   name: string
-  category: 'foundations' | 'inputs' | 'display' | 'feedback' | 'navigation' | 'layout'
+  category: 'presentation' | 'navigation' | 'actions' | 'inputs' | 'feedback' | 'layout' | 'foundations-removed'
   description: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: ComponentType<any>

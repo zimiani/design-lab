@@ -1,48 +1,48 @@
 import { useState } from 'react'
-import { DollarSign, Users, Percent, Star, Gift } from 'lucide-react'
+import { RiMoneyDollarCircleLine, RiGroupLine, RiPercentLine, RiStarLine, RiGiftLine } from '@remixicon/react'
 import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
 import Header from '../../library/navigation/Header'
-import ScreenLayout from '../../library/layout/ScreenLayout'
+import BaseLayout from '../../library/layout/BaseLayout'
+import Stack from '../../library/layout/Stack'
 import SegmentedControl from '../../library/navigation/SegmentedControl'
 import ListItem from '../../library/display/ListItem'
-import Divider from '../../library/foundations/Divider'
 import Badge from '../../library/display/Badge'
 import Text from '../../library/foundations/Text'
 
 const highlights = [
   {
-    icon: <DollarSign size={20} className="text-interactive-foreground" />,
-    label: 'Conversão sem taxas',
-    description: 'Converta dólar com o melhor câmbio',
+    icon: <RiMoneyDollarCircleLine size={20} className="text-interactive-foreground" />,
+    title: 'Conversão sem taxas',
+    subtitle: 'Converta dólar com o melhor câmbio',
   },
   {
-    icon: <Users size={20} className="text-interactive-foreground" />,
-    label: 'Indique e ganhe',
-    description: 'Ganhe $5 a cada amigo indicado',
+    icon: <RiGroupLine size={20} className="text-interactive-foreground" />,
+    title: 'Indique e ganhe',
+    subtitle: 'Ganhe $5 a cada amigo indicado',
   },
   {
-    icon: <Percent size={20} className="text-interactive-foreground" />,
-    label: 'Programa de Cashback',
-    description: 'Receba de volta em todas as compras',
+    icon: <RiPercentLine size={20} className="text-interactive-foreground" />,
+    title: 'Programa de Cashback',
+    subtitle: 'Receba de volta em todas as compras',
   },
   {
-    icon: <Star size={20} className="text-interactive-foreground" />,
-    label: 'Benefícios exclusivos',
-    description: 'Acesso a promoções e ofertas especiais',
+    icon: <RiStarLine size={20} className="text-interactive-foreground" />,
+    title: 'Benefícios exclusivos',
+    subtitle: 'Acesso a promoções e ofertas especiais',
   },
 ]
 
 const referrals = [
   {
-    icon: <Gift size={20} className="text-interactive-foreground" />,
-    label: 'Indique amigos',
-    description: 'Compartilhe seu código e ganhe $5',
+    icon: <RiGiftLine size={20} className="text-interactive-foreground" />,
+    title: 'Indique amigos',
+    subtitle: 'Compartilhe seu código e ganhe $5',
     badge: 'Novo',
   },
   {
-    icon: <Users size={20} className="text-interactive-foreground" />,
-    label: 'Seus indicados',
-    description: '3 amigos já se cadastraram',
+    icon: <RiGroupLine size={20} className="text-interactive-foreground" />,
+    title: 'Seus indicados',
+    subtitle: '3 amigos já se cadastraram',
   },
 ]
 
@@ -50,60 +50,45 @@ export default function Screen2_BenefitsPromos({ onNext, onBack }: FlowScreenPro
   const [tabIndex, setTabIndex] = useState(0)
 
   return (
-    <ScreenLayout header={<Header title="Benefícios e Promos" onBack={onBack} />}>
-      <div className="px-[var(--token-spacing-md)] py-[var(--token-spacing-3)]">
-        <SegmentedControl
-          segments={['Destaques', 'Indicações']}
-          activeIndex={tabIndex}
-          onChange={setTabIndex}
-        />
-      </div>
+    <BaseLayout>
+      <Header title="Benefícios e Promos" onBack={onBack} />
+      <SegmentedControl
+        segments={['Destaques', 'Indicações']}
+        activeIndex={tabIndex}
+        onChange={setTabIndex}
+      />
 
       {tabIndex === 0 ? (
-        <div className="bg-surface-primary mx-[var(--token-spacing-md)] rounded-[var(--token-radius-lg)] overflow-hidden">
+        <Stack gap="none">
           {highlights.map((item, i) => (
-            <div key={item.label}>
-              {i > 0 && <Divider spacing="sm" />}
-              <ListItem
-                icon={item.icon}
-                label={item.label}
-                description={item.description}
-                onPress={i === 0 ? onNext : undefined}
-              />
-            </div>
+            <ListItem
+              key={item.title}
+              left={item.icon}
+              title={item.title}
+              subtitle={item.subtitle}
+              onPress={i === 0 ? onNext : undefined}
+            />
           ))}
-        </div>
+        </Stack>
       ) : (
-        <div className="px-[var(--token-spacing-md)]">
-          <div className="bg-surface-primary rounded-[var(--token-radius-lg)] overflow-hidden">
-            {referrals.map((item, i) => (
-              <div key={item.label}>
-                {i > 0 && <Divider spacing="sm" />}
-                <ListItem
-                  icon={item.icon}
-                  label={item.label}
-                  description={item.description}
-                  onPress={onNext}
-                  rightValue={
-                    item.badge ? undefined : undefined
-                  }
-                />
-                {item.badge && (
-                  <div className="px-[var(--token-spacing-md)] pb-[var(--token-spacing-2)] -mt-[var(--token-spacing-1)]">
-                    <Badge variant="success" size="sm">{item.badge}</Badge>
-                  </div>
-                )}
-              </div>
+        <Stack>
+          <Stack gap="none">
+            {referrals.map((item) => (
+              <ListItem
+                key={item.title}
+                left={item.icon}
+                title={item.title}
+                subtitle={item.subtitle}
+                right={item.badge ? <Badge variant="success" size="sm">{item.badge}</Badge> : undefined}
+                onPress={onNext}
+              />
             ))}
-          </div>
-
-          <div className="mt-[var(--token-spacing-lg)]">
-            <Text variant="body-sm" color="text-tertiary" align="center">
-              Convide amigos e ganhe recompensas a cada cadastro confirmado.
-            </Text>
-          </div>
-        </div>
+          </Stack>
+          <Text variant="body-sm" color="content-tertiary" align="center">
+            Convide amigos e ganhe recompensas a cada cadastro confirmado.
+          </Text>
+        </Stack>
       )}
-    </ScreenLayout>
+    </BaseLayout>
   )
 }

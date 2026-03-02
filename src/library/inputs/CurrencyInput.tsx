@@ -1,14 +1,17 @@
 import { type ChangeEvent } from 'react'
 import { registerComponent } from '../registry'
 
+const DEFAULT_TOKEN_ICON = 'https://coin-images.coingecko.com/coins/images/12559/large/Avalanche_Circle_RedWhite_Trans.png'
+
 export interface CurrencyInputProps {
   label?: string
-  currency?: string
   value?: string
   onChange?: (value: string) => void
+  tokenIcon?: string
   helperText?: string
   error?: string
   disabled?: boolean
+  readOnly?: boolean
   className?: string
 }
 
@@ -26,21 +29,20 @@ function toRawDigits(formatted: string): string {
   return formatted.replace(/\D/g, '')
 }
 
+const fontFeatures = "'ss01' 1, 'ss03' 1, 'cv05' 1, 'cv10' 1, 'tnum' 1"
+
 export default function CurrencyInput({
   label,
-  currency = 'R$',
   value = '',
   onChange,
+  tokenIcon = DEFAULT_TOKEN_ICON,
   helperText,
   error,
   disabled = false,
+  readOnly = false,
   className = '',
 }: CurrencyInputProps) {
   const hasError = !!error
-  const borderColor = hasError
-    ? 'border-error focus-within:border-error'
-    : 'border-border-default focus-within:border-interactive-default'
-
   const displayValue = formatCurrency(value)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -49,43 +51,44 @@ export default function CurrencyInput({
   }
 
   return (
-    <div className={`flex flex-col gap-[var(--token-spacing-1)] ${className}`}>
+    <div data-component="CurrencyInput" className={`flex flex-col gap-[var(--token-spacing-3)] items-end pt-[6px] pb-[var(--token-spacing-4)] ${className}`}>
       {label && (
-        <label className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium text-text-primary">
+        <span className="text-[14px] font-medium leading-[22px] text-content-tertiary">
           {label}
-        </label>
-      )}
-      <div
-        className={`
-          flex items-center gap-[var(--token-spacing-2)]
-          h-[56px] px-[var(--token-spacing-md)]
-          bg-surface-primary border rounded-[var(--token-radius-md)]
-          transition-colors duration-[var(--token-transition-fast)]
-          ${borderColor}
-          ${disabled ? 'opacity-50 cursor-not-allowed bg-surface-secondary' : ''}
-        `}
-      >
-        <span className="text-[length:var(--token-font-size-heading-md)] font-semibold text-text-secondary">
-          {currency}
         </span>
+      )}
+
+      <div className={`flex items-center justify-between w-full ${disabled ? 'opacity-50' : ''}`}>
+        {/* Token avatar */}
+        <img
+          src={tokenIcon}
+          alt=""
+          className="w-[40px] h-[40px] rounded-full object-cover shrink-0"
+        />
+
+        {/* Value */}
         <input
           type="text"
           inputMode="numeric"
-          placeholder="0.00"
+          placeholder="0,00"
           value={displayValue}
           onChange={handleChange}
           disabled={disabled}
+          readOnly={readOnly}
           className="
-            flex-1 bg-transparent outline-none
-            text-[length:var(--token-font-size-heading-md)] leading-[var(--token-line-height-heading-md)] font-semibold
-            text-text-primary placeholder:text-text-tertiary
+            flex-1 min-w-0 bg-transparent outline-none
+            text-[40px] font-bold leading-[40px]
+            text-content-primary placeholder:text-content-tertiary
+            text-right
           "
+          style={{ fontFeatureSettings: fontFeatures }}
         />
       </div>
+
       {(helperText || error) && (
         <span
           className={`text-[length:var(--token-font-size-caption)] leading-[var(--token-line-height-caption)] ${
-            hasError ? 'text-error' : 'text-text-tertiary'
+            hasError ? 'text-error' : 'text-content-tertiary'
           }`}
         >
           {error ?? helperText}
@@ -98,15 +101,16 @@ export default function CurrencyInput({
 registerComponent({
   name: 'CurrencyInput',
   category: 'inputs',
-  description: 'Formatted number input with currency symbol for financial values.',
+  description: 'Large currency display with token avatar. Use for swap amounts, deposit/withdrawal values, and transfer entry.',
   component: CurrencyInput,
   props: [
-    { name: 'label', type: 'string', required: false, description: 'Input label' },
-    { name: 'currency', type: 'string', required: false, defaultValue: 'R$', description: 'Currency symbol' },
+    { name: 'label', type: 'string', required: false, description: 'Right-aligned label above the value (e.g., "Receba")' },
     { name: 'value', type: 'string', required: false, description: 'Raw digit string' },
     { name: 'onChange', type: '(value: string) => void', required: false, description: 'Change handler (raw digits)' },
+    { name: 'tokenIcon', type: 'string', required: false, defaultValue: 'AVAX logo', description: 'URL for the token avatar' },
     { name: 'helperText', type: 'string', required: false, description: 'Helper text below input' },
     { name: 'error', type: 'string', required: false, description: 'Error message' },
     { name: 'disabled', type: 'boolean', required: false, defaultValue: 'false', description: 'Disable input' },
+    { name: 'readOnly', type: 'boolean', required: false, defaultValue: 'false', description: 'Read-only mode (no opacity change)' },
   ],
 })

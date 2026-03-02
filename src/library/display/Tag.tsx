@@ -1,4 +1,4 @@
-import { X } from 'lucide-react'
+import { RiCloseLine } from '@remixicon/react'
 import { registerComponent } from '../registry'
 
 export interface TagProps {
@@ -16,6 +16,7 @@ export default function Tag({
 }: TagProps) {
   return (
     <span
+      data-component="Tag"
       className={`
         inline-flex items-center gap-[var(--token-spacing-1)]
         px-[var(--token-spacing-3)] py-[var(--token-spacing-1)]
@@ -32,7 +33,7 @@ export default function Tag({
           onClick={onRemove}
           className="shrink-0 text-text-tertiary hover:text-text-primary transition-colors cursor-pointer"
         >
-          <X size={12} />
+          <RiCloseLine size={12} />
         </button>
       )}
     </span>
@@ -41,8 +42,8 @@ export default function Tag({
 
 registerComponent({
   name: 'Tag',
-  category: 'display',
-  description: 'Tag label, optionally removable.',
+  category: 'presentation',
+  description: 'Compact label for categorization. Use for filters, tags, and removable selections.',
   component: Tag,
   props: [
     { name: 'label', type: 'string', required: true, description: 'Tag text' },

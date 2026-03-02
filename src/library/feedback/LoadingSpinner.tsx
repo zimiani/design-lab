@@ -16,6 +16,7 @@ export default function LoadingSpinner({
 
   return (
     <motion.div
+      data-component="LoadingSpinner"
       animate={{ rotate: 360 }}
       transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
       style={{ width: px, height: px }}
@@ -41,7 +42,7 @@ export default function LoadingSpinner({
 registerComponent({
   name: 'LoadingSpinner',
   category: 'feedback',
-  description: 'Animated loading spinner with size variants.',
+  description: 'Spinning indicator for async operations. Use for page loads, form submissions, and data fetching.',
   component: LoadingSpinner,
   sizes: ['sm', 'md', 'lg'],
   props: [

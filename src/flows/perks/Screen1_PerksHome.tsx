@@ -1,51 +1,56 @@
-import { Sparkles, Gift, ArrowRight } from 'lucide-react'
+import { RiSparklingLine, RiArrowRightLine } from '@remixicon/react'
 import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
+import FeatureLayout from '../../library/layout/FeatureLayout'
+import StickyFooter from '../../library/layout/StickyFooter'
+import Stack from '../../library/layout/Stack'
 import Text from '../../library/foundations/Text'
+import Badge from '../../library/display/Badge'
 import Button from '../../library/inputs/Button'
-import Spacer from '../../library/foundations/Spacer'
+import Summary from '../../library/display/Summary'
+import Banner from '../../library/display/Banner'
 
-export default function Screen1_PerksHome({ onNext }: FlowScreenProps) {
+export default function Screen1_PerksHome({ onNext, onBack }: FlowScreenProps) {
   return (
-    <div className="flex flex-col h-full bg-[#1a2e1a]">
-      {/* Hero illustration area */}
-      <div className="relative flex-1 flex flex-col items-center justify-center px-[var(--token-spacing-lg)] overflow-hidden">
-        {/* Decorative background circles */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-[-60px] right-[-40px] w-[200px] h-[200px] rounded-full bg-[#4ADE80]/10" />
-          <div className="absolute bottom-[40px] left-[-60px] w-[160px] h-[160px] rounded-full bg-[#4ADE80]/5" />
-        </div>
+    <FeatureLayout
+      imageSrc="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=800&h=400&fit=crop&q=80"
+      imageAlt="Picnic benefits"
+      onClose={onBack}
+      imageOverlay={
+        <Badge variant="lime" icon={<RiSparklingLine size={16} />}>Benefícios</Badge>
+      }
+    >
+      <Stack gap="sm">
+        <Text variant="display">
+          Cliente Picnic tem mais benefícios!
+        </Text>
+        <Text variant="body-md" color="content-secondary">
+          Dólar mais barato, cashback exclusivo, indicações que rendem e muito mais.
+        </Text>
+      </Stack>
 
-        <div className="relative z-10 flex flex-col items-center text-center">
-          {/* Icon cluster */}
-          <div className="relative mb-[var(--token-spacing-lg)]">
-            <div className="w-[80px] h-[80px] rounded-full bg-[#4ADE80]/20 flex items-center justify-center">
-              <Sparkles size={40} className="text-[#4ADE80]" />
-            </div>
-            <div className="absolute -top-2 -right-3 w-[32px] h-[32px] rounded-full bg-[#4ADE80]/30 flex items-center justify-center">
-              <Gift size={16} className="text-[#4ADE80]" />
-            </div>
-          </div>
+      <Summary
+        header="Suas vantagens"
+        data={[
+          { icon: <RiSparklingLine size={24} className="text-content-primary" />, title: 'Dólar mais barato', description: 'Converta sem taxas nem spread cambial' },
+          { icon: <RiSparklingLine size={24} className="text-content-primary" />, title: 'Cashback em cripto', description: 'Receba de volta parte do que gastar' },
+          { icon: <RiSparklingLine size={24} className="text-content-primary" />, title: 'Indique e ganhe', description: 'Ganhe recompensas por cada amigo que se cadastrar' },
+        ]}
+      />
 
-          <Text variant="heading-lg" align="center" className="!text-white">
-            Cliente Picnic tem mais benefícios!
-          </Text>
-          <Spacer size="md" />
-          <Text variant="body-md" align="center" className="!text-white/70">
-            Dólar mais barato, cashback exclusivo, indicações que rendem e muito mais.
-            Aproveite todas as vantagens de ser Picnic.
-          </Text>
-        </div>
-      </div>
+      <Banner
+        variant="neutral"
+        title="Aproveite todos os benefícios"
+        description="Quanto mais você usa o Picnic, mais vantagens desbloqueia."
+      />
 
-      {/* Bottom CTA */}
-      <div className="shrink-0 px-[var(--token-spacing-md)] pb-[var(--token-spacing-xl)] pt-[var(--token-spacing-md)]">
+      <StickyFooter>
         <Button fullWidth size="lg" onPress={onNext}>
           <span className="flex items-center gap-[var(--token-spacing-2)]">
             Ver mais benefícios
-            <ArrowRight size={18} />
+            <RiArrowRightLine size={18} />
           </span>
         </Button>
-      </div>
-    </div>
+      </StickyFooter>
+    </FeatureLayout>
   )
 }

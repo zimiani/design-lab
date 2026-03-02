@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { RiCloseLine } from '@remixicon/react'
 import { registerComponent } from '../registry'
 
 export interface BottomSheetProps {
@@ -30,6 +31,7 @@ export default function BottomSheet({
             className="fixed inset-0 z-40 bg-black/40"
           />
           <motion.div
+            data-component="BottomSheet"
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
@@ -46,13 +48,21 @@ export default function BottomSheet({
             <div className="flex justify-center pt-[var(--token-spacing-2)] pb-[var(--token-spacing-1)]">
               <div className="w-[36px] h-[4px] rounded-[var(--token-radius-full)] bg-neutral-300" />
             </div>
-            {title && (
-              <div className="px-[var(--token-spacing-md)] py-[var(--token-spacing-3)]">
-                <h2 className="text-[length:var(--token-font-size-heading-sm)] leading-[var(--token-line-height-heading-sm)] font-medium text-content-primary text-center">
+            <div className="flex items-center px-[var(--token-spacing-md)] py-[var(--token-spacing-3)]">
+              {title && (
+                <h2 className="flex-1 text-[length:var(--token-font-size-heading-md)] leading-[var(--token-line-height-heading-md)] font-semibold text-content-primary">
                   {title}
                 </h2>
-              </div>
-            )}
+              )}
+              {!title && <div className="flex-1" />}
+              <button
+                type="button"
+                onClick={onClose}
+                className="shrink-0 w-[32px] h-[32px] rounded-full bg-[var(--color-surface-shade)] flex items-center justify-center cursor-pointer hover:opacity-80"
+              >
+                <RiCloseLine size={20} className="text-[var(--color-content-primary)]" />
+              </button>
+            </div>
             <div className="flex-1 overflow-y-auto px-[var(--token-spacing-md)] pb-[var(--token-spacing-xl)]">
               {children}
             </div>
@@ -65,8 +75,8 @@ export default function BottomSheet({
 
 registerComponent({
   name: 'BottomSheet',
-  category: 'layout',
-  description: 'Modal overlay sliding from bottom with spring animation.',
+  category: 'presentation',
+  description: 'Overlay for supplementary content. Bottom sheet on mobile, centered modal on desktop.',
   component: BottomSheet,
   props: [
     { name: 'open', type: 'boolean', required: true, description: 'Visibility state' },

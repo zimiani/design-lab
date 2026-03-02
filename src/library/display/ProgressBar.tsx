@@ -16,6 +16,7 @@ export default function ProgressBar({
 
   return (
     <div
+      data-component="ProgressBar"
       className={`w-full h-[4px] bg-neutral-200 rounded-[var(--token-radius-full)] overflow-hidden ${className}`}
     >
       <motion.div
@@ -30,8 +31,8 @@ export default function ProgressBar({
 
 registerComponent({
   name: 'ProgressBar',
-  category: 'display',
-  description: 'Horizontal progress indicator with animated fill.',
+  category: 'feedback',
+  description: 'Horizontal progress indicator. Use for step progress, upload status, and goal completion.',
   component: ProgressBar,
   props: [
     { name: 'value', type: 'number', required: true, description: 'Current value' },

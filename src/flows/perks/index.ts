@@ -13,21 +13,21 @@ const screenDefs = [
     id: 'perks-home',
     title: 'Perks Home',
     description: 'Hero landing page showcasing Picnic benefits with CTA to explore more.',
-    componentsUsed: ['Text', 'Button', 'Spacer'],
+    componentsUsed: ['FeatureLayout', 'Stack', 'Text', 'Badge', 'Summary', 'Banner', 'Button', 'StickyFooter'],
     component: Screen1_PerksHome,
   },
   {
     id: 'benefits-promos',
     title: 'Benefits & Promos',
     description: 'Segmented list of highlights (fee-free conversion, cashback) and referral program.',
-    componentsUsed: ['Header', 'ScreenLayout', 'SegmentedControl', 'ListItem', 'Divider', 'Badge', 'Text'],
+    componentsUsed: ['Header', 'BaseLayout', 'SegmentedControl', 'ListItem', 'Divider', 'Badge', 'Text'],
     component: Screen2_BenefitsPromos,
   },
   {
     id: 'dollar-rate',
     title: 'Dollar Rate Detail',
     description: 'Explains competitive dollar conversion rate with benefits breakdown.',
-    componentsUsed: ['HeroHeader', 'ScreenLayout', 'Text', 'Button', 'SavingsCard', 'BottomSheet'],
+    componentsUsed: ['FeatureLayout', 'Stack', 'Text', 'Button', 'IconButton', 'Link', 'BottomSheet', 'ListItem', 'StickyFooter'],
     component: Screen3_DollarRate,
   },
   {
@@ -48,7 +48,7 @@ const screenDefs = [
     id: 'perks-share',
     title: 'Share',
     description: 'Share savings and referral code via WhatsApp, Instagram, email, or link.',
-    componentsUsed: ['Header', 'ScreenLayout', 'Text', 'Card', 'Badge', 'Amount', 'Toast', 'Spacer'],
+    componentsUsed: ['Header', 'BaseLayout', 'Text', 'Card', 'Badge', 'Amount', 'Toast', 'Spacer'],
     component: Screen6_Share,
   },
 ] as const
@@ -68,7 +68,7 @@ registerFlow({
   id: 'perks-benefits',
   name: 'Perks & Benefits',
   description: 'User explores Picnic benefits — competitive dollar rates, cashback program, and referral rewards — with conversion flow and social sharing.',
-  area: 'Perks',
+  domain: 'perks',
   specContent,
   screens: screenDefs.map((s) => ({ ...s, pageId: s.id })),
 })

@@ -1,7 +1,13 @@
 export { default as Header } from './Header'
 export { default as TabBar } from './TabBar'
 export { default as SegmentedControl } from './SegmentedControl'
+export { default as GroupHeader } from './GroupHeader'
+export { default as Sidebar } from './Sidebar'
+export { default as Breadcrumb } from './Breadcrumb'
 
 export type { HeaderProps } from './Header'
 export type { TabBarProps, TabBarItem } from './TabBar'
 export type { SegmentedControlProps } from './SegmentedControl'
+export type { GroupHeaderProps } from './GroupHeader'
+export type { SidebarProps, SidebarItem } from './Sidebar'
+export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb'

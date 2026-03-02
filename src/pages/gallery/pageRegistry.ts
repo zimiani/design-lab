@@ -4,6 +4,13 @@ import { getPageOverrides } from './pageStore'
 import { getDynamicPages, type DynamicPageDef } from './dynamicPageStore'
 import { createPlaceholderComponent } from '../../flows/PlaceholderScreen'
 
+export interface PageStateDefinition {
+  id: string
+  name: string
+  description?: string
+  isDefault?: boolean
+}
+
 export interface Page {
   id: string
   name: string
@@ -12,6 +19,8 @@ export interface Page {
   componentsUsed: string[]
   component: ComponentType<FlowScreenProps>
   isDynamic?: boolean
+  source?: 'static' | 'dynamic'
+  states?: PageStateDefinition[]
 }
 
 const pages = new Map<string, Page>()

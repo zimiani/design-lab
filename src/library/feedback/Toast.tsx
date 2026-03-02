@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle, AlertCircle, AlertTriangle, Info, X } from 'lucide-react'
+import { RiCheckboxCircleLine, RiAlertLine, RiErrorWarningLine, RiInformationLine, RiCloseLine } from '@remixicon/react'
 import { registerComponent } from '../registry'
 
 export interface ToastProps {
@@ -11,10 +11,10 @@ export interface ToastProps {
 }
 
 const config = {
-  success: { icon: CheckCircle, bg: 'bg-success', text: 'text-text-inverse' },
-  error: { icon: AlertCircle, bg: 'bg-error', text: 'text-text-inverse' },
-  info: { icon: Info, bg: 'bg-info', text: 'text-text-inverse' },
-  warning: { icon: AlertTriangle, bg: 'bg-warning', text: 'text-text-inverse' },
+  success: { icon: RiCheckboxCircleLine, bg: 'bg-[var(--token-neutral-900)]', text: 'text-white' },
+  error: { icon: RiAlertLine, bg: 'bg-[var(--token-error)]', text: 'text-white' },
+  info: { icon: RiInformationLine, bg: 'bg-[var(--token-neutral-900)]', text: 'text-white' },
+  warning: { icon: RiErrorWarningLine, bg: 'bg-[var(--token-neutral-900)]', text: 'text-white' },
 } as const
 
 export default function Toast({
@@ -29,28 +29,32 @@ export default function Toast({
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
-          className={`
-            flex items-center gap-[var(--token-spacing-3)]
-            px-[var(--token-spacing-md)] py-[var(--token-spacing-3)]
-            rounded-[var(--token-radius-md)] shadow-md
-            ${bg} ${text} ${className}
-          `}
-        >
-          <IconComp size={18} className="shrink-0" />
-          <span className="flex-1 text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]">
-            {message}
-          </span>
-          {onDismiss && (
-            <button type="button" onClick={onDismiss} className="shrink-0 opacity-80 hover:opacity-100 cursor-pointer">
-              <X size={16} />
-            </button>
-          )}
-        </motion.div>
+        <div data-component="Toast" className="fixed bottom-[max(var(--token-spacing-6),var(--safe-area-bottom,0px))] left-[var(--token-spacing-4)] right-[var(--token-spacing-4)] z-50 flex justify-center pointer-events-none">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className={`
+              pointer-events-auto
+              flex items-center gap-[var(--token-spacing-3)]
+              px-[var(--token-spacing-4)] py-[var(--token-spacing-3)]
+              rounded-[var(--token-radius-sm)] shadow-lg
+              w-full max-w-[400px]
+              ${bg} ${text} ${className}
+            `}
+          >
+            <IconComp size={18} className="shrink-0" />
+            <span className="flex-1 text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium">
+              {message}
+            </span>
+            {onDismiss && (
+              <button type="button" onClick={onDismiss} className="shrink-0 opacity-80 hover:opacity-100 cursor-pointer bg-transparent border-none p-0 text-inherit">
+                <RiCloseLine size={16} />
+              </button>
+            )}
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   )
@@ -59,7 +63,7 @@ export default function Toast({
 registerComponent({
   name: 'Toast',
   category: 'feedback',
-  description: 'Notification toast with success, error, info, warning variants.',
+  description: 'Brief, non-blocking notification at screen bottom (Material snackbar pattern). Dark background, white text. Auto-positioned fixed at bottom. Use for copy confirmations, save success, and transient alerts.',
   component: Toast,
   variants: ['success', 'error', 'info', 'warning'],
   props: [

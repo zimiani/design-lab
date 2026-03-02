@@ -30,7 +30,7 @@ export default function Amount({
   className = '',
 }: AmountProps) {
   return (
-    <span className={`${sizeStyles[size]} text-text-primary tabular-nums ${className}`}>
+    <span data-component="Amount" className={`${sizeStyles[size]} text-text-primary tabular-nums tracking-[-0.01em] ${className}`} style={{ fontFeatureSettings: "'ss01' 1, 'ss03' 1, 'cv05' 1, 'cv10' 1, 'tnum' 1" }}>
       {formatAmount(value, currency)}
     </span>
   )
@@ -38,8 +38,8 @@ export default function Amount({
 
 registerComponent({
   name: 'Amount',
-  category: 'display',
-  description: 'Formatted currency display with size variants.',
+  category: 'foundations-removed',
+  description: 'Formatted currency value with tabular numbers. Use for balances, prices, and transaction amounts.',
   component: Amount,
   sizes: ['sm', 'md', 'lg', 'display'],
   props: [

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Handle, Position, type NodeProps } from '@xyflow/react'
-import { Monitor, Play } from 'lucide-react'
+import { RiComputerLine, RiPlayLine } from '@remixicon/react'
 import type { FlowNodeData } from '../flowGraph.types'
 
 function ScreenNode({ data, selected }: NodeProps) {
@@ -20,15 +20,19 @@ function ScreenNode({ data, selected }: NodeProps) {
         bg-shell-surface
       `}
     >
-      <Handle type="target" position={Position.Top} className="!bg-shell-selected-text !w-[10px] !h-[10px] !border-2 !border-shell-surface" />
+      <Handle type="target" position={Position.Top} id="top" className="!bg-shell-selected-text !w-[10px] !h-[10px] !border-2 !border-shell-surface" />
+      <Handle type="target" position={Position.Left} id="left-target" className="!bg-shell-selected-text !w-[10px] !h-[10px] !border-2 !border-shell-surface" />
+      <Handle type="source" position={Position.Left} id="left-source" className="!bg-shell-selected-text !w-[10px] !h-[10px] !border-2 !border-shell-surface" />
+      <Handle type="target" position={Position.Right} id="right-target" className="!bg-shell-selected-text !w-[10px] !h-[10px] !border-2 !border-shell-surface" />
+      <Handle type="source" position={Position.Right} id="right-source" className="!bg-shell-selected-text !w-[10px] !h-[10px] !border-2 !border-shell-surface" />
       {/* Header bar */}
       <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] bg-shell-hover">
-        <Monitor size={14} className="text-shell-selected-text shrink-0" />
+        <RiComputerLine size={14} className="text-shell-selected-text shrink-0" />
         <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-shell-text truncate flex-1">
           {nodeData.label}
         </span>
         {nodeData.screenId && (
-          <Play size={12} className="text-shell-text-tertiary shrink-0" />
+          <RiPlayLine size={12} className="text-shell-text-tertiary shrink-0" />
         )}
       </div>
       {/* Description */}
@@ -46,7 +50,7 @@ function ScreenNode({ data, selected }: NodeProps) {
           </p>
         </div>
       )}
-      <Handle type="source" position={Position.Bottom} className="!bg-shell-selected-text !w-[10px] !h-[10px] !border-2 !border-shell-surface" />
+      <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-shell-selected-text !w-[10px] !h-[10px] !border-2 !border-shell-surface" />
     </div>
   )
 }

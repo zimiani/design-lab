@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Handle, Position, type NodeProps } from '@xyflow/react'
-import { GitBranch } from 'lucide-react'
+import { RiGitBranchLine } from '@remixicon/react'
 import type { FlowNodeData } from '../flowGraph.types'
 
 function DecisionNode({ data, selected }: NodeProps) {
@@ -18,9 +18,11 @@ function DecisionNode({ data, selected }: NodeProps) {
         bg-[#3D3526]
       `}
     >
-      <Handle type="target" position={Position.Top} className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
+      <Handle type="target" position={Position.Top} id="top" className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
+      <Handle type="target" position={Position.Left} id="left-target" className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
+      <Handle type="target" position={Position.Right} id="right-target" className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
       <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
-        <GitBranch size={14} className="text-[#FBBF24] shrink-0" />
+        <RiGitBranchLine size={14} className="text-[#FBBF24] shrink-0" />
         <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-shell-text truncate">
           {nodeData.label}
         </span>
@@ -32,9 +34,9 @@ function DecisionNode({ data, selected }: NodeProps) {
           </p>
         </div>
       )}
-      <Handle type="source" position={Position.Bottom} id="default" className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
-      <Handle type="source" position={Position.Left} id="left" className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
-      <Handle type="source" position={Position.Right} id="right" className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
+      <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
+      <Handle type="source" position={Position.Left} id="left-source" className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
+      <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#FBBF24] !w-[10px] !h-[10px] !border-2 !border-[#3D3526]" />
     </div>
   )
 }

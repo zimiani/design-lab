@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion'
-import { Check } from 'lucide-react'
+import { RiCheckLine } from '@remixicon/react'
 import { registerComponent } from '../registry'
 
 export interface CheckboxProps {
   checked?: boolean
   onChange?: (checked: boolean) => void
-  label?: string
   disabled?: boolean
   className?: string
 }
@@ -13,7 +12,6 @@ export interface CheckboxProps {
 export default function Checkbox({
   checked = false,
   onChange,
-  label,
   disabled = false,
   className = '',
 }: CheckboxProps) {
@@ -23,10 +21,11 @@ export default function Checkbox({
 
   return (
     <button
+      data-component="Checkbox"
       type="button"
       onClick={handlePress}
       disabled={disabled}
-      className={`flex items-center gap-[var(--token-spacing-3)] ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
+      className={`flex items-center ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
     >
       <motion.div
         animate={{
@@ -38,15 +37,10 @@ export default function Checkbox({
       >
         {checked && (
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.15 }}>
-            <Check size={14} color="var(--token-text-inverse)" strokeWidth={2.5} />
+            <RiCheckLine size={14} color="var(--token-text-inverse)" />
           </motion.div>
         )}
       </motion.div>
-      {label && (
-        <span className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] text-content-primary">
-          {label}
-        </span>
-      )}
     </button>
   )
 }
@@ -54,12 +48,11 @@ export default function Checkbox({
 registerComponent({
   name: 'Checkbox',
   category: 'inputs',
-  description: 'Checkbox with label and animated check mark.',
+  description: 'Check mark for boolean selection. Use inside ListItem for labeled rows.',
   component: Checkbox,
   props: [
     { name: 'checked', type: 'boolean', required: false, defaultValue: 'false', description: 'Whether checked' },
     { name: 'onChange', type: '(checked: boolean) => void', required: false, description: 'Toggle handler' },
-    { name: 'label', type: 'string', required: false, description: 'Label text' },
     { name: 'disabled', type: 'boolean', required: false, defaultValue: 'false', description: 'Disable interaction' },
   ],
 })

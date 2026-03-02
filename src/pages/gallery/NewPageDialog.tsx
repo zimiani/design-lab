@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { RiCloseLine } from '@remixicon/react'
 
 interface NewPageDialogProps {
   onClose: () => void
@@ -43,7 +43,7 @@ export default function NewPageDialog({ onClose, onCreate }: NewPageDialogProps)
             onClick={onClose}
             className="w-[28px] h-[28px] flex items-center justify-center rounded-[var(--token-radius-sm)] text-shell-text-tertiary hover:text-shell-text hover:bg-shell-hover transition-colors cursor-pointer"
           >
-            <X size={16} />
+            <RiCloseLine size={16} />
           </button>
         </div>
 

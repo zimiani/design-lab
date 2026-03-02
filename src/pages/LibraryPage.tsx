@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useSearchParams } from 'react-router-dom'
 
@@ -13,32 +13,50 @@ import '../library/layout'
 import AppHeader from '../components/AppHeader'
 import ComponentSidebar from './library/ComponentSidebar'
 import ComponentDetail from './library/ComponentDetail'
+import FoundationDetail from './library/FoundationDetail'
+import PatternDetail from './library/PatternDetail'
+import ScreenPartsDetail from './library/ScreenPartsDetail'
 import TokenEditor from './library/TokenEditor'
-import { getAllComponents } from '../library/registry'
 
 export default function LibraryPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [selected, setSelected] = useState<string | null>(null)
+  const selected = searchParams.get('selected')
 
-  /* Pick first component as default on mount, or use ?selected= param */
+  /* Default to Colors foundation if none selected */
   useEffect(() => {
-    const fromParam = searchParams.get('selected')
-    if (fromParam) {
-      setSelected(fromParam)
-      // Clear the param from the URL after consuming it
-      setSearchParams({}, { replace: true })
-      return
-    }
     if (!selected) {
-      const all = getAllComponents()
-      if (all.length > 0) {
-        setSelected(all[0].name)
-      }
+      setSearchParams({ selected: 'foundation:Colors' }, { replace: true })
     }
-  }, [selected, searchParams, setSearchParams])
+  }, [selected, setSearchParams])
 
   const handleSelect = (name: string) => {
-    setSelected(name)
+    setSearchParams({ selected: name })
+  }
+
+  function renderContent() {
+    if (!selected) {
+      return (
+        <div className="flex-1 flex items-center justify-center text-shell-text-tertiary">
+          Select an item from the sidebar
+        </div>
+      )
+    }
+
+    if (selected.startsWith('foundation:')) {
+      const foundation = selected.replace('foundation:', '')
+      return <FoundationDetail foundation={foundation} />
+    }
+
+    if (selected === 'screen-parts') {
+      return <ScreenPartsDetail />
+    }
+
+    if (selected.startsWith('pattern:')) {
+      const pattern = selected.replace('pattern:', '')
+      return <PatternDetail pattern={pattern} />
+    }
+
+    return <ComponentDetail componentName={selected} />
   }
 
   return (
@@ -54,13 +72,7 @@ export default function LibraryPage() {
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
         <ComponentSidebar selected={selected} onSelect={handleSelect} />
-        {selected ? (
-          <ComponentDetail componentName={selected} />
-        ) : (
-          <div className="flex-1 flex items-center justify-center text-shell-text-tertiary">
-            Select a component
-          </div>
-        )}
+        {renderContent()}
         <TokenEditor />
       </div>
     </motion.div>

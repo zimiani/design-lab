@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { Loader2 } from 'lucide-react'
+import { RiLoaderLine } from '@remixicon/react'
 import { registerComponent } from '../registry'
 
 export interface ButtonProps {
@@ -10,19 +10,21 @@ export interface ButtonProps {
   disabled?: boolean
   fullWidth?: boolean
   children: ReactNode
+  subtitle?: string
   onPress?: () => void
   className?: string
+  style?: React.CSSProperties
 }
 
 const variantStyles = {
   primary:
-    'bg-[#c8f91f] text-[#1d211a] font-semibold hover:bg-[#b8e61a] active:bg-[#a8d315]',
+    'bg-[var(--color-interactive-default)] text-[var(--color-content-primary)] font-semibold hover:bg-[var(--color-interactive-hover)] active:bg-[var(--color-interactive-pressed)]',
   secondary:
-    'bg-[#1d211a] text-[#f9fafb] font-semibold hover:bg-[#2a2f26] active:bg-[#363b32]',
+    'bg-[var(--color-interactive-primary)] text-[var(--color-content-inverse)] font-semibold hover:opacity-80 active:opacity-70',
   ghost:
-    'bg-transparent text-[#4d7c0f] font-medium hover:bg-[#4d7c0f]/5 active:bg-[#4d7c0f]/10',
+    'bg-transparent text-[var(--color-interactive-primary)] font-medium hover:bg-[var(--color-interactive-primary)]/5 active:bg-[var(--color-interactive-primary)]/10',
   destructive:
-    'bg-[#dc2626] text-white font-medium hover:bg-[#B91C1C] active:bg-[#991B1B]',
+    'bg-[var(--color-error)] text-white font-medium hover:bg-[#B91C1C] active:bg-[#991B1B]',
 } as const
 
 const primarySizeStyles = {
@@ -44,17 +46,21 @@ export default function Button({
   disabled = false,
   fullWidth = false,
   children,
+  subtitle,
   onPress,
   className = '',
+  style,
 }: ButtonProps) {
   const isDisabled = disabled || loading
 
   return (
     <motion.button
+      data-component="Button"
       whileTap={isDisabled ? undefined : { scale: 0.97 }}
       transition={{ duration: 0.15, ease: 'easeOut' }}
       onClick={onPress}
       disabled={isDisabled}
+      style={style}
       className={`
         inline-flex items-center justify-center font-medium
         transition-colors duration-[var(--token-transition-fast)]
@@ -66,7 +72,12 @@ export default function Button({
       `}
     >
       {loading ? (
-        <Loader2 size={size === 'sm' ? 14 : size === 'md' ? 16 : 18} className="animate-spin" />
+        <RiLoaderLine size={size === 'sm' ? 14 : size === 'md' ? 16 : 18} className="animate-spin" />
+      ) : subtitle ? (
+        <span className="flex justify-between w-full">
+          <span>{children}</span>
+          <span className="text-sm opacity-80">{subtitle}</span>
+        </span>
       ) : (
         children
       )}
@@ -76,8 +87,8 @@ export default function Button({
 
 registerComponent({
   name: 'Button',
-  category: 'inputs',
-  description: 'Primary action button with variants, sizes, loading, and disabled states.',
+  category: 'actions',
+  description: 'Triggers an action. `primary` for main action, `secondary` for alternatives, `ghost` for inline, `destructive` for irreversible.',
   component: Button,
   variants: ['primary', 'secondary', 'ghost', 'destructive'],
   sizes: ['sm', 'md', 'lg'],
@@ -88,6 +99,7 @@ registerComponent({
     { name: 'disabled', type: 'boolean', required: false, defaultValue: 'false', description: 'Disable interaction' },
     { name: 'fullWidth', type: 'boolean', required: false, defaultValue: 'false', description: 'Stretch to full width' },
     { name: 'children', type: 'ReactNode', required: true, description: 'Button label' },
+    { name: 'subtitle', type: 'string', required: false, description: 'Secondary text shown to the right' },
     { name: 'onPress', type: '() => void', required: false, description: 'Click handler' },
   ],
 })

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { RiArrowDownSLine } from '@remixicon/react'
 import { registerComponent } from '../registry'
 
 export interface SelectOption {
@@ -51,7 +51,7 @@ export default function Select({
       : 'border-border-default'
 
   return (
-    <div ref={ref} className={`relative flex flex-col gap-[var(--token-spacing-1)] ${className}`}>
+    <div data-component="Select" ref={ref} className={`relative flex flex-col gap-[var(--token-spacing-1)] ${className}`}>
       {label && (
         <label className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium text-content-primary">
           {label}
@@ -78,7 +78,7 @@ export default function Select({
           {selected?.label ?? placeholder}
         </span>
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
-          <ChevronDown size={18} className="text-content-tertiary" />
+          <RiArrowDownSLine size={18} className="text-content-tertiary" />
         </motion.div>
       </button>
 
@@ -129,7 +129,7 @@ export default function Select({
 registerComponent({
   name: 'Select',
   category: 'inputs',
-  description: 'Dropdown select with animated open/close.',
+  description: 'Dropdown picker for choosing one option from a list. Use for form fields with predefined choices.',
   component: Select,
   props: [
     { name: 'label', type: 'string', required: false, description: 'Input label' },

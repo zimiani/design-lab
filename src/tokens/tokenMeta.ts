@@ -29,6 +29,48 @@ export const tokenCategories: TokenCategory[] = [
     ],
   },
   {
+    label: 'Brand Core',
+    tokens: [
+      { cssVar: 'brand-core-100', label: 'Core 100', type: 'color', defaultValue: '#14B876' },
+      { cssVar: 'brand-core-300', label: 'Core 300', type: 'color', defaultValue: '#29A372' },
+      { cssVar: 'brand-core-500', label: 'Core 500', type: 'color', defaultValue: '#1A4D3D' },
+    ],
+  },
+  {
+    label: 'Brand Lime',
+    tokens: [
+      { cssVar: 'brand-lime-100', label: 'Lime 100', type: 'color', defaultValue: '#E8F9B8' },
+      { cssVar: 'brand-lime-200', label: 'Lime 200', type: 'color', defaultValue: '#CDED74' },
+      { cssVar: 'brand-lime-300', label: 'Lime 300', type: 'color', defaultValue: '#CDF460' },
+      { cssVar: 'brand-lime-500', label: 'Lime 500', type: 'color', defaultValue: '#A3D41C' },
+      { cssVar: 'brand-lime-900', label: 'Lime 900', type: 'color', defaultValue: '#38632B' },
+    ],
+  },
+  {
+    label: 'Brand Grape',
+    tokens: [
+      { cssVar: 'brand-grape-100', label: 'Grape 100', type: 'color', defaultValue: '#C0BAF7' },
+      { cssVar: 'brand-grape-300', label: 'Grape 300', type: 'color', defaultValue: '#2F289F' },
+      { cssVar: 'brand-grape-500', label: 'Grape 500', type: 'color', defaultValue: '#242060' },
+    ],
+  },
+  {
+    label: 'Brand Guava',
+    tokens: [
+      { cssVar: 'brand-guava-100', label: 'Guava 100', type: 'color', defaultValue: '#F39AA9' },
+      { cssVar: 'brand-guava-300', label: 'Guava 300', type: 'color', defaultValue: '#ED795E' },
+      { cssVar: 'brand-guava-500', label: 'Guava 500', type: 'color', defaultValue: '#994633' },
+    ],
+  },
+  {
+    label: 'Feedback',
+    tokens: [
+      { cssVar: 'feedback-success', label: 'Success', type: 'color', defaultValue: '#10B981' },
+      { cssVar: 'feedback-critical', label: 'Critical', type: 'color', defaultValue: '#B91C1C' },
+      { cssVar: 'feedback-warning', label: 'Warning', type: 'color', defaultValue: '#EAB308' },
+    ],
+  },
+  {
     label: 'Semantic Colors',
     tokens: [
       { cssVar: 'success', label: 'Success', type: 'color', defaultValue: '#16A34A' },
@@ -105,14 +147,14 @@ export const tokenCategories: TokenCategory[] = [
   {
     label: 'Typography',
     tokens: [
-      { cssVar: 'font-size-display', label: 'Display Size', type: 'size', defaultValue: '32px' },
-      { cssVar: 'font-size-heading-lg', label: 'Heading LG Size', type: 'size', defaultValue: '24px' },
-      { cssVar: 'font-size-heading-md', label: 'Heading MD Size', type: 'size', defaultValue: '20px' },
-      { cssVar: 'font-size-heading-sm', label: 'Heading SM Size', type: 'size', defaultValue: '17px' },
-      { cssVar: 'font-size-body-lg', label: 'Body LG Size', type: 'size', defaultValue: '17px' },
-      { cssVar: 'font-size-body-md', label: 'Body MD Size', type: 'size', defaultValue: '15px' },
-      { cssVar: 'font-size-body-sm', label: 'Body SM Size', type: 'size', defaultValue: '13px' },
-      { cssVar: 'font-size-caption', label: 'Caption Size', type: 'size', defaultValue: '11px' },
+      { cssVar: 'font-size-display', label: 'Display Size', type: 'size', defaultValue: '36px' },
+      { cssVar: 'font-size-heading-lg', label: 'Heading LG Size', type: 'size', defaultValue: '30px' },
+      { cssVar: 'font-size-heading-md', label: 'Heading MD Size', type: 'size', defaultValue: '24px' },
+      { cssVar: 'font-size-heading-sm', label: 'Heading SM Size', type: 'size', defaultValue: '20px' },
+      { cssVar: 'font-size-body-lg', label: 'Body LG Size', type: 'size', defaultValue: '18px' },
+      { cssVar: 'font-size-body-md', label: 'Body MD Size', type: 'size', defaultValue: '16px' },
+      { cssVar: 'font-size-body-sm', label: 'Body SM Size', type: 'size', defaultValue: '14px' },
+      { cssVar: 'font-size-caption', label: 'Caption Size', type: 'size', defaultValue: '12px' },
     ],
   },
   {
@@ -124,14 +166,6 @@ export const tokenCategories: TokenCategory[] = [
       { cssVar: 'radius-lg', label: 'Large', type: 'size', defaultValue: '16px' },
       { cssVar: 'radius-xl', label: 'Extra Large', type: 'size', defaultValue: '24px' },
       { cssVar: 'radius-full', label: 'Full', type: 'size', defaultValue: '9999px' },
-    ],
-  },
-  {
-    label: 'Shadows',
-    tokens: [
-      { cssVar: 'shadow-sm', label: 'Small', type: 'shadow', defaultValue: '0px 1px 2px rgba(0, 0, 0, 0.05)' },
-      { cssVar: 'shadow-md', label: 'Medium', type: 'shadow', defaultValue: '0px 4px 12px rgba(0, 0, 0, 0.08)' },
-      { cssVar: 'shadow-lg', label: 'Large', type: 'shadow', defaultValue: '0px 12px 32px rgba(0, 0, 0, 0.12)' },
     ],
   },
 ]

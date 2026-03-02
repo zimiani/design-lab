@@ -16,6 +16,7 @@ export default function SegmentedControl({
 }: SegmentedControlProps) {
   return (
     <div
+      data-component="SegmentedControl"
       className={`
         relative flex p-[2px]
         bg-surface-secondary rounded-[var(--token-radius-md)]
@@ -53,7 +54,7 @@ export default function SegmentedControl({
 registerComponent({
   name: 'SegmentedControl',
   category: 'navigation',
-  description: 'Tab switcher with animated indicator.',
+  description: 'Inline tab switcher for filtering or toggling views. Use for 2-4 mutually exclusive options within a screen.',
   component: SegmentedControl,
   props: [
     { name: 'segments', type: 'string[]', required: true, description: 'Segment labels' },

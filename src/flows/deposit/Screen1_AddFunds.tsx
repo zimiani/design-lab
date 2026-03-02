@@ -1,40 +1,40 @@
-import { QrCode, Landmark, Bitcoin } from 'lucide-react'
+import { RiQrCodeLine, RiBankLine, RiBitCoinLine } from '@remixicon/react'
 import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
 import Header from '../../library/navigation/Header'
-import ScreenLayout from '../../library/layout/ScreenLayout'
+import BaseLayout from '../../library/layout/BaseLayout'
+import Section from '../../library/layout/Section'
+import Stack from '../../library/layout/Stack'
 import ListItem from '../../library/display/ListItem'
+import Avatar from '../../library/display/Avatar'
 import Text from '../../library/foundations/Text'
-import Divider from '../../library/foundations/Divider'
 
 export default function Screen1_AddFunds({ onNext, onBack }: FlowScreenProps) {
   return (
-    <ScreenLayout header={<Header title="Add funds" onBack={onBack} />}>
-      <div className="px-[var(--token-spacing-md)]">
-        <Text variant="heading-sm">Choose a deposit method</Text>
-      </div>
-      <div className="bg-surface-primary mx-[var(--token-spacing-md)] rounded-[var(--token-radius-lg)] overflow-hidden">
-        <ListItem
-          icon={<QrCode size={20} className="text-interactive-foreground" />}
-          label="PIX"
-          description="Instant transfer"
-          rightValue="Free"
-          onPress={onNext}
-        />
-        <Divider spacing="sm" />
-        <ListItem
-          icon={<Landmark size={20} className="text-text-secondary" />}
-          label="TED"
-          description="Bank transfer, 1-2 business days"
-          rightValue="R$ 8.50"
-        />
-        <Divider spacing="sm" />
-        <ListItem
-          icon={<Bitcoin size={20} className="text-text-secondary" />}
-          label="Crypto"
-          description="BTC, ETH, USDC"
-          rightValue="Network fee"
-        />
-      </div>
-    </ScreenLayout>
+    <BaseLayout>
+      <Header title="Add funds" onBack={onBack} />
+      <Section title="Choose a deposit method">
+        <Stack gap="none">
+          <ListItem
+            left={<Avatar icon={<RiQrCodeLine size={18} />} size="md" />}
+            title="PIX"
+            subtitle="Instant transfer"
+            right={<Text variant="body-sm" color="content-secondary">Free</Text>}
+            onPress={onNext}
+          />
+          <ListItem
+            left={<Avatar icon={<RiBankLine size={18} />} size="md" />}
+            title="TED"
+            subtitle="Bank transfer, 1-2 business days"
+            right={<Text variant="body-sm" color="content-secondary">R$ 8.50</Text>}
+          />
+          <ListItem
+            left={<Avatar icon={<RiBitCoinLine size={18} />} size="md" />}
+            title="Crypto"
+            subtitle="BTC, ETH, USDC"
+            right={<Text variant="body-sm" color="content-secondary">Network fee</Text>}
+          />
+        </Stack>
+      </Section>
+    </BaseLayout>
   )
 }

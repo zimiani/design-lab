@@ -16,7 +16,7 @@ export interface DynamicFlowDef {
   id: string
   name: string
   description: string
-  area: string
+  domain: string
   screens: DynamicScreen[]
   specContent?: string
 }

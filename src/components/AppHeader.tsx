@@ -7,7 +7,7 @@ interface AppHeaderProps {
 }
 
 const navItems = [
-  { to: '/components', label: 'Components' },
+  { to: '/components', label: 'Design System' },
   { to: '/flows', label: 'Flows' },
   { to: '/pages', label: 'Pages' },
 ] as const

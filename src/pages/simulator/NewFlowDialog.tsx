@@ -1,20 +1,22 @@
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { RiCloseLine } from '@remixicon/react'
+import { getAllDomains } from './flowRegistry'
 
 interface NewFlowDialogProps {
   onClose: () => void
-  onCreate: (name: string, area: string, description: string) => void
+  onCreate: (name: string, domain: string, description: string) => void
 }
 
 export default function NewFlowDialog({ onClose, onCreate }: NewFlowDialogProps) {
   const [name, setName] = useState('')
-  const [area, setArea] = useState('')
+  const [domain, setDomain] = useState('')
   const [description, setDescription] = useState('')
+  const domains = getAllDomains()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name.trim() || !area.trim()) return
-    onCreate(name.trim(), area.trim(), description.trim())
+    if (!name.trim() || !domain.trim()) return
+    onCreate(name.trim(), domain.trim(), description.trim())
   }
 
   return (
@@ -43,7 +45,7 @@ export default function NewFlowDialog({ onClose, onCreate }: NewFlowDialogProps)
             onClick={onClose}
             className="w-[28px] h-[28px] flex items-center justify-center rounded-[var(--token-radius-sm)] text-shell-text-tertiary hover:text-shell-text hover:bg-shell-hover transition-colors cursor-pointer"
           >
-            <X size={16} />
+            <RiCloseLine size={16} />
           </button>
         </div>
 
@@ -65,15 +67,18 @@ export default function NewFlowDialog({ onClose, onCreate }: NewFlowDialogProps)
 
           <div>
             <label className="block text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
-              Area *
+              Domain *
             </label>
-            <input
-              type="text"
-              value={area}
-              onChange={(e) => setArea(e.target.value)}
-              placeholder="e.g. Transactions, Onboarding, Settings"
+            <select
+              value={domain}
+              onChange={(e) => setDomain(e.target.value)}
               className="w-full px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text"
-            />
+            >
+              <option value="">Select a domain...</option>
+              {domains.map((d) => (
+                <option key={d.id} value={d.id}>{d.name}</option>
+              ))}
+            </select>
           </div>
 
           <div>
@@ -101,7 +106,7 @@ export default function NewFlowDialog({ onClose, onCreate }: NewFlowDialogProps)
           </button>
           <button
             type="submit"
-            disabled={!name.trim() || !area.trim()}
+            disabled={!name.trim() || !domain.trim()}
             className="px-[var(--token-spacing-4)] py-[var(--token-spacing-2)] text-[length:var(--token-font-size-body-sm)] text-shell-bg bg-shell-selected-text rounded-[var(--token-radius-sm)] font-medium cursor-pointer hover:bg-[#6EE7A0] disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Create Flow

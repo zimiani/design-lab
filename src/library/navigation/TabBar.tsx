@@ -23,9 +23,10 @@ export default function TabBar({
 }: TabBarProps) {
   return (
     <nav
+      data-component="TabBar"
       className={`
         flex items-end justify-around
-        h-[56px] px-[var(--token-spacing-sm)]
+        px-[var(--token-spacing-sm)] pb-[var(--safe-area-bottom,0px)]
         bg-surface-primary border-t border-border-default
         ${className}
       `}
@@ -61,7 +62,7 @@ export default function TabBar({
 registerComponent({
   name: 'TabBar',
   category: 'navigation',
-  description: 'Bottom tab navigation bar for 4-5 items.',
+  description: 'Bottom tab navigation for primary app sections. Use for 4-5 top-level destinations.',
   component: TabBar,
   props: [
     { name: 'items', type: 'TabBarItem[]', required: true, description: 'Tab items' },

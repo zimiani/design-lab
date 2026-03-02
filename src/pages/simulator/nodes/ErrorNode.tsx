@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Handle, Position, type NodeProps } from '@xyflow/react'
-import { AlertTriangle } from 'lucide-react'
+import { RiErrorWarningLine } from '@remixicon/react'
 import type { FlowNodeData } from '../flowGraph.types'
 
 function ErrorNode({ data, selected }: NodeProps) {
@@ -18,9 +18,13 @@ function ErrorNode({ data, selected }: NodeProps) {
         bg-[#3D2626]
       `}
     >
-      <Handle type="target" position={Position.Top} className="!bg-[#F87171] !w-[10px] !h-[10px] !border-2 !border-[#3D2626]" />
+      <Handle type="target" position={Position.Top} id="top" className="!bg-[#F87171] !w-[10px] !h-[10px] !border-2 !border-[#3D2626]" />
+      <Handle type="target" position={Position.Left} id="left-target" className="!bg-[#F87171] !w-[10px] !h-[10px] !border-2 !border-[#3D2626]" />
+      <Handle type="source" position={Position.Left} id="left-source" className="!bg-[#F87171] !w-[10px] !h-[10px] !border-2 !border-[#3D2626]" />
+      <Handle type="target" position={Position.Right} id="right-target" className="!bg-[#F87171] !w-[10px] !h-[10px] !border-2 !border-[#3D2626]" />
+      <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#F87171] !w-[10px] !h-[10px] !border-2 !border-[#3D2626]" />
       <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
-        <AlertTriangle size={14} className="text-[#F87171] shrink-0" />
+        <RiErrorWarningLine size={14} className="text-[#F87171] shrink-0" />
         <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-shell-text truncate">
           {nodeData.label}
         </span>
@@ -32,7 +36,7 @@ function ErrorNode({ data, selected }: NodeProps) {
           </p>
         </div>
       )}
-      <Handle type="source" position={Position.Bottom} className="!bg-[#F87171] !w-[10px] !h-[10px] !border-2 !border-[#3D2626]" />
+      <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-[#F87171] !w-[10px] !h-[10px] !border-2 !border-[#3D2626]" />
     </div>
   )
 }

@@ -22,6 +22,7 @@ export default function Toggle({
 
   return (
     <button
+      data-component="Toggle"
       type="button"
       onClick={handlePress}
       disabled={disabled}
@@ -34,7 +35,9 @@ export default function Toggle({
       )}
       <motion.div
         animate={{
-          backgroundColor: checked ? 'var(--token-interactive-default)' : 'var(--token-neutral-300)',
+          backgroundColor: checked
+            ? 'var(--token-interactive-default)'
+            : 'var(--token-neutral-300)',
         }}
         transition={{ duration: 0.2 }}
         className="relative w-[50px] h-[30px] rounded-[var(--token-radius-full)] shrink-0"
@@ -52,7 +55,7 @@ export default function Toggle({
 registerComponent({
   name: 'Toggle',
   category: 'inputs',
-  description: 'Toggle switch with animated thumb.',
+  description: 'Binary on/off switch with animated thumb. Use inside ListItem for settings rows.',
   component: Toggle,
   props: [
     { name: 'checked', type: 'boolean', required: false, defaultValue: 'false', description: 'Whether on' },
