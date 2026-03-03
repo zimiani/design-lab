@@ -34,14 +34,6 @@ function isScreenNode(node: Node): boolean {
   return false
 }
 
-/** Info about a state connected to a page node. */
-export interface PageStateInfo {
-  nodeId: string
-  stateId: string
-  label: string
-  description?: string
-}
-
 /**
  * Build an adjacency map: nodeId → list of target nodeIds via outgoing edges.
  */
@@ -100,12 +92,17 @@ function findStartNode(nodes: Node[], edges: Edge[]): Node | null {
 /**
  * From a given node, follow outgoing edges to find the next reachable screen
  * nodes, skipping pass-through nodes (decision, error, flow-reference, action, overlay).
+ *
+ * When `skipScreenId` is provided, screen nodes with that screenId are treated
+ * as pass-through (state-transition nodes for the same page) so the traversal
+ * continues through them to find the next *different* screen.
  */
 function followEdgesToScreens(
   fromNodeId: string,
   adj: Map<string, string[]>,
   nodeMap: Map<string, Node>,
   visited: Set<string> = new Set(),
+  skipScreenId?: string,
 ): Node[] {
   const results: Node[] = []
   const targets = adj.get(fromNodeId) ?? []
@@ -118,10 +115,17 @@ function followEdgesToScreens(
     if (!targetNode) continue
 
     if (isScreenNode(targetNode)) {
-      results.push(targetNode)
+      const td = targetNode.data as FlowNodeData
+      const sid = td.screenId ?? td.pageId
+      if (skipScreenId && sid === skipScreenId) {
+        // Same page (state transition) — treat as pass-through
+        results.push(...followEdgesToScreens(targetId, adj, nodeMap, visited, skipScreenId))
+      } else {
+        results.push(targetNode)
+      }
     } else {
       // Pass-through: keep following edges
-      results.push(...followEdgesToScreens(targetId, adj, nodeMap, visited))
+      results.push(...followEdgesToScreens(targetId, adj, nodeMap, visited, skipScreenId))
     }
   }
 
@@ -158,8 +162,10 @@ export function deriveNavigationPath(nodes: Node[], edges: Edge[]): NavigableSte
       label: d.label,
     })
 
-    // Follow edges to next screen nodes
-    const nextScreens = followEdgesToScreens(current.id, adj, nodeMap, new Set())
+    const currentScreenId = d.screenId ?? d.pageId!
+
+    // Follow edges to next screen nodes, skipping same-screenId state-transition nodes
+    const nextScreens = followEdgesToScreens(current.id, adj, nodeMap, new Set(), currentScreenId)
     for (const next of nextScreens) {
       if (!visited.has(next.id)) {
         queue.push(next)
@@ -167,13 +173,17 @@ export function deriveNavigationPath(nodes: Node[], edges: Edge[]): NavigableSte
     }
   }
 
-  // Append unreachable screen nodes
+  // Append unreachable screen nodes (deduplicate by screenId — state-transition nodes don't count)
+  const seenScreenIds = new Set(path.map((s) => s.screenId))
   for (const node of screenNodes) {
     if (!visited.has(node.id)) {
       const d = node.data as FlowNodeData
+      const sid = d.screenId ?? d.pageId!
+      if (seenScreenIds.has(sid)) continue // skip duplicate screenId
+      seenScreenIds.add(sid)
       path.push({
         nodeId: node.id,
-        screenId: d.screenId ?? d.pageId!,
+        screenId: sid,
         label: d.label,
       })
     }
@@ -193,7 +203,9 @@ export function getNextScreenOptions(
 ): NavigableStep[] {
   const nodeMap = new Map(nodes.map((n) => [n.id, n]))
   const adj = buildAdjacency(edges)
-  const nextNodes = followEdgesToScreens(currentNodeId, adj, nodeMap)
+  const currentNode = nodeMap.get(currentNodeId)
+  const currentScreenId = currentNode ? ((currentNode.data as FlowNodeData).screenId ?? (currentNode.data as FlowNodeData).pageId) : undefined
+  const nextNodes = followEdgesToScreens(currentNodeId, adj, nodeMap, new Set(), currentScreenId ?? undefined)
 
   return nextNodes.map((n) => {
     const d = n.data as FlowNodeData
@@ -250,34 +262,220 @@ export function getPreviousScreen(
 }
 
 /**
- * Find all state nodes connected to a page/screen node.
- * Walks direct outgoing edges to find child state nodes.
+ * Walk edges backwards from a node to find its connected screen/page node.
+ * BFS reverse traversal, returns the first screen/page node found.
  */
-export function getStatesForPage(
-  pageNodeId: string,
+export function findParentScreenNode(
+  nodeId: string,
   nodes: Node[],
   edges: Edge[],
-): PageStateInfo[] {
+): Node | null {
+  const nodeMap = new Map(nodes.map((n) => [n.id, n]))
+  const rev = buildReverseAdjacency(edges)
+  const visited = new Set<string>()
+  const queue = [nodeId]
+
+  while (queue.length > 0) {
+    const currentId = queue.shift()!
+    if (visited.has(currentId)) continue
+    visited.add(currentId)
+
+    const sources = rev.get(currentId) ?? []
+    for (const srcId of sources) {
+      if (visited.has(srcId)) continue
+      const srcNode = nodeMap.get(srcId)
+      if (!srcNode) continue
+      const d = srcNode.data as FlowNodeData
+      if (d.nodeType === 'screen' || d.nodeType === 'page') {
+        return srcNode
+      }
+      queue.push(srcId)
+    }
+  }
+
+  return null
+}
+
+/**
+ * Walk edges backwards from a node to find the first screen, page, OR overlay node.
+ * Unlike findParentScreenNode, this stops at overlay nodes too — used for
+ * resolving interactive elements when an action sits under an overlay.
+ */
+export function findParentInteractiveNode(
+  nodeId: string,
+  nodes: Node[],
+  edges: Edge[],
+): Node | null {
+  const nodeMap = new Map(nodes.map((n) => [n.id, n]))
+  const rev = buildReverseAdjacency(edges)
+  const visited = new Set<string>()
+  const queue = [nodeId]
+
+  while (queue.length > 0) {
+    const currentId = queue.shift()!
+    if (visited.has(currentId)) continue
+    visited.add(currentId)
+
+    const sources = rev.get(currentId) ?? []
+    for (const srcId of sources) {
+      if (visited.has(srcId)) continue
+      const srcNode = nodeMap.get(srcId)
+      if (!srcNode) continue
+      const d = srcNode.data as FlowNodeData
+      if (d.nodeType === 'screen' || d.nodeType === 'page' || d.nodeType === 'overlay') {
+        return srcNode
+      }
+      queue.push(srcId)
+    }
+  }
+
+  return null
+}
+
+/**
+ * Resolve what happens when a user taps an interactive element on a screen.
+ * Walks outgoing edges from the screen node, looking for action nodes whose
+ * actionTarget matches the element label, then follows those to the final
+ * destination (screen node or flow-reference).
+ *
+ * Also searches through same-screenId nodes (state transitions) so that
+ * action nodes attached to a state-transition screen are found.
+ */
+export function resolveScreenElementTarget(
+  screenNodeId: string,
+  elementLabel: string,
+  nodes: Node[],
+  edges: Edge[],
+): { type: 'screen'; nodeId: string; screenId: string } | { type: 'flow'; flowId: string } | null {
   const nodeMap = new Map(nodes.map((n) => [n.id, n]))
   const adj = buildAdjacency(edges)
-  const results: PageStateInfo[] = []
 
-  const targets = adj.get(pageNodeId) ?? []
+  // Determine the screenId so we can search through same-screenId state-transition nodes
+  const originNode = nodeMap.get(screenNodeId)
+  const originScreenId = originNode ? ((originNode.data as FlowNodeData).screenId ?? (originNode.data as FlowNodeData).pageId) : null
+
+  // Collect all screen node IDs to search (the origin + any reachable same-screenId nodes)
+  const searchNodeIds: string[] = [screenNodeId]
+  if (originScreenId) {
+    const visited = new Set<string>([screenNodeId])
+    const queue = [screenNodeId]
+    while (queue.length > 0) {
+      const nid = queue.shift()!
+      for (const targetId of adj.get(nid) ?? []) {
+        if (visited.has(targetId)) continue
+        visited.add(targetId)
+        const tn = nodeMap.get(targetId)
+        if (!tn) continue
+        const td = tn.data as FlowNodeData
+        // Follow through non-screen pass-through nodes
+        if (!isScreenNode(tn)) {
+          queue.push(targetId)
+          continue
+        }
+        // If same screenId, add to search set and keep walking
+        const sid = td.screenId ?? td.pageId
+        if (sid === originScreenId) {
+          searchNodeIds.push(targetId)
+          queue.push(targetId)
+        }
+      }
+    }
+  }
+
+  // Search all collected nodes for matching action targets
+  for (const nodeId of searchNodeIds) {
+    const targets = adj.get(nodeId) ?? []
+    for (const targetId of targets) {
+      const targetNode = nodeMap.get(targetId)
+      if (!targetNode) continue
+      const td = targetNode.data as FlowNodeData
+
+      // Match action nodes whose actionTarget matches the element
+      if (td.nodeType === 'action' && td.actionTarget === elementLabel) {
+        // Follow edges from this action node to find the destination
+        const actionTargets = adj.get(targetId) ?? []
+        for (const destId of actionTargets) {
+          const destNode = nodeMap.get(destId)
+          if (!destNode) continue
+          const dd = destNode.data as FlowNodeData
+
+          if (dd.nodeType === 'flow-reference' && dd.targetFlowId) {
+            return { type: 'flow', flowId: dd.targetFlowId }
+          }
+          if ((dd.nodeType === 'screen' || dd.nodeType === 'page') && (dd.screenId || dd.pageId)) {
+            const destScreenId = (dd.screenId ?? dd.pageId)!
+            // If destination is same screen, keep following to find the real target
+            if (destScreenId === originScreenId) {
+              const deeper = followEdgesToScreens(destId, adj, nodeMap, new Set(), originScreenId ?? undefined)
+              if (deeper.length > 0) {
+                const ds = deeper[0].data as FlowNodeData
+                return { type: 'screen', nodeId: deeper[0].id, screenId: (ds.screenId ?? ds.pageId)! }
+              }
+              continue
+            }
+            return { type: 'screen', nodeId: destNode.id, screenId: destScreenId }
+          }
+          // Keep following pass-through nodes
+          const deeper = followEdgesToScreens(destId, adj, nodeMap, new Set(), originScreenId ?? undefined)
+          if (deeper.length > 0) {
+            const ds = deeper[0].data as FlowNodeData
+            return { type: 'screen', nodeId: deeper[0].id, screenId: (ds.screenId ?? ds.pageId)! }
+          }
+        }
+      }
+    }
+  }
+
+  return null
+}
+
+/**
+ * Resolve what happens when a user taps an interactive element inside an overlay.
+ * Walks outgoing edges from the overlay node, looking for action nodes whose
+ * actionTarget matches the element label, then follows those to the final
+ * destination (screen node or flow-reference).
+ */
+export function resolveOverlayElementTarget(
+  overlayNodeId: string,
+  elementLabel: string,
+  nodes: Node[],
+  edges: Edge[],
+): { type: 'screen'; nodeId: string; screenId: string } | { type: 'flow'; flowId: string } | null {
+  const nodeMap = new Map(nodes.map((n) => [n.id, n]))
+  const adj = buildAdjacency(edges)
+
+  const targets = adj.get(overlayNodeId) ?? []
   for (const targetId of targets) {
     const targetNode = nodeMap.get(targetId)
     if (!targetNode) continue
     const td = targetNode.data as FlowNodeData
-    if (td.nodeType !== 'state') continue
 
-    results.push({
-      nodeId: targetNode.id,
-      stateId: td.stateId ?? td.label,
-      label: td.label,
-      description: td.description,
-    })
+    // Match action nodes whose actionTarget matches the clicked element
+    if (td.nodeType === 'action' && td.actionTarget === elementLabel) {
+      // Follow edges from this action node to find the destination
+      const actionTargets = adj.get(targetId) ?? []
+      for (const destId of actionTargets) {
+        const destNode = nodeMap.get(destId)
+        if (!destNode) continue
+        const dd = destNode.data as FlowNodeData
+
+        if (dd.nodeType === 'flow-reference' && dd.targetFlowId) {
+          return { type: 'flow', flowId: dd.targetFlowId }
+        }
+        if ((dd.nodeType === 'screen' || dd.nodeType === 'page') && (dd.screenId || dd.pageId)) {
+          return { type: 'screen', nodeId: destNode.id, screenId: (dd.screenId ?? dd.pageId)! }
+        }
+        // Keep following pass-through nodes
+        const deeper = followEdgesToScreens(destId, adj, nodeMap)
+        if (deeper.length > 0) {
+          const ds = deeper[0].data as FlowNodeData
+          return { type: 'screen', nodeId: deeper[0].id, screenId: (ds.screenId ?? ds.pageId)! }
+        }
+      }
+    }
   }
 
-  return results
+  return null
 }
 
 /**

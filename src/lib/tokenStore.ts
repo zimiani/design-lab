@@ -72,6 +72,7 @@ export async function hydrateTokensFromSupabase(): Promise<boolean> {
   try {
     const { data, error } = await supabase!.from('token_overrides').select('*')
     if (error || !data) return false
+    if (data.length === 0) return false // nothing in Supabase yet — keep localStorage
 
     const map: TokenMap = {}
     for (const row of data) {

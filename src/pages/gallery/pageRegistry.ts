@@ -9,6 +9,7 @@ export interface PageStateDefinition {
   name: string
   description?: string
   isDefault?: boolean
+  data?: Record<string, unknown>
 }
 
 export interface Page {
@@ -26,6 +27,9 @@ export interface Page {
 const pages = new Map<string, Page>()
 
 export function registerPage(page: Page): void {
+  if (import.meta.env.DEV && pages.has(page.id)) {
+    throw new Error(`[pageRegistry] Duplicate page ID: "${page.id}"`)
+  }
   pages.set(page.id, page)
 }
 

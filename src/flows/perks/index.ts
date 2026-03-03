@@ -15,20 +15,33 @@ const screenDefs = [
     description: 'Hero landing page showcasing Picnic benefits with CTA to explore more.',
     componentsUsed: ['FeatureLayout', 'Stack', 'Text', 'Badge', 'Summary', 'Banner', 'Button', 'StickyFooter'],
     component: Screen1_PerksHome,
+    interactiveElements: [
+      { id: 'btn-explore', component: 'Button', label: 'Explorar benefícios' },
+    ],
   },
   {
-    id: 'benefits-promos',
+    id: 'perks-benefits-promos',
     title: 'Benefits & Promos',
     description: 'Segmented list of highlights (fee-free conversion, cashback) and referral program.',
     componentsUsed: ['Header', 'BaseLayout', 'SegmentedControl', 'ListItem', 'Divider', 'Badge', 'Text'],
     component: Screen2_BenefitsPromos,
+    interactiveElements: [
+      { id: 'seg-highlights', component: 'SegmentedControl', label: 'Destaques' },
+      { id: 'seg-promos', component: 'SegmentedControl', label: 'Promoções' },
+      { id: 'li-dollar-rate', component: 'ListItem', label: 'Dólar sem taxas' },
+      { id: 'li-cashback', component: 'ListItem', label: 'Cashback' },
+    ],
   },
   {
-    id: 'dollar-rate',
+    id: 'perks-dollar-rate',
     title: 'Dollar Rate Detail',
     description: 'Explains competitive dollar conversion rate with benefits breakdown.',
     componentsUsed: ['FeatureLayout', 'Stack', 'Text', 'Button', 'IconButton', 'Link', 'BottomSheet', 'ListItem', 'StickyFooter'],
     component: Screen3_DollarRate,
+    interactiveElements: [
+      { id: 'btn-convert', component: 'Button', label: 'Converter agora' },
+      { id: 'btn-share', component: 'IconButton', label: 'Compartilhar' },
+    ],
   },
   {
     id: 'perks-conversion',
@@ -36,9 +49,13 @@ const screenDefs = [
     description: 'BRL to USD conversion form with real-time rate preview.',
     componentsUsed: ['Header', 'FormLayout', 'CurrencyInput', 'Card', 'Text', 'Amount', 'Button'],
     component: Screen4_Conversion,
+    interactiveElements: [
+      { id: 'input-brl', component: 'CurrencyInput', label: 'Valor (BRL)' },
+      { id: 'btn-convert', component: 'Button', label: 'Converter' },
+    ],
   },
   {
-    id: 'savings-breakdown',
+    id: 'perks-savings-breakdown',
     title: 'Savings Breakdown',
     description: 'Comparison table showing Picnic vs market fees with total savings.',
     componentsUsed: ['Text', 'Spacer', 'Divider', 'Amount'],
@@ -50,6 +67,10 @@ const screenDefs = [
     description: 'Share savings and referral code via WhatsApp, Instagram, email, or link.',
     componentsUsed: ['Header', 'BaseLayout', 'Text', 'Card', 'Badge', 'Amount', 'Toast', 'Spacer'],
     component: Screen6_Share,
+    interactiveElements: [
+      { id: 'btn-whatsapp', component: 'Button', label: 'WhatsApp' },
+      { id: 'btn-copy-link', component: 'Button', label: 'Copiar link' },
+    ],
   },
 ] as const
 
@@ -70,5 +91,7 @@ registerFlow({
   description: 'User explores Picnic benefits — competitive dollar rates, cashback program, and referral rewards — with conversion flow and social sharing.',
   domain: 'perks',
   specContent,
+  linkedFlows: ['deposit-pix-v2'],
+  entryPoints: ['tab-bar', 'onboarding'],
   screens: screenDefs.map((s) => ({ ...s, pageId: s.id })),
 })

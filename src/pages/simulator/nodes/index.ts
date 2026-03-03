@@ -5,7 +5,9 @@ import ErrorNode from './ErrorNode'
 import FlowReferenceNode from './FlowReferenceNode'
 import ActionNode from './ActionNode'
 import OverlayNode from './OverlayNode'
-import StateNode from './StateNode'
+import ApiCallNode from './ApiCallNode'
+import DelayNode from './DelayNode'
+import NoteNode from './NoteNode'
 
 export const nodeTypes: NodeTypes = {
   screen: ScreenNode,
@@ -15,5 +17,7 @@ export const nodeTypes: NodeTypes = {
   'flow-reference': FlowReferenceNode,
   action: ActionNode,
   overlay: OverlayNode,
-  state: StateNode,
+  'api-call': ApiCallNode,
+  delay: DelayNode,
+  note: NoteNode,
 }

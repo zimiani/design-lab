@@ -6,6 +6,7 @@ import type { Page } from './pageRegistry'
 import type { PageNodeData } from './pageGallery.types'
 import { setPageName, setPageDescription } from './pageStore'
 import { getFlowsForPage, type PageFlowRef } from './pageFlowIndex'
+import { ScreenDataProvider } from '../../lib/ScreenDataContext'
 
 const PHONE_W = 393
 const PHONE_H = 852
@@ -120,6 +121,13 @@ function EditableField({
 
 export default function PageDetailPanel({ page, selectedNode, onPageChanged }: PageDetailPanelProps) {
   const nodeData = selectedNode?.data as PageNodeData | undefined
+  const [activeStateId, setActiveStateId] = useState<string | null>(null)
+
+  // Resolve state data for preview
+  const pageStates = page?.states
+  const resolvedStateId = activeStateId ?? pageStates?.find(s => s.isDefault)?.id
+  const activeState = pageStates?.find(s => s.id === resolvedStateId)
+  const stateData = activeState?.data ?? {}
 
   const handleNameSave = useCallback(
     (name: string) => {
@@ -169,6 +177,30 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
               <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
                 Preview
               </p>
+              {/* State switcher pills */}
+              {pageStates && pageStates.length > 1 && (
+                <div className="flex flex-wrap gap-[var(--token-spacing-1)] mb-[var(--token-spacing-2)]">
+                  {pageStates.map((state) => {
+                    const isActive = activeState?.id === state.id
+                    return (
+                      <button
+                        key={state.id}
+                        type="button"
+                        onClick={() => setActiveStateId(state.id)}
+                        className={`
+                          px-[var(--token-spacing-2)] py-[1px] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-medium transition-colors cursor-pointer
+                          ${isActive
+                            ? 'bg-shell-selected text-shell-selected-text'
+                            : 'bg-shell-hover text-shell-text-secondary hover:text-shell-text'
+                          }
+                        `}
+                      >
+                        {state.name}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
               <div
                 className="relative overflow-hidden rounded-[var(--token-radius-md)] border border-shell-border bg-surface-primary text-content-primary"
                 style={{ width: PREVIEW_CONTENT_W, height: PREVIEW_VISIBLE_H }}
@@ -181,7 +213,9 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
                     transform: `scale(${PREVIEW_SCALE})`,
                   }}
                 >
-                  <PageComponent onNext={noop} onBack={noop} />
+                  <ScreenDataProvider data={stateData}>
+                    <PageComponent onNext={noop} onBack={noop} />
+                  </ScreenDataProvider>
                 </div>
               </div>
             </div>
@@ -195,6 +229,9 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
             <div className="text-[length:var(--token-font-size-body-sm)] text-shell-text leading-[var(--token-line-height-body-sm)]">
               <EditableField value={page.name} onSave={handleNameSave} label="name" />
             </div>
+            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mt-[2px] font-mono">
+              {page.id}
+            </p>
           </div>
 
           {/* Description */}

@@ -1,4 +1,5 @@
 import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
+import { useScreenData } from '../../lib/ScreenDataContext'
 import Header from '../../library/navigation/Header'
 import BaseLayout from '../../library/layout/BaseLayout'
 import StickyFooter from '../../library/layout/StickyFooter'
@@ -18,7 +19,9 @@ const projectedData = Array.from({ length: 13 }, (_, i) => ({
   value: Math.round(500 * Math.pow(1 + 0.05 / 12, i) * 100) / 100,
 }))
 
-export default function Screen1_Offer({ onNext, onBack, activeStateId }: FlowScreenProps) {
+export default function Screen1_Offer({ onNext, onBack }: FlowScreenProps) {
+  const { currentBalance = 0 } = useScreenData<{ currentBalance?: number }>()
+
   return (
     <BaseLayout>
       <Header title="Earn" onBack={onBack} />
@@ -34,11 +37,7 @@ export default function Screen1_Offer({ onNext, onBack, activeStateId }: FlowScr
             <Text variant="body-sm" color="content-secondary">
               Earn 5% annual yield on your dollar balance. No lock-up, withdraw anytime.
             </Text>
-            {activeStateId === 'has-balance' ? (
-              <Amount value={1243.57} currency="US$" size="lg" />
-            ) : (
-              <Amount value={0} currency="US$" size="lg" />
-            )}
+            <Amount value={currentBalance} currency="US$" size="lg" />
           </Stack>
         </Card>
 

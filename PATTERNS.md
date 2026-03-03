@@ -16,6 +16,7 @@
 | 5 | **No inline spacing magic numbers** | `mt-[37px]`, `gap-[13px]` | Use spacing scale: 4 / 8 / 12 / 16 / 24 / 32 px |
 | 6 | **No raw HTML/CSS in flows** | `<button className="...">`, `<div className="flex ...">` | Always use a library component |
 | 7 | **When no component exists, ask or create one** | Building custom markup inline | Ask which component to use, or create a new library component |
+| 8 | **English for names & docs** | Flow names, descriptions, or version labels in pt-br | Flow names, descriptions, screen titles, version labels, and documentation are always in English. Only in-screen UI copy (button labels, body text) is pt-br. |
 
 **Rule 6 is the most important.** Flows must be composed entirely of library components. If a design requires UI that no component provides, the correct action is to create a new component in `src/library/` or extend an existing one — never to write raw markup inside a flow screen.
 

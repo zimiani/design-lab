@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
+import { useScreenData } from '../../lib/ScreenDataContext'
 import Header from '../../library/navigation/Header'
 import BaseLayout from '../../library/layout/BaseLayout'
 import StickyFooter from '../../library/layout/StickyFooter'
@@ -50,16 +51,24 @@ function rawDigitsFromAmount(amount: number): string {
   return Math.round(amount * 100).toString()
 }
 
-type CalcState = 'idle' | 'loading' | 'ready'
+type CalcState = 'idle' | 'loading' | 'ready' | 'error'
 
-export default function Screen1_AmountEntry({ onNext, onBack }: FlowScreenProps) {
-  const [usdValue, setUsdValue] = useState('')
+export default function Screen1_AmountEntry({ onNext, onBack, onElementTap, onStateChange }: FlowScreenProps) {
+  const { initialCalcState, initialAmount } = useScreenData<{ initialCalcState?: CalcState; initialAmount?: string }>()
+  const [usdValue, setUsdValue] = useState(initialAmount ?? '')
   const [brlValue, setBrlValue] = useState('')
   const [lastEdited, setLastEdited] = useState<'usd' | 'brl'>('usd')
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedMethod, setSelectedMethod] = useState('brl')
-  const [calcState, setCalcState] = useState<CalcState>('idle')
+  const [calcState, setCalcState] = useState<CalcState>(initialCalcState ?? 'idle')
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Report internal state changes to the prototype player's state pills
+  useEffect(() => {
+    if (!onStateChange) return
+    const stateMap: Record<CalcState, string> = { idle: 'default', loading: 'loading', ready: 'ready', error: 'error' }
+    onStateChange(stateMap[calcState])
+  }, [calcState, onStateChange])
 
   const usdAmount = parseInt(usdValue || '0', 10) / 100
   const brlAmount = parseInt(brlValue || '0', 10) / 100
@@ -96,8 +105,12 @@ export default function Screen1_AmountEntry({ onNext, onBack }: FlowScreenProps)
     setLastEdited('brl')
   }
 
-  const handleSelectMethod = (id: string) => {
-    setSelectedMethod(id)
+  const handleSelectMethod = (method: typeof PAYMENT_METHODS[number]) => {
+    // Notify graph navigation system before updating local state
+    if (onElementTap) {
+      onElementTap(`ListItem: ${method.title}`)
+    }
+    setSelectedMethod(method.id)
     setSheetOpen(false)
   }
 
@@ -148,6 +161,16 @@ export default function Screen1_AmountEntry({ onNext, onBack }: FlowScreenProps)
         </Stack>
       )}
 
+      {/* Transaction details — error */}
+      {calcState === 'error' && (
+        <Stack gap="none">
+          <Banner
+            variant="critical"
+            title="Valor mínimo de depósito é US$ 5,00"
+          />
+        </Stack>
+      )}
+
       {/* Transaction details — ready */}
       {calcState === 'ready' && (
         <Stack gap="none">
@@ -187,7 +210,10 @@ export default function Screen1_AmountEntry({ onNext, onBack }: FlowScreenProps)
       )}
 
       <StickyFooter>
-        <Button fullWidth disabled={!isValid || calcState !== 'ready'} onPress={onNext}>
+        <Button fullWidth disabled={!isValid || calcState !== 'ready'} onPress={() => {
+          const handled = onElementTap?.('Button: Continuar')
+          if (!handled) onNext()
+        }}>
           Continuar
         </Button>
       </StickyFooter>
@@ -204,7 +230,7 @@ export default function Screen1_AmountEntry({ onNext, onBack }: FlowScreenProps)
               title={method.title}
               subtitle={method.subtitle}
               left={<Avatar src={method.icon} size="md" />}
-              onPress={() => handleSelectMethod(method.id)}
+              onPress={() => handleSelectMethod(method)}
             />
           ))}
         </Stack>

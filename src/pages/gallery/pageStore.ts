@@ -92,8 +92,11 @@ export async function hydratePageOverridesFromSupabase(): Promise<boolean> {
     const { data, error } = await supabase!.from('page_overrides').select('*')
     if (error) return false
 
+    const rows = data ?? []
+    if (rows.length === 0) return false // nothing in Supabase yet — keep localStorage
+
     const all: AllOverrides = {}
-    for (const row of data ?? []) {
+    for (const row of rows) {
       const id = row.page_id as string
       if (!all[id]) all[id] = {}
       if (row.name) all[id].name = row.name

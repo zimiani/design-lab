@@ -13,6 +13,9 @@ export const NODE_WIDTHS: Record<string, number> = {
   action: 160,
   overlay: 200,
   state: 140,
+  'api-call': 200,
+  delay: 160,
+  note: 200,
 }
 
 const DEFAULT_NODE_HEIGHT = 60

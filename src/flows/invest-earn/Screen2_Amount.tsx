@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
+import { useScreenData } from '../../lib/ScreenDataContext'
 import Header from '../../library/navigation/Header'
 import BaseLayout from '../../library/layout/BaseLayout'
 import StickyFooter from '../../library/layout/StickyFooter'
@@ -36,11 +37,12 @@ const FUNDING_SOURCES = [
 
 type CalcState = 'idle' | 'loading' | 'ready'
 
-export default function Screen2_Amount({ onNext, onBack, activeStateId }: FlowScreenProps) {
-  const [usdValue, setUsdValue] = useState('')
+export default function Screen2_Amount({ onNext, onBack }: FlowScreenProps) {
+  const { initialCalcState, initialAmount } = useScreenData<{ initialCalcState?: CalcState; initialAmount?: string }>()
+  const [usdValue, setUsdValue] = useState(initialAmount ?? '')
   const [sheetOpen, setSheetOpen] = useState(false)
   const [selectedSource, setSelectedSource] = useState('usd-balance')
-  const [calcState, setCalcState] = useState<CalcState>('idle')
+  const [calcState, setCalcState] = useState<CalcState>(initialCalcState ?? 'idle')
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const usdAmount = parseInt(usdValue || '0', 10) / 100
@@ -49,10 +51,7 @@ export default function Screen2_Amount({ onNext, onBack, activeStateId }: FlowSc
   const isPix = selectedSource === 'pix'
   const brlEquivalent = usdAmount * MOCK_RATE
 
-  // Override calc state if activeStateId is set
-  const effectiveCalcState = activeStateId === 'loading' ? 'loading'
-    : activeStateId === 'ready' ? 'ready'
-    : calcState
+  const effectiveCalcState = initialCalcState ?? calcState
 
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
