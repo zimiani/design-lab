@@ -8,9 +8,10 @@ import {
 } from '@remixicon/react'
 import type { Node, Edge } from '@xyflow/react'
 import { getFlow } from './flowRegistry'
-import { saveVersion, type FlowVersion, type VersionTag } from './flowVersionStore'
+import { ScreenDataProvider } from '../../lib/ScreenDataContext'
+import { saveVersion, type FlowVersion } from './flowVersionStore'
 import { getFlowGraph } from './flowGraphStore'
-import { deriveNavigationPath, getNextScreenOptions, getOverlaysForScreen } from './flowGraphNavigation'
+import { deriveNavigationPath, getNextScreenOptions, getOverlaysForScreen, resolveScreenElementTarget, resolveOverlayElementTarget } from './flowGraphNavigation'
 import type { FlowNodeData } from './flowGraph.types'
 import BottomSheet from '../../library/layout/BottomSheet'
 import PhoneFrame from './PhoneFrame'
@@ -39,10 +40,12 @@ interface FlowPlayerProps {
   suggestedVersion?: string
   onVersionsChanged?: () => void
   onViewVersion?: (versionEntry: FlowVersion) => void
+  onRestoreVersion?: (versionEntry: FlowVersion) => void
   graphOverride?: { nodes: Node[], edges: Edge[] } | null
+  onNavigateToFlow?: (flowId: string) => void
 }
 
-export default function FlowPlayer({ flowId, initialScreenId, versions = [], suggestedVersion = '1.0', onVersionsChanged, onViewVersion, graphOverride }: FlowPlayerProps) {
+export default function FlowPlayer({ flowId, initialScreenId, versions = [], suggestedVersion = '1.0', onVersionsChanged, onViewVersion, onRestoreVersion, graphOverride, onNavigateToFlow }: FlowPlayerProps) {
   const [currentNodeId, setCurrentNodeId] = useState<string | null>(null)
   const [navHistory, setNavHistory] = useState<string[]>([])
   const [direction, setDirection] = useState(1)
@@ -50,6 +53,8 @@ export default function FlowPlayer({ flowId, initialScreenId, versions = [], sug
   const [deviceMode, setDeviceMode] = useState<DeviceMode>('phone')
   const [activeNavId, setActiveNavId] = useState('home')
   const [activeOverlayId, setActiveOverlayId] = useState<string | null>(null)
+  const [localActiveStateId, setLocalActiveStateId] = useState<string | null>(null)
+  const [stateKey, setStateKey] = useState(0) // incremented on pill click to force remount
 
   // Re-read flow from registry + localStorage on each render / edit
   const flow = getFlow(flowId)
@@ -99,6 +104,17 @@ export default function FlowPlayer({ flowId, initialScreenId, versions = [], sug
     return idx >= 0 ? idx : 0
   }, [navPath, currentNodeId])
 
+  // Reset local state selection when node changes
+  useEffect(() => {
+    setLocalActiveStateId(null)
+    setStateKey(0)
+  }, [currentNodeId])
+
+  // Called by screen components to report internal state changes (e.g. idle → loading → ready)
+  const handleScreenStateChange = useCallback((stateId: string) => {
+    setLocalActiveStateId(stateId)
+  }, [])
+
   // Overlays connected to the current screen node
   const screenOverlays = useMemo(() => {
     if (!graph || !currentNodeId) return []
@@ -116,6 +132,70 @@ export default function FlowPlayer({ flowId, initialScreenId, versions = [], sug
     if (!activeOverlayId) return null
     return screenOverlays.find((o) => o.nodeId === activeOverlayId) ?? null
   }, [activeOverlayId, screenOverlays])
+
+  // Get the overlay node's interactiveElements from graph data
+  const activeOverlayElements = useMemo(() => {
+    if (!graph || !activeOverlayId) return undefined
+    const node = graph.nodes.find((n) => n.id === activeOverlayId)
+    const d = node?.data as FlowNodeData | undefined
+    return d?.interactiveElements
+  }, [graph, activeOverlayId])
+
+  const handleOverlayElementClick = useCallback((element: { id: string; component: string; label: string }) => {
+    if (!graph || !activeOverlayId) return
+    const elementLabel = `${element.component}: ${element.label}`
+    const target = resolveOverlayElementTarget(activeOverlayId, elementLabel, graph.nodes, graph.edges)
+    if (!target) return
+
+    if (target.type === 'flow' && onNavigateToFlow) {
+      setActiveOverlayId(null)
+      onNavigateToFlow(target.flowId)
+    } else if (target.type === 'screen') {
+      setDirection(1)
+      setNavHistory((h) => [...h, currentNodeId!])
+      setCurrentNodeId(target.nodeId)
+      setActiveOverlayId(null)
+    }
+  }, [graph, activeOverlayId, currentNodeId, onNavigateToFlow])
+
+  // Called by screen components when a user interacts with an element (e.g. tapping a Button, ListItem).
+  // First resolves screen→action→destination paths, then overlay paths.
+  // Returns true if a graph-based navigation target was found and executed.
+  const handleElementTap = useCallback((elementLabel: string): boolean => {
+    if (!graph || !currentNodeId) return false
+
+    // 1. Check screen → action → destination paths
+    const screenTarget = resolveScreenElementTarget(currentNodeId, elementLabel, graph.nodes, graph.edges)
+    if (screenTarget) {
+      if (screenTarget.type === 'flow' && onNavigateToFlow) {
+        onNavigateToFlow(screenTarget.flowId)
+        return true
+      } else if (screenTarget.type === 'screen') {
+        setDirection(1)
+        setNavHistory((h) => [...h, currentNodeId])
+        setCurrentNodeId(screenTarget.nodeId)
+        return true
+      }
+    }
+
+    // 2. Check overlay → action → destination paths
+    for (const overlay of screenOverlays) {
+      const target = resolveOverlayElementTarget(overlay.nodeId, elementLabel, graph.nodes, graph.edges)
+      if (!target) continue
+
+      if (target.type === 'flow' && onNavigateToFlow) {
+        onNavigateToFlow(target.flowId)
+        return true
+      } else if (target.type === 'screen') {
+        setDirection(1)
+        setNavHistory((h) => [...h, currentNodeId])
+        setCurrentNodeId(target.nodeId)
+        return true
+      }
+    }
+
+    return false
+  }, [graph, currentNodeId, screenOverlays, onNavigateToFlow])
 
   const goNext = useCallback(() => {
     if (!graph || !currentNodeId) return
@@ -154,10 +234,10 @@ export default function FlowPlayer({ flowId, initialScreenId, versions = [], sug
   }, [])
 
   const handleSaveVersion = useCallback(
-    (version: string, description: string, tag: VersionTag, screenIds?: string[]) => {
+    (version: string, description: string, screenIds?: string[]) => {
       const g = getFlowGraph(flowId)
       if (g) {
-        saveVersion(flowId, version, description, g.nodes, g.edges, tag, screenIds)
+        saveVersion(flowId, version, description, g.nodes, g.edges, screenIds)
         onVersionsChanged?.()
       }
     },
@@ -203,10 +283,18 @@ export default function FlowPlayer({ flowId, initialScreenId, versions = [], sug
     : false
   const hasBack = navHistory.length > 0
 
+  const isStateSwap = stateKey > 0
+
   const slideVariants = {
     enter: (d: number) => ({ x: d > 0 ? 300 : -300, opacity: 0 }),
     center: { x: 0, opacity: 1 },
     exit: (d: number) => ({ x: d > 0 ? -300 : 300, opacity: 0 }),
+  }
+
+  const fadeVariants = {
+    enter: () => ({ opacity: 0 }),
+    center: { opacity: 1 },
+    exit: () => ({ opacity: 0 }),
   }
 
   const _version = editVersion
@@ -243,19 +331,28 @@ export default function FlowPlayer({ flowId, initialScreenId, versions = [], sug
     />
   )
 
+  // Resolve state data for current screen
+  const screenStates = current.states
+  const resolvedStateId = localActiveStateId ?? currentNodeData?.activeStateId as string | undefined
+  const activeState = screenStates?.find(s => s.id === resolvedStateId)
+    ?? screenStates?.find(s => s.isDefault)
+  const stateData = activeState?.data ?? {}
+
   const animatedScreen = (
     <AnimatePresence mode="wait" custom={direction}>
       <motion.div
-        key={currentStep?.nodeId ?? currentStepIndex}
+        key={`${currentStep?.nodeId ?? currentStepIndex}-s${stateKey}`}
         custom={direction}
-        variants={slideVariants}
+        variants={isStateSwap ? fadeVariants : slideVariants}
         initial="enter"
         animate="center"
         exit="exit"
-        transition={{ duration: 0.25, ease: 'easeOut' }}
+        transition={{ duration: isStateSwap ? 0.15 : 0.25, ease: 'easeOut' }}
         className="h-full"
       >
-        <current.component onNext={goNext} onBack={goBack} overlays={screenOverlays} onOpenOverlay={setActiveOverlayId} activeStateId={currentNodeData?.activeStateId ?? null} />
+        <ScreenDataProvider data={stateData}>
+          <current.component onNext={goNext} onBack={goBack} overlays={screenOverlays} onOpenOverlay={setActiveOverlayId} onElementTap={handleElementTap} onStateChange={handleScreenStateChange} />
+        </ScreenDataProvider>
       </motion.div>
     </AnimatePresence>
   )
@@ -304,12 +401,53 @@ export default function FlowPlayer({ flowId, initialScreenId, versions = [], sug
           </button>
         </div>
 
+        {/* State switcher pills */}
+        {screenStates && screenStates.length > 1 && (
+          <div className="flex items-center gap-[var(--token-spacing-1)]">
+            {screenStates.map((state) => {
+              const isActive = activeState?.id === state.id
+              return (
+                <button
+                  key={state.id}
+                  type="button"
+                  onClick={() => { setLocalActiveStateId(state.id); setStateKey(k => k + 1) }}
+                  className={`
+                    px-3 py-[4px] rounded-[var(--token-radius-full)] text-[13px] font-medium transition-colors cursor-pointer
+                    ${isActive
+                      ? 'bg-shell-selected text-shell-selected-text'
+                      : 'bg-shell-surface border border-shell-border text-shell-text-secondary hover:text-shell-text hover:bg-shell-hover'
+                    }
+                  `}
+                >
+                  {state.name}
+                </button>
+              )
+            })}
+          </div>
+        )}
+
         <Frame>
           {screenContent}
           <BottomSheet open={!!activeOverlay} onClose={() => setActiveOverlayId(null)} title={activeOverlay?.label}>
-            <Text variant="body-md" color="content-secondary">
-              {activeOverlay?.description || 'Overlay placeholder'}
-            </Text>
+            {activeOverlayElements && activeOverlayElements.length > 0 ? (
+              <div className="flex flex-col">
+                {activeOverlayElements.map((el) => (
+                  <button
+                    key={el.id}
+                    type="button"
+                    onClick={() => handleOverlayElementClick(el)}
+                    className="flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--color-surface-secondary)] transition-colors cursor-pointer border-b border-[var(--color-border-primary)] last:border-b-0"
+                  >
+                    <span className="text-[14px] font-medium text-[var(--color-content-primary)]">{el.label}</span>
+                    <span className="text-[12px] text-[var(--color-content-tertiary)] ml-auto">{el.component}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <Text variant="body-md" color="content-secondary">
+                {activeOverlay?.description || 'Overlay placeholder'}
+              </Text>
+            )}
           </BottomSheet>
         </Frame>
 
@@ -354,6 +492,8 @@ export default function FlowPlayer({ flowId, initialScreenId, versions = [], sug
         suggestedVersion={suggestedVersion}
         onSaveVersion={handleSaveVersion}
         onViewVersion={handleViewVersion}
+        onRestoreVersion={onRestoreVersion}
+        onVersionsChanged={onVersionsChanged}
       />
     </div>
   )

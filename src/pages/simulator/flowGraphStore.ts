@@ -78,8 +78,11 @@ export async function hydrateGraphsFromSupabase(): Promise<boolean> {
     const { data, error } = await supabase!.from('flow_graphs').select('*')
     if (error) return false
 
+    const rows = data ?? []
+    if (rows.length === 0) return false // nothing in Supabase yet — keep localStorage
+
     const all: Record<string, FlowGraph> = {}
-    for (const row of data ?? []) {
+    for (const row of rows) {
       all[row.flow_id] = {
         flowId: row.flow_id,
         nodes: JSON.parse(row.nodes),

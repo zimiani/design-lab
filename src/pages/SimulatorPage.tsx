@@ -5,11 +5,14 @@ import { RiComputerLine, RiGitBranchLine, RiArrowLeftLine } from '@remixicon/rea
 import type { Node, Edge } from '@xyflow/react'
 
 /* Force flow registrations */
-import '../flows/deposit'
 import '../flows/deposit-v2'
+import '../flows/deposit-ach'
+import '../flows/noah-registration'
 import '../flows/perks'
 import '../flows/withdrawal'
 import '../flows/invest-earn'
+import '../flows/caixinha-dolar'
+import '../flows/dashboard'
 
 import AppHeader from '../components/AppHeader'
 import FlowSidebar from './simulator/FlowSidebar'
@@ -17,8 +20,12 @@ import FlowPlayer from './simulator/FlowPlayer'
 import FlowCanvas from './simulator/FlowCanvas'
 import { getAllFlows, getFlow, hydrateDynamicFlows } from './simulator/flowRegistry'
 import { getVersions, suggestNextVersion, setActiveVersion, type FlowVersion } from './simulator/flowVersionStore'
-import { hydrateFromSupabase, subscribeToChanges } from './simulator/flowStore'
-import { hydrateGraphsFromSupabase, subscribeToGraphChanges } from './simulator/flowGraphStore'
+import { saveFlowGraph } from './simulator/flowGraphStore'
+import { subscribeToChanges } from './simulator/flowStore'
+import { subscribeToGraphChanges } from './simulator/flowGraphStore'
+import { subscribeToVersionChanges } from './simulator/flowVersionStore'
+import { subscribeToDynamicFlowChanges } from './simulator/dynamicFlowStore'
+import { syncAll, markSynced } from '../lib/syncStore'
 
 type ViewMode = 'flow' | 'prototype'
 
@@ -83,6 +90,15 @@ export default function SimulatorPage() {
     setVersion((v) => v + 1)
   }, [selectedFlowId])
 
+  const handleRestoreVersion = useCallback((versionEntry: FlowVersion) => {
+    // Copy version graph → live graph (persisted)
+    saveFlowGraph(versionEntry.flowId, versionEntry.nodes, versionEntry.edges)
+    // Clear preview state
+    setActiveVersion(versionEntry.flowId, null)
+    setActiveVersionGraph(null)
+    setVersion((v) => v + 1)
+  }, [])
+
   useEffect(() => {
     hydrateDynamicFlows()
     setVersion((v) => v + 1)
@@ -97,18 +113,31 @@ export default function SimulatorPage() {
   }, [selectedFlowId])
 
 
+  const handleSynced = useCallback(() => {
+    hydrateDynamicFlows()
+    setVersion((v) => v + 1)
+  }, [])
+
   useEffect(() => {
-    Promise.all([
-      hydrateFromSupabase(),
-      hydrateGraphsFromSupabase(),
-    ]).then(([flowOk, graphOk]) => {
-      if (flowOk || graphOk) setVersion((v) => v + 1)
+    syncAll().then((ok) => {
+      if (ok) {
+        hydrateDynamicFlows()
+        setVersion((v) => v + 1)
+      }
     })
-    const unsubFlows = subscribeToChanges(() => setVersion((v) => v + 1))
-    const unsubGraphs = subscribeToGraphChanges(() => setVersion((v) => v + 1))
+    const unsubFlows = subscribeToChanges(() => { markSynced(); setVersion((v) => v + 1) })
+    const unsubGraphs = subscribeToGraphChanges(() => { markSynced(); setVersion((v) => v + 1) })
+    const unsubVersions = subscribeToVersionChanges(() => { markSynced(); setVersion((v) => v + 1) })
+    const unsubDynFlows = subscribeToDynamicFlowChanges(() => {
+      markSynced()
+      hydrateDynamicFlows()
+      setVersion((v) => v + 1)
+    })
     return () => {
       unsubFlows?.()
       unsubGraphs?.()
+      unsubVersions?.()
+      unsubDynFlows?.()
     }
   }, [])
 
@@ -132,7 +161,7 @@ export default function SimulatorPage() {
       transition={{ duration: 0.2 }}
       className="h-screen flex flex-col bg-shell-bg"
     >
-      <AppHeader />
+      <AppHeader onSynced={handleSynced} />
 
       {/* Sub-header: view toggle + flow name */}
       <div className="h-[40px] flex items-center px-[var(--token-spacing-md)] border-b border-shell-border bg-shell-surface shrink-0">
@@ -181,14 +210,14 @@ export default function SimulatorPage() {
 
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
-        <FlowSidebar selectedFlowId={selectedFlowId} onSelect={setSelectedFlowId} onFlowCreated={() => setVersion((v) => v + 1)} />
+        <FlowSidebar selectedFlowId={selectedFlowId} onSelect={setSelectedFlowId} onFlowCreated={() => setVersion((v) => v + 1)} onFlowDeleted={() => setVersion((v) => v + 1)} />
         {selectedFlowId && selectedFlow ? (
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Version banner */}
             {activeVersionGraph && (
               <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-md)] py-[var(--token-spacing-1)] bg-[#60A5FA]/10 border-b border-[#60A5FA]/30 shrink-0">
                 <span className="text-[length:var(--token-font-size-caption)] text-[#60A5FA] font-medium">
-                  Viewing saved version
+                  Previewing version — read only
                 </span>
                 <button
                   type="button"
@@ -208,7 +237,9 @@ export default function SimulatorPage() {
                 suggestedVersion={suggestedVer}
                 onVersionsChanged={refreshVersions}
                 onViewVersion={handleViewVersion}
+                onRestoreVersion={handleRestoreVersion}
                 graphOverride={activeVersionGraph}
+                onNavigateToFlow={handleNavigateToFlow}
               />
             ) : (
               <FlowCanvas
@@ -220,6 +251,7 @@ export default function SimulatorPage() {
                 suggestedVersion={suggestedVer}
                 onVersionsChanged={refreshVersions}
                 onViewVersion={handleViewVersion}
+                onRestoreVersion={handleRestoreVersion}
                 graphOverride={activeVersionGraph}
               />
             )}

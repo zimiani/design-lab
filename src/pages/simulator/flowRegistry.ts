@@ -1,8 +1,14 @@
 import type { ComponentType } from 'react'
+import type { PageStateDefinition } from '../gallery/pageRegistry'
 import { getFlowOverrides } from './flowStore'
-import { getActiveFlowVersion } from './flowVersionStore'
 import { getDynamicFlows, type DynamicFlowDef } from './dynamicFlowStore'
 import { createPlaceholderComponent } from '../../flows/PlaceholderScreen'
+
+export interface InteractiveElement {
+  id: string          // e.g. 'btn-continue'
+  component: string   // e.g. 'Button'
+  label: string       // e.g. 'Continuar'
+}
 
 export interface FlowScreen {
   id: string
@@ -12,6 +18,8 @@ export interface FlowScreen {
   component: ComponentType<FlowScreenProps>
   /** Optional reference to a standalone Page entity in the page registry */
   pageId?: string
+  states?: PageStateDefinition[]
+  interactiveElements?: readonly InteractiveElement[]
 }
 
 export interface FlowScreenProps {
@@ -19,7 +27,10 @@ export interface FlowScreenProps {
   onBack: () => void
   overlays?: import('./flowGraphNavigation').ScreenOverlayInfo[]
   onOpenOverlay?: (nodeId: string) => void
-  activeStateId?: string | null
+  /** Called when a user taps an interactive element (e.g. ListItem in a BottomSheet). Label format: "Component: Label". Returns true if the graph resolved a navigation target. */
+  onElementTap?: (elementLabel: string) => boolean
+  /** Called when the screen's internal state changes (e.g. idle → loading → ready). Reports the matching page state ID. */
+  onStateChange?: (stateId: string) => void
 }
 
 // ── Domain system ──
@@ -68,11 +79,18 @@ export interface Flow {
   isDynamic?: boolean
   /** Navigation level for the flow. Level 1 shows TabBar (main tabs), level 2 hides it (deeper screens). Defaults to 1. */
   level?: 1 | 2
+  /** IDs of flows this flow navigates to */
+  linkedFlows?: string[]
+  /** Labels describing how users enter this flow (e.g. 'dashboard-add-funds', 'deep-link') */
+  entryPoints?: string[]
 }
 
 const flows = new Map<string, Flow>()
 
 export function registerFlow(flow: Flow): void {
+  if (import.meta.env.DEV && flows.has(flow.id)) {
+    throw new Error(`[flowRegistry] Duplicate flow ID: "${flow.id}"`)
+  }
   flows.set(flow.id, flow)
 }
 
@@ -118,14 +136,13 @@ export function refreshDynamicFlow(id: string): void {
   }
 }
 
-/** Returns the flow with localStorage overrides merged in.
- *  When an active version with screenIds is set, only those screens are returned (in order). */
+/** Returns the flow with localStorage overrides merged in. */
 export function getFlow(id: string): Flow | undefined {
   const base = flows.get(id)
   if (!base) return undefined
 
   const overrides = getFlowOverrides(id)
-  let screens = base.screens.map((s) => {
+  const screens = base.screens.map((s) => {
     const so = overrides.screens?.[s.id]
     return {
       ...s,
@@ -133,15 +150,6 @@ export function getFlow(id: string): Flow | undefined {
       description: so?.description ?? s.description,
     }
   })
-
-  // Filter screens by active version's screenIds (if any)
-  const activeVersion = getActiveFlowVersion(id)
-  if (activeVersion?.screenIds && activeVersion.screenIds.length > 0) {
-    const screenMap = new Map(screens.map((s) => [s.id, s]))
-    screens = activeVersion.screenIds
-      .map((sid) => screenMap.get(sid))
-      .filter((s): s is FlowScreen => s !== undefined)
-  }
 
   return {
     ...base,
@@ -174,4 +182,20 @@ export function getFlowsByDomain(): Record<string, Flow[]> {
     grouped[flow.domain].push(flow)
   }
   return grouped
+}
+
+/** Forward lookup: resolve linkedFlows IDs to Flow objects */
+export function getLinkedFlows(flowId: string): Flow[] {
+  const flow = getFlow(flowId)
+  if (!flow?.linkedFlows) return []
+  return flow.linkedFlows
+    .map((id) => getFlow(id))
+    .filter((f): f is Flow => f !== undefined)
+}
+
+/** Reverse lookup: flows whose linkedFlows include this flowId */
+export function getFlowsLinkingTo(flowId: string): Flow[] {
+  return getAllFlows().filter(
+    (f) => f.linkedFlows?.includes(flowId),
+  )
 }

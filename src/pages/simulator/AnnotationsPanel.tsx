@@ -1,8 +1,10 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { RiPencilLine, RiCheckLine, RiRefreshLine, RiHistoryLine, RiSaveLine } from '@remixicon/react'
+import { RiPencilLine, RiCheckLine, RiRefreshLine, RiHistoryLine, RiSaveLine, RiDeleteBinLine, RiArrowGoBackLine } from '@remixicon/react'
 import type { FlowScreen, Flow } from './flowRegistry'
-import type { FlowVersion, VersionTag } from './flowVersionStore'
+import type { FlowVersion } from './flowVersionStore'
+import { updateVersion, deleteVersion } from './flowVersionStore'
+import { getFlowTag, setFlowTag, type FlowTag } from './flowStore'
 import SaveVersionDialog from './SaveVersionDialog'
 import { getBaseFlow } from './flowRegistry'
 import {
@@ -21,8 +23,10 @@ interface AnnotationsPanelProps {
   onFlowEdited: () => void
   versions?: FlowVersion[]
   suggestedVersion?: string
-  onSaveVersion?: (version: string, description: string, tag: VersionTag, screenIds?: string[]) => void
+  onSaveVersion?: (version: string, description: string, screenIds?: string[]) => void
   onViewVersion?: (version: FlowVersion) => void
+  onRestoreVersion?: (version: FlowVersion) => void
+  onVersionsChanged?: () => void
 }
 
 function EditableField({
@@ -129,11 +133,16 @@ export default function AnnotationsPanel({
   suggestedVersion = '1.0',
   onSaveVersion,
   onViewVersion,
+  onRestoreVersion,
+  onVersionsChanged,
 }: AnnotationsPanelProps) {
   const navigate = useNavigate()
   const [showVersionDialog, setShowVersionDialog] = useState(false)
   const [specEditing, setSpecEditing] = useState(false)
   const [specDraft, setSpecDraft] = useState(flow.specContent ?? '')
+  const [editingVersionId, setEditingVersionId] = useState<string | null>(null)
+  const [editVersionDraft, setEditVersionDraft] = useState({ version: '', description: '' })
+  const [flowTag, setFlowTagLocal] = useState<FlowTag>(() => getFlowTag(flow.id))
 
   const handleExport = () => {
     const lines = [
@@ -207,6 +216,35 @@ export default function AnnotationsPanel({
     setSpecEditing(false)
     onFlowEdited()
   }, [flow.id, specDraft, onFlowEdited])
+
+  const handleFlowTagChange = useCallback(
+    (tag: FlowTag) => {
+      setFlowTagLocal(tag)
+      setFlowTag(flow.id, tag)
+      onFlowEdited()
+    },
+    [flow.id, onFlowEdited],
+  )
+
+  const handleStartEditVersion = useCallback((v: FlowVersion) => {
+    setEditingVersionId(v.id)
+    setEditVersionDraft({ version: v.version, description: v.description })
+  }, [])
+
+  const handleSaveEditVersion = useCallback(() => {
+    if (!editingVersionId) return
+    updateVersion(flow.id, editingVersionId, editVersionDraft)
+    setEditingVersionId(null)
+    onVersionsChanged?.()
+  }, [flow.id, editingVersionId, editVersionDraft, onVersionsChanged])
+
+  const handleDeleteVersion = useCallback(
+    (versionId: string) => {
+      deleteVersion(flow.id, versionId)
+      onVersionsChanged?.()
+    },
+    [flow.id, onVersionsChanged],
+  )
 
   const baseFlow = getBaseFlow(flow.id)
   const hasOverrides =
@@ -285,6 +323,9 @@ export default function AnnotationsPanel({
               label="screen title"
             />
           </div>
+          <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mb-[var(--token-spacing-1)] font-mono">
+            {currentScreen.id}
+          </p>
           <div className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary">
             <EditableField
               value={currentScreen.description}
@@ -403,6 +444,38 @@ export default function AnnotationsPanel({
           )}
         </div>
 
+        {/* Flow Status */}
+        <div className="mt-[var(--token-spacing-lg)] pt-[var(--token-spacing-lg)] border-t border-shell-border">
+          <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+            Status
+          </p>
+          <div className="flex gap-[var(--token-spacing-1)]">
+            {([
+              { value: 'draft' as FlowTag, label: 'Draft', color: 'bg-[#FBBF24]' },
+              { value: 'approved' as FlowTag, label: 'Approved', color: 'bg-[#4ADE80]' },
+              { value: 'in-production' as FlowTag, label: 'In Prod', color: 'bg-[#60A5FA]' },
+            ]).map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => handleFlowTagChange(opt.value)}
+                className={`
+                  flex items-center gap-[4px] px-[var(--token-spacing-2)] py-[3px]
+                  rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-medium
+                  transition-colors cursor-pointer border
+                  ${flowTag === opt.value
+                    ? 'border-shell-selected-text bg-shell-selected-text/10 text-shell-text'
+                    : 'border-shell-border text-shell-text-tertiary hover:border-shell-active hover:text-shell-text-secondary'
+                  }
+                `}
+              >
+                <div className={`w-[6px] h-[6px] rounded-full ${opt.color}`} />
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Versions */}
         {onSaveVersion && (
           <div className="mt-[var(--token-spacing-lg)] pt-[var(--token-spacing-lg)] border-t border-shell-border">
@@ -426,41 +499,97 @@ export default function AnnotationsPanel({
                 No versions saved yet
               </p>
             ) : (
-              <div className="flex flex-col gap-[var(--token-spacing-2)] max-h-[200px] overflow-y-auto">
+              <div className="flex flex-col gap-[var(--token-spacing-2)] max-h-[300px] overflow-y-auto">
                 {[...versions].reverse().map((v) => {
-                  const tagColor = v.tag === 'production' ? 'bg-[#60A5FA]'
-                    : v.tag === 'exploration' ? 'bg-[#FBBF24]'
-                    : 'bg-[#4ADE80]'
+                  const isEditing = editingVersionId === v.id
                   return (
                     <div
                       key={v.id}
-                      className="flex items-start justify-between gap-[var(--token-spacing-2)] py-[var(--token-spacing-1)]"
+                      className="py-[var(--token-spacing-1)] border-b border-shell-border last:border-b-0"
                     >
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-[var(--token-spacing-1)]">
-                          <div className={`w-[6px] h-[6px] rounded-full shrink-0 ${tagColor}`} />
-                          <span className="text-[length:var(--token-font-size-caption)] font-mono font-medium text-shell-selected-text">
-                            v{v.version}
-                          </span>
-                          <span className="text-[length:10px] text-shell-text-tertiary">
-                            {v.tag}
-                          </span>
-                          <span className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary">
-                            {new Date(v.createdAt).toLocaleDateString()}
-                          </span>
+                      {isEditing ? (
+                        <div className="flex flex-col gap-[var(--token-spacing-1)]">
+                          <input
+                            type="text"
+                            value={editVersionDraft.version}
+                            onChange={(e) => setEditVersionDraft((d) => ({ ...d, version: e.target.value }))}
+                            className="w-full px-[var(--token-spacing-2)] py-[2px] text-[length:var(--token-font-size-caption)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none font-mono"
+                            autoFocus
+                          />
+                          <textarea
+                            value={editVersionDraft.description}
+                            onChange={(e) => setEditVersionDraft((d) => ({ ...d, description: e.target.value }))}
+                            rows={2}
+                            className="w-full px-[var(--token-spacing-2)] py-[2px] text-[length:var(--token-font-size-caption)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none resize-y"
+                          />
+                          <div className="flex gap-[var(--token-spacing-1)] justify-end">
+                            <button
+                              type="button"
+                              onClick={() => setEditingVersionId(null)}
+                              className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleSaveEditVersion}
+                              className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px]"
+                            >
+                              <RiCheckLine size={12} />
+                              Save
+                            </button>
+                          </div>
                         </div>
-                        <p className="text-[length:var(--token-font-size-caption)] text-shell-text-secondary truncate pl-[10px]">
-                          {v.description}
-                        </p>
-                      </div>
-                      {onViewVersion && (
-                        <button
-                          type="button"
-                          onClick={() => onViewVersion(v)}
-                          className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text shrink-0 cursor-pointer"
-                        >
-                          View
-                        </button>
+                      ) : (
+                        <>
+                          <div className="flex items-center gap-[var(--token-spacing-1)]">
+                            <span className="text-[length:var(--token-font-size-caption)] font-mono font-medium text-shell-selected-text">
+                              v{v.version}
+                            </span>
+                            <span className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary">
+                              {new Date(v.createdAt).toLocaleDateString()}
+                            </span>
+                          </div>
+                          <p className="text-[length:var(--token-font-size-caption)] text-shell-text-secondary truncate">
+                            {v.description}
+                          </p>
+                          <div className="flex items-center gap-[var(--token-spacing-2)] mt-[2px]">
+                            {onViewVersion && (
+                              <button
+                                type="button"
+                                onClick={() => onViewVersion(v)}
+                                className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text cursor-pointer"
+                              >
+                                Preview
+                              </button>
+                            )}
+                            {onRestoreVersion && (
+                              <button
+                                type="button"
+                                onClick={() => onRestoreVersion(v)}
+                                className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-selected-text cursor-pointer flex items-center gap-[2px]"
+                              >
+                                <RiArrowGoBackLine size={10} />
+                                Restore
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleStartEditVersion(v)}
+                              className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text cursor-pointer flex items-center gap-[2px]"
+                            >
+                              <RiPencilLine size={10} />
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteVersion(v.id)}
+                              className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-error cursor-pointer flex items-center gap-[2px] ml-auto"
+                            >
+                              <RiDeleteBinLine size={10} />
+                            </button>
+                          </div>
+                        </>
                       )}
                     </div>
                   )
@@ -476,8 +605,8 @@ export default function AnnotationsPanel({
           suggestedVersion={suggestedVersion}
           currentScreenIds={flow.screens.map(s => s.id)}
           onClose={() => setShowVersionDialog(false)}
-          onSave={(version, description, tag, screenIds) => {
-            onSaveVersion(version, description, tag, screenIds)
+          onSave={(version, description, screenIds) => {
+            onSaveVersion(version, description, screenIds)
             setShowVersionDialog(false)
           }}
         />

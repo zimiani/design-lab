@@ -38,6 +38,9 @@ const sharedScreenDefs = [
     description: 'Withdrawal confirmed with recipient summary and transaction details.',
     componentsUsed: ['FeedbackLayout', 'Button', 'DataList', 'GroupHeader', 'Text', 'StickyFooter', 'Stack'],
     component: SharedSuccess,
+    interactiveElements: [
+      { id: 'btn-done', component: 'Button', label: 'Concluir' },
+    ],
   },
 ] as const
 
@@ -48,6 +51,12 @@ const versionAScreenDefs = [
     description: 'Select withdrawal destination type: PIX, Picnic account, Picnic user, or foreign bank.',
     componentsUsed: ['BaseLayout', 'Header', 'ListItem', 'Avatar', 'Text', 'Stack'],
     component: A_Screen1_ChooseDestination,
+    interactiveElements: [
+      { id: 'li-pix', component: 'ListItem', label: 'PIX' },
+      { id: 'li-picnic-account', component: 'ListItem', label: 'Conta Picnic' },
+      { id: 'li-picnic-user', component: 'ListItem', label: 'Usuário Picnic' },
+      { id: 'li-foreign-bank', component: 'ListItem', label: 'Banco internacional' },
+    ],
   },
   {
     id: 'withdrawal-a-choose-recipient',
@@ -55,6 +64,10 @@ const versionAScreenDefs = [
     description: 'Search and select from saved recipients or add a new one.',
     componentsUsed: ['BaseLayout', 'Header', 'SearchBar', 'ListItem', 'Avatar', 'Stack'],
     component: A_Screen2_ChooseRecipient,
+    interactiveElements: [
+      { id: 'search-recipient', component: 'SearchBar', label: 'Buscar destinatário' },
+      { id: 'li-recipient', component: 'ListItem', label: 'Destinatário salvo' },
+    ],
   },
   {
     id: 'withdrawal-a-amount',
@@ -62,6 +75,10 @@ const versionAScreenDefs = [
     description: 'Enter withdrawal amount in USD with automatic BRL conversion and fee breakdown.',
     componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'DataList', 'DataListSkeleton', 'Button', 'StickyFooter'],
     component: A_Screen3_Amount,
+    interactiveElements: [
+      { id: 'input-amount', component: 'CurrencyInput', label: 'Valor (USD)' },
+      { id: 'btn-continue', component: 'Button', label: 'Continuar' },
+    ],
   },
   {
     id: 'withdrawal-a-review',
@@ -69,6 +86,9 @@ const versionAScreenDefs = [
     description: 'Review withdrawal details with recipient, amounts, fees, and delivery estimate.',
     componentsUsed: ['BaseLayout', 'Header', 'ListItem', 'Avatar', 'DataList', 'Banner', 'GroupHeader', 'Button', 'StickyFooter', 'Stack'],
     component: A_Screen4_Review,
+    interactiveElements: [
+      { id: 'btn-confirm', component: 'Button', label: 'Confirmar saque' },
+    ],
   },
 ] as const
 
@@ -79,6 +99,12 @@ const versionBScreenDefs = [
     description: 'Bi-directional currency input with destination type selector via BottomSheet.',
     componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'Divider', 'ListItem', 'Avatar', 'DataList', 'Banner', 'DataListSkeleton', 'BannerSkeleton', 'BottomSheet', 'Button', 'StickyFooter', 'Stack'],
     component: B_Screen1_Amount,
+    interactiveElements: [
+      { id: 'input-usd', component: 'CurrencyInput', label: 'Envie (USD)' },
+      { id: 'input-brl', component: 'CurrencyInput', label: 'Receba (BRL)' },
+      { id: 'btn-change-dest', component: 'Button', label: 'Mudar' },
+      { id: 'btn-continue', component: 'Button', label: 'Continuar' },
+    ],
   },
   {
     id: 'withdrawal-b-recipient',
@@ -86,6 +112,10 @@ const versionBScreenDefs = [
     description: 'Search and select from saved recipients or add a new one.',
     componentsUsed: ['BaseLayout', 'Header', 'SearchBar', 'ListItem', 'Avatar', 'Stack'],
     component: B_Screen2_Recipient,
+    interactiveElements: [
+      { id: 'search-recipient', component: 'SearchBar', label: 'Buscar destinatário' },
+      { id: 'li-recipient', component: 'ListItem', label: 'Destinatário salvo' },
+    ],
   },
   {
     id: 'withdrawal-b-review',
@@ -93,6 +123,9 @@ const versionBScreenDefs = [
     description: 'Review withdrawal details with recipient, amounts, fees, and delivery estimate.',
     componentsUsed: ['BaseLayout', 'Header', 'ListItem', 'Avatar', 'DataList', 'Banner', 'GroupHeader', 'Button', 'StickyFooter', 'Stack'],
     component: B_Screen3_Review,
+    interactiveElements: [
+      { id: 'btn-confirm', component: 'Button', label: 'Confirmar saque' },
+    ],
   },
 ] as const
 
@@ -103,6 +136,12 @@ const versionCScreenDefs = [
     description: 'All-in-one withdrawal screen with destination, recipient, amount, and fees. Uses BottomSheets for selections.',
     componentsUsed: ['BaseLayout', 'Header', 'ListItem', 'Avatar', 'CurrencyInput', 'Divider', 'DataList', 'Banner', 'DataListSkeleton', 'BannerSkeleton', 'SearchBar', 'BottomSheet', 'Button', 'StickyFooter', 'Stack'],
     component: C_Screen1_Withdraw,
+    interactiveElements: [
+      { id: 'li-destination', component: 'ListItem', label: 'Destino' },
+      { id: 'li-recipient', component: 'ListItem', label: 'Destinatário' },
+      { id: 'input-amount', component: 'CurrencyInput', label: 'Valor (USD)' },
+      { id: 'btn-confirm', component: 'Button', label: 'Sacar' },
+    ],
   },
 ] as const
 
@@ -132,10 +171,11 @@ const allScreens = [...allScreenDefs].map((s) => ({ ...s, pageId: s.id }))
 
 registerFlow({
   id: 'withdrawal',
-  name: 'Saque',
+  name: 'Withdrawal',
   description: 'Withdrawal flow with multiple exploration versions: A (destination first), B (amount first), C (compact).',
   domain: 'send-funds',
   level: 2,
+  entryPoints: ['dashboard-send', 'quick-action'],
   screens: allScreens,
 })
 
@@ -150,7 +190,7 @@ function bootstrapVersions() {
   // We need a dummy graph to save with each version
   const dummyFlow: Flow = {
     id: FLOW_ID,
-    name: 'Saque',
+    name: 'Withdrawal',
     description: '',
     domain: 'send-funds',
     screens: allScreens,
@@ -162,21 +202,21 @@ function bootstrapVersions() {
     ...versionAScreenDefs.map((s) => s.id),
     ...sharedScreenDefs.map((s) => s.id),
   ]
-  saveVersion(FLOW_ID, '1.0', 'Versão A — Destino Primeiro: guided step-by-step withdrawal flow.', graph.nodes, graph.edges, 'exploration', versionAScreenIds)
+  saveVersion(FLOW_ID, '1.0', 'Version A — Destination First: guided step-by-step withdrawal flow.', graph.nodes, graph.edges, versionAScreenIds)
 
   // Version B — Amount First
   const versionBScreenIds = [
     ...versionBScreenDefs.map((s) => s.id),
     ...sharedScreenDefs.map((s) => s.id),
   ]
-  saveVersion(FLOW_ID, '2.0', 'Versão B — Valor Primeiro: amount-first flow mirroring deposit-v2 patterns.', graph.nodes, graph.edges, 'exploration', versionBScreenIds)
+  saveVersion(FLOW_ID, '2.0', 'Version B — Amount First: amount-first flow mirroring deposit-v2 patterns.', graph.nodes, graph.edges, versionBScreenIds)
 
   // Version C — Compact
   const versionCScreenIds = [
     ...versionCScreenDefs.map((s) => s.id),
     ...sharedScreenDefs.map((s) => s.id),
   ]
-  saveVersion(FLOW_ID, '3.0', 'Versão C — Compacto: all-in-one single screen with BottomSheets.', graph.nodes, graph.edges, 'exploration', versionCScreenIds)
+  saveVersion(FLOW_ID, '3.0', 'Version C — Compact: all-in-one single screen with BottomSheets.', graph.nodes, graph.edges, versionCScreenIds)
 }
 
 bootstrapVersions()

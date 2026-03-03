@@ -9,6 +9,8 @@ import { supabase, isSupabaseConnected } from '../../lib/supabase'
 
 const STORAGE_KEY = 'picnic-design-lab:flow-overrides'
 
+export type FlowTag = 'draft' | 'approved' | 'in-production'
+
 export interface ScreenOverrides {
   title?: string
   description?: string
@@ -18,6 +20,7 @@ export interface FlowOverrides {
   name?: string
   description?: string
   spec?: string
+  tag?: FlowTag
   screens?: Record<string, ScreenOverrides>
 }
 
@@ -42,6 +45,24 @@ function writeAll(data: AllOverrides): void {
 
 export function getFlowOverrides(flowId: string): FlowOverrides {
   return readAll()[flowId] ?? {}
+}
+
+export function getFlowTag(flowId: string): FlowTag {
+  return readAll()[flowId]?.tag ?? 'draft'
+}
+
+export async function setFlowTag(flowId: string, tag: FlowTag): Promise<void> {
+  const all = readAll()
+  if (!all[flowId]) all[flowId] = {}
+  all[flowId].tag = tag
+  writeAll(all)
+
+  if (isSupabaseConnected()) {
+    await supabase!.from('flow_overrides').upsert(
+      { flow_id: flowId, tag, updated_at: new Date().toISOString() },
+      { onConflict: 'flow_id' },
+    )
+  }
 }
 
 export async function setFlowName(flowId: string, name: string): Promise<void> {
@@ -151,17 +172,22 @@ export async function hydrateFromSupabase(): Promise<boolean> {
 
     if (flowRes.error || screenRes.error) return false
 
+    const flowRows = flowRes.data ?? []
+    const screenRows = screenRes.data ?? []
+    if (flowRows.length === 0 && screenRows.length === 0) return false // nothing in Supabase yet — keep localStorage
+
     const all: AllOverrides = {}
 
-    for (const row of flowRes.data ?? []) {
+    for (const row of flowRows) {
       const id = row.flow_id as string
       if (!all[id]) all[id] = {}
       if (row.name) all[id].name = row.name
       if (row.description) all[id].description = row.description
       if (row.spec) all[id].spec = row.spec
+      if (row.tag) all[id].tag = row.tag
     }
 
-    for (const row of screenRes.data ?? []) {
+    for (const row of screenRows) {
       const flowId = row.flow_id as string
       const screenId = row.screen_id as string
       if (!all[flowId]) all[flowId] = {}

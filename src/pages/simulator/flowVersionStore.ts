@@ -6,9 +6,11 @@
 import type { Node, Edge } from '@xyflow/react'
 import { getFlowOverrides } from './flowStore'
 import { getFlow } from './flowRegistry'
+import { supabase, isSupabaseConnected } from '../../lib/supabase'
 
 const STORAGE_KEY = 'picnic-design-lab:flow-versions'
 
+/** @deprecated Tags now live on flows (FlowTag in flowStore). Kept for backward compat with old versions. */
 export type VersionTag = 'exploration' | 'milestone' | 'production'
 
 export interface FlowVersion {
@@ -16,7 +18,8 @@ export interface FlowVersion {
   flowId: string
   version: string       // e.g. "1.0", "1.1", "2.0"
   description: string   // what changed — user-written
-  tag: VersionTag       // type of version
+  /** @deprecated Legacy field — tags now live on flows. Kept for backward compat. */
+  tag?: VersionTag
   // Graph state
   nodes: Node[]
   edges: Edge[]
@@ -57,7 +60,6 @@ export function saveVersion(
   description: string,
   nodes: Node[],
   edges: Edge[],
-  tag: VersionTag = 'milestone',
   screenIds?: string[],
 ): FlowVersion {
   const all = readAll()
@@ -82,7 +84,6 @@ export function saveVersion(
     flowId,
     version,
     description,
-    tag,
     nodes: JSON.parse(JSON.stringify(nodes)),
     edges: JSON.parse(JSON.stringify(edges)),
     flowName: flow?.name ?? '',
@@ -94,6 +95,27 @@ export function saveVersion(
 
   all[flowId].push(entry)
   writeAll(all)
+
+  // Supabase (async, fire-and-forget)
+  if (isSupabaseConnected()) {
+    supabase!.from('flow_versions').upsert(
+      {
+        id: entry.id,
+        flow_id: entry.flowId,
+        version: entry.version,
+        description: entry.description,
+        nodes: JSON.stringify(entry.nodes),
+        edges: JSON.stringify(entry.edges),
+        flow_name: entry.flowName,
+        flow_description: entry.flowDescription,
+        screen_overrides: JSON.stringify(entry.screenOverrides),
+        screen_ids: entry.screenIds ? JSON.stringify(entry.screenIds) : null,
+        created_at: entry.createdAt,
+      },
+      { onConflict: 'id' },
+    )
+  }
+
   return entry
 }
 
@@ -103,6 +125,45 @@ export function deleteVersion(flowId: string, versionId: string): void {
   all[flowId] = all[flowId].filter((v) => v.id !== versionId)
   if (all[flowId].length === 0) delete all[flowId]
   writeAll(all)
+
+  // Supabase
+  if (isSupabaseConnected()) {
+    supabase!.from('flow_versions').delete().eq('id', versionId)
+  }
+}
+
+export function deleteAllVersions(flowId: string): void {
+  const all = readAll()
+  const versions = all[flowId]
+  if (!versions) return
+  delete all[flowId]
+  writeAll(all)
+
+  if (isSupabaseConnected()) {
+    supabase!.from('flow_versions').delete().eq('flow_id', flowId)
+  }
+}
+
+export function updateVersion(
+  flowId: string,
+  versionId: string,
+  updates: { version?: string; description?: string },
+): void {
+  const all = readAll()
+  if (!all[flowId]) return
+  const idx = all[flowId].findIndex((v) => v.id === versionId)
+  if (idx === -1) return
+
+  if (updates.version !== undefined) all[flowId][idx].version = updates.version
+  if (updates.description !== undefined) all[flowId][idx].description = updates.description
+  writeAll(all)
+
+  if (isSupabaseConnected()) {
+    const row: Record<string, string> = { id: versionId }
+    if (updates.version !== undefined) row.version = updates.version
+    if (updates.description !== undefined) row.description = updates.description
+    supabase!.from('flow_versions').update(row).eq('id', versionId)
+  }
 }
 
 export function getVersion(flowId: string, versionId: string): FlowVersion | null {
@@ -155,4 +216,59 @@ export function getActiveFlowVersion(flowId: string): FlowVersion | null {
   const vId = getActiveVersion(flowId)
   if (!vId) return null
   return getVersion(flowId, vId)
+}
+
+// ── Supabase → localStorage hydration ──
+
+export async function hydrateVersionsFromSupabase(): Promise<boolean> {
+  if (!isSupabaseConnected()) return false
+
+  try {
+    const { data, error } = await supabase!.from('flow_versions').select('*')
+    if (error) return false
+
+    const rows = data ?? []
+    if (rows.length === 0) return false // nothing in Supabase yet — keep localStorage
+
+    const grouped: Record<string, FlowVersion[]> = {}
+    for (const row of rows) {
+      const version: FlowVersion = {
+        id: row.id,
+        flowId: row.flow_id,
+        version: row.version,
+        description: row.description,
+        tag: row.tag,
+        nodes: typeof row.nodes === 'string' ? JSON.parse(row.nodes) : row.nodes,
+        edges: typeof row.edges === 'string' ? JSON.parse(row.edges) : row.edges,
+        flowName: row.flow_name,
+        flowDescription: row.flow_description,
+        screenOverrides: typeof row.screen_overrides === 'string' ? JSON.parse(row.screen_overrides) : row.screen_overrides,
+        createdAt: row.created_at,
+        ...(row.screen_ids ? { screenIds: typeof row.screen_ids === 'string' ? JSON.parse(row.screen_ids) : row.screen_ids } : {}),
+      }
+      if (!grouped[version.flowId]) grouped[version.flowId] = []
+      grouped[version.flowId].push(version)
+    }
+    writeAll(grouped)
+    return true
+  } catch {
+    return false
+  }
+}
+
+// ── Real-time subscription ──
+
+export function subscribeToVersionChanges(onUpdate: () => void): (() => void) | null {
+  if (!isSupabaseConnected()) return null
+
+  const channel = supabase!
+    .channel('flow-version-changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'flow_versions' }, () => {
+      hydrateVersionsFromSupabase().then(() => onUpdate())
+    })
+    .subscribe()
+
+  return () => {
+    supabase!.removeChannel(channel)
+  }
 }

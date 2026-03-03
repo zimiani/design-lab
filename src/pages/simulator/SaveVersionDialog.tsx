@@ -1,20 +1,13 @@
 import { useState } from 'react'
 import { RiCloseLine } from '@remixicon/react'
-import type { VersionTag } from './flowVersionStore'
 
 interface SaveVersionDialogProps {
   suggestedVersion: string
   onClose: () => void
-  onSave: (version: string, description: string, tag: VersionTag, screenIds?: string[]) => void
+  onSave: (version: string, description: string, screenIds?: string[]) => void
   /** Current screen IDs (for "Include screen set" option) */
   currentScreenIds?: string[]
 }
-
-const tagOptions: { value: VersionTag; label: string; color: string; description: string }[] = [
-  { value: 'milestone', label: 'Milestone', color: 'bg-[#4ADE80]', description: 'Design review, feature ready' },
-  { value: 'exploration', label: 'Exploration', color: 'bg-[#FBBF24]', description: 'UX test, alternative, draft' },
-  { value: 'production', label: 'Production', color: 'bg-[#60A5FA]', description: 'Currently live in the app' },
-]
 
 export default function SaveVersionDialog({
   suggestedVersion,
@@ -24,13 +17,12 @@ export default function SaveVersionDialog({
 }: SaveVersionDialogProps) {
   const [version, setVersion] = useState(suggestedVersion)
   const [description, setDescription] = useState('')
-  const [tag, setTag] = useState<VersionTag>('milestone')
   const [includeScreenSet, setIncludeScreenSet] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!version.trim() || !description.trim()) return
-    onSave(version.trim(), description.trim(), tag, includeScreenSet && currentScreenIds ? currentScreenIds : undefined)
+    onSave(version.trim(), description.trim(), includeScreenSet && currentScreenIds ? currentScreenIds : undefined)
   }
 
   return (
@@ -77,33 +69,6 @@ export default function SaveVersionDialog({
               autoFocus
               className="w-full px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text font-mono"
             />
-          </div>
-
-          <div>
-            <label className="block text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
-              Tag
-            </label>
-            <div className="flex gap-[var(--token-spacing-2)]">
-              {tagOptions.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => setTag(opt.value)}
-                  className={`
-                    flex-1 flex flex-col items-center gap-[4px] py-[var(--token-spacing-2)] px-[var(--token-spacing-2)]
-                    rounded-[var(--token-radius-sm)] border text-[length:var(--token-font-size-caption)]
-                    transition-colors cursor-pointer
-                    ${tag === opt.value
-                      ? 'border-shell-selected-text bg-shell-selected-text/10 text-shell-text'
-                      : 'border-shell-border text-shell-text-secondary hover:border-shell-active'
-                    }
-                  `}
-                >
-                  <div className={`w-[8px] h-[8px] rounded-full ${opt.color}`} />
-                  <span className="font-medium">{opt.label}</span>
-                </button>
-              ))}
-            </div>
           </div>
 
           <div>

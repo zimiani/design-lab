@@ -3,18 +3,23 @@ import { motion } from 'framer-motion'
 import { RiAddLine } from '@remixicon/react'
 
 /* Force page registrations */
-import '../flows/deposit'
 import '../flows/deposit-v2'
+import '../flows/deposit-ach'
+import '../flows/noah-registration'
 import '../flows/perks'
 import '../flows/withdrawal'
 import '../flows/invest-earn'
+import '../flows/caixinha-dolar'
+import '../flows/dashboard'
 
 import AppHeader from '../components/AppHeader'
 import PageGalleryCanvas from './gallery/PageGalleryCanvas'
 import NewPageDialog from './gallery/NewPageDialog'
-import { getAllPages, hydrateDynamicPages, registerDynamicPage } from './gallery/pageRegistry'
-import { hydratePageOverridesFromSupabase, subscribeToPageChanges } from './gallery/pageStore'
-import { saveDynamicPage } from './gallery/dynamicPageStore'
+import { getAllPages, getPage, hydrateDynamicPages, registerDynamicPage } from './gallery/pageRegistry'
+import { subscribeToPageChanges } from './gallery/pageStore'
+import { saveDynamicPage, subscribeToDynamicPageChanges } from './gallery/dynamicPageStore'
+import { slugify, uniqueId } from '../lib/slugify'
+import { syncAll, markSynced } from '../lib/syncStore'
 
 export default function PageGalleryPage() {
   const [, setVersion] = useState(0)
@@ -25,16 +30,32 @@ export default function PageGalleryPage() {
     setVersion((v) => v + 1)
   }, [])
 
+  const handleSynced = useCallback(() => {
+    hydrateDynamicPages()
+    setVersion((v) => v + 1)
+  }, [])
+
   useEffect(() => {
-    hydratePageOverridesFromSupabase().then((ok) => {
-      if (ok) setVersion((v) => v + 1)
+    syncAll().then((ok) => {
+      if (ok) {
+        hydrateDynamicPages()
+        setVersion((v) => v + 1)
+      }
     })
-    const unsub = subscribeToPageChanges(() => setVersion((v) => v + 1))
-    return () => { unsub?.() }
+    const unsub = subscribeToPageChanges(() => { markSynced(); setVersion((v) => v + 1) })
+    const unsubDynPages = subscribeToDynamicPageChanges(() => {
+      markSynced()
+      hydrateDynamicPages()
+      setVersion((v) => v + 1)
+    })
+    return () => {
+      unsub?.()
+      unsubDynPages?.()
+    }
   }, [])
 
   const handleCreatePage = useCallback((name: string, area: string, description: string) => {
-    const id = `page-${Date.now()}`
+    const id = uniqueId('page-' + slugify(name), (id) => !!getPage(id))
     const def = { id, name, description, area, componentsUsed: [] }
     saveDynamicPage(def)
     registerDynamicPage(def)
@@ -53,6 +74,7 @@ export default function PageGalleryPage() {
       className="h-screen flex flex-col bg-shell-bg"
     >
       <AppHeader
+        onSynced={handleSynced}
         actions={
           <button
             type="button"

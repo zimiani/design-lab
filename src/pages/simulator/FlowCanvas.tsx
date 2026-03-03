@@ -22,7 +22,7 @@ import { getFlowGraph, saveFlowGraph } from './flowGraphStore'
 import { autoGenerateFlowGraph } from './flowGraphAutoGen'
 import { alignNodes } from './alignNodes'
 import { addScreenToFlow } from './dynamicFlowStore'
-import { saveVersion, type FlowVersion, type VersionTag } from './flowVersionStore'
+import { saveVersion, type FlowVersion } from './flowVersionStore'
 import { nodeTypes } from './nodes'
 import type { FlowNodeType, FlowNodeData } from './flowGraph.types'
 import { syncNodeLabelToScreen } from './flowGraphSync'
@@ -41,6 +41,7 @@ interface FlowCanvasProps {
   suggestedVersion?: string
   onVersionsChanged?: () => void
   onViewVersion?: (versionEntry: FlowVersion) => void
+  onRestoreVersion?: (versionEntry: FlowVersion) => void
   graphOverride?: { nodes: Node[], edges: Edge[] } | null
 }
 
@@ -51,7 +52,7 @@ interface UndoState {
 
 const MAX_UNDO = 50
 
-function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowChanged, versions: versionsProp = [], suggestedVersion: suggestedVerProp = '1.0', onVersionsChanged, onViewVersion: onViewVersionProp, graphOverride }: FlowCanvasProps) {
+function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowChanged, versions: versionsProp = [], suggestedVersion: suggestedVerProp = '1.0', onVersionsChanged, onViewVersion: onViewVersionProp, onRestoreVersion: onRestoreVersionProp, graphOverride }: FlowCanvasProps) {
   const [nodes, setNodes, applyNodeChanges] = useNodesState<Node>([] as Node[])
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([] as Edge[])
   const [selectedNode, setSelectedNode] = useState<Node | null>(null)
@@ -81,7 +82,7 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
     (changes: NodeChange[]) => {
       const hasDrag = changes.some((c) => c.type === 'position' && c.dragging)
       if (hasDrag) {
-        const { lines, adjustedChanges } = getHelperLines(changes, nodes)
+        const { lines, adjustedChanges } = getHelperLines(changes, nodes, edges)
         setHelperLines(lines)
         applyNodeChanges(adjustedChanges)
       } else {
@@ -91,7 +92,7 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
         applyNodeChanges(changes)
       }
     },
-    [nodes, applyNodeChanges],
+    [nodes, edges, applyNodeChanges],
   )
 
   // Load or auto-generate graph when flow changes
@@ -245,12 +246,14 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
       const labels: Record<FlowNodeType, string> = {
         screen: 'New Screen',
         page: 'New Page',
-        state: 'State',
         decision: 'Decision',
         error: 'Error State',
         'flow-reference': 'Flow Reference',
         action: 'User Action',
         overlay: 'Overlay',
+        'api-call': 'API Call',
+        delay: 'Delay',
+        note: 'Note',
       }
 
       // For dynamic flows, creating a screen node also creates a linked screen
@@ -278,11 +281,6 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
           screenId: linkedScreenId,
           nodeType,
           description: '',
-        }
-        // State nodes use stateId instead of screenId
-        if (nodeType === 'state') {
-          nodeData.stateId = ''
-          nodeData.screenId = null
         }
         const newNode: Node = {
           id: nodeId,
@@ -365,9 +363,15 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
       } else if (e.key === 'o' && !e.ctrlKey && !e.metaKey) {
         e.preventDefault()
         handleAddNode('overlay')
-      } else if (e.key === 't' && !e.ctrlKey && !e.metaKey) {
+      } else if (e.key === 'c' && !e.ctrlKey && !e.metaKey) {
         e.preventDefault()
-        handleAddNode('state')
+        handleAddNode('api-call')
+      } else if (e.key === 'w' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault()
+        handleAddNode('delay')
+      } else if (e.key === 'n' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault()
+        handleAddNode('note')
       }
     }
     window.addEventListener('keydown', handler)
@@ -404,6 +408,28 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
         }
       }
 
+      // Auto-generate action node labels when actionType or actionTarget changes
+      const nodeData = nodes.find((n) => n.id === nodeId)?.data as FlowNodeData | undefined
+      if (nodeData?.nodeType === 'action') {
+        const hasTypeOrTargetChange = 'actionType' in updates || 'actionTarget' in updates
+        const isDirectLabelEdit = 'label' in updates && !hasTypeOrTargetChange
+
+        if (isDirectLabelEdit) {
+          updates.labelManuallyEdited = true
+        } else if (hasTypeOrTargetChange && !nodeData.labelManuallyEdited) {
+          const verbMap: Record<string, string> = {
+            tap: 'taps', swipe: 'swipes', input: 'inputs',
+            scroll: 'scrolls', 'long-press': 'long-presses',
+          }
+          const actionType = (updates.actionType as string) ?? nodeData.actionType ?? 'tap'
+          const actionTarget = (updates.actionTarget as string) ?? nodeData.actionTarget ?? ''
+          const verb = verbMap[actionType] ?? actionType
+          if (actionTarget) {
+            updates.label = `User ${verb} ${actionTarget}`
+          }
+        }
+      }
+
       setNodes((nds) =>
         nds.map((n) => {
           if (n.id !== nodeId) return n
@@ -435,10 +461,10 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
 
   // Version management (state is lifted to SimulatorPage, received via props)
   const handleSaveVersion = useCallback(
-    (version: string, description: string, tag: VersionTag, screenIds?: string[]) => {
+    (version: string, description: string, screenIds?: string[]) => {
       setNodes((currentNodes) => {
         setEdges((currentEdges) => {
-          saveVersion(flow.id, version, description, currentNodes, currentEdges, tag, screenIds)
+          saveVersion(flow.id, version, description, currentNodes, currentEdges, screenIds)
           onVersionsChanged?.()
           return currentEdges
         })
@@ -448,22 +474,25 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
     [flow.id, setNodes, setEdges, onVersionsChanged],
   )
 
+  // Preview: non-destructive, in-memory only — never persists
   const handleViewVersion = useCallback(
     (versionEntry: FlowVersion) => {
-      setNodes((currentNodes) => {
-        setEdges((currentEdges) => {
-          pushUndo(currentNodes, currentEdges)
-          return currentEdges
-        })
-        return currentNodes
-      })
+      onViewVersionProp?.(versionEntry)
+    },
+    [onViewVersionProp],
+  )
+
+  // Restore: explicitly copies version graph → live graph (persisted)
+  const handleRestoreVersion = useCallback(
+    (versionEntry: FlowVersion) => {
+      pushUndo(nodes, edges)
       setNodes(versionEntry.nodes as Node[])
       setEdges(versionEntry.edges as Edge[])
       saveFlowGraph(flow.id, versionEntry.nodes, versionEntry.edges)
       setSelectedNode(null)
-      onViewVersionProp?.(versionEntry)
+      onRestoreVersionProp?.(versionEntry)
     },
-    [flow.id, setNodes, setEdges, pushUndo, onViewVersionProp],
+    [flow.id, nodes, edges, setNodes, setEdges, pushUndo, onRestoreVersionProp],
   )
 
   return (
@@ -485,6 +514,8 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
             onPaneClick={handlePaneClick}
             onNodeDragStop={handleNodeDragStop}
             nodeTypes={nodeTypes}
+            snapToGrid
+            snapGrid={[20, 20]}
             fitView
             fitViewOptions={{ padding: 0.3 }}
             proOptions={{ hideAttribution: true }}
@@ -510,7 +541,9 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
                   case 'flow-reference': return '#60A5FA'
                   case 'action': return '#A78BFA'
                   case 'overlay': return '#2DD4BF'
-                  case 'state': return '#94A3B8'
+                  case 'api-call': return '#22D3EE'
+                  case 'delay': return '#FB923C'
+                  case 'note': return '#78716C'
                   default: return '#6B6B6B'
                 }
               }}
@@ -531,6 +564,8 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
       <FlowViewAnnotationsPanel
         flow={flow}
         selectedNode={selectedNode}
+        nodes={nodes}
+        edges={edges}
         onOpenInPrototype={handleOpenInPrototype}
         onNodeUpdate={handleNodeUpdate}
         onAlignNodes={handleAlignNodes}
@@ -538,6 +573,8 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
         suggestedVersion={suggestedVerProp}
         onSaveVersion={handleSaveVersion}
         onViewVersion={handleViewVersion}
+        onRestoreVersion={handleRestoreVersion}
+        onVersionsChanged={onVersionsChanged}
       />
     </div>
   )
