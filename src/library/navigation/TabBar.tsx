@@ -25,8 +25,8 @@ export default function TabBar({
     <nav
       data-component="TabBar"
       className={`
-        flex items-end justify-around shrink-0
-        px-[var(--token-spacing-sm)] pb-[var(--safe-area-bottom,0px)]
+        flex items-start justify-between shrink-0
+        px-[24px] py-[4px] pb-[var(--safe-area-bottom,8px)]
         bg-surface-primary border-t border-border-default
         ${className}
       `}
@@ -39,17 +39,17 @@ export default function TabBar({
             type="button"
             onClick={() => onChange(item.id)}
             className={`
-              flex flex-col items-center justify-center gap-[2px]
-              flex-1 h-full pt-[var(--token-spacing-2)]
+              flex flex-col items-center justify-end gap-[4px]
+              w-[72px] h-[60px]
               transition-colors duration-[var(--token-transition-fast)]
               cursor-pointer
-              ${active ? 'text-interactive-foreground' : 'text-content-tertiary'}
+              ${active ? 'text-content-primary' : 'text-content-tertiary'}
             `}
           >
-            <span className="w-[22px] h-[22px] flex items-center justify-center">
+            <span className="w-[28px] h-[28px] flex items-center justify-center [&>svg]:w-[28px] [&>svg]:h-[28px]">
               {active && item.activeIcon ? item.activeIcon : item.icon}
             </span>
-            <span className="text-[length:10px] leading-[14px] font-medium">
+            <span className="text-[12px] leading-[12px] font-medium">
               {item.label}
             </span>
           </button>

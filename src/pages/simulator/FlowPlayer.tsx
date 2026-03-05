@@ -4,8 +4,9 @@ import {
   RiArrowLeftSLine, RiArrowRightSLine, RiRefreshLine,
   RiSmartphoneLine, RiComputerLine,
   RiHomeLine, RiBankCardLine,
-  RiLineChartLine, RiGiftLine,
+  RiGiftLine,
 } from '@remixicon/react'
+import { PiPiggyBank, PiPiggyBankFill } from 'react-icons/pi'
 import { getFlow } from './flowRegistry'
 import { ScreenDataProvider } from '../../lib/ScreenDataContext'
 import { getFlowGraph } from './flowGraphStore'
@@ -26,7 +27,7 @@ type DeviceMode = 'phone' | 'desktop'
 const navItems = [
   { id: 'home', label: 'Início', icon: <RiHomeLine size={20} /> },
   { id: 'cards', label: 'Cartão', icon: <RiBankCardLine size={20} /> },
-  { id: 'invest', label: 'Caixinha', icon: <RiLineChartLine size={20} /> },
+  { id: 'invest', label: 'Caixinha', icon: <PiPiggyBank size={20} />, activeIcon: <PiPiggyBankFill size={20} /> },
   { id: 'perks', label: 'Benefícios', icon: <RiGiftLine size={20} /> },
 ]
 

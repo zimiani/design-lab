@@ -3,11 +3,19 @@ import { motion } from 'framer-motion'
 import type { FlowScreenProps } from '../../../pages/simulator/flowRegistry'
 import { useScreenData } from '../../../lib/ScreenDataContext'
 import Stack from '../../../library/layout/Stack'
+import BottomSheet from '../../../library/layout/BottomSheet'
 import SegmentedControl from '../../../library/navigation/SegmentedControl'
+import GroupHeader from '../../../library/navigation/GroupHeader'
 import ShortcutButton from '../../../library/inputs/ShortcutButton'
+import Button from '../../../library/inputs/Button'
+import CurrencyInput from '../../../library/inputs/CurrencyInput'
+import RadioGroup from '../../../library/inputs/RadioGroup'
+import DataList from '../../../library/display/DataList'
+import Banner from '../../../library/display/Banner'
 import Text from '../../../library/foundations/Text'
 import { RiArrowUpLine, RiArrowDownLine, RiFlagLine, RiEditLine, RiCheckLine } from '@remixicon/react'
 import { BalanceDisplay, DetailsTab, HistoryTab } from '../version-a/A_Screen1_Hub.parts'
+import { USD_ICON, TIME_HORIZONS, formatUsd } from '../../caixinha-dolar/shared/data'
 
 const HERO_IMAGE = 'https://img.icons8.com/3d-fluency/512/money-box.png'
 
@@ -186,10 +194,17 @@ export default function B_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps)
     if (!resolved) onNext()
   }
 
+  // Goal bottom sheet state
+  const [goalSheetOpen, setGoalSheetOpen] = useState(false)
+  const [targetValue, setTargetValue] = useState('')
+  const [selectedHorizon, setSelectedHorizon] = useState('1y')
+
+  const target = parseInt(targetValue || '0', 10) / 100
+  const isValidGoal = target >= 10
+  const horizonMonths = selectedHorizon === '6m' ? 6 : selectedHorizon === '1y' ? 12 : selectedHorizon === '2y' ? 24 : 0
+
   const handleGoal = () => {
-    const label = hasGoal ? 'ShortcutButton: Editar meta' : 'ShortcutButton: Criar meta'
-    const resolved = onElementTap?.(label)
-    if (!resolved) onNext()
+    setGoalSheetOpen(true)
   }
 
   const handleViewPolicy = () => {
@@ -267,6 +282,58 @@ export default function B_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps)
           </Stack>
         </div>
       </div>
+
+      {/* Goal BottomSheet */}
+      <BottomSheet
+        open={goalSheetOpen}
+        onClose={() => setGoalSheetOpen(false)}
+        title={hasGoal ? 'Editar meta' : 'Definir meta'}
+      >
+        <Stack gap="default">
+          <Stack gap="sm">
+            <GroupHeader text="Quanto você quer guardar?" />
+            <CurrencyInput
+              label="Valor da meta"
+              value={targetValue}
+              onChange={setTargetValue}
+              tokenIcon={USD_ICON}
+              currencySymbol="US$"
+            />
+          </Stack>
+
+          <Stack gap="sm">
+            <GroupHeader text="Até quando?" />
+            <RadioGroup
+              value={selectedHorizon}
+              onChange={(v) => setSelectedHorizon(String(v))}
+              options={TIME_HORIZONS.map((h) => ({
+                value: h.id,
+                title: h.label,
+              }))}
+            />
+          </Stack>
+
+          {isValidGoal && horizonMonths > 0 && (
+            <DataList
+              data={[
+                { label: 'Depósito mensal sugerido', value: formatUsd(target / horizonMonths) },
+                { label: 'Rendimento estimado', value: formatUsd(target * 0.05 * (horizonMonths / 12)) },
+                { label: 'Taxa', value: '5,00% a.a.' },
+              ]}
+            />
+          )}
+
+          <Banner
+            variant="neutral"
+            title="A meta é flexível"
+            description="Você pode alterar o valor e o prazo a qualquer momento. A caixinha continua rendendo independente da meta."
+          />
+
+          <Button fullWidth disabled={!isValidGoal} onPress={() => setGoalSheetOpen(false)}>
+            Salvar meta
+          </Button>
+        </Stack>
+      </BottomSheet>
     </div>
   )
 }

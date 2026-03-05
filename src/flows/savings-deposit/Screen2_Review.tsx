@@ -19,21 +19,8 @@ export default function Screen2_Review({ onNext, onBack, onElementTap }: FlowScr
       <Stack gap="default">
         <Stack gap="none">
           <GroupHeader text="Detalhes da operação" />
-          <DataList
-            variant="vertical"
-            data={[
-              {
-                label: 'Você está guardando',
-                value: 'US$ 100,00',
-                action: (
-                  <Button variant="primary" size="sm" onPress={() => onBack?.()}>
-                    Editar
-                  </Button>
-                ),
-              },
-            ]}
-          />
           <DataList data={[
+              { label: 'Você está guardando', value: 'US$ 100,00' },
             { label: 'Pagamento', value: 'Saldo do Cartão' },
             { label: 'Prazo', value: 'Instantâneo' },
             {
