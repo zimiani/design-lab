@@ -25,6 +25,7 @@ interface CardInfoData {
   number?: string
   expiry?: string
   cvv?: string
+  [key: string]: unknown
 }
 
 export default function Screen2_CardInfo({ onBack, onNext, onElementTap }: FlowScreenProps) {
@@ -32,7 +33,6 @@ export default function Screen2_CardInfo({ onBack, onNext, onElementTap }: FlowS
   const cardType = data.cardType ?? 'virtual'
   const initialFrozen = data.frozen ?? false
   const name = data.name ?? 'Cartão Virtual'
-  const last4 = data.last4 ?? '7328'
   const number = data.number ?? '5432 8901 2345 7328'
   const expiry = data.expiry ?? '12/28'
   const cvv = data.cvv ?? '421'
@@ -187,8 +187,7 @@ export default function Screen2_CardInfo({ onBack, onNext, onElementTap }: FlowS
         variant="regular"
         buttonOneText={frozen ? 'Descongelar' : 'Congelar'}
         onButtonOnePress={confirmFreeze}
-        buttonTwoText="Cancelar"
-        onButtonTwoPress={() => setShowFreezeModal(false)}
+        onBackdropPress={() => setShowFreezeModal(false)}
       >
         <Stack gap="sm">
           <Text variant="heading-md">

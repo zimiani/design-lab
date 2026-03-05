@@ -102,3 +102,20 @@ export const TIME_HORIZONS = [
   { id: '2y', label: 'Em 2 anos' },
   { id: 'none', label: 'Sem prazo' },
 ]
+
+export function projectedYield(principal: number, months: number): number {
+  const monthlyRate = APY / 12
+  return principal * monthlyRate * months
+}
+
+export const DEPOSIT_PROCESSING_STEPS = [
+  'Verificando dados…',
+  'Processando depósito…',
+  'Atualizando saldo…',
+]
+
+export const WITHDRAW_PROCESSING_STEPS = [
+  'Verificando saldo…',
+  'Processando resgate…',
+  'Atualizando saldo…',
+]

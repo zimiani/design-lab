@@ -59,7 +59,6 @@ registerFlow({
 {
   const ROW = 120
   const x = 300
-  const xL = 0
   const xR = 600
 
   const nodes = [

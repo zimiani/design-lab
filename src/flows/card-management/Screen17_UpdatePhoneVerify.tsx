@@ -25,7 +25,7 @@ export default function Screen17_UpdatePhoneVerify({ onBack, onNext, onElementTa
           value={code}
           onChange={setCode}
         />
-        <Link linkText="Reenviar código" onLinkPress={() => {}} size="sm" />
+        <Link linkText="Reenviar código" onLinkPress={() => {}} size="xs" />
       </Stack>
       <StickyFooter>
         <Button fullWidth disabled={!isValid} onPress={() => {

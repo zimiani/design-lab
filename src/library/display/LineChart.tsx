@@ -60,12 +60,12 @@ export default function LineChart({
   const handleCrosshair = useCallback((param: MouseEventParams) => {
     if (!onCrosshairMoveRef.current) return
 
-    if (!param.time || !param.seriesData?.size) {
+    if (!param.time || !param.seriesPrices?.size) {
       onCrosshairMoveRef.current(null)
       return
     }
 
-    const entry = param.seriesData.values().next().value as { value?: number } | undefined
+    const entry = param.seriesPrices.values().next().value as { value?: number } | undefined
     if (entry?.value != null) {
       const ts = param.time as number
       const date = new Date(ts * 1000)
@@ -151,7 +151,6 @@ export default function LineChart({
         crosshairMarkerRadius: 5,
         crosshairMarkerBackgroundColor: lineColor,
         crosshairMarkerBorderColor: '#FFFFFF',
-        crosshairMarkerBorderWidth: 2,
       })
       series.setData(timestamps)
     }

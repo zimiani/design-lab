@@ -18,7 +18,7 @@ export default function FigmaCapturePage() {
   const Component = page.component
 
   return (
-    <LayoutProvider mode="mobile">
+    <LayoutProvider>
       <div style={{ width: 390, height: 844, margin: '0 auto', overflow: 'hidden', position: 'relative', background: 'var(--token-surface-primary, #fff)' }}>
         <Component onNext={() => {}} onBack={() => {}} />
       </div>

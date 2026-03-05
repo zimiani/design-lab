@@ -175,6 +175,7 @@ interface ScreenData {
   tab?: number
   hasGoal?: boolean
   goalReached?: boolean
+  [key: string]: unknown
 }
 
 export default function C_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps) {
@@ -228,7 +229,7 @@ export default function C_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps)
                 <Stack gap="sm">
                   <Text variant="body-sm" color="content-secondary">Total guardado</Text>
                   <BalanceDisplay value={CURRENT_BALANCE} />
-                  <Text variant="body" className="font-medium">
+                  <Text variant="body-md" className="font-medium">
                     <span className="text-content-secondary">Rendeu </span>
                     <span className="text-[var(--color-feedback-success)] font-semibold">US$ 23,43</span>
                   </Text>

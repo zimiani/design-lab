@@ -26,6 +26,7 @@ interface ScreenData {
   tab?: number
   hasGoal?: boolean
   goalReached?: boolean
+  [key: string]: unknown
 }
 
 export default function Screen1_Hub({ onNext, onElementTap }: FlowScreenProps) {
@@ -66,7 +67,6 @@ export default function Screen1_Hub({ onNext, onElementTap }: FlowScreenProps) {
     if (!resolved) onNext()
   }
 
-  const effectiveBalance = goalReached ? GOAL_AMOUNT : CURRENT_BALANCE
   const goalProgress = goalReached ? 100 : (CURRENT_BALANCE / GOAL_AMOUNT) * 100
 
   return (

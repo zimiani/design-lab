@@ -9,7 +9,7 @@ import GroupHeader from '../../library/navigation/GroupHeader'
 import Link from '../../library/foundations/Link'
 import { RiExchangeDollarLine, RiTimeLine, RiShieldCheckLine } from '@remixicon/react'
 
-export default function Screen1_Intro({ onNext, onBack, onElementTap }: FlowScreenProps) {
+export default function Screen1_Intro({ onNext, onElementTap }: FlowScreenProps) {
   return (
     <FeatureLayout
       imageSrc="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80"

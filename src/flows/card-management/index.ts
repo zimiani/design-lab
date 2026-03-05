@@ -269,7 +269,7 @@ for (const s of allScreens) {
     area: 'Cards',
     componentsUsed: [...s.componentsUsed],
     component: s.component,
-    ...('states' in s && s.states ? { states: s.states } : {}),
+    ...('states' in s && s.states ? { states: s.states as import('../../pages/gallery/pageRegistry').PageStateDefinition[] } : {}),
   })
 }
 

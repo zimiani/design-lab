@@ -91,7 +91,7 @@ for (const s of allScreens) {
     area: 'Savings',
     componentsUsed: [...s.componentsUsed],
     component: s.component,
-    ...('states' in s && s.states ? { states: s.states } : {}),
+    ...('states' in s && s.states ? { states: s.states as import('../../pages/gallery/pageRegistry').PageStateDefinition[] } : {}),
   })
 }
 
@@ -114,7 +114,6 @@ registerFlow({
   description: 'Savings hub with hero image header, no chart. Same actions and content as version A.',
   domain: 'savings',
   level: 1,
-  parentFlowId: 'savings-manage',
   linkedFlows: ['savings-withdraw', 'savings-deposit'],
   entryPoints: ['tab-bar', 'dashboard'],
   screens: versionBScreens.map((s) => ({ ...s, pageId: s.id })),
@@ -189,7 +188,6 @@ registerFlow({
   description: 'Savings hub with animated radial progress ring for goal visualization.',
   domain: 'savings',
   level: 1,
-  parentFlowId: 'savings-manage',
   linkedFlows: ['savings-withdraw', 'savings-deposit'],
   entryPoints: ['tab-bar', 'dashboard'],
   screens: versionCScreens.map((s) => ({ ...s, pageId: s.id })),

@@ -139,9 +139,9 @@ export default function CurrencyInput({
           type="button"
           onClick={onBalanceTap}
           disabled={!onBalanceTap}
-          className={`flex items-center gap-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] ${balanceError ? 'text-[var(--color-feedback-error)]' : 'text-content-tertiary'} ${onBalanceTap ? 'cursor-pointer underline decoration-dotted underline-offset-2' : ''}`}
+          className={`flex items-center gap-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] ${balanceError ? 'text-[var(--color-feedback-critical)]' : 'text-content-tertiary'} ${onBalanceTap ? 'cursor-pointer underline decoration-dotted underline-offset-2' : ''}`}
         >
-          {balanceError && <RiErrorWarningLine size={14} />}
+          {balanceError && <RiErrorWarningLine size={18} />}
           Saldo: {balance}
         </button>
       )}

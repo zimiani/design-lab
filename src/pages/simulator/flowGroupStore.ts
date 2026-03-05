@@ -198,7 +198,7 @@ export function removeFlowFromGroup(flowId: string): void {
   writeState(state)
 }
 
-export function reorderFlowsInGroup(groupId: string, orderedFlowIds: string[]): void {
+export function reorderFlowsInGroup(_groupId: string, orderedFlowIds: string[]): void {
   const state = readState()
   for (let i = 0; i < orderedFlowIds.length; i++) {
     const flowId = orderedFlowIds[i]

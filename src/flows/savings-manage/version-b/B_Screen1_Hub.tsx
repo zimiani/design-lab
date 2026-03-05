@@ -12,7 +12,6 @@ import { BalanceDisplay, DetailsTab, HistoryTab } from '../version-a/A_Screen1_H
 const HERO_IMAGE = 'https://img.icons8.com/3d-fluency/512/money-box.png'
 
 const CURRENT_BALANCE = 1250.00
-const CURRENT_GAINS = 5.21
 const GOAL_AMOUNT = 5000.00
 
 // ── Coin Stack Progress ──
@@ -119,7 +118,7 @@ function GoalCard({
               {fmtUSD(displayValue)}
             </span>
           </div>
-          <Text variant="body" className="font-medium">
+          <Text variant="body-md" className="font-medium">
             <span className="text-content-secondary">Rendeu </span>
             <span className="text-[var(--color-feedback-success)] font-semibold">US$ 23,43</span>
           </Text>
@@ -170,6 +169,7 @@ interface ScreenData {
   tab?: number
   hasGoal?: boolean
   goalReached?: boolean
+  [key: string]: unknown
 }
 
 export default function B_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps) {
@@ -196,8 +196,6 @@ export default function B_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps)
     const resolved = onElementTap?.('Button: Ver apólice')
     if (!resolved) onNext()
   }
-
-  const effectiveBalance = goalReached ? GOAL_AMOUNT : CURRENT_BALANCE
 
   return (
     <div className="flex flex-col h-full bg-surface-primary overflow-hidden">
@@ -226,7 +224,7 @@ export default function B_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps)
                 <Stack gap="sm">
                   <Text variant="body-sm" color="content-secondary">Total guardado</Text>
                   <BalanceDisplay value={CURRENT_BALANCE} />
-                  <Text variant="body" className="font-medium">
+                  <Text variant="body-md" className="font-medium">
                     <span className="text-content-secondary">Rendeu </span>
                     <span className="text-[var(--color-feedback-success)] font-semibold">US$ 23,43</span>
                   </Text>

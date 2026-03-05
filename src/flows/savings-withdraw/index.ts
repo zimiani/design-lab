@@ -67,7 +67,6 @@ registerFlow({
   description: 'Withdraw savings back to card balance: enter amount, review, process, confirm.',
   domain: 'savings',
   level: 2,
-  parentFlowId: 'savings-manage',
   entryPoints: ['savings-hub'],
   screens: screenDefs.map((s) => ({ ...s, pageId: s.id })),
 })

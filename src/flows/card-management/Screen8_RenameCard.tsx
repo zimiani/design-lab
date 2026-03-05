@@ -22,7 +22,7 @@ export default function Screen8_RenameCard({ onBack, onNext, onElementTap }: Flo
         <TextInput
           label="Nome do cartão"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(v) => setName(v)}
         />
       </Stack>
       <StickyFooter>

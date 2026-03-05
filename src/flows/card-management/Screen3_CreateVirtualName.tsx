@@ -22,7 +22,7 @@ export default function Screen3_CreateVirtualName({ onBack, onNext, onElementTap
         <TextInput
           label="Nome do cartão"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(v) => setName(v)}
           helperText="Ex: Compras Online, Assinaturas, Viagem"
         />
       </Stack>

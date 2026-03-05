@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { RiArrowDownLine, RiArrowUpLine } from '@remixicon/react'
 import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
 import BaseLayout from '../../library/layout/BaseLayout'
@@ -19,12 +19,10 @@ import {
   NET_APY,
   formatPct,
   formatUsd,
-  generateYieldChartData,
 } from '../yields2/shared/data'
 
 export default function Screen1_Hub({ onNext, onBack, onElementTap }: FlowScreenProps) {
   const [coverageOpen, setCoverageOpen] = useState(false)
-  const _chartData = useMemo(() => generateYieldChartData(30), [])
 
   return (
     <BaseLayout>

@@ -46,7 +46,7 @@ export default function Screen1_WithdrawAmount({ onNext, onBack }: FlowScreenPro
           ]}
         />
         <DataList
-          direction="vertical"
+          variant="vertical"
           data={[
             { label: 'Impostos', value: TAX_DESCRIPTION },
           ]}

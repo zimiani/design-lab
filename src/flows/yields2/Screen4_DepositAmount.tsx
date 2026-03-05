@@ -24,7 +24,6 @@ import {
   NET_APY,
   formatUsd,
   formatPct,
-  rawDigitsFromAmount,
 } from './shared/data'
 
 type CalcState = 'idle' | 'loading' | 'ready'

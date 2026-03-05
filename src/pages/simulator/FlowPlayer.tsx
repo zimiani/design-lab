@@ -104,14 +104,14 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
   // Only update the pill selection if the reported state ID exists in the screen's state definitions;
   // otherwise it's an internal state (e.g. loading) that shouldn't affect pill selection.
   const handleScreenStateChange = useCallback((stateId: string) => {
-    const screen = flow.screens.find(s => {
+    const screen = flow?.screens.find(s => {
       const step = navPath[currentStepIndex]
       return step && s.id === step.screenId
     })
     if (!screen?.states || screen.states.some(s => s.id === stateId)) {
       setLocalActiveStateId(stateId)
     }
-  }, [flow.screens, navPath, currentStepIndex])
+  }, [flow?.screens, navPath, currentStepIndex])
 
   // Overlays connected to the current screen node
   const screenOverlays = useMemo(() => {
