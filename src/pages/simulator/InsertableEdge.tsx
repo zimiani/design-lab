@@ -4,23 +4,8 @@ import {
   getSmoothStepPath,
   type EdgeProps,
 } from '@xyflow/react'
-import {
-  RiCursorLine, RiComputerLine, RiGitBranchLine, RiErrorWarningLine,
-  RiExternalLinkLine, RiStackLine, RiServerLine, RiTimerLine, RiLoginBoxLine,
-} from '@remixicon/react'
 import type { CreatableNodeType } from './flowGraph.types'
-
-const nodeTypeOptions: { type: CreatableNodeType; label: string; icon: typeof RiCursorLine; color: string }[] = [
-  { type: 'action', label: 'Action', icon: RiCursorLine, color: '#A78BFA' },
-  { type: 'screen', label: 'Screen', icon: RiComputerLine, color: '#4ADE80' },
-  { type: 'decision', label: 'Decision', icon: RiGitBranchLine, color: '#FBBF24' },
-  { type: 'api-call', label: 'API Call', icon: RiServerLine, color: '#22D3EE' },
-  { type: 'delay', label: 'Delay', icon: RiTimerLine, color: '#FB923C' },
-  { type: 'error', label: 'Error', icon: RiErrorWarningLine, color: '#F87171' },
-  { type: 'overlay', label: 'Overlay', icon: RiStackLine, color: '#2DD4BF' },
-  { type: 'flow-reference', label: 'Flow Ref', icon: RiExternalLinkLine, color: '#60A5FA' },
-  { type: 'entry-point', label: 'Entry Point', icon: RiLoginBoxLine, color: '#F472B6' },
-]
+import { NODE_TYPE_CONFIG } from './nodeTypeConfig'
 
 interface InsertableEdgeData {
   onInsertNode?: (edgeId: string, nodeType: CreatableNodeType, position: { x: number; y: number }) => void
@@ -67,7 +52,7 @@ export default function InsertableEdge({
   const midY = (sourceY + targetY) / 2
 
   const handleInsert = useCallback(
-    (nodeType: FlowNodeType) => {
+    (nodeType: CreatableNodeType) => {
       edgeData?.onInsertNode?.(id, nodeType, { x: midX - 100, y: midY - 30 })
       setMenuOpen(false)
       setHovered(false)
@@ -249,7 +234,7 @@ export default function InsertableEdge({
           x={midX - 72}
           y={midY + 16}
           width={144}
-          height={nodeTypeOptions.length * 30 + 8}
+          height={NODE_TYPE_CONFIG.length * 30 + 8}
           className="overflow-visible pointer-events-auto"
         >
           <div
@@ -257,7 +242,7 @@ export default function InsertableEdge({
             className="bg-shell-surface border border-shell-border rounded-[var(--token-radius-md)] shadow-lg py-[var(--token-spacing-1)] overflow-hidden"
             onMouseLeave={() => { setMenuOpen(false); setHovered(false) }}
           >
-            {nodeTypeOptions.map((opt) => (
+            {NODE_TYPE_CONFIG.map((opt) => (
               <button
                 key={opt.type}
                 type="button"

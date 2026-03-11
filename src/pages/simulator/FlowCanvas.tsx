@@ -22,18 +22,20 @@ import { refreshDynamicFlow, updateFlowMeta, getFlowsLinkingTo, renameFlowIdCasc
 import { getFlowGraph, saveFlowGraph } from './flowGraphStore'
 import { autoGenerateFlowGraph } from './flowGraphAutoGen'
 import { alignNodes } from './alignNodes'
-import { addScreenToFlow, updateScreenInFlow, removeScreenFromFlow, getDynamicFlow, saveDynamicFlow, deleteDynamicFlow } from './dynamicFlowStore'
+import { addScreenToFlow, updateScreenInFlow, removeScreenFromFlow, getDynamicFlow, saveDynamicFlow } from './dynamicFlowStore'
 import { createScreenFile, deleteScreenFile, writeFlowIndex } from './flowFileApi'
 import { generateFlowIndex, type FlowIndexDef } from './flowIndexGenerator'
 import { resolveFilePath } from './screenResolver'
 import { nodeTypes } from './nodes'
-import type { FlowNodeType, CreatableNodeType, FlowNodeData } from './flowGraph.types'
+import type { CreatableNodeType, FlowNodeData } from './flowGraph.types'
 import { syncNodeLabelToScreen } from './flowGraphSync'
+import { NODE_LABELS, NODE_COLORS, SHORTCUT_TO_NODE_TYPE } from './nodeTypeConfig'
 import FloatingCanvasToolbar from './FloatingCanvasToolbar'
 import FlowViewAnnotationsPanel from './FlowViewAnnotationsPanel'
 import InsertableEdge from './InsertableEdge'
 import HelperLines from './HelperLines'
 import { getHelperLines, type HelperLineResult } from './getHelperLines'
+import { useUndoRedo } from './useUndoRedo'
 
 interface FlowCanvasProps {
   flow: Flow
@@ -41,13 +43,6 @@ interface FlowCanvasProps {
   onNavigateToFlow?: (flowId: string) => void
   onFlowChanged?: () => void
 }
-
-interface UndoState {
-  nodes: Node[]
-  edges: Edge[]
-}
-
-const MAX_UNDO = 50
 
 const edgeTypes = { insertable: InsertableEdge }
 
@@ -60,22 +55,7 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
   const initializedRef = useRef<string | null>(null)
 
-  // Undo/redo stacks
-  const undoStackRef = useRef<UndoState[]>([])
-  const redoStackRef = useRef<UndoState[]>([])
-  const [undoCount, setUndoCount] = useState(0)
-  const [redoCount, setRedoCount] = useState(0)
-
-  const pushUndo = useCallback((n: Node[], e: Edge[]) => {
-    undoStackRef.current.push({
-      nodes: JSON.parse(JSON.stringify(n)),
-      edges: JSON.parse(JSON.stringify(e)),
-    })
-    if (undoStackRef.current.length > MAX_UNDO) undoStackRef.current.shift()
-    redoStackRef.current = []
-    setUndoCount(undoStackRef.current.length)
-    setRedoCount(0)
-  }, [])
+  const { pushUndo, undo, redo, reset: resetUndoRedo, canUndo, canRedo } = useUndoRedo()
 
   // Custom onNodesChange: intercept drag to compute alignment guides + snap,
   // and intercept remove to clean up linked screen files.
@@ -156,11 +136,8 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
     }
 
     setSelectedNode(null)
-    undoStackRef.current = []
-    redoStackRef.current = []
-    setUndoCount(0)
-    setRedoCount(0)
-  }, [flow.id, flow, setNodes, setEdges])
+    resetUndoRedo()
+  }, [flow.id, flow, setNodes, setEdges, resetUndoRedo])
 
   // Debounced save
   const scheduleSave = useCallback(() => {
@@ -263,48 +240,38 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
     scheduleSave()
   }, [scheduleSave])
 
+  // Shared: create a linked screen in the dynamic store + file on disk
+  const createLinkedScreen = useCallback(
+    (nodeType: CreatableNodeType): string | null => {
+      if (nodeType !== 'screen') return null
+      const linkedScreenId = `screen-${Date.now()}`
+      const dynFlow = getDynamicFlow(flow.id)
+      const screenIndex = (dynFlow?.screens.length ?? flow.screens.length) + 1
+      const title = NODE_LABELS[nodeType]
+      addScreenToFlow(flow.id, {
+        id: linkedScreenId,
+        title,
+        description: '',
+        componentsUsed: [],
+        pageId: linkedScreenId,
+      })
+      createScreenFile(flow.id, screenIndex, title).then((filePath) => {
+        if (filePath) updateScreenInFlow(flow.id, linkedScreenId, { filePath })
+      })
+      refreshDynamicFlow(flow.id)
+      onFlowChanged?.()
+      return linkedScreenId
+    },
+    [flow.id, flow.screens.length, onFlowChanged],
+  )
+
   // Toolbar: Add node
   const handleAddNode = useCallback(
     (nodeType: CreatableNodeType) => {
       const nodeId = `node-${Date.now()}`
-      const labels: Record<CreatableNodeType, string> = {
-        screen: 'New Screen',
-        decision: 'Decision',
-        error: 'Error State',
-        'flow-reference': 'Flow Reference',
-        action: 'User Action',
-        overlay: 'Overlay',
-        'api-call': 'API Call',
-        delay: 'Delay',
-        note: 'Note',
-        'entry-point': 'Entry Points',
-      }
-
-      // Creating a screen node also creates a linked screen in the dynamic store + file on disk
-      let linkedScreenId: string | null = null
-      if (nodeType === 'screen') {
-        linkedScreenId = `screen-${Date.now()}`
-        const dynFlow = getDynamicFlow(flow.id)
-        const screenIndex = (dynFlow?.screens.length ?? flow.screens.length) + 1
-        addScreenToFlow(flow.id, {
-          id: linkedScreenId,
-          title: labels[nodeType],
-          description: '',
-          componentsUsed: [],
-          pageId: linkedScreenId,
-        })
-        // Create scaffold file in dev mode (async, non-blocking)
-        createScreenFile(flow.id, screenIndex, labels[nodeType]).then((filePath) => {
-          if (filePath) {
-            updateScreenInFlow(flow.id, linkedScreenId!, { filePath })
-          }
-        })
-        refreshDynamicFlow(flow.id)
-        onFlowChanged?.()
-      }
+      const linkedScreenId = createLinkedScreen(nodeType)
 
       setNodes((currentNodes) => {
-        // Only one entry-point node per flow
         if (nodeType === 'entry-point' && currentNodes.some((n) => (n.data as FlowNodeData).nodeType === 'entry-point')) {
           return currentNodes
         }
@@ -313,66 +280,32 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
           return currentEdges
         })
         const maxY = currentNodes.reduce((max, n) => Math.max(max, n.position.y), 0)
-        const nodeData: FlowNodeData = {
-          label: labels[nodeType],
-          screenId: linkedScreenId,
-          nodeType,
-          description: '',
-        }
         const newNode: Node = {
           id: nodeId,
           type: nodeType,
           position: { x: 300, y: maxY + 200 },
-          data: nodeData,
+          data: { label: NODE_LABELS[nodeType], screenId: linkedScreenId, nodeType, description: '' } as FlowNodeData,
         }
         return [...currentNodes, newNode]
       })
       scheduleSave()
     },
-    [setNodes, setEdges, scheduleSave, pushUndo, flow.id, onFlowChanged],
+    [setNodes, setEdges, scheduleSave, pushUndo, createLinkedScreen],
   )
 
   // Insert node on edge
   const handleInsertNodeOnEdge = useCallback(
     (edgeId: string, nodeType: CreatableNodeType, position: { x: number; y: number }) => {
       const nodeId = `node-${Date.now()}`
-      const labels: Record<CreatableNodeType, string> = {
-        screen: 'New Screen', decision: 'Decision',
-        error: 'Error State', 'flow-reference': 'Flow Reference',
-        action: 'User Action', overlay: 'Overlay', 'api-call': 'API Call',
-        delay: 'Delay', note: 'Note', 'entry-point': 'Entry Points',
-      }
-
-      let linkedScreenId: string | null = null
-      if (nodeType === 'screen') {
-        linkedScreenId = `screen-${Date.now()}`
-        const dynFlow = getDynamicFlow(flow.id)
-        const screenIndex = (dynFlow?.screens.length ?? flow.screens.length) + 1
-        addScreenToFlow(flow.id, {
-          id: linkedScreenId,
-          title: labels[nodeType],
-          description: '',
-          componentsUsed: [],
-          pageId: linkedScreenId,
-        })
-        createScreenFile(flow.id, screenIndex, labels[nodeType]).then((filePath) => {
-          if (filePath) {
-            updateScreenInFlow(flow.id, linkedScreenId!, { filePath })
-          }
-        })
-        refreshDynamicFlow(flow.id)
-        onFlowChanged?.()
-      }
-
+      const linkedScreenId = createLinkedScreen(nodeType)
       const nodeData: FlowNodeData = {
-        label: labels[nodeType],
+        label: NODE_LABELS[nodeType],
         screenId: linkedScreenId,
         nodeType,
         description: '',
       }
 
       setNodes((currentNodes) => {
-        // Only one entry-point node per flow
         if (nodeType === 'entry-point' && currentNodes.some((n) => (n.data as FlowNodeData).nodeType === 'entry-point')) {
           return currentNodes
         }
@@ -381,7 +314,6 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
           const edge = currentEdges.find((e) => e.id === edgeId)
           if (!edge) return currentEdges
 
-          // Remove old edge, create two new edges: source→new, new→target
           const newEdges = currentEdges.filter((e) => e.id !== edgeId)
           newEdges.push({
             id: `${edge.source}->${nodeId}`,
@@ -412,46 +344,18 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
       })
       scheduleSave()
     },
-    [setNodes, setEdges, scheduleSave, pushUndo, flow.id, onFlowChanged],
+    [setNodes, setEdges, scheduleSave, pushUndo, createLinkedScreen],
   )
 
-  // Undo
   const handleUndo = useCallback(() => {
-    if (undoStackRef.current.length === 0) return
-    const prev = undoStackRef.current.pop()!
-    setNodes((currentNodes) => {
-      setEdges((currentEdges) => {
-        redoStackRef.current.push({
-          nodes: JSON.parse(JSON.stringify(currentNodes)),
-          edges: JSON.parse(JSON.stringify(currentEdges)),
-        })
-        setRedoCount(redoStackRef.current.length)
-        return prev.edges as Edge[]
-      })
-      return prev.nodes as Node[]
-    })
-    setUndoCount(undoStackRef.current.length)
+    undo(setNodes, setEdges)
     scheduleSave()
-  }, [setNodes, setEdges, scheduleSave])
+  }, [undo, setNodes, setEdges, scheduleSave])
 
-  // Redo
   const handleRedo = useCallback(() => {
-    if (redoStackRef.current.length === 0) return
-    const next = redoStackRef.current.pop()!
-    setNodes((currentNodes) => {
-      setEdges((currentEdges) => {
-        undoStackRef.current.push({
-          nodes: JSON.parse(JSON.stringify(currentNodes)),
-          edges: JSON.parse(JSON.stringify(currentEdges)),
-        })
-        setUndoCount(undoStackRef.current.length)
-        return next.edges as Edge[]
-      })
-      return next.nodes as Node[]
-    })
-    setRedoCount(redoStackRef.current.length)
+    redo(setNodes, setEdges)
     scheduleSave()
-  }, [setNodes, setEdges, scheduleSave])
+  }, [redo, setNodes, setEdges, scheduleSave])
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -465,36 +369,12 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
       } else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
         e.preventDefault()
         handleRedo()
-      } else if (e.key === 's' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('screen')
-      } else if (e.key === 'd' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('decision')
-      } else if (e.key === 'e' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('error')
-      } else if (e.key === 'f' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('flow-reference')
-      } else if (e.key === 'a' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('action')
-      } else if (e.key === 'o' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('overlay')
-      } else if (e.key === 'c' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('api-call')
-      } else if (e.key === 'w' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('delay')
-      } else if (e.key === 'n' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('note')
-      } else if (e.key === 'p' && !e.ctrlKey && !e.metaKey) {
-        e.preventDefault()
-        handleAddNode('entry-point')
+      } else if (!e.ctrlKey && !e.metaKey) {
+        const nodeType = SHORTCUT_TO_NODE_TYPE[e.key]
+        if (nodeType) {
+          e.preventDefault()
+          handleAddNode(nodeType)
+        }
       }
     }
     window.addEventListener('keydown', handler)
@@ -813,21 +693,7 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
               bgColor="#1E1E1E"
             />
             <MiniMap
-              nodeColor={(node) => {
-                switch (node.type) {
-                  case 'screen': return '#4ADE80'
-                  case 'decision': return '#FBBF24'
-                  case 'error': return '#F87171'
-                  case 'flow-reference': return '#60A5FA'
-                  case 'action': return '#A78BFA'
-                  case 'overlay': return '#2DD4BF'
-                  case 'api-call': return '#22D3EE'
-                  case 'delay': return '#FB923C'
-                  case 'note': return '#78716C'
-                  case 'entry-point': return '#F472B6'
-                  default: return '#6B6B6B'
-                }
-              }}
+              nodeColor={(node) => NODE_COLORS[node.type ?? ''] ?? '#6B6B6B'}
               maskColor="rgba(30, 30, 30, 0.8)"
               className="!bg-shell-surface !border-shell-border"
             />
@@ -838,8 +704,8 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
           onAddNode={handleAddNode}
           onUndo={handleUndo}
           onRedo={handleRedo}
-          canUndo={undoCount > 0}
-          canRedo={redoCount > 0}
+          canUndo={canUndo}
+          canRedo={canRedo}
         />
       </div>
       <FlowViewAnnotationsPanel

@@ -53,7 +53,7 @@ for (const s of screenDefs) {
     id: s.id,
     name: s.title,
     description: s.description,
-    area: 'Savings',
+    area: 'Earn',
     componentsUsed: [...s.componentsUsed],
     component: s.component,
   })
@@ -65,7 +65,7 @@ registerFlow({
   id: 'savings-withdraw',
   name: 'Savings Withdraw',
   description: 'Withdraw savings back to card balance: enter amount, review, process, confirm.',
-  domain: 'savings',
+  domain: 'earn',
   level: 2,
   entryPoints: ['savings-hub'],
   screens: screenDefs.map((s) => ({ ...s, pageId: s.id })),

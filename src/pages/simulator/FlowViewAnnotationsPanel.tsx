@@ -1,11 +1,13 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { RiPencilLine, RiCheckLine, RiPlayLine, RiComputerLine, RiGitBranchLine, RiErrorWarningLine, RiExternalLinkLine, RiCursorLine, RiStackLine, RiRefreshLine, RiFileTextLine, RiServerLine, RiTimerLine, RiStickyNoteLine, RiLoginBoxLine, RiCloseLine, RiAddLine, RiCodeSSlashLine } from '@remixicon/react'
+import { RiPencilLine, RiCheckLine, RiPlayLine, RiRefreshLine, RiFileTextLine, RiCloseLine, RiAddLine, RiCodeSSlashLine } from '@remixicon/react'
 import type { Node, Edge } from '@xyflow/react'
 import type { Flow } from './flowRegistry'
 import { getAllFlows, getFlow, getLinkedFlows, getFlowsLinkingTo } from './flowRegistry'
 import { getDynamicFlow } from './dynamicFlowStore'
 import type { FlowNodeData } from './flowGraph.types'
+import { NODE_TYPE_CONFIG } from './nodeTypeConfig'
+import { SLUG_REGEX, formatSlug } from '../../lib/slugify'
 import { findParentInteractiveNode } from './flowGraphNavigation'
 import { getPage } from '../gallery/pageRegistry'
 
@@ -118,12 +120,6 @@ function EditableField({
   )
 }
 
-const SLUG_REGEX = /^[a-z0-9]+(-[a-z0-9]+)*$/
-
-function formatSlug(input: string): string {
-  return input.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-/, '')
-}
-
 function EditableSlug({
   value,
   onSave,
@@ -222,19 +218,27 @@ function EditableSlug({
   )
 }
 
-const nodeTypeConfig = {
-  screen: { label: 'Screen', icon: RiComputerLine, color: 'text-shell-selected-text', description: '' },
-  page: { label: 'Page', icon: RiComputerLine, color: 'text-shell-selected-text', description: '' },
-  decision: { label: 'Decision', icon: RiGitBranchLine, color: 'text-[#FBBF24]', description: 'A branching condition that routes to different paths' },
-  error: { label: 'Error State', icon: RiErrorWarningLine, color: 'text-[#F87171]', description: 'An error or failure path in the flow' },
-  'flow-reference': { label: 'Flow Reference', icon: RiExternalLinkLine, color: 'text-[#60A5FA]', description: 'Navigation to another flow' },
-  action: { label: 'Action', icon: RiCursorLine, color: 'text-[#A78BFA]', description: 'A user interaction that triggers navigation or state change' },
-  overlay: { label: 'Overlay', icon: RiStackLine, color: 'text-[#2DD4BF]', description: 'A modal, bottom sheet, or popover on top of a screen' },
-  'api-call': { label: 'API Call', icon: RiServerLine, color: 'text-[#22D3EE]', description: 'Synchronous HTTP request the app makes' },
-  delay: { label: 'Delay', icon: RiTimerLine, color: 'text-[#FB923C]', description: 'Async wait for an external event (webhook, polling, timer)' },
-  note: { label: 'Note', icon: RiStickyNoteLine, color: 'text-[#78716C]', description: '' },
-  'entry-point': { label: 'Entry Point', icon: RiLoginBoxLine, color: 'text-[#F472B6]', description: 'Where users enter this flow — other flows, deep links, or dashboard actions' },
+// Node type descriptions for the annotations panel (extends shared NODE_TYPE_CONFIG)
+const nodeTypeDescriptions: Record<string, string> = {
+  decision: 'A branching condition that routes to different paths',
+  error: 'An error or failure path in the flow',
+  'flow-reference': 'Navigation to another flow',
+  action: 'A user interaction that triggers navigation or state change',
+  overlay: 'A modal, bottom sheet, or popover on top of a screen',
+  'api-call': 'Synchronous HTTP request the app makes',
+  delay: 'Async wait for an external event (webhook, polling, timer)',
+  'entry-point': 'Where users enter this flow — other flows, deep links, or dashboard actions',
 }
+
+const nodeTypeConfig = Object.fromEntries([
+  ...NODE_TYPE_CONFIG.map((e) => [
+    e.type,
+    { label: e.label, icon: e.icon, color: `text-[${e.color}]`, description: nodeTypeDescriptions[e.type] ?? '' },
+  ]),
+  // screen/page use accent color instead of the green hex
+  ['screen', (() => { const e = NODE_TYPE_CONFIG.find((c) => c.type === 'screen')!; return { label: 'Screen', icon: e.icon, color: 'text-shell-selected-text', description: '' } })()],
+  ['page', (() => { const e = NODE_TYPE_CONFIG.find((c) => c.type === 'screen')!; return { label: 'Page', icon: e.icon, color: 'text-shell-selected-text', description: '' } })()],
+]) as Record<string, { label: string; icon: typeof import('@remixicon/react').RiCursorLine; color: string; description: string }>
 
 const actionTypeLabels: Record<string, string> = {
   tap: 'Tap',

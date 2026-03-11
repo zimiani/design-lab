@@ -15,7 +15,7 @@ const sizeStyles = {
 } as const
 
 function formatAmount(value: number, currency: string): string {
-  const formatted = Math.abs(value).toLocaleString('en-US', {
+  const formatted = Math.abs(value).toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })

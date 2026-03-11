@@ -28,7 +28,7 @@ function formatCurrency(raw: string): string {
   const digits = raw.replace(/\D/g, '')
   if (!digits) return ''
   const cents = parseInt(digits, 10)
-  return (cents / 100).toLocaleString('en-US', {
+  return (cents / 100).toLocaleString('pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })

@@ -20,16 +20,16 @@ export default function AppShell({
 
   if (isDesktop) {
     return (
-      <div data-component="AppShell" className="flex h-full w-full">
+      <div data-component="AppShell" data-part="shell-root" className="flex h-full w-full">
         {sidebar}
-        <div className="flex-1 flex flex-col min-w-0 bg-background">
+        <div data-part="main-area" className="flex-1 flex flex-col min-w-0 bg-background">
           {level >= 2 && breadcrumbs.length > 0 && (
-            <div className="px-[var(--token-spacing-8)] pt-[var(--token-spacing-6)]">
+            <div data-part="breadcrumb-bar" className="px-[var(--token-spacing-8)] pt-[var(--token-spacing-6)]">
               <Breadcrumb items={breadcrumbs} />
             </div>
           )}
-          <div className="flex-1 flex justify-center overflow-y-auto py-[var(--token-spacing-8)] px-[var(--token-spacing-8)]">
-            <div className="w-full max-w-[600px] bg-surface-primary rounded-xl shadow-sm overflow-hidden">
+          <div data-part="scroll-area" className="flex-1 overflow-y-scroll desktop-visible-scroll py-[var(--token-spacing-8)] px-[var(--token-spacing-8)]">
+            <div data-part="page-card" className="w-full max-w-[600px] mx-auto bg-surface-primary rounded-xl shadow-sm overflow-hidden">
               {children}
             </div>
           </div>
@@ -40,9 +40,9 @@ export default function AppShell({
 
   // Mobile layout
   return (
-    <div data-component="AppShell" className="flex flex-col h-full w-full">
+    <div data-component="AppShell" data-part="shell-root" className="flex flex-col h-full w-full">
       {level === 1 && topBar}
-      <div className="flex-1 overflow-hidden">
+      <div data-part="content-area" className="flex-1 overflow-hidden">
         {children}
       </div>
       {level === 1 && tabBar}

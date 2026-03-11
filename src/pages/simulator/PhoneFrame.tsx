@@ -1,11 +1,27 @@
-import { useState, useCallback, type ReactNode, type FocusEvent } from 'react'
+import { useState, useCallback, type ReactNode, type FocusEvent, type Ref } from 'react'
 import IOSKeyboard from './iOSKeyboard'
 
 type KeyboardType = 'numeric' | 'text'
 
+export type PhoneSize = 'sm' | 'lg'
+
 interface PhoneFrameProps {
-  children: ReactNode
+  children?: ReactNode
+  size?: PhoneSize
+  /** Controlled keyboard type — used when content is in an iframe (focus events don't cross iframe boundary). */
+  controlledKeyboardType?: KeyboardType | null
+  /** iframe src URL — when provided, renders an iframe instead of children. */
+  iframeSrc?: string
+  /** Ref for the iframe element. */
+  iframeRef?: Ref<HTMLIFrameElement>
 }
+
+const SCALE = 0.75
+
+export const PHONE_DIMENSIONS = {
+  sm: { width: 375, height: 812, scale: SCALE, radius: 47, island: { w: 120, h: 34, top: 11 } },
+  lg: { width: 402, height: 874, scale: SCALE, radius: 55, island: { w: 126, h: 37, top: 12 } },
+} as const
 
 /**
  * iPhone 17 / 17 Pro status bar (402×874pt viewport).
@@ -18,8 +34,6 @@ interface PhoneFrameProps {
  *   - Right cluster: cellular + wifi + battery, right 15pt
  *   - Scale: 0.75 to approximate real-world physical size on screen
  */
-
-const SCALE = 0.75
 
 function StatusBar() {
   const now = new Date()
@@ -87,12 +101,16 @@ function getKeyboardType(el: HTMLElement): KeyboardType | null {
   return mode === 'numeric' || mode === 'decimal' ? 'numeric' : 'text'
 }
 
-export default function PhoneFrame({ children }: PhoneFrameProps) {
-  const [keyboardType, setKeyboardType] = useState<KeyboardType | null>(null)
+export default function PhoneFrame({ children, size = 'lg', controlledKeyboardType, iframeSrc, iframeRef }: PhoneFrameProps) {
+  const [localKeyboardType, setLocalKeyboardType] = useState<KeyboardType | null>(null)
+  const dim = PHONE_DIMENSIONS[size]
+
+  // Use controlled keyboard when in iframe mode, local detection otherwise
+  const isIframeMode = !!iframeSrc
+  const keyboardType = isIframeMode ? (controlledKeyboardType ?? null) : localKeyboardType
 
   const dismissKeyboard = useCallback(() => {
-    setKeyboardType(null)
-    // Blur the active element so the browser input loses focus too
+    setLocalKeyboardType(null)
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur()
     }
@@ -100,41 +118,45 @@ export default function PhoneFrame({ children }: PhoneFrameProps) {
 
   const handleFocus = useCallback((e: FocusEvent) => {
     const type = getKeyboardType(e.target as HTMLElement)
-    if (type) setKeyboardType(type)
+    if (type) setLocalKeyboardType(type)
   }, [])
 
   const handleBlur = useCallback((e: FocusEvent) => {
     const container = e.currentTarget
     const next = e.relatedTarget as HTMLElement | null
     if (!next || !container.contains(next)) {
-      setKeyboardType(null)
+      setLocalKeyboardType(null)
     } else {
       const type = getKeyboardType(next)
-      if (type) setKeyboardType(type)
-      else setKeyboardType(null)
+      if (type) setLocalKeyboardType(type)
+      else setLocalKeyboardType(null)
     }
   }, [])
 
   return (
     <div
       style={{
-        width: 402 * SCALE,
-        height: 874 * SCALE,
+        width: dim.width * dim.scale,
+        height: dim.height * dim.scale,
       }}
     >
       <div
-        className="relative bg-background text-content-primary rounded-[55px] overflow-hidden flex flex-col origin-top-left"
+        className="relative bg-background text-content-primary overflow-hidden flex flex-col origin-top-left"
         style={{
-          width: 402,
-          height: 874,
-          transform: `scale(${SCALE})`,
+          width: dim.width,
+          height: dim.height,
+          borderRadius: dim.radius,
+          transform: `scale(${dim.scale})`,
           '--safe-area-top': '62px',
           '--safe-area-bottom': keyboardType ? '0px' : '34px',
           boxShadow: '0 0 0 2px #1a1a1a, 0 0 0 6px #333, 0 0 0 7px #1a1a1a, 0 4px 24px rgba(0,0,0,0.35)',
         } as React.CSSProperties}
       >
         {/* Dynamic Island */}
-        <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-neutral-900 rounded-[20px] z-50" />
+        <div
+          className="absolute left-1/2 -translate-x-1/2 bg-neutral-900 rounded-[20px] z-50"
+          style={{ width: dim.island.w, height: dim.island.h, top: dim.island.top }}
+        />
 
         {/* Side buttons */}
         <div className="absolute -right-[3px] top-[180px] w-[3px] h-[80px] bg-[#2a2a2a] rounded-r-sm z-50" />
@@ -143,13 +165,22 @@ export default function PhoneFrame({ children }: PhoneFrameProps) {
         <div className="absolute -left-[3px] top-[120px] w-[3px] h-[20px] bg-[#2a2a2a] rounded-l-sm z-50" />
 
         <StatusBar />
-        <div
-          className="flex-1 overflow-hidden"
-          onFocusCapture={handleFocus}
-          onBlurCapture={handleBlur}
-        >
-          {children}
-        </div>
+        {isIframeMode ? (
+          <iframe
+            ref={iframeRef}
+            src={iframeSrc}
+            className="flex-1 min-h-0 border-0 w-full"
+            title="Preview"
+          />
+        ) : (
+          <div
+            className="flex-1 overflow-hidden"
+            onFocusCapture={handleFocus}
+            onBlurCapture={handleBlur}
+          >
+            {children}
+          </div>
+        )}
         <IOSKeyboard type={keyboardType ?? 'text'} visible={!!keyboardType} onDismiss={dismissKeyboard} />
         {!keyboardType && <HomeIndicator />}
       </div>

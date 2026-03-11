@@ -24,9 +24,23 @@ export default function BaseLayout({
     (child) => !(isValidElement(child) && child.type === StickyFooter)
   )
 
+  if (isDesktop) {
+    // On desktop, let the AppShell card handle scrolling
+    return (
+      <div data-component="BaseLayout" className={cn('flex flex-col min-h-full bg-surface-primary', className)}>
+        <div className="pt-[var(--token-spacing-6)]">
+          <div className="px-[var(--token-spacing-6)] pb-[48px] flex flex-col gap-[var(--token-spacing-6)]">
+            {rest}
+          </div>
+        </div>
+        {footer}
+      </div>
+    )
+  }
+
   return (
     <div data-component="BaseLayout" className={cn('flex flex-col h-full bg-surface-primary overflow-hidden', className)}>
-      <div className={cn('flex-1 overflow-y-auto', isDesktop ? 'pt-[var(--token-spacing-6)]' : 'pt-[var(--safe-area-top,0px)]')}>
+      <div className={cn('flex-1 overflow-y-auto pt-[var(--safe-area-top,0px)]')}>
         <div className="px-[var(--token-spacing-6)] pb-[48px] flex flex-col gap-[var(--token-spacing-6)]">
           {rest}
         </div>

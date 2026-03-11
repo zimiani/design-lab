@@ -1,10 +1,19 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, Ref } from 'react'
+
+export const DESKTOP_DIMENSIONS = {
+  width: 1200,
+  height: 760,
+} as const
 
 interface DesktopFrameProps {
-  children: ReactNode
+  children?: ReactNode
+  /** iframe src URL — when provided, renders an iframe instead of children. */
+  iframeSrc?: string
+  /** Ref for the iframe element. */
+  iframeRef?: Ref<HTMLIFrameElement>
 }
 
-export default function DesktopFrame({ children }: DesktopFrameProps) {
+export default function DesktopFrame({ children, iframeSrc, iframeRef }: DesktopFrameProps) {
   return (
     <div
       className="relative flex flex-col w-[1200px] h-[760px] bg-background text-content-primary rounded-xl overflow-hidden"
@@ -32,7 +41,16 @@ export default function DesktopFrame({ children }: DesktopFrameProps) {
 
       {/* Content area */}
       <div className="flex-1 overflow-hidden">
-        {children}
+        {iframeSrc ? (
+          <iframe
+            ref={iframeRef}
+            src={iframeSrc}
+            className="w-full h-full border-0"
+            title="Preview"
+          />
+        ) : (
+          children
+        )}
       </div>
     </div>
   )

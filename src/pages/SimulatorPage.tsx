@@ -10,10 +10,11 @@ import AppHeader from '../components/AppHeader'
 import FlowSidebar from './simulator/FlowSidebar'
 import FlowPlayer from './simulator/FlowPlayer'
 import FlowCanvas from './simulator/FlowCanvas'
-import { getAllFlows, getFlow, hydrateDynamicFlows } from './simulator/flowRegistry'
+import { getAllFlows, getFlow, hydrateDynamicFlows, renameFlowIdCascade } from './simulator/flowRegistry'
+import EditableFlowSlug from './simulator/EditableFlowSlug'
 import { migrateHardcodedFlows, migrateStaleScreenPaths } from './simulator/flowMigration'
 import { subscribeToGraphChanges } from './simulator/flowGraphStore'
-import { subscribeToDynamicFlowChanges } from './simulator/dynamicFlowStore'
+import { subscribeToDynamicFlowChanges, migrateSavingsToEarnDomain } from './simulator/dynamicFlowStore'
 import { seedDefaultGroups, migrateV1Flows } from './simulator/flowGroupStore'
 import { syncAll, markSynced, pushAllToSupabase } from '../lib/syncStore'
 
@@ -64,6 +65,7 @@ export default function SimulatorPage() {
   useEffect(() => {
     migrateHardcodedFlows()
     migrateStaleScreenPaths()
+    migrateSavingsToEarnDomain()
     hydrateDynamicFlows()
     seedDefaultGroups()
     migrateV1Flows()
@@ -102,6 +104,16 @@ export default function SimulatorPage() {
   const handleNavigateToFlow = useCallback((flowId: string) => {
     setSelectedFlowId(flowId)
   }, [setSelectedFlowId])
+
+  const handleRenameFlow = useCallback(async (newId: string): Promise<boolean> => {
+    if (!selectedFlowId) return false
+    const ok = await renameFlowIdCascade(selectedFlowId, newId)
+    if (ok) {
+      setSelectedFlowId(newId)
+      setVersion((v) => v + 1)
+    }
+    return ok
+  }, [selectedFlowId, setSelectedFlowId])
 
   const selectedFlow = selectedFlowId ? getFlow(selectedFlowId) : null
   const activeIndex = viewModes.findIndex((m) => m.key === viewMode)
@@ -151,12 +163,10 @@ export default function SimulatorPage() {
           ))}
         </div>
 
-        {/* Flow name (right side) */}
+        {/* Flow name (right side) — editable */}
         <div className="flex-1 flex items-center justify-end min-w-0">
           {selectedFlow && (
-            <span className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary font-mono">
-              {selectedFlow.id}
-            </span>
+            <EditableFlowSlug value={selectedFlow.id} onSave={handleRenameFlow} variant="inline" />
           )}
         </div>
       </div>
@@ -171,6 +181,7 @@ export default function SimulatorPage() {
                 flowId={selectedFlowId}
                 initialScreenId={targetScreenId}
                 onNavigateToFlow={handleNavigateToFlow}
+                onRenameFlow={handleRenameFlow}
               />
             ) : (
               <FlowCanvas

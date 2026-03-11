@@ -4,6 +4,7 @@
  */
 
 import { supabase, isSupabaseConnected } from '../../lib/supabase'
+import { parseIfString } from '../../lib/parseIfString'
 import { getAllFlows, duplicateFlowWithId } from './flowRegistry'
 
 // ── Types ──
@@ -94,12 +95,52 @@ export async function hydrateFlowGroupsFromSupabase(): Promise<boolean> {
 
     if (error || !data) return false
 
-    const parsed: FlowGroupState =
-      typeof data.data === 'string' ? JSON.parse(data.data) : data.data
+    const parsed: FlowGroupState = parseIfString(data.data)
 
     if (parsed.groups && parsed.memberships) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed))
+      // Merge strategy: LOCAL is the base (always the most recent for this device).
+      // Remote only adds groups/memberships that don't exist locally (from other devices).
+      // Local deletions, archives, and ordering always win.
+      const local = readState()
+      if (!parsed.archivedFlows) parsed.archivedFlows = {}
+      if (!parsed.archivedGroups) parsed.archivedGroups = {}
+      if (!parsed.ungroupedOrder) parsed.ungroupedOrder = {}
+
+      // Start with local as base
+      const merged = { ...local }
+
+      // Add remote-only groups (from another device) that don't exist locally
+      for (const [groupId, remoteGroup] of Object.entries(parsed.groups)) {
+        if (!(groupId in merged.groups)) {
+          merged.groups[groupId] = remoteGroup
+        }
+      }
+
+      // Add remote-only memberships that don't exist locally
+      for (const [flowId, remoteMembership] of Object.entries(parsed.memberships)) {
+        if (!(flowId in merged.memberships)) {
+          merged.memberships[flowId] = remoteMembership
+        }
+      }
+
+      // Add remote-only archived flows/groups
+      for (const [flowId, domainId] of Object.entries(parsed.archivedFlows)) {
+        if (!(flowId in merged.archivedFlows)) {
+          merged.archivedFlows[flowId] = domainId
+        }
+      }
+      for (const groupId of Object.keys(parsed.archivedGroups)) {
+        if (!(groupId in merged.archivedGroups)) {
+          merged.archivedGroups[groupId] = true
+        }
+      }
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
       notifyListeners()
+
+      // Push merged state back to Supabase to keep it current
+      upsertToSupabase(merged)
+
       return true
     }
     return false
@@ -388,6 +429,7 @@ export function seedDefaultGroups(_allFlows?: unknown): void {
     { domain: 'earn', group: 'Yields 3', flowIds: ['yields3', 'yields3-deposit', 'yields3-withdraw'] },
     { domain: 'earn', group: 'Yields 4', flowIds: ['yields4', 'yields4-deposit', 'yields4-withdraw'] },
     { domain: 'earn', group: 'Yields 5', flowIds: ['yields5', 'yields5-deposit', 'yields5-withdraw'] },
+    { domain: 'earn', group: 'Reviewed', flowIds: ['caixinha-create', 'caixinha-manage', 'caixinha-deposit-reviewed', 'caixinha-withdraw-reviewed'] },
     { domain: 'add-funds', group: 'ACH Deposit', flowIds: ['deposit-ach', 'noah-registration'] },
   ]
 
@@ -424,7 +466,7 @@ export function seedDefaultGroups(_allFlows?: unknown): void {
 
 const V1_MIGRATION_KEY = 'picnic-design-lab:v1-migration-done'
 
-export function migrateV1Flows(): void {
+export async function migrateV1Flows(): Promise<void> {
   if (localStorage.getItem(V1_MIGRATION_KEY)) return
 
   const flowsToMigrate = ['flow-poupar', 'savings-deposit', 'savings-manage-b']
@@ -432,7 +474,7 @@ export function migrateV1Flows(): void {
 
   for (const id of flowsToMigrate) {
     const targetId = id + '-v1'
-    const ok = duplicateFlowWithId(id, targetId, 'earn')
+    const ok = await duplicateFlowWithId(id, targetId, 'earn')
     if (ok) migratedIds.push(targetId)
   }
 

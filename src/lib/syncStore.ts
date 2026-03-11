@@ -74,6 +74,41 @@ export function markError(): void {
   if (isSupabaseConnected()) setStatus('error')
 }
 
+/** Upsert an array of items to a Supabase table. Returns error strings. */
+async function upsertMany<T>(
+  table: string,
+  items: T[],
+  mapFn: (item: T) => Record<string, unknown>,
+  conflictKey: string,
+): Promise<string[]> {
+  const errors: string[] = []
+  for (const item of items) {
+    const row = mapFn(item)
+    const { error } = await supabase!.from(table).upsert(row, { onConflict: conflictKey })
+    if (error) errors.push(`${table}/${row[conflictKey] ?? '?'}: ${error.message}`)
+  }
+  return errors
+}
+
+/** Upsert a raw localStorage JSON blob as individual rows. Returns error strings. */
+async function upsertLocalStorageEntries(
+  storageKey: string,
+  table: string,
+  mapFn: (key: string, value: unknown) => Record<string, unknown>,
+  conflictKey: string,
+): Promise<string[]> {
+  const raw = localStorage.getItem(storageKey)
+  if (!raw) return []
+  const entries = Object.entries(JSON.parse(raw))
+  const errors: string[] = []
+  for (const [key, value] of entries) {
+    const row = mapFn(key, value)
+    const { error } = await supabase!.from(table).upsert(row, { onConflict: conflictKey })
+    if (error) errors.push(`${table}/${key}: ${error.message}`)
+  }
+  return errors
+}
+
 /**
  * Push all localStorage data to Supabase.
  * Use this to backfill Supabase from existing local data.
@@ -82,113 +117,54 @@ export async function pushAllToSupabase(): Promise<boolean> {
   if (!isSupabaseConnected() || !supabase) return false
 
   setStatus('syncing')
-  const errors: string[] = []
+  const now = new Date().toISOString()
 
   try {
-    // 1. Dynamic flows
-    const flows = getDynamicFlows()
-    for (const flow of flows) {
-      const { error } = await supabase.from('dynamic_flows').upsert(
-        {
-          id: flow.id,
-          name: flow.name,
-          description: flow.description,
-          domain: flow.domain,
-          screens: JSON.stringify(flow.screens),
-          spec_content: flow.specContent ?? null,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'id' },
-      )
-      if (error) errors.push(`dynamic_flows/${flow.id}: ${error.message}`)
-    }
+    const allErrors = (await Promise.all([
+      // 1. Dynamic flows
+      upsertMany('dynamic_flows', getDynamicFlows(), (flow) => ({
+        id: flow.id, name: flow.name, description: flow.description, domain: flow.domain,
+        screens: JSON.stringify(flow.screens), spec_content: flow.specContent ?? null,
+        updated_at: now,
+      }), 'id'),
 
-    // 2. Flow graphs
-    const graphsRaw = localStorage.getItem('picnic-design-lab:flow-graphs')
-    if (graphsRaw) {
-      const graphs = JSON.parse(graphsRaw) as Record<string, { flowId: string; nodes: unknown[]; edges: unknown[] }>
-      for (const [flowId, graph] of Object.entries(graphs)) {
-        const { error } = await supabase.from('flow_graphs').upsert(
-          {
-            flow_id: flowId,
-            nodes: JSON.stringify(graph.nodes),
-            edges: JSON.stringify(graph.edges),
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'flow_id' },
+      // 2. Flow graphs
+      upsertLocalStorageEntries('picnic-design-lab:flow-graphs', 'flow_graphs', (flowId, graph) => {
+        const g = graph as { nodes: unknown[]; edges: unknown[] }
+        return { flow_id: flowId, nodes: JSON.stringify(g.nodes), edges: JSON.stringify(g.edges), updated_at: now }
+      }, 'flow_id'),
+
+      // 3. Flow groups (singleton)
+      (async () => {
+        const raw = localStorage.getItem('picnic-design-lab:flow-groups')
+        if (!raw) return []
+        const { error } = await supabase!.from('flow_groups').upsert(
+          { id: 'singleton', data: raw, updated_at: now },
+          { onConflict: 'id' },
         )
-        if (error) errors.push(`flow_graphs/${flowId}: ${error.message}`)
-      }
-    }
+        return error ? [`flow_groups: ${error.message}`] : []
+      })(),
 
-    // 3. Flow groups
-    const groupsRaw = localStorage.getItem('picnic-design-lab:flow-groups')
-    if (groupsRaw) {
-      const { error } = await supabase.from('flow_groups').upsert(
-        {
-          id: 'singleton',
-          data: groupsRaw,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'id' },
-      )
-      if (error) errors.push(`flow_groups: ${error.message}`)
-    }
+      // 4. Dynamic pages
+      upsertMany('dynamic_pages', getDynamicPages(), (page) => ({
+        id: page.id, name: page.name, description: page.description, area: page.area,
+        components_used: JSON.stringify(page.componentsUsed), updated_at: now,
+      }), 'id'),
 
-    // 4. Dynamic pages
-    const pages = getDynamicPages()
-    for (const page of pages) {
-      const { error } = await supabase.from('dynamic_pages').upsert(
-        {
-          id: page.id,
-          name: page.name,
-          description: page.description,
-          area: page.area,
-          components_used: JSON.stringify(page.componentsUsed),
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'id' },
-      )
-      if (error) errors.push(`dynamic_pages/${page.id}: ${error.message}`)
-    }
+      // 5. Page overrides
+      upsertLocalStorageEntries('picnic-design-lab:page-overrides', 'page_overrides', (pageId, data) => {
+        const d = data as { name?: string; description?: string }
+        return { page_id: pageId, name: d.name ?? null, description: d.description ?? null, updated_at: now }
+      }, 'page_id'),
 
-    // 5. Page overrides
-    const overridesRaw = localStorage.getItem('picnic-design-lab:page-overrides')
-    if (overridesRaw) {
-      const overrides = JSON.parse(overridesRaw) as Record<string, { name?: string; description?: string }>
-      for (const [pageId, data] of Object.entries(overrides)) {
-        const { error } = await supabase.from('page_overrides').upsert(
-          {
-            page_id: pageId,
-            name: data.name ?? null,
-            description: data.description ?? null,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'page_id' },
-        )
-        if (error) errors.push(`page_overrides/${pageId}: ${error.message}`)
-      }
-    }
+      // 6. Token overrides
+      upsertLocalStorageEntries('picnic-design-lab:token-overrides', 'token_overrides', (_cssVar, value) => ({
+        css_var: _cssVar, value, updated_at: now,
+      }), 'css_var'),
+    ])).flat()
 
-    // 6. Token overrides
-    const tokensRaw = localStorage.getItem('picnic-design-lab:token-overrides')
-    if (tokensRaw) {
-      const tokens = JSON.parse(tokensRaw) as Record<string, string>
-      for (const [cssVar, value] of Object.entries(tokens)) {
-        const { error } = await supabase.from('token_overrides').upsert(
-          {
-            css_var: cssVar,
-            value,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'css_var' },
-        )
-        if (error) errors.push(`token_overrides/${cssVar}: ${error.message}`)
-      }
-    }
-
-    if (errors.length > 0) {
-      console.error('[syncStore] pushAllToSupabase errors:', errors)
+    if (allErrors.length > 0) {
+      console.error('[syncStore] pushAllToSupabase errors:', allErrors)
       setStatus('error')
       return false
     }

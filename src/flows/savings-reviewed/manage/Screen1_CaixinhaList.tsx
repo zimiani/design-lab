@@ -1,0 +1,89 @@
+import { RiAddLine } from '@remixicon/react'
+import type { FlowScreenProps } from '../../../pages/simulator/flowRegistry'
+import { useScreenData } from '../../../lib/ScreenDataContext'
+import FeatureLayout from '../../../library/layout/FeatureLayout'
+import StickyFooter from '../../../library/layout/StickyFooter'
+import Stack from '../../../library/layout/Stack'
+import Button from '../../../library/inputs/Button'
+import Text from '../../../library/foundations/Text'
+import Amount from '../../../library/display/Amount'
+import Badge from '../../../library/display/Badge'
+
+import { CaixinhaListCard, EmptyState } from './Screen1_CaixinhaList.parts'
+import { MOCK_REVIEWED_CAIXINHAS, MOCK_FX_TO_BRL } from '../shared/data'
+
+import savingsPiggyHero from '@/assets/images/savings-piggy-hero.png'
+
+export default function Screen1_CaixinhaList({ onNext, onElementTap }: FlowScreenProps) {
+  const { isEmpty } = useScreenData<{ isEmpty?: boolean }>()
+
+  const caixinhas = isEmpty ? [] : MOCK_REVIEWED_CAIXINHAS
+
+  const totalBrl = caixinhas.reduce((sum, c) => sum + c.balance * MOCK_FX_TO_BRL[c.currency], 0)
+  const totalYieldBrl = caixinhas.reduce((sum, c) => sum + c.yieldToday * MOCK_FX_TO_BRL[c.currency], 0)
+
+  const handleTapCaixinha = (id: string) => {
+    const resolved = onElementTap?.(`ListItem: ${id}`)
+    if (!resolved) onNext()
+  }
+
+  const handleCreate = () => {
+    const resolved = onElementTap?.('Button: Nova Caixinha')
+    if (!resolved) onNext()
+  }
+
+  return (
+    <FeatureLayout
+      imageSrc={savingsPiggyHero}
+      imageAlt="Savings illustration"
+      imageMaxHeight={200}
+      imageOverlay={
+        <Badge variant="lime" size="md">Seguro incluso</Badge>
+      }
+    >
+      <Stack gap="default">
+        {/* Total in BRL */}
+        <Stack gap="sm">
+          <Text variant="body-sm" color="content-secondary">Total em reais</Text>
+          <Amount value={totalBrl} currency="R$" size="lg" />
+          {totalYieldBrl > 0 && (
+            <Text variant="caption" className="text-[var(--color-feedback-success)]">
+              +R$ {totalYieldBrl.toFixed(2).replace('.', ',')} rendendo hoje
+            </Text>
+          )}
+        </Stack>
+
+        {/* Caixinha list */}
+        {caixinhas.length > 0 ? (
+          <Stack gap="sm">
+            {caixinhas.map((c) => (
+              <CaixinhaListCard
+                key={c.id}
+                caixinha={c}
+                onPress={() => handleTapCaixinha(c.id)}
+              />
+            ))}
+          </Stack>
+        ) : (
+          <EmptyState />
+        )}
+
+        {/* Create new */}
+        <Button
+          fullWidth
+          variant={caixinhas.length > 0 ? 'secondary' : 'primary'}
+          onPress={handleCreate}
+        >
+          <Stack direction="row" gap="sm" align="center">
+            <RiAddLine size={18} />
+            <Text variant="body-md" className="font-semibold">Nova Caixinha</Text>
+          </Stack>
+        </Button>
+      </Stack>
+
+      <StickyFooter>
+        <div>{/* TabBar placeholder — this is a level-1 page */}</div>
+      </StickyFooter>
+    </FeatureLayout>
+  )
+}

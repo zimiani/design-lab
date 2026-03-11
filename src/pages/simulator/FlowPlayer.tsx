@@ -1,52 +1,37 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import {
   RiArrowLeftSLine, RiArrowRightSLine, RiRefreshLine,
   RiSmartphoneLine, RiComputerLine,
-  RiHomeLine, RiBankCardLine,
-  RiGiftLine,
 } from '@remixicon/react'
-import { PiPiggyBank, PiPiggyBankFill } from 'react-icons/pi'
-import { getFlow } from './flowRegistry'
-import { ScreenDataProvider } from '../../lib/ScreenDataContext'
+import { getFlow, updateFlowMeta } from './flowRegistry'
+import { getDynamicFlow, saveDynamicFlow } from './dynamicFlowStore'
 import { getFlowGraph } from './flowGraphStore'
-import { deriveNavigationPath, getNextScreenOptions, getOverlaysForScreen, resolveScreenElementTarget, resolveOverlayElementTarget } from './flowGraphNavigation'
+import { deriveNavigationPath, getNextScreenOptions, getOverlaysForScreen, resolveOverlayElementTarget } from './flowGraphNavigation'
 import type { FlowNodeData } from './flowGraph.types'
-import BottomSheet from '../../library/layout/BottomSheet'
-import PhoneFrame from './PhoneFrame'
+import PhoneFrame, { type PhoneSize } from './PhoneFrame'
 import DesktopFrame from './DesktopFrame'
 import AnnotationsPanel from './AnnotationsPanel'
-import { LayoutProvider } from '../../library/layout/LayoutProvider'
-import AppShell from '../../library/layout/AppShell'
-import Sidebar from '../../library/navigation/Sidebar'
-import TabBar from '../../library/navigation/TabBar'
-import Text from '../../library/foundations/Text'
+import { useIframeBridge, type IframeBridgeRenderData } from './useIframeBridge'
 
-type DeviceMode = 'phone' | 'desktop'
-
-const navItems = [
-  { id: 'home', label: 'Início', icon: <RiHomeLine size={20} /> },
-  { id: 'cards', label: 'Cartão', icon: <RiBankCardLine size={20} /> },
-  { id: 'invest', label: 'Caixinha', icon: <PiPiggyBank size={20} />, activeIcon: <PiPiggyBankFill size={20} /> },
-  { id: 'perks', label: 'Benefícios', icon: <RiGiftLine size={20} /> },
-]
+type DeviceMode = 'phone-sm' | 'phone-lg' | 'desktop'
 
 interface FlowPlayerProps {
   flowId: string
   initialScreenId?: string | null
   onNavigateToFlow?: (flowId: string) => void
+  onRenameFlow?: (newId: string) => Promise<boolean>
 }
 
-export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }: FlowPlayerProps) {
+export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow, onRenameFlow }: FlowPlayerProps) {
   const [currentNodeId, setCurrentNodeId] = useState<string | null>(null)
   const [navHistory, setNavHistory] = useState<string[]>([])
   const [direction, setDirection] = useState(1)
   const [editVersion, setEditVersion] = useState(0)
-  const [deviceMode, setDeviceMode] = useState<DeviceMode>('phone')
-  const [activeNavId, setActiveNavId] = useState('home')
+  const [deviceMode, setDeviceMode] = useState<DeviceMode>('phone-lg')
+  const [activeNavId] = useState('home')
   const [activeOverlayId, setActiveOverlayId] = useState<string | null>(null)
   const [localActiveStateId, setLocalActiveStateId] = useState<string | null>(null)
-  const [stateKey, setStateKey] = useState(0) // incremented on pill click to force remount
+  const [stateKey, setStateKey] = useState(0)
 
   // Re-read flow from registry + localStorage on each render / edit
   const flow = getFlow(flowId)
@@ -63,14 +48,23 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
     return deriveNavigationPath(graph.nodes, graph.edges)
   }, [graph])
 
-  // Initialize or update currentNodeId when flow/graph changes
+  // Reset to first screen when switching flows
+  const prevFlowIdForReset = useRef(flowId)
   useEffect(() => {
     if (navPath.length === 0) {
       setCurrentNodeId(null)
       return
     }
 
-    // If initialScreenId provided, find its node
+    // Flow changed — always reset to the beginning
+    if (prevFlowIdForReset.current !== flowId) {
+      prevFlowIdForReset.current = flowId
+      setDirection(1)
+      setCurrentNodeId(navPath[0].nodeId)
+      setNavHistory([])
+      return
+    }
+
     if (initialScreenId) {
       const step = navPath.find(s => s.screenId === initialScreenId)
       if (step) {
@@ -81,12 +75,11 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
       }
     }
 
-    // Default: start at first step (only if currentNodeId isn't already valid)
     setCurrentNodeId((prev) => {
       if (prev && navPath.some(s => s.nodeId === prev)) return prev
       return navPath[0].nodeId
     })
-  }, [navPath, initialScreenId])
+  }, [flowId, navPath, initialScreenId])
 
   // Find current position in navPath
   const currentStepIndex = useMemo(() => {
@@ -101,9 +94,6 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
     setStateKey(0)
   }, [currentNodeId])
 
-  // Called by screen components to report internal state changes (e.g. idle → loading → ready)
-  // Only update the pill selection if the reported state ID exists in the screen's state definitions;
-  // otherwise it's an internal state (e.g. loading) that shouldn't affect pill selection.
   const handleScreenStateChange = useCallback((stateId: string) => {
     const screen = flow?.screens.find(s => {
       const step = navPath[currentStepIndex]
@@ -126,11 +116,6 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
     const node = graph.nodes.find((n) => n.id === currentNodeId)
     return node?.data as FlowNodeData | null
   }, [graph, currentNodeId])
-
-  const activeOverlay = useMemo(() => {
-    if (!activeOverlayId) return null
-    return screenOverlays.find((o) => o.nodeId === activeOverlayId) ?? null
-  }, [activeOverlayId, screenOverlays])
 
   // Get the overlay node's interactiveElements from graph data
   const activeOverlayElements = useMemo(() => {
@@ -157,52 +142,12 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
     }
   }, [graph, activeOverlayId, currentNodeId, onNavigateToFlow])
 
-  // Called by screen components when a user interacts with an element (e.g. tapping a Button, ListItem).
-  // First resolves screen→action→destination paths, then overlay paths.
-  // Returns true if a graph-based navigation target was found and executed.
-  const handleElementTap = useCallback((elementLabel: string): boolean => {
-    if (!graph || !currentNodeId) return false
-
-    // 1. Check screen → action → destination paths
-    const screenTarget = resolveScreenElementTarget(currentNodeId, elementLabel, graph.nodes, graph.edges)
-    if (screenTarget) {
-      if (screenTarget.type === 'flow' && onNavigateToFlow) {
-        onNavigateToFlow(screenTarget.flowId)
-        return true
-      } else if (screenTarget.type === 'screen') {
-        setDirection(1)
-        setNavHistory((h) => [...h, currentNodeId])
-        setCurrentNodeId(screenTarget.nodeId)
-        return true
-      }
-    }
-
-    // 2. Check overlay → action → destination paths
-    for (const overlay of screenOverlays) {
-      const target = resolveOverlayElementTarget(overlay.nodeId, elementLabel, graph.nodes, graph.edges)
-      if (!target) continue
-
-      if (target.type === 'flow' && onNavigateToFlow) {
-        onNavigateToFlow(target.flowId)
-        return true
-      } else if (target.type === 'screen') {
-        setDirection(1)
-        setNavHistory((h) => [...h, currentNodeId])
-        setCurrentNodeId(target.nodeId)
-        return true
-      }
-    }
-
-    return false
-  }, [graph, currentNodeId, screenOverlays, onNavigateToFlow])
-
   const goNext = useCallback(() => {
     if (!graph || !currentNodeId) return
 
     const nextOptions = getNextScreenOptions(currentNodeId, graph.nodes, graph.edges)
     if (nextOptions.length === 0) return
 
-    // Navigate to first option (branching UI is future work)
     const next = nextOptions[0]
     setDirection(1)
     setNavHistory((h) => [...h, currentNodeId])
@@ -232,6 +177,47 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
     setEditVersion((v) => v + 1)
   }, [])
 
+  const handleFlowDescriptionUpdate = useCallback((description: string) => {
+    updateFlowMeta(flowId, { description })
+    const dynFlow = getDynamicFlow(flowId)
+    if (dynFlow) {
+      dynFlow.description = description
+      saveDynamicFlow(dynFlow)
+    }
+    setEditVersion((v) => v + 1)
+  }, [flowId])
+
+  // ── iframe bridge ──
+
+  const bridgeCallbacks = useMemo(() => ({
+    onNavigate: (nodeId: string, _screenId: string) => {
+      setDirection(1)
+      setNavHistory((h) => currentNodeId ? [...h, currentNodeId] : h)
+      setCurrentNodeId(nodeId)
+      setActiveOverlayId(null)
+    },
+    onBack: goBack,
+    onNext: goNext,
+    onNavigateFlow: (fId: string) => {
+      if (onNavigateToFlow) onNavigateToFlow(fId)
+    },
+    onStateChange: handleScreenStateChange,
+    onOpenOverlay: (overlayId: string) => setActiveOverlayId(overlayId),
+    onCloseOverlay: () => setActiveOverlayId(null),
+    onOverlayElementClick: handleOverlayElementClick,
+  }), [currentNodeId, goBack, goNext, onNavigateToFlow, handleScreenStateChange, handleOverlayElementClick])
+
+  const { iframeRef, keyboardType, sendRender, sendSafeAreas, resetReady } = useIframeBridge(bridgeCallbacks)
+
+  // Reset iframe bridge when flowId changes (iframe reloads with new src)
+  const prevFlowIdRef = useRef(flowId)
+  useEffect(() => {
+    if (prevFlowIdRef.current !== flowId) {
+      prevFlowIdRef.current = flowId
+      resetReady()
+    }
+  }, [flowId, resetReady])
+
   if (!flow) {
     return (
       <div className="flex-1 flex items-center justify-center text-shell-text-tertiary">
@@ -260,25 +246,11 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
     : false
   const hasBack = navHistory.length > 0
 
-  const isStateSwap = stateKey > 0
-
-  const slideVariants = {
-    enter: (d: number) => ({ x: d > 0 ? 300 : -300, opacity: 0 }),
-    center: { x: 0, opacity: 1 },
-    exit: (d: number) => ({ x: d > 0 ? -300 : 300, opacity: 0 }),
-  }
-
-  const fadeVariants = {
-    enter: () => ({ opacity: 0 }),
-    center: { opacity: 1 },
-    exit: () => ({ opacity: 0 }),
-  }
-
   const _version = editVersion
   const isDesktop = deviceMode === 'desktop'
-  const Frame = isDesktop ? DesktopFrame : PhoneFrame
+  const phoneSize: PhoneSize = deviceMode === 'phone-sm' ? 'sm' : 'lg'
 
-  // Determine navigation level: flow can override (e.g. level 2 = no TabBar for all screens)
+  // Determine navigation level
   const defaultLevel = currentStepIndex === 0 ? 1 : 2
   const level = flow.level ? Math.max(flow.level, defaultLevel) : defaultLevel
 
@@ -291,23 +263,6 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
       ]
     : []
 
-  const sidebarNode = (
-    <Sidebar
-      items={navItems}
-      activeId={activeNavId}
-      onChange={setActiveNavId}
-      header={<Text variant="heading-sm">Picnic</Text>}
-    />
-  )
-
-  const tabBarNode = (
-    <TabBar
-      items={navItems}
-      activeId={activeNavId}
-      onChange={setActiveNavId}
-    />
-  )
-
   // Resolve state data for current screen
   const screenStates = current.states
   const resolvedStateId = localActiveStateId ?? currentNodeData?.activeStateId as string | undefined
@@ -315,66 +270,88 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
     ?? screenStates?.find(s => s.isDefault)
   const stateData = activeState?.data ?? {}
 
-  const animatedScreen = (
-    <AnimatePresence mode="wait" custom={direction}>
-      <motion.div
-        key={`${currentStep?.nodeId ?? currentStepIndex}-s${stateKey}`}
-        custom={direction}
-        variants={isStateSwap ? fadeVariants : slideVariants}
-        initial="enter"
-        animate="center"
-        exit="exit"
-        transition={{ duration: isStateSwap ? 0.15 : 0.25, ease: 'easeOut' }}
-        className="h-full"
-      >
-        <ScreenDataProvider data={stateData}>
-          <current.component onNext={goNext} onBack={goBack} overlays={screenOverlays} onOpenOverlay={setActiveOverlayId} onElementTap={handleElementTap} onStateChange={handleScreenStateChange} screenTitle={current.title} screenDescription={current.description} />
-        </ScreenDataProvider>
-      </motion.div>
-    </AnimatePresence>
-  )
+  // ── Send render command to iframe ──
+  // We call sendRender as a side effect during render. This is intentional:
+  // we need it to fire on every state change that affects what the iframe shows.
+  // Using useEffect would add a frame delay and cause visual glitches.
+  const iframeSrc = `/preview/${flowId}`
 
-  const screenContent = (
-    <LayoutProvider isDesktop={isDesktop} level={level} breadcrumbs={breadcrumbs}>
-      <AppShell sidebar={sidebarNode} tabBar={tabBarNode}>
-        {animatedScreen}
-      </AppShell>
-    </LayoutProvider>
-  )
+  // Build render data for the bridge — strip non-serializable values (functions)
+  const serializableBreadcrumbs = breadcrumbs.map(({ label }) => ({ label }))
+  const serializableOverlays = screenOverlays.map(o => ({
+    nodeId: o.nodeId,
+    label: o.label,
+    description: o.description,
+    overlayType: o.overlayType,
+    triggerLabel: o.triggerLabel,
+    triggerActionType: o.triggerActionType,
+  }))
+  const serializableStates = current.states?.map(s => ({
+    id: s.id,
+    name: s.name,
+    description: s.description,
+    isDefault: s.isDefault,
+    data: s.data,
+  }))
+
+  const renderData = {
+    flowId,
+    screenId: current.id,
+    screenTitle: current.title,
+    screenDescription: current.description,
+    stateData,
+    direction,
+    stateKey,
+    level,
+    breadcrumbs: serializableBreadcrumbs,
+    overlays: serializableOverlays,
+    activeOverlayId,
+    overlayElements: activeOverlayElements as { id: string; component: string; label: string }[] | undefined,
+    activeNavId,
+    states: serializableStates,
+  }
+
+  // Send safe areas based on device mode
+  const safeAreaTop = isDesktop ? '0px' : '62px'
+  const safeAreaBottom = isDesktop ? '0px' : (keyboardType ? '0px' : '34px')
+
+  const deviceModeButtons: { mode: DeviceMode; label: string; icon: React.ReactNode }[] = [
+    { mode: 'phone-sm', label: 'Phone sm', icon: <RiSmartphoneLine size={13} /> },
+    { mode: 'phone-lg', label: 'Phone lg', icon: <RiSmartphoneLine size={15} /> },
+    { mode: 'desktop', label: 'Desktop', icon: <RiComputerLine size={14} /> },
+  ]
 
   return (
     <div className="flex-1 flex overflow-hidden" data-version={_version}>
       {/* Center: Device + controls */}
-      <div className="flex-1 flex flex-col items-center justify-center gap-[var(--token-spacing-lg)] bg-shell-bg py-[var(--token-spacing-md)] overflow-auto">
-        {/* Device mode toggle */}
-        <div className="flex items-center p-[2px] bg-shell-surface border border-shell-border rounded-lg">
+      <div className="flex-1 flex flex-col items-center justify-center gap-5 bg-shell-bg py-[var(--token-spacing-md)] overflow-auto">
+        {/* Pagination controls — top */}
+        <div className="flex items-center gap-[var(--token-spacing-3)]">
           <button
             type="button"
-            onClick={() => setDeviceMode('phone')}
-            className={`
-              flex items-center gap-[6px] px-3 py-[6px] rounded-md text-[13px] font-medium transition-colors cursor-pointer
-              ${deviceMode === 'phone'
-                ? 'bg-shell-hover text-shell-text'
-                : 'text-shell-text-secondary hover:text-shell-text'
-              }
-            `}
+            onClick={goBack}
+            disabled={!hasBack}
+            className="w-[36px] h-[36px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-shell-surface border border-shell-border hover:bg-shell-hover transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-shell-text"
           >
-            <RiSmartphoneLine size={14} />
-            Phone
+            <RiArrowLeftSLine size={18} />
+          </button>
+          <span className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary min-w-[80px] text-center">
+            {currentStepIndex + 1} / {navPath.length}
+          </span>
+          <button
+            type="button"
+            onClick={goNext}
+            disabled={!hasNext}
+            className="w-[36px] h-[36px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-shell-surface border border-shell-border hover:bg-shell-hover transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-shell-text"
+          >
+            <RiArrowRightSLine size={18} />
           </button>
           <button
             type="button"
-            onClick={() => setDeviceMode('desktop')}
-            className={`
-              flex items-center gap-[6px] px-3 py-[6px] rounded-md text-[13px] font-medium transition-colors cursor-pointer
-              ${deviceMode === 'desktop'
-                ? 'bg-shell-hover text-shell-text'
-                : 'text-shell-text-secondary hover:text-shell-text'
-              }
-            `}
+            onClick={restart}
+            className="w-[36px] h-[36px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-shell-surface border border-shell-border hover:bg-shell-hover transition-colors cursor-pointer ml-[var(--token-spacing-2)] text-shell-text"
           >
-            <RiComputerLine size={14} />
-            Desktop
+            <RiRefreshLine size={16} />
           </button>
         </div>
 
@@ -403,59 +380,40 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
           </div>
         )}
 
-        <Frame>
-          {screenContent}
-          <BottomSheet open={!!activeOverlay} onClose={() => setActiveOverlayId(null)} title={activeOverlay?.label}>
-            {activeOverlayElements && activeOverlayElements.length > 0 ? (
-              <div className="flex flex-col">
-                {activeOverlayElements.map((el) => (
-                  <button
-                    key={el.id}
-                    type="button"
-                    onClick={() => handleOverlayElementClick(el)}
-                    className="flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--color-surface-secondary)] transition-colors cursor-pointer border-b border-[var(--color-border-primary)] last:border-b-0"
-                  >
-                    <span className="text-[14px] font-medium text-[var(--color-content-primary)]">{el.label}</span>
-                    <span className="text-[12px] text-[var(--color-content-tertiary)] ml-auto">{el.component}</span>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <Text variant="body-md" color="content-secondary">
-                {activeOverlay?.description || 'Overlay placeholder'}
-              </Text>
-            )}
-          </BottomSheet>
-        </Frame>
+        {/* Device frame with iframe */}
+        {isDesktop ? (
+          <DesktopFrame
+            iframeSrc={iframeSrc}
+            iframeRef={iframeRef}
+          />
+        ) : (
+          <PhoneFrame
+            size={phoneSize}
+            iframeSrc={iframeSrc}
+            iframeRef={iframeRef}
+            controlledKeyboardType={keyboardType}
+          />
+        )}
 
-        {/* Controls */}
-        <div className="flex items-center gap-[var(--token-spacing-3)]">
-          <button
-            type="button"
-            onClick={goBack}
-            disabled={!hasBack}
-            className="w-[40px] h-[40px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-shell-surface border border-shell-border hover:bg-shell-hover transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-shell-text"
-          >
-            <RiArrowLeftSLine size={18} />
-          </button>
-          <span className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary min-w-[80px] text-center">
-            {currentStepIndex + 1} / {navPath.length}
-          </span>
-          <button
-            type="button"
-            onClick={goNext}
-            disabled={!hasNext}
-            className="w-[40px] h-[40px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-shell-surface border border-shell-border hover:bg-shell-hover transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-shell-text"
-          >
-            <RiArrowRightSLine size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={restart}
-            className="w-[40px] h-[40px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-shell-surface border border-shell-border hover:bg-shell-hover transition-colors cursor-pointer ml-[var(--token-spacing-2)] text-shell-text"
-          >
-            <RiRefreshLine size={16} />
-          </button>
+        {/* Device mode toggle — below simulator */}
+        <div className="flex items-center p-[2px] bg-shell-surface border border-shell-border rounded-lg">
+          {deviceModeButtons.map(({ mode, label, icon }) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => { setDeviceMode(mode); resetReady() }}
+              className={`
+                flex items-center gap-[5px] px-2.5 py-[5px] rounded-md text-[12px] font-medium transition-colors cursor-pointer
+                ${deviceMode === mode
+                  ? 'bg-shell-hover text-shell-text'
+                  : 'text-shell-text-secondary hover:text-shell-text'
+                }
+              `}
+            >
+              {icon}
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -465,7 +423,46 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow }
         currentScreen={current}
         screenIndex={currentStepIndex}
         onFlowEdited={handleFlowEdited}
+        onRenameFlow={onRenameFlow}
+        onFlowDescriptionUpdate={handleFlowDescriptionUpdate}
+      />
+
+      {/* Send render data to iframe via effect */}
+      <IframeRenderEffect
+        sendRender={sendRender}
+        sendSafeAreas={sendSafeAreas}
+        renderData={renderData}
+        safeAreaTop={safeAreaTop}
+        safeAreaBottom={safeAreaBottom}
       />
     </div>
   )
+}
+
+/**
+ * Component that sends render commands to the iframe as an effect.
+ * Separated to avoid calling hooks conditionally in the main component.
+ */
+function IframeRenderEffect({
+  sendRender,
+  sendSafeAreas,
+  renderData,
+  safeAreaTop,
+  safeAreaBottom,
+}: {
+  sendRender: (data: IframeBridgeRenderData) => void
+  sendSafeAreas: (top: string, bottom: string) => void
+  renderData: IframeBridgeRenderData
+  safeAreaTop: string
+  safeAreaBottom: string
+}) {
+  useEffect(() => {
+    sendRender(renderData)
+  }, [sendRender, renderData.flowId, renderData.screenId, renderData.stateKey, renderData.direction, renderData.level, renderData.activeOverlayId, renderData.activeNavId]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    sendSafeAreas(safeAreaTop, safeAreaBottom)
+  }, [sendSafeAreas, safeAreaTop, safeAreaBottom])
+
+  return null
 }

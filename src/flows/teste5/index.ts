@@ -99,7 +99,7 @@ registerFlow({
     { id: 'welcome', type: 'screen', position: { x: 300, y: 120 }, data: { label: 'Bem-vindo', screenId: 'teste5-welcome', nodeType: 'screen', description: 'Landing screen with hero image and auth options' } as FlowNodeData },
 
     // Column 1: Sign Up path
-    { id: 'action-criar-conta', type: 'action', position: { x: 150, y: 280 }, data: { label: 'Criar conta', screenId: null, nodeType: 'action', actionType: 'navigate', actionTarget: 'Button: Criar conta' } as FlowNodeData },
+    { id: 'action-criar-conta', type: 'action', position: { x: 150, y: 280 }, data: { label: 'Criar conta', screenId: null, nodeType: 'action', actionType: 'tap', actionTarget: 'Button: Criar conta' } as FlowNodeData },
     { id: 'signup', type: 'screen', position: { x: 150, y: 400 }, data: { label: 'Criar conta', screenId: 'teste5-signup', nodeType: 'screen', description: 'Account creation form' } as FlowNodeData },
     { id: 'api-create-account', type: 'api-call', position: { x: 150, y: 560 }, data: { label: 'Create account', screenId: null, nodeType: 'api-call', apiMethod: 'POST', apiEndpoint: '/api/auth/register' } as FlowNodeData },
     { id: 'verify-email', type: 'screen', position: { x: 150, y: 700 }, data: { label: 'Verificar e-mail', screenId: 'teste5-verify-email', nodeType: 'screen', description: 'Email verification with 6-digit PIN' } as FlowNodeData },
@@ -108,7 +108,7 @@ registerFlow({
     { id: 'success', type: 'screen', position: { x: 150, y: 1160 }, data: { label: 'Conta criada', screenId: 'teste5-success', nodeType: 'screen', description: 'Success confirmation' } as FlowNodeData },
 
     // Column 2: Sign In path
-    { id: 'action-ja-tenho-conta', type: 'action', position: { x: 500, y: 280 }, data: { label: 'Já tenho conta', screenId: null, nodeType: 'action', actionType: 'navigate', actionTarget: 'Link: Já tenho conta' } as FlowNodeData },
+    { id: 'action-ja-tenho-conta', type: 'action', position: { x: 500, y: 280 }, data: { label: 'Já tenho conta', screenId: null, nodeType: 'action', actionType: 'tap', actionTarget: 'Link: Já tenho conta' } as FlowNodeData },
     { id: 'signin', type: 'screen', position: { x: 500, y: 400 }, data: { label: 'Entrar', screenId: 'teste5-signin', nodeType: 'screen', description: 'Login form with email and password' } as FlowNodeData },
     { id: 'api-auth', type: 'api-call', position: { x: 500, y: 560 }, data: { label: 'Authenticate', screenId: null, nodeType: 'api-call', apiMethod: 'POST', apiEndpoint: '/api/auth/login' } as FlowNodeData },
     { id: 'decision-auth-ok', type: 'decision', position: { x: 500, y: 700 }, data: { label: 'Auth OK?', screenId: null, nodeType: 'decision', description: 'Are the credentials valid?' } as FlowNodeData },

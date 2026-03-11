@@ -5,7 +5,19 @@
  */
 
 import { supabase, isSupabaseConnected } from '../../lib/supabase'
+import { parseIfString } from '../../lib/parseIfString'
 import { updateScreenMeta } from './flowFileApi'
+
+const DELETED_KEY = 'picnic-design-lab:deleted-flows'
+
+function readDeletedFlowIds(): Set<string> {
+  try {
+    const raw = localStorage.getItem(DELETED_KEY)
+    return raw ? new Set(JSON.parse(raw)) : new Set()
+  } catch {
+    return new Set()
+  }
+}
 
 const STORAGE_KEY = 'picnic-design-lab:dynamic-flows'
 
@@ -37,6 +49,8 @@ export interface DynamicFlowDef {
   linkedFlows?: string[]
   /** Labels describing how users enter this flow */
   entryPoints?: string[]
+  /** ISO timestamp of last modification (for sync conflict resolution) */
+  updatedAt?: string
 }
 
 // ── localStorage layer ──
@@ -88,6 +102,7 @@ export function getDynamicFlow(id: string): DynamicFlowDef | null {
 
 export function saveDynamicFlow(flow: DynamicFlowDef): void {
   const all = readAll()
+  flow.updatedAt = new Date().toISOString()
   all[flow.id] = flow
   writeAll(all)
   upsertFlowToSupabase(flow)
@@ -109,6 +124,7 @@ export function addScreenToFlow(flowId: string, screen: DynamicScreen): void {
   const flow = all[flowId]
   if (!flow) return
   flow.screens.push(screen)
+  flow.updatedAt = new Date().toISOString()
   writeAll(all)
   upsertFlowToSupabase(flow)
 }
@@ -118,6 +134,7 @@ export function removeScreenFromFlow(flowId: string, screenId: string): void {
   const flow = all[flowId]
   if (!flow) return
   flow.screens = flow.screens.filter((s) => s.id !== screenId)
+  flow.updatedAt = new Date().toISOString()
   writeAll(all)
   upsertFlowToSupabase(flow)
 }
@@ -133,6 +150,7 @@ export function updateScreenInFlow(
   const screen = flow.screens.find((s) => s.id === screenId)
   if (!screen) return
   Object.assign(screen, updates)
+  flow.updatedAt = new Date().toISOString()
   writeAll(all)
   upsertFlowToSupabase(flow)
 
@@ -153,10 +171,11 @@ export async function renameDynamicFlow(oldId: string, newId: string): Promise<v
   delete all[oldId]
   flow.id = newId
   flow.name = newId
-  flow.screens = flow.screens.map((s) => ({
-    ...s,
-    id: s.id.replace(oldId, newId),
-  }))
+  flow.screens = flow.screens.map((s) => {
+    // Screen IDs typically start with the flow ID prefix — replace only at the start
+    const newScreenId = s.id.startsWith(oldId) ? newId + s.id.slice(oldId.length) : s.id
+    return { ...s, id: newScreenId }
+  })
   all[newId] = flow
   writeAll(all)
 
@@ -180,19 +199,33 @@ export async function hydrateDynamicFlowsFromSupabase(): Promise<boolean> {
     if (rows.length === 0) return false // nothing in Supabase yet — keep localStorage
 
     const all = readAll()
+    const deleted = readDeletedFlowIds()
+
     for (const row of rows) {
-      all[row.id] = {
-        id: row.id,
-        name: row.name,
-        description: row.description,
-        domain: row.domain,
-        screens: typeof row.screens === 'string' ? JSON.parse(row.screens) : row.screens,
-        ...(row.spec_content ? { specContent: row.spec_content } : {}),
-        ...(row.level != null ? { level: row.level } : {}),
-        ...(row.linked_flows ? { linkedFlows: typeof row.linked_flows === 'string' ? JSON.parse(row.linked_flows) : row.linked_flows } : {}),
-        ...(row.entry_points ? { entryPoints: typeof row.entry_points === 'string' ? JSON.parse(row.entry_points) : row.entry_points } : {}),
+      if (deleted.has(row.id)) continue
+
+      const local = all[row.id]
+      const remoteTime = row.updated_at ? new Date(row.updated_at).getTime() : 0
+      const localTime = local?.updatedAt ? new Date(local.updatedAt).getTime() : 0
+
+      if (!local || remoteTime >= localTime) {
+        // Remote is newer or no local version — accept remote
+        all[row.id] = {
+          id: row.id,
+          name: row.name,
+          description: row.description,
+          domain: row.domain,
+          screens: parseIfString(row.screens),
+          updatedAt: row.updated_at,
+          ...(row.spec_content ? { specContent: row.spec_content } : {}),
+          ...(row.level != null ? { level: row.level } : {}),
+          ...(row.linked_flows ? { linkedFlows: parseIfString(row.linked_flows) } : {}),
+          ...(row.entry_points ? { entryPoints: parseIfString(row.entry_points) } : {}),
+        }
       }
+      // else: local is newer — keep local (it was already pushed to Supabase async)
     }
+
     writeAll(all)
     return true
   } catch {
@@ -215,4 +248,73 @@ export function subscribeToDynamicFlowChanges(onUpdate: () => void): (() => void
   return () => {
     supabase!.removeChannel(channel)
   }
+}
+
+// ── Domain migration: savings → earn ──
+
+const SAVINGS_MIGRATION_KEY = 'picnic-design-lab:savings-to-earn-done'
+
+export function migrateSavingsToEarnDomain(): void {
+  if (localStorage.getItem(SAVINGS_MIGRATION_KEY)) return
+
+  const all = readAll()
+  let changed = false
+  for (const flow of Object.values(all)) {
+    if (flow.domain === 'savings') {
+      flow.domain = 'earn'
+      flow.updatedAt = new Date().toISOString()
+      changed = true
+    }
+  }
+  if (changed) {
+    writeAll(all)
+    // Push updates to Supabase
+    for (const flow of Object.values(all)) {
+      if (flow.domain === 'earn') upsertFlowToSupabase(flow)
+    }
+  }
+
+  // Also fix flowGroupStore archived flows and ungrouped order keyed under 'savings'
+  const groupsRaw = localStorage.getItem('picnic-design-lab:flow-groups')
+  if (groupsRaw) {
+    try {
+      const state = JSON.parse(groupsRaw)
+      let groupsChanged = false
+
+      // Re-key archivedFlows: savings → earn
+      if (state.archivedFlows) {
+        for (const [flowId, domainId] of Object.entries(state.archivedFlows)) {
+          if (domainId === 'savings') {
+            state.archivedFlows[flowId] = 'earn'
+            groupsChanged = true
+          }
+        }
+      }
+
+      // Re-key groups with domainId: 'savings'
+      if (state.groups) {
+        for (const group of Object.values(state.groups) as { domainId: string }[]) {
+          if (group.domainId === 'savings') {
+            group.domainId = 'earn'
+            groupsChanged = true
+          }
+        }
+      }
+
+      // Merge ungroupedOrder['savings'] into ungroupedOrder['earn']
+      if (state.ungroupedOrder?.savings) {
+        const savingsOrder = state.ungroupedOrder.savings as string[]
+        const earnOrder = (state.ungroupedOrder.earn ?? []) as string[]
+        state.ungroupedOrder.earn = [...earnOrder, ...savingsOrder.filter((id: string) => !earnOrder.includes(id))]
+        delete state.ungroupedOrder.savings
+        groupsChanged = true
+      }
+
+      if (groupsChanged) {
+        localStorage.setItem('picnic-design-lab:flow-groups', JSON.stringify(state))
+      }
+    } catch { /* ignore parse errors */ }
+  }
+
+  localStorage.setItem(SAVINGS_MIGRATION_KEY, new Date().toISOString())
 }

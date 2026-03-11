@@ -11,9 +11,9 @@
 import type { ComponentType } from 'react'
 import type { FlowScreenProps } from './flowRegistry'
 
-// Eager glob: all Screen*.tsx files under src/flows/
+// Eager glob: all Screen*.tsx files under src/flows/ (including prefixed variants like A_Screen1, B_Screen1)
 const screenModules = import.meta.glob<{ default: ComponentType<FlowScreenProps> }>(
-  '../../flows/**/Screen*.tsx',
+  ['../../flows/**/*Screen*.tsx', '!../../flows/**/PlaceholderScreen.tsx'],
   { eager: true },
 )
 

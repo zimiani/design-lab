@@ -73,12 +73,11 @@ function deriveInteractiveElements(
   return Array.from(result.values())
 }
 
+/** Escape a string for use inside single-quoted JS literals (handles all special chars). */
 function escapeString(s: string): string {
-  return s
-    .replace(/\\/g, '\\\\')
-    .replace(/'/g, "\\'")
-    .replace(/\n/g, '\\n')
-    .replace(/\r/g, '\\r')
+  // JSON.stringify handles all edge cases (tabs, unicode, etc.); adapt from double to single quotes
+  const inner = JSON.stringify(s).slice(1, -1)
+  return inner.replace(/'/g, "\\'").replace(/\\"/g, '"')
 }
 
 function formatArray(arr: string[], indent: string): string {

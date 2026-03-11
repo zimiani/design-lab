@@ -891,3 +891,81 @@ Periodically review the Screen Parts catalog (`/components?selected=screen-parts
 | **Stack direction="row"** | Use for side-by-side elements with `align="between"` for distribution |
 | **data-component attribute** | All library components have `data-component="Name"` for browser devtools debugging |
 | **Content-aware skeletons** | Always match the exact layout of the component they replace to prevent layout shifts |
+
+---
+
+## 13. Copy Style Guide (pt-BR)
+
+> Source: `picnic-copy-style-guide.json`. All in-screen UI copy must follow these rules.
+
+### 13.1 Voice & Tone
+
+| Attribute | Description |
+|-----------|-------------|
+| **Direto** | Short sentences (8–15 words max). No filler. Say it in fewer words. |
+| **Confiante sem arrogância** | State facts, show numbers. Let evidence persuade. No shouting. |
+| **Leve mas com substância** | Playful and approachable, always backed by a real claim. Humor OK, fluff not. |
+| **Insider, não vendedor** | Tone of sharing a discovery, not selling. "Quem sabe, sabe" energy. |
+| **Coloquial brasileiro natural** | Natural pt-BR. Conversational, not robotic. Write how people talk, not press releases. |
+
+**Register**: informal-to-neutral (never formal/corporate). Pronoun: "você". Contractions OK: "tá", "pra", "pro". Moderate slang.
+
+### 13.2 App UI Copy Rules
+
+- Max 2 lines per screen element
+- Action-oriented: tell users what happens, not what to think
+- Error messages: helpful and human, never scary
+- Success states: rewarding but not over-the-top
+- **Buttons/CTAs**: first person / infinitive — "Consultar", "Ativar", "Pedir meu cartão" (never imperative "Consulte")
+- **Body text**: third person / neutral — describes what the user sees
+
+### 13.3 Terminology
+
+| Technical | User-facing |
+|-----------|-------------|
+| USDC | dólar digital |
+| blockchain | tecnologia (or omit) |
+| smart wallet | conta / carteira |
+| self custody | controle total do seu dinheiro |
+| stablecoin | dólar digital |
+| GNO token | cashback |
+| OG NFT | membro OG Club |
+| KYC | verificação de identidade |
+| PIX deposit | depósito via Pix |
+
+### 13.4 Forbidden Terms & Tones
+
+**Never use in user-facing copy**: blockchain, USDC, stablecoin, crypto/criptomoeda, dólar comercial, garantido, investimento (in card/travel context), sem risco, "o melhor" / "o mais barato".
+
+**Forbidden tones**: Conspiratório, agressivo contra concorrência, bom demais pra ser verdade, corporativo/banco tradicional, crypto bro.
+
+**Structural anti-patterns**: Walls of text without contrast, generic fintech copy, promises without evidence, exclamation mark overload (!!!), emoji spam (max 1–2 per piece), starting copy with brand name ("O Picnic é…").
+
+### 13.5 Writing Rules
+
+- Sentence: max 15 words, prefer 8–12
+- Paragraph: max 2 lines in marketing copy
+- Numbers: use digits ("5 minutos", not "cinco minutos"), use R$ and US$ with values
+- Specificity over vagueness: "R$1.439 em uma viagem de US$5.000" > "economize bastante"
+- Capitalization: sentence case for UI, avoid ALL CAPS
+- Contrast structure: [what they expect] → [what actually happens] → [what Picnic does]
+- Reading level: write for a smart 16-year-old — complex ideas, simple words
+
+### 13.6 Screen Composition Rules
+
+1. **Use Avatar for all icon containers.** Never use raw `div` with flex/rounded for icon wrappers — use `<Avatar icon={...} size="lg" bgColor="..." iconColor="..." />`. Avatar handles sizing, shape, colors, and stays consistent across the system.
+2. **Card is not a button.** `Card` requires `pressable` to be clickable, and even then it's not ideal for list items. For tappable list entries, either use `ListItem` or create a screen-part `<button>` with appropriate styles.
+3. **ListItem selection = navigate.** When a user must pick one option from a ListItem list, tapping the ListItem should navigate directly (no separate "Continuar" button). Use RadioGroup + Button only when the selection needs confirmation before proceeding.
+4. **ShortcutButton labels must not wrap.** Keep labels to a single short word (max ~8 chars). E.g., use "Editar" not "Editar nome", "Resgatar" not "Resgatar fundos".
+5. **Level-1 pages never show back buttons.** Screens that are entry points (tab-level) must not render `onBack` in the Header. These pages show the TabBar at the bottom instead.
+6. **Every detail screen needs context.** Add a subtitle or body text below the Header explaining what the user is looking at (e.g., insurance policy, coverage details). Never drop the user into data without framing.
+7. **Wireframe feel = missing visual appeal.** Every list/dashboard page needs visual weight — use `FeatureLayout` with a hero image, a colored gradient header, or Avatar with brand colors. Raw white + flat cards reads as wireframe.
+8. **New screen-part components**: When no library component exists for a use case, create it in `.parts.tsx` and flag it to the user for review. It may be promoted to library, replaced by an existing component, or kept as screen-local.
+
+### 13.7 Brand Signatures (use 1–2 per piece when relevant)
+
+- "Se aceita Visa, aceita Picnic."
+- "Picnic: zero taxa de verdade."
+- "Abre o olho pro custo total."
+- "Seu dinheiro, seu de verdade."
+- "Viajar sem susto no extrato."

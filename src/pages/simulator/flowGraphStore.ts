@@ -100,17 +100,17 @@ export async function renameFlowGraph(oldId: string, newId: string): Promise<voi
 
   delete all[oldId]
 
-  // Update screenId/pageId in nodes that embed the old ID
+  // Update screenId/pageId in nodes that embed the old ID (prefix-safe replacement)
+  const replacePrefix = (val: unknown): string | undefined => {
+    if (typeof val !== 'string') return undefined
+    return val.startsWith(oldId) ? newId + val.slice(oldId.length) : val
+  }
   const updatedNodes = graph.nodes.map((n) => ({
     ...n,
     data: {
       ...n.data,
-      ...(typeof n.data.screenId === 'string' && (n.data.screenId as string).includes(oldId)
-        ? { screenId: (n.data.screenId as string).replace(oldId, newId) }
-        : {}),
-      ...(typeof n.data.pageId === 'string' && (n.data.pageId as string).includes(oldId)
-        ? { pageId: (n.data.pageId as string).replace(oldId, newId) }
-        : {}),
+      ...(replacePrefix(n.data.screenId) !== undefined ? { screenId: replacePrefix(n.data.screenId) } : {}),
+      ...(replacePrefix(n.data.pageId) !== undefined ? { pageId: replacePrefix(n.data.pageId) } : {}),
     },
   }))
 
@@ -170,15 +170,25 @@ export async function hydrateGraphsFromSupabase(): Promise<boolean> {
     if (rows.length === 0) return false // nothing in Supabase yet — keep localStorage
 
     const all = readAllGraphs()
+
     for (const row of rows) {
-      all[row.flow_id] = {
-        flowId: row.flow_id,
-        nodes: JSON.parse(row.nodes),
-        edges: JSON.parse(row.edges),
-        updatedAt: row.updated_at,
+      const local = all[row.flow_id]
+      const remoteTime = row.updated_at ? new Date(row.updated_at).getTime() : 0
+      const localTime = local?.updatedAt ? new Date(local.updatedAt).getTime() : 0
+
+      if (!local || remoteTime >= localTime) {
+        // Remote is newer or no local version — accept remote
+        all[row.flow_id] = {
+          flowId: row.flow_id,
+          nodes: JSON.parse(row.nodes),
+          edges: JSON.parse(row.edges),
+          updatedAt: row.updated_at,
+        }
       }
+      // else: local is newer — keep local (next saveFlowGraph will push to Supabase)
     }
     writeAllGraphs(all)
+
     return true
   } catch {
     return false

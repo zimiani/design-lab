@@ -35,7 +35,7 @@ for (const s of screenDefs) {
     id: s.id,
     name: s.title,
     description: s.description,
-    area: 'savings',
+    area: 'earn',
     componentsUsed: [...s.componentsUsed],
     component: s.component,
   })

@@ -162,6 +162,20 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
     }
   }, [orderedDomainIds.length, selectedFlowId])
 
+  // When selectedFlowId changes (e.g. reload with different URL), ensure its domain is expanded
+  useEffect(() => {
+    if (!selectedFlowId) return
+    const selectedFlow = getFlow(selectedFlowId)
+    if (selectedFlow) {
+      setCollapsedDomains((prev) => {
+        if (!prev.has(selectedFlow.domain)) return prev
+        const next = new Set(prev)
+        next.delete(selectedFlow.domain)
+        return next
+      })
+    }
+  }, [selectedFlowId])
+
   const allCollapsed = orderedDomainIds.length > 0 && orderedDomainIds.every((id) => collapsedDomains.has(id))
 
   const toggleCollapseAll = () => {
@@ -212,22 +226,52 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
     onFlowDeleted?.()
   }
 
-  const handleDuplicateFlow = (flowId: string) => {
+  const handleDuplicateFlow = async (flowId: string) => {
     const source = getFlow(flowId)
     if (!source) return
 
-    const newId = uniqueId(flowId + '-copy', (id) => !!getFlow(id) || !!getDynamicFlow(id))
+    const exists = (id: string) => !!getFlow(id) || !!getDynamicFlow(id)
+    // Name clones with letter suffixes: -b, -c, -d, ...
+    let newId = ''
+    for (let i = 1; i < 26; i++) {
+      const suffix = String.fromCharCode(97 + i) // b, c, d, ...
+      const candidate = `${flowId}-${suffix}`
+      if (!exists(candidate)) { newId = candidate; break }
+    }
+    if (!newId) newId = uniqueId(flowId + '-copy', exists) // fallback
+
+    // Copy screen .tsx files to the new flow directory (independent copies)
+    const { resolveFilePath } = await import('./screenResolver')
+    const screenFilePaths = await Promise.all(
+      source.screens.map(async (s) => {
+        const dynScreen = getDynamicFlow(flowId)?.screens.find((ds) => ds.id === s.id)
+        const sourcePath = dynScreen?.filePath ?? resolveFilePath(s.component) ?? undefined
+        if (!sourcePath) return undefined
+        const { copyScreenFile } = await import('./flowFileApi')
+        const newPath = await copyScreenFile(sourcePath, newId)
+        return newPath ?? sourcePath // fall back to shared file if copy fails
+      }),
+    )
+
     const def: DynamicFlowDef = {
       id: newId,
       name: newId,
       domain: source.domain,
       description: source.description,
-      screens: source.screens.map((s) => ({
-        id: s.id.replace(flowId, newId),
-        title: s.title,
-        description: s.description,
-        componentsUsed: [...s.componentsUsed],
-      })),
+      screens: source.screens.map((s, i) => {
+        return {
+          id: s.id.startsWith(flowId) ? newId + s.id.slice(flowId.length) : s.id,
+          title: s.title,
+          description: s.description,
+          componentsUsed: [...s.componentsUsed],
+          filePath: screenFilePaths[i],
+          pageId: s.pageId,
+          states: s.states?.map((st) => ({ ...st })),
+          interactiveElements: s.interactiveElements
+            ? s.interactiveElements.map((ie) => ({ ...ie }))
+            : undefined,
+        }
+      }),
     }
     saveDynamicFlow(def)
     registerDynamicFlow(def)
@@ -394,8 +438,17 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
     } else {
       // Dropping onto an ungrouped flow — ungroup and insert before target
       removeFlowFromGroup(dragState.flowId, domainId)
-      // Build new order: insert dragged flow before target
-      const currentOrder = getUngroupedFlowOrder(domainId)
+      // Build new order: if no persisted order yet, seed from current render order
+      let currentOrder = getUngroupedFlowOrder(domainId)
+      if (currentOrder.length === 0) {
+        // Seed with all ungrouped flows in this domain (current render order)
+        const domainFlows = (getFlowsByDomain()[domainId] ?? [])
+        const groupedIds = new Set<string>()
+        for (const g of getGroupsForDomain(domainId)) {
+          for (const fid of getFlowIdsInGroup(g.id)) groupedIds.add(fid)
+        }
+        currentOrder = domainFlows.filter(f => !groupedIds.has(f.id) && !isFlowArchived(f.id)).map(f => f.id)
+      }
       const filtered = currentOrder.filter((id) => id !== dragState.flowId)
       const targetIdx = filtered.indexOf(targetFlowId)
       filtered.splice(targetIdx >= 0 ? targetIdx : filtered.length, 0, dragState.flowId)
@@ -429,17 +482,24 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
     return (
       <div
         key={flow.id}
-        className={`group relative ${isDropTargetFlow ? 'border-t-2 border-shell-selected-text' : ''}`}
+        className={`group relative`}
         draggable
         onDragStart={(e) => handleDragStartFlow(e, flow)}
         onDragEnd={handleDragEnd}
         onDragOver={(e) => {
+          e.stopPropagation()
           handleDragOver(e)
           setDropTarget({ type: 'flow', id: flow.id })
         }}
-        onDragLeave={() => setDropTarget(null)}
-        onDrop={(e) => handleDropOnFlow(e, flow.id, groupId, domainId)}
+        onDragLeave={(e) => {
+          e.stopPropagation()
+          setDropTarget(null)
+        }}
+        onDrop={(e) => { e.stopPropagation(); handleDropOnFlow(e, flow.id, groupId, domainId) }}
       >
+        {isDropTargetFlow && (
+          <div className="absolute top-0 left-2 right-2 h-[2px] bg-shell-selected-text rounded-full z-10" />
+        )}
         <button
           type="button"
           onClick={() => onSelect(flow.id)}
@@ -544,11 +604,15 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
         onDragStart={(e) => handleDragStartGroup(e, group)}
         onDragEnd={handleDragEnd}
         onDragOver={(e) => {
+          e.stopPropagation()
           handleDragOver(e)
           setDropTarget({ type: 'group', id: group.id })
         }}
-        onDragLeave={() => setDropTarget(null)}
-        onDrop={(e) => handleDropOnGroup(e, group.id, domainId)}
+        onDragLeave={(e) => {
+          e.stopPropagation()
+          setDropTarget(null)
+        }}
+        onDrop={(e) => { e.stopPropagation(); handleDropOnGroup(e, group.id, domainId) }}
       >
         <div className="group/grp flex items-center gap-[var(--token-spacing-1)] pl-[var(--token-spacing-md)] pr-[var(--token-spacing-2)] py-[var(--token-spacing-1)]">
           {isRenaming ? (

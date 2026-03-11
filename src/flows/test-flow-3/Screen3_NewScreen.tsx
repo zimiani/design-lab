@@ -11,7 +11,7 @@ export default function Screen({ onNext, onBack }: FlowScreenProps) {
     <BaseLayout>
       <Header title="New Screen" onBack={onBack} />
       <Stack>
-        <Text variant="body">TODO: build this screen</Text>
+        <Text variant="body-md">TODO: build this screen</Text>
       </Stack>
       <StickyFooter>
         <Button variant="primary" size="lg" onPress={onNext} fullWidth>

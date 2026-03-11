@@ -6,6 +6,7 @@ import { resolveComponent } from './screenResolver'
 import { registerPage, getBasePage } from '../gallery/pageRegistry'
 import { getFlowGraph, saveFlowGraph as saveFlowGraphStore, renameFlowGraph, updateFlowReferencesInAllGraphs } from './flowGraphStore'
 import { renameFlowInGroups } from './flowGroupStore'
+import { SLUG_REGEX } from '../../lib/slugify'
 
 export interface InteractiveElement {
   id: string          // e.g. 'btn-continue'
@@ -155,6 +156,9 @@ export function updateFlowMeta(id: string, updates: { name?: string; description
 
 /** Register a flow from the dynamic store data model, resolving components from disk. */
 export function registerDynamicFlow(def: DynamicFlowDef): void {
+  // Skip deleted flows — tombstone wins over dynamic store
+  if (isFlowDeleted(def.id)) return
+
   // Preserve pageId and component from static registration when dynamic store lacks them
   const existingFlow = flows.get(def.id)
   const staticScreens = new Map<string, FlowScreen>()
@@ -212,8 +216,10 @@ export function registerDynamicFlow(def: DynamicFlowDef): void {
 
 /** Hydrate all dynamic flows from localStorage into the registry. */
 export function hydrateDynamicFlows(): void {
+  const deleted = readDeletedFlows()
   const dynamicFlows = getDynamicFlows()
   for (const def of dynamicFlows) {
+    if (deleted.has(def.id)) continue
     registerDynamicFlow(def)
   }
 }
@@ -263,22 +269,41 @@ export function getFlowsLinkingTo(flowId: string): Flow[] {
 
 // ── Duplicate flow with specific ID ──
 
-export function duplicateFlowWithId(sourceId: string, targetId: string, targetDomain?: string): boolean {
+export async function duplicateFlowWithId(sourceId: string, targetId: string, targetDomain?: string): Promise<boolean> {
   const source = flows.get(sourceId)
   if (!source) return false
   if (flows.has(targetId) || getDynamicFlow(targetId)) return false
+
+  // Copy screen .tsx files to the new flow directory (independent copies)
+  const { copyScreenFile } = await import('./flowFileApi')
+  const screenFilePaths = await Promise.all(
+    source.screens.map(async (s) => {
+      const dynScreen = getDynamicFlow(sourceId)?.screens.find((ds) => ds.id === s.id)
+      if (!dynScreen?.filePath) return dynScreen?.filePath
+      const newPath = await copyScreenFile(dynScreen.filePath, targetId)
+      return newPath ?? dynScreen.filePath // fall back to shared file if copy fails
+    }),
+  )
 
   const def: DynamicFlowDef = {
     id: targetId,
     name: targetId,
     domain: targetDomain ?? source.domain,
     description: source.description,
-    screens: source.screens.map((s) => ({
-      id: s.id.replace(sourceId, targetId),
-      title: s.title,
-      description: s.description,
-      componentsUsed: [...s.componentsUsed],
-    })),
+    screens: source.screens.map((s, i) => {
+      return {
+        id: s.id.startsWith(sourceId) ? targetId + s.id.slice(sourceId.length) : s.id,
+        title: s.title,
+        description: s.description,
+        componentsUsed: [...s.componentsUsed],
+        filePath: screenFilePaths[i],
+        pageId: s.pageId,
+        states: s.states?.map((st) => ({ ...st })),
+        interactiveElements: s.interactiveElements
+          ? s.interactiveElements.map((ie) => ({ ...ie }))
+          : undefined,
+      }
+    }),
   }
   saveDynamicFlow(def)
   registerDynamicFlow(def)
@@ -303,8 +328,6 @@ export function duplicateFlowWithId(sourceId: string, targetId: string, targetDo
 }
 
 // ── Rename flow ID cascade ──
-
-const SLUG_REGEX = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
 export async function renameFlowIdCascade(oldId: string, newId: string): Promise<boolean> {
   // 1. Validate format and uniqueness

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import type { FlowScreenProps } from '../../../pages/simulator/flowRegistry'
 import { useScreenData } from '../../../lib/ScreenDataContext'
+import { useLayout } from '../../../library/layout/LayoutProvider'
 import Stack from '../../../library/layout/Stack'
 import BottomSheet from '../../../library/layout/BottomSheet'
 import SegmentedControl from '../../../library/navigation/SegmentedControl'
@@ -17,7 +18,8 @@ import { RiArrowUpLine, RiArrowDownLine, RiFlagLine, RiEditLine, RiCheckLine } f
 import { BalanceDisplay, DetailsTab, HistoryTab } from '../version-a/A_Screen1_Hub.parts'
 import { USD_ICON, TIME_HORIZONS, formatUsd } from '../../caixinha-dolar/shared/data'
 
-const HERO_IMAGE = 'https://img.icons8.com/3d-fluency/512/money-box.png'
+import savingsPiggyHero from '@/assets/images/savings-piggy-hero.png'
+const HERO_IMAGE = savingsPiggyHero
 
 const CURRENT_BALANCE = 1250.00
 const GOAL_AMOUNT = 5000.00
@@ -181,6 +183,7 @@ interface ScreenData {
 }
 
 export default function B_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps) {
+  const { isDesktop } = useLayout()
   const { tab: initialTab, hasGoal, goalReached } = useScreenData<ScreenData>()
   const [activeTab, setActiveTab] = useState(initialTab ?? 0)
 
@@ -213,21 +216,19 @@ export default function B_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps)
   }
 
   return (
-    <div className="flex flex-col h-full bg-surface-primary overflow-hidden">
-      <div className="flex-1 overflow-y-auto">
-        {/* Hero — 3D piggy bank on gradient, full-bleed behind status bar */}
-        <div
-          className="relative w-full shrink-0 overflow-hidden flex items-center justify-center"
-          style={{
-            height: 200,
-            background: 'linear-gradient(135deg, #fce4ec 0%, #f8bbd0 40%, #f48fb1 100%)',
-          }}
-        >
-          <img src={HERO_IMAGE} alt="" className="h-[140px] w-[140px] object-contain drop-shadow-lg" />
-        </div>
+    <div className="relative flex flex-col h-full bg-surface-primary overflow-hidden">
+      {/* Fixed hero background — stays in place while content scrolls */}
+      <div
+        className="absolute inset-x-0 top-0 h-[232px] z-0"
+        style={{ backgroundImage: `url(${HERO_IMAGE})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      />
 
-        {/* White container with rounded top — overlaps hero */}
-        <div className="relative -mt-[24px] rounded-t-[35px] bg-surface-primary">
+      <div className="relative z-10 flex-1 overflow-y-auto">
+        {/* Spacer to reveal the fixed hero behind */}
+        <div className="h-[200px] shrink-0" />
+
+        {/* White container with rounded top — overlaps hero (flat on desktop) */}
+        <div className={`relative bg-surface-primary ${isDesktop ? '' : 'rounded-t-[35px]'}`}>
           <Stack gap="lg" className="px-[var(--token-spacing-6)] pt-[24px] pb-[48px]">
             {/* Title + Balance + Actions */}
             <Stack gap="lg">

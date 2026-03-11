@@ -1,17 +1,128 @@
+import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { RiFileCopyLine, RiCheckLine, RiPencilLine } from '@remixicon/react'
 import type { FlowScreen, Flow } from './flowRegistry'
+import EditableFlowSlug from './EditableFlowSlug'
+
+function CopyableSlug({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(value)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 1500)
+  }, [value])
+
+  return (
+    <div className="flex items-center gap-[var(--token-spacing-1)] mb-[var(--token-spacing-1)]">
+      <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary font-mono">
+        {value}
+      </p>
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="shrink-0 flex items-center justify-center text-shell-text-tertiary hover:text-shell-text transition-colors cursor-pointer p-0 bg-transparent border-none"
+        title="Copy page ID"
+      >
+        {copied
+          ? <RiCheckLine size={12} className="text-[#6EE7A0]" />
+          : <RiFileCopyLine size={12} />
+        }
+      </button>
+    </div>
+  )
+}
+
+function EditableDescription({
+  value,
+  onSave,
+}: {
+  value: string
+  onSave: (val: string) => void
+}) {
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState(value)
+
+  const handleEdit = () => {
+    setDraft(value)
+    setEditing(true)
+  }
+
+  const handleSave = () => {
+    onSave(draft)
+    setEditing(false)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault()
+      handleSave()
+    }
+    if (e.key === 'Escape') setEditing(false)
+  }
+
+  if (editing) {
+    return (
+      <div className="flex flex-col gap-[var(--token-spacing-1)]">
+        <textarea
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={handleKeyDown}
+          rows={3}
+          autoFocus
+          className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none resize-y"
+        />
+        <div className="flex gap-[var(--token-spacing-1)] justify-end">
+          <button
+            type="button"
+            onClick={() => setEditing(false)}
+            className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px]"
+          >
+            <RiCheckLine size={12} />
+            Save
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={handleEdit}
+      onKeyDown={(e) => { if (e.key === 'Enter') handleEdit() }}
+      title="Click to edit description"
+      className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-1)] px-[var(--token-spacing-1)] py-[2px] -mx-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary"
+    >
+      <span className="flex-1">{value || '(no description)'}</span>
+      <RiPencilLine size={12} className="shrink-0 mt-[3px] text-shell-text-tertiary" />
+    </div>
+  )
+}
 
 interface AnnotationsPanelProps {
   flow: Flow
   currentScreen: FlowScreen
   screenIndex: number
   onFlowEdited: () => void
+  onRenameFlow?: (newId: string) => Promise<boolean>
+  onFlowDescriptionUpdate?: (description: string) => void
 }
 
 export default function AnnotationsPanel({
   flow,
   currentScreen,
   screenIndex,
+  onRenameFlow,
+  onFlowDescriptionUpdate,
 }: AnnotationsPanelProps) {
   const navigate = useNavigate()
 
@@ -65,9 +176,13 @@ export default function AnnotationsPanel({
           <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
             Flow Name
           </p>
-          <p className="text-[length:var(--token-font-size-heading-sm)] font-medium text-shell-text font-mono">
-            {flow.id}
-          </p>
+          {onRenameFlow ? (
+            <EditableFlowSlug value={flow.id} onSave={onRenameFlow} variant="block" />
+          ) : (
+            <p className="text-[length:var(--token-font-size-heading-sm)] font-medium text-shell-text font-mono">
+              {flow.id}
+            </p>
+          )}
         </div>
 
         {/* Flow description */}
@@ -75,9 +190,16 @@ export default function AnnotationsPanel({
           <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
             Overview
           </p>
-          <p className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary">
-            {flow.description}
-          </p>
+          {onFlowDescriptionUpdate ? (
+            <EditableDescription
+              value={flow.description ?? ''}
+              onSave={onFlowDescriptionUpdate}
+            />
+          ) : (
+            <p className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary">
+              {flow.description}
+            </p>
+          )}
         </div>
 
         {/* Current screen info */}
@@ -88,9 +210,7 @@ export default function AnnotationsPanel({
           <p className="text-[length:var(--token-font-size-heading-sm)] font-medium text-shell-text mb-[var(--token-spacing-1)]">
             {currentScreen.title}
           </p>
-          <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mb-[var(--token-spacing-1)] font-mono">
-            {currentScreen.id}
-          </p>
+          <CopyableSlug value={currentScreen.id} />
           <p className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary">
             {currentScreen.description}
           </p>

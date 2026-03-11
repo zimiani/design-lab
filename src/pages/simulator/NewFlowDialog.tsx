@@ -3,12 +3,7 @@ import { RiCloseLine } from '@remixicon/react'
 import { getAllDomains, getFlow } from './flowRegistry'
 import { getDynamicFlow } from './dynamicFlowStore'
 import { getGroupsForDomain } from './flowGroupStore'
-
-const SLUG_REGEX = /^[a-z0-9]+(-[a-z0-9]+)*$/
-
-function formatSlug(input: string): string {
-  return input.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-').replace(/^-/, '')
-}
+import { SLUG_REGEX, formatSlug } from '../../lib/slugify'
 
 interface NewFlowDialogProps {
   onClose: () => void
