@@ -49,7 +49,7 @@ export default function FeedbackLayout({
           isDesktop ? 'pt-[var(--token-spacing-6)]' : 'pt-[var(--safe-area-top,0px)]',
         )}
       >
-        <div className="px-[var(--token-spacing-6)] flex flex-col gap-[var(--token-spacing-3)]">
+        <div className="px-[var(--token-spacing-6)] pb-[var(--safe-area-bottom,16px)] flex flex-col gap-[var(--token-spacing-3)]">
           {/* Close button — top-right */}
           {onClose && (
             <div className="flex justify-end">

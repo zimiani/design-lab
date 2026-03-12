@@ -13,12 +13,21 @@ export interface FeatureLayoutProps {
   imageAlt?: string
   /** Background color for the hero area (used when imageSrc is omitted) */
   imageBgColor?: string
+  /** CSS background-image value for the hero area — use with imageBgColor for seamless
+   *  compositing. Supports full background-size/position control via imageBgSize and imageBgPosition. */
+  imageBgImage?: string
+  /** CSS background-size (e.g. '75%', 'cover', '200px auto'). Only used with imageBgImage. */
+  imageBgSize?: string
+  /** CSS background-position (e.g. 'right 10% top 5%', 'center'). Only used with imageBgImage. */
+  imageBgPosition?: string
   /** Content rendered inside the hero area (e.g. title/subtitle overlaid on image or color) */
   imageHeader?: ReactNode
   /** Max height of the header image area (mobile default 280, desktop 340) */
   imageMaxHeight?: number
   /** Called when the close button is pressed */
   onClose?: () => void
+  /** Extra class names for the <img> element (e.g. object-position tweaks) */
+  imageClassName?: string
   /** Optional node rendered over the image at bottom-left (e.g. Badge) */
   imageOverlay?: ReactNode
   children: ReactNode
@@ -29,8 +38,12 @@ export default function FeatureLayout({
   imageSrc,
   imageAlt = '',
   imageBgColor,
+  imageBgImage,
+  imageBgSize,
+  imageBgPosition,
   imageHeader,
   imageMaxHeight,
+  imageClassName,
   onClose,
   imageOverlay,
   children,
@@ -61,13 +74,22 @@ export default function FeatureLayout({
         {/* Header hero — image or solid color */}
         <div
           className="relative w-full shrink-0 overflow-hidden"
-          style={{ height: resolvedMaxHeight, background: imageBgColor }}
+          style={{
+            height: resolvedMaxHeight,
+            backgroundColor: imageBgColor,
+            ...(imageBgImage ? {
+              backgroundImage: imageBgImage,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: imageBgSize ?? 'cover',
+              backgroundPosition: imageBgPosition ?? 'center',
+            } : {}),
+          }}
         >
           {imageSrc && (
             <img
               src={imageSrc}
               alt={imageAlt}
-              className="w-full h-full object-cover"
+              className={cn('w-full h-full object-cover', imageClassName)}
             />
           )}
 
@@ -122,14 +144,20 @@ export default function FeatureLayout({
           className="relative w-full shrink-0 overflow-hidden"
           style={{
             ...(imageSrc ? { maxHeight: resolvedMaxHeight } : { height: resolvedMaxHeight }),
-            background: imageBgColor,
+            backgroundColor: imageBgColor,
+            ...(imageBgImage ? {
+              backgroundImage: imageBgImage,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: imageBgSize ?? 'cover',
+              backgroundPosition: imageBgPosition ?? 'center',
+            } : {}),
           }}
         >
           {imageSrc && (
             <img
               src={imageSrc}
               alt={imageAlt}
-              className="w-full h-full object-cover"
+              className={cn('w-full h-full object-cover', imageClassName)}
             />
           )}
 
@@ -151,7 +179,7 @@ export default function FeatureLayout({
           )}
 
           {imageOverlay && (
-            <div className="absolute bottom-[var(--token-spacing-6)] left-[var(--token-spacing-6)]">
+            <div className="absolute bottom-[36px] left-[var(--token-spacing-6)]">
               {imageOverlay}
             </div>
           )}
