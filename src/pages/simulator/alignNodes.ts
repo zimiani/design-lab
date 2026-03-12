@@ -28,6 +28,33 @@ export function alignNodes(
 ): { nodes: Node[]; edges: Edge[] } {
   if (nodes.length === 0) return { nodes, edges }
 
+  // Identify hidden action nodes (same logic as FlowCanvas enrichedNodes):
+  // action nodes with exactly 1 incoming edge that don't bridge to overlays and have outgoing edges
+  const hiddenActionNodeIds = new Set<string>()
+  {
+    const inCount = new Map<string, number>()
+    const outTargets = new Map<string, string[]>()
+    for (const e of edges) {
+      inCount.set(e.target, (inCount.get(e.target) ?? 0) + 1)
+      if (!outTargets.has(e.source)) outTargets.set(e.source, [])
+      outTargets.get(e.source)!.push(e.target)
+    }
+    const nm = new Map(nodes.map((n) => [n.id, n]))
+    for (const n of nodes) {
+      const d = n.data as FlowNodeData
+      if (d.nodeType !== 'action') continue
+      if ((inCount.get(n.id) ?? 0) !== 1) continue
+      const targets = outTargets.get(n.id) ?? []
+      if (targets.length === 0) continue
+      const bridgesToOverlay = targets.some((tid) => {
+        const t = nm.get(tid)
+        return t && (t.data as FlowNodeData).nodeType === 'overlay'
+      })
+      if (bridgesToOverlay) continue
+      hiddenActionNodeIds.add(n.id)
+    }
+  }
+
   const nodeMap = new Map(nodes.map((n) => [n.id, n]))
 
   // Build edge lookup
@@ -41,7 +68,7 @@ export function alignNodes(
   }
 
   // ── Identify satellite nodes (excluded from main spine) ──
-  const satelliteNodeIds = new Set<string>()
+  const satelliteNodeIds = new Set<string>(hiddenActionNodeIds)
 
   // --- Overlay satellites ---
   // Map: parentScreenNodeId → { actionNodeId, overlayNodeId }[]
@@ -244,6 +271,21 @@ export function alignNodes(
       const failX = decisionPos.x + (nodeWidth + SATELLITE_GAP) * (i + 1)
       newPositions.set(failTargetIds[i], { x: failX, y: decisionPos.y })
     }
+  }
+
+  // Position hidden action nodes at their source node's coords (invisible anyway)
+  for (const actionId of hiddenActionNodeIds) {
+    if (newPositions.has(actionId)) continue
+    // Find the source node of this action's incoming edge
+    const incoming = edges.find((e) => e.target === actionId)
+    if (incoming) {
+      const sourcePos = newPositions.get(incoming.source)
+      if (sourcePos) {
+        newPositions.set(actionId, { ...sourcePos })
+        continue
+      }
+    }
+    // Fallback: keep original position
   }
 
   const alignedNodes = nodes.map((n) => ({

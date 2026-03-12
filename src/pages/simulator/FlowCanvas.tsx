@@ -160,14 +160,95 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
     }
   }, [])
 
+  // Remove action nodes that have become orphaned (no incoming OR no outgoing edges).
+  // Called after edge deletion / reconnection to clean up stale collapsed action nodes.
+  const removeOrphanedActionNodes = useCallback(
+    (currentNodes: Node[], currentEdges: Edge[]): Node[] => {
+      const sources = new Set(currentEdges.map((e) => e.source))
+      const targets = new Set(currentEdges.map((e) => e.target))
+      return currentNodes.filter((n) => {
+        const d = n.data as FlowNodeData
+        if (d.nodeType !== 'action') return true
+        // Keep if it has both incoming and outgoing edges
+        return targets.has(n.id) && sources.has(n.id)
+      })
+    },
+    [],
+  )
+
+  // Node types that already represent a "reason" — no auto-insert needed
+  const AUTO_INSERT_SOURCE_TYPES = new Set(['screen', 'page', 'overlay', 'flow-reference'])
+
   const handleConnect = useCallback(
     (connection: Connection) => {
       setNodes((currentNodes) => {
+        const sourceNode = currentNodes.find((n) => n.id === connection.source)
+        const targetNode = currentNodes.find((n) => n.id === connection.target)
+        const sourceType = (sourceNode?.data as FlowNodeData | undefined)?.nodeType
+        const targetType = (targetNode?.data as FlowNodeData | undefined)?.nodeType
+
+        // Only auto-insert action when source is a screen-like node and target is not an overlay
+        const shouldAutoInsert =
+          sourceType && AUTO_INSERT_SOURCE_TYPES.has(sourceType) && targetType !== 'overlay'
+
+        if (!shouldAutoInsert) {
+          // Plain edge — no action node
+          setEdges((currentEdges) => {
+            pushUndo(currentNodes, currentEdges)
+            return addEdge(connection, currentEdges)
+          })
+          return currentNodes
+        }
+
+        // Auto-insert an action placeholder between source and target
+        const actionNodeId = `node-${Date.now()}`
+        const sourcePos = sourceNode!.position
+        const targetPos = targetNode!.position
+        const midX = (sourcePos.x + targetPos.x) / 2
+        const midY = (sourcePos.y + targetPos.y) / 2
+
+        const actionNode: Node = {
+          id: actionNodeId,
+          type: 'action',
+          position: { x: midX, y: midY },
+          data: {
+            label: 'Action',
+            nodeType: 'action',
+            actionType: 'tap',
+            screenId: null,
+            description: '',
+          } as FlowNodeData,
+        }
+
         setEdges((currentEdges) => {
           pushUndo(currentNodes, currentEdges)
-          return addEdge(connection, currentEdges)
+          const newEdges = [
+            ...currentEdges,
+            {
+              id: `${connection.source}->${actionNodeId}`,
+              source: connection.source,
+              target: actionNodeId,
+              sourceHandle: connection.sourceHandle ?? undefined,
+              targetHandle: 'top',
+              type: 'insertable',
+            },
+            {
+              id: `${actionNodeId}->${connection.target}`,
+              source: actionNodeId,
+              target: connection.target,
+              sourceHandle: 'bottom',
+              targetHandle: connection.targetHandle ?? undefined,
+              type: 'insertable',
+            },
+          ]
+          return newEdges
         })
-        return currentNodes
+
+        // Auto-select the new action node so annotations panel opens
+        const newNode = actionNode
+        setTimeout(() => setSelectedNode(newNode), 0)
+
+        return [...currentNodes, actionNode]
       })
       scheduleSave()
     },
@@ -184,33 +265,58 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
   const handleReconnect = useCallback(
     (oldEdge: Edge, newConnection: Connection) => {
       edgeReconnectSuccessful.current = true
+      const isMerged = oldEdge.id.startsWith('merged-')
+      const edgeData = oldEdge.data as Record<string, unknown> | undefined
+      const originalInId = isMerged ? (edgeData?._originalIncomingEdgeId as string) : null
+      const originalOutId = isMerged ? (edgeData?._originalOutgoingEdgeId as string) : null
+
       setNodes((currentNodes) => {
+        let nextEdges: Edge[] = []
         setEdges((currentEdges) => {
           pushUndo(currentNodes, currentEdges)
-          return reconnectEdge(oldEdge, newConnection, currentEdges)
+          if (isMerged && originalInId && originalOutId) {
+            // Remove both original edges and add the new connection
+            const filtered = currentEdges.filter((e) => e.id !== originalInId && e.id !== originalOutId)
+            nextEdges = addEdge(newConnection, filtered)
+          } else {
+            nextEdges = reconnectEdge(oldEdge, newConnection, currentEdges)
+          }
+          return nextEdges
         })
-        return currentNodes
+        return removeOrphanedActionNodes(currentNodes, nextEdges)
       })
       scheduleSave()
     },
-    [setNodes, setEdges, scheduleSave, pushUndo],
+    [setNodes, setEdges, scheduleSave, pushUndo, removeOrphanedActionNodes],
   )
 
   const handleReconnectEnd = useCallback(
     (_event: MouseEvent | TouchEvent, edge: Edge) => {
       if (!edgeReconnectSuccessful.current) {
         // Edge was dropped in empty space — delete it
+        const edgeData = edge.data as Record<string, unknown> | undefined
+        const isMerged = edge.id.startsWith('merged-')
+        // For merged edges, remove both original edges that were collapsed
+        const originalInId = isMerged ? (edgeData?._originalIncomingEdgeId as string) : null
+        const originalOutId = isMerged ? (edgeData?._originalOutgoingEdgeId as string) : null
+
         setNodes((currentNodes) => {
+          let nextEdges: Edge[] = []
           setEdges((currentEdges) => {
             pushUndo(currentNodes, currentEdges)
-            return currentEdges.filter((e) => e.id !== edge.id)
+            if (isMerged && originalInId && originalOutId) {
+              nextEdges = currentEdges.filter((e) => e.id !== originalInId && e.id !== originalOutId)
+            } else {
+              nextEdges = currentEdges.filter((e) => e.id !== edge.id)
+            }
+            return nextEdges
           })
-          return currentNodes
+          return removeOrphanedActionNodes(currentNodes, nextEdges)
         })
         scheduleSave()
       }
     },
-    [setNodes, setEdges, scheduleSave, pushUndo],
+    [setNodes, setEdges, scheduleSave, pushUndo, removeOrphanedActionNodes],
   )
 
   const handleNodeClick = useCallback(
@@ -609,10 +715,53 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
     }
   }, [selectedNode, onNavigateToScreen])
 
-  // Enrich entry-point nodes with auto-computed data
+  // Determine which action nodes should be visually hidden (collapsed into edge labels).
+  // An action node is hidden when:
+  //  - it has exactly 1 incoming edge
+  //  - it does NOT bridge to an overlay node (overlay layout depends on visible action nodes)
+  const hiddenActionNodeIds = useMemo(() => {
+    const hidden = new Set<string>()
+    const incomingCount = new Map<string, number>()
+    const outgoingTargets = new Map<string, string[]>()
+
+    for (const e of edges) {
+      incomingCount.set(e.target, (incomingCount.get(e.target) ?? 0) + 1)
+      if (!outgoingTargets.has(e.source)) outgoingTargets.set(e.source, [])
+      outgoingTargets.get(e.source)!.push(e.target)
+    }
+
+    const nodeMap = new Map(nodes.map((n) => [n.id, n]))
+
+    for (const n of nodes) {
+      const d = n.data as FlowNodeData
+      if (d.nodeType !== 'action') continue
+      if ((incomingCount.get(n.id) ?? 0) !== 1) continue
+
+      // Check if any outgoing target is an overlay node — if so, keep visible
+      const targets = outgoingTargets.get(n.id) ?? []
+      const bridgesToOverlay = targets.some((tid) => {
+        const t = nodeMap.get(tid)
+        return t && (t.data as FlowNodeData).nodeType === 'overlay'
+      })
+      if (bridgesToOverlay) continue
+
+      // Also keep visible if it has no outgoing edges (dangling / being authored)
+      if (targets.length === 0) continue
+
+      hidden.add(n.id)
+    }
+    return hidden
+  }, [nodes, edges])
+
+  // Enrich entry-point nodes + hide collapsed action nodes
   const enrichedNodes = useMemo(() => {
     return nodes.map((n) => {
       const d = n.data as FlowNodeData
+
+      if (hiddenActionNodeIds.has(n.id)) {
+        return { ...n, hidden: true }
+      }
+
       if (d.nodeType !== 'entry-point') return n
       return {
         ...n,
@@ -623,34 +772,103 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
         },
       }
     })
-  }, [nodes, flow])
+  }, [nodes, flow, hiddenActionNodeIds])
 
-  // Enrich edges with insert callback, insertable type, and decision-node styling
+  // Select a hidden action node (clicked from an edge label pill)
+  const handleSelectActionNode = useCallback(
+    (nodeId: string) => {
+      const node = nodes.find((n) => n.id === nodeId)
+      if (node) setSelectedNode(node)
+    },
+    [nodes],
+  )
+
+  // Enrich edges: merge edge pairs through hidden action nodes into single annotated edges.
+  // For each hidden action: remove incoming edge + outgoing edges, create merged edges
+  // that go directly from the upstream source to the downstream targets.
   const enrichedEdges = useMemo(() => {
     const nodeMap = new Map(nodes.map((n) => [n.id, n]))
-    return edges.map((e) => {
-      const sourceNode = nodeMap.get(e.source)
-      const targetNode = nodeMap.get(e.target)
-      const sourceType = (sourceNode?.data as FlowNodeData | undefined)?.nodeType
-      const targetType = (targetNode?.data as FlowNodeData | undefined)?.nodeType
-      const isDecisionEdge = sourceType === 'decision' || targetType === 'decision'
 
-      return {
-        ...e,
-        type: e.type || 'insertable',
-        data: {
-          ...e.data,
-          onInsertNode: handleInsertNodeOnEdge,
-          onEdgeLabelChange: handleEdgeLabelChange,
-          isDecisionEdge,
-        },
-        ...(isDecisionEdge ? {
-          style: { stroke: '#FBBF24', strokeWidth: 2 },
-          label: e.label || '',
-        } : {}),
+    // Build maps of edges entering/leaving hidden action nodes
+    const incomingToHidden = new Map<string, Edge>()
+    const outgoingFromHidden = new Map<string, Edge[]>()
+    const edgeIdsToRemove = new Set<string>()
+
+    for (const e of edges) {
+      if (hiddenActionNodeIds.has(e.target)) {
+        incomingToHidden.set(e.target, e)
+        edgeIdsToRemove.add(e.id)
       }
-    })
-  }, [edges, nodes, handleInsertNodeOnEdge, handleEdgeLabelChange])
+      if (hiddenActionNodeIds.has(e.source)) {
+        if (!outgoingFromHidden.has(e.source)) outgoingFromHidden.set(e.source, [])
+        outgoingFromHidden.get(e.source)!.push(e)
+        edgeIdsToRemove.add(e.id)
+      }
+    }
+
+    // Create merged edges for each hidden action node
+    const mergedEdges: Edge[] = []
+    for (const actionNodeId of hiddenActionNodeIds) {
+      const incoming = incomingToHidden.get(actionNodeId)
+      const outgoing = outgoingFromHidden.get(actionNodeId) ?? []
+      if (!incoming) continue
+
+      const actionNode = nodeMap.get(actionNodeId)
+      const actionData = actionNode?.data as FlowNodeData | undefined
+
+      for (const out of outgoing) {
+        mergedEdges.push({
+          id: `merged-${incoming.id}-${out.id}`,
+          source: incoming.source,
+          target: out.target,
+          sourceHandle: incoming.sourceHandle,
+          targetHandle: out.targetHandle,
+          type: 'insertable',
+          data: {
+            isActionEdge: true,
+            actionNodeId,
+            actionLabel: actionData?.label ?? 'Action',
+            actionType: actionData?.actionType ?? 'tap',
+            actionTarget: actionData?.actionTarget ?? '',
+            _originalIncomingEdgeId: incoming.id,
+            _originalOutgoingEdgeId: out.id,
+            onSelectActionNode: handleSelectActionNode,
+            onInsertNode: handleInsertNodeOnEdge,
+            onEdgeLabelChange: handleEdgeLabelChange,
+          },
+          style: { stroke: '#4ADE80', strokeWidth: 1.5 },
+        })
+      }
+    }
+
+    // Process remaining (non-removed) edges normally
+    const normalEdges = edges
+      .filter((e) => !edgeIdsToRemove.has(e.id))
+      .map((e) => {
+        const sourceNode = nodeMap.get(e.source)
+        const targetNode = nodeMap.get(e.target)
+        const sourceType = (sourceNode?.data as FlowNodeData | undefined)?.nodeType
+        const targetType = (targetNode?.data as FlowNodeData | undefined)?.nodeType
+        const isDecisionEdge = sourceType === 'decision' || targetType === 'decision'
+
+        return {
+          ...e,
+          type: e.type || 'insertable',
+          data: {
+            ...e.data,
+            onInsertNode: handleInsertNodeOnEdge,
+            onEdgeLabelChange: handleEdgeLabelChange,
+            isDecisionEdge,
+          },
+          ...(isDecisionEdge ? {
+            style: { stroke: '#FBBF24', strokeWidth: 2 },
+            label: e.label || '',
+          } : {}),
+        }
+      })
+
+    return [...normalEdges, ...mergedEdges]
+  }, [edges, nodes, hiddenActionNodeIds, handleInsertNodeOnEdge, handleEdgeLabelChange, handleSelectActionNode])
 
   return (
     <div className="flex-1 flex overflow-hidden">
@@ -665,6 +883,16 @@ function FlowCanvasInner({ flow, onNavigateToScreen, onNavigateToFlow, onFlowCha
             onReconnectStart={handleReconnectStart}
             onReconnect={handleReconnect}
             onReconnectEnd={handleReconnectEnd}
+            onDelete={({ edges: deletedEdges }) => {
+              if (deletedEdges.length > 0) {
+                setNodes((currentNodes) => {
+                  let currentEdges: Edge[] = []
+                  setEdges((ce) => { currentEdges = ce; return ce })
+                  return removeOrphanedActionNodes(currentNodes, currentEdges)
+                })
+                scheduleSave()
+              }
+            }}
             reconnectRadius={20}
             onNodeClick={handleNodeClick}
             onNodeDoubleClick={handleNodeDoubleClick}

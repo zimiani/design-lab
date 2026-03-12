@@ -90,7 +90,6 @@ assignFlowToGroup('referral', group.id)
   const x = 300
   const xL = 0
 
-
   const nodes = [
     // Row 0: Screen A
     { id: 'n-claim-a', type: 'screen', position: { x, y: 0 },

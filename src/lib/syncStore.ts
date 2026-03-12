@@ -63,8 +63,14 @@ export async function pullFromSupabase(): Promise<boolean> {
       hydrateCommentsFromSupabase(),
     ])
 
+    const allSucceeded = results.every(Boolean)
     const anySucceeded = results.some(Boolean)
-    setStatus(anySucceeded ? 'synced' : 'error')
+    setStatus(allSucceeded ? 'synced' : anySucceeded ? 'error' : 'error')
+    if (!allSucceeded) {
+      const storeNames = ['graphs', 'dynamicFlows', 'flowGroups', 'pageOverrides', 'dynamicPages', 'tokens', 'comments']
+      const failed = storeNames.filter((_, i) => !results[i])
+      console.error('[syncStore] Pull partially failed. Failed stores:', failed.join(', '))
+    }
     return anySucceeded
   } catch {
     setStatus('error')
@@ -123,11 +129,24 @@ export async function pushAllToSupabase(): Promise<boolean> {
   const now = new Date().toISOString()
 
   try {
+    // 0. Delete flows that were removed locally
+    const deletedRaw = localStorage.getItem('picnic-design-lab:deleted-flows')
+    if (deletedRaw) {
+      const deletedIds: string[] = JSON.parse(deletedRaw)
+      for (const id of deletedIds) {
+        await supabase.from('dynamic_flows').delete().eq('id', id)
+        await supabase.from('flow_graphs').delete().eq('flow_id', id)
+      }
+    }
+
     const allErrors = (await Promise.all([
       // 1. Dynamic flows
       upsertMany('dynamic_flows', getDynamicFlows(), (flow) => ({
         id: flow.id, name: flow.name, description: flow.description, domain: flow.domain,
         screens: JSON.stringify(flow.screens), spec_content: flow.specContent ?? null,
+        level: flow.level ?? null,
+        linked_flows: flow.linkedFlows ? JSON.stringify(flow.linkedFlows) : null,
+        entry_points: flow.entryPoints ? JSON.stringify(flow.entryPoints) : null,
         updated_at: now,
       }), 'id'),
 

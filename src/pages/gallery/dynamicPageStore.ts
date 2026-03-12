@@ -82,7 +82,7 @@ export async function hydrateDynamicPagesFromSupabase(): Promise<boolean> {
     if (error) return false
 
     const rows = data ?? []
-    if (rows.length === 0) return false // nothing in Supabase yet — keep localStorage
+    if (rows.length === 0) return true // empty table is valid — nothing to hydrate
 
     const all: Record<string, DynamicPageDef> = {}
     for (const row of rows) {
