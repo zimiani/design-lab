@@ -61,7 +61,7 @@ export default function Summary({
                 <button
                   type="button"
                   onClick={item.onLinkPress}
-                  className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-sm)] font-medium text-[var(--color-interactive-default)] text-left cursor-pointer"
+                  className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-sm)] font-medium text-[var(--color-interactive-primary)] text-left cursor-pointer underline decoration-[var(--color-interactive-accent)] decoration-2 underline-offset-8"
                 >
                   {item.linkText}
                 </button>

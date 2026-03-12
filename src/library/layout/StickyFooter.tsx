@@ -18,10 +18,11 @@ export default function StickyFooter({ children }: StickyFooterProps) {
   }
 
   return (
-    <div data-component="StickyFooter" className="relative shrink-0 px-[var(--token-spacing-6)] pt-[var(--token-spacing-4)] pb-[max(var(--token-spacing-4),var(--safe-area-bottom,0px))] bg-surface-primary">
+    <div data-component="StickyFooter" className="relative shrink-0 px-[var(--token-spacing-6)] pt-0 pb-[16px] bg-surface-primary">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 right-0 -top-[16px] h-[16px] bg-gradient-to-t from-surface-primary to-transparent"
+        className="pointer-events-none absolute left-0 right-0 -top-[32px] h-[32px]"
+        style={{ background: 'linear-gradient(to top, var(--color-surface-primary) 0%, transparent 100%)' }}
       />
       {children}
     </div>
