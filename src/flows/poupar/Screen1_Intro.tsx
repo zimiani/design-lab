@@ -7,7 +7,8 @@ import Text from '../../library/foundations/Text'
 import Badge from '../../library/display/Badge'
 import Summary from '../../library/display/Summary'
 import GroupHeader from '../../library/navigation/GroupHeader'
-import { RiExchangeDollarLine, RiTimeLine, RiShieldCheckLine } from '@remixicon/react'
+import { RiExchangeDollarLine, RiTimeLine, RiShieldCheckLine, RiFlashlightFill } from '@remixicon/react'
+import savingsPiggy from '../../assets/images/savings-piggy-3d.jpg'
 
 export default function Screen1_Intro({ onNext, onBack, onElementTap }: FlowScreenProps) {
   const handleSaibaMais = () => {
@@ -17,9 +18,9 @@ export default function Screen1_Intro({ onNext, onBack, onElementTap }: FlowScre
 
   return (
     <FeatureLayout
-      imageSrc="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80"
-      imageAlt="Growing savings"
-      imageOverlay={<Badge variant="lime" size="md">5% a.a.</Badge>}
+      imageSrc={savingsPiggy}
+      imageAlt="Piggy bank savings"
+      imageOverlay={<Badge variant="lime" size="md" icon={<RiFlashlightFill size={16} />}>Novidade</Badge>}
       onClose={() => {
         const handled = onElementTap?.('IconButton: Fechar')
         if (!handled) onBack?.()

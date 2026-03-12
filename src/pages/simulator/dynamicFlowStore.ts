@@ -203,10 +203,15 @@ export async function hydrateDynamicFlowsFromSupabase(): Promise<boolean> {
     if (error) return false
 
     const rows = data ?? []
-    if (rows.length === 0) return false // nothing in Supabase yet — keep localStorage
+    if (rows.length === 0) return true // empty table is valid — nothing to hydrate
 
     const all = readAll()
     const deleted = readDeletedFlowIds()
+
+    // Remove any locally-stored flows that are now in the deleted list
+    for (const id of deleted) {
+      if (id in all) delete all[id]
+    }
 
     for (const row of rows) {
       if (deleted.has(row.id)) continue

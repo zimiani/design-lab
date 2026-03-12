@@ -4,13 +4,19 @@ import {
   getSmoothStepPath,
   type EdgeProps,
 } from '@xyflow/react'
-import type { CreatableNodeType } from './flowGraph.types'
-import { NODE_TYPE_CONFIG } from './nodeTypeConfig'
+import { PiHandTap } from 'react-icons/pi'
+import type { ActionType, CreatableNodeType } from './flowGraph.types'
 
 interface InsertableEdgeData {
   onInsertNode?: (edgeId: string, nodeType: CreatableNodeType, position: { x: number; y: number }) => void
   onEdgeLabelChange?: (edgeId: string, label: string) => void
   isDecisionEdge?: boolean
+  isActionEdge?: boolean
+  actionNodeId?: string
+  actionLabel?: string
+  actionType?: ActionType
+  actionTarget?: string
+  onSelectActionNode?: (nodeId: string) => void
   [key: string]: unknown
 }
 
@@ -30,14 +36,13 @@ export default function InsertableEdge({
   data,
 }: EdgeProps) {
   const [hovered, setHovered] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState('')
-  const menuRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const edgeData = data as InsertableEdgeData | undefined
   const isDecisionEdge = edgeData?.isDecisionEdge ?? false
+  const isActionEdge = edgeData?.isActionEdge ?? false
 
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
@@ -47,18 +52,6 @@ export default function InsertableEdge({
     sourcePosition,
     targetPosition,
   })
-
-  const midX = (sourceX + targetX) / 2
-  const midY = (sourceY + targetY) / 2
-
-  const handleInsert = useCallback(
-    (nodeType: CreatableNodeType) => {
-      edgeData?.onInsertNode?.(id, nodeType, { x: midX - 100, y: midY - 30 })
-      setMenuOpen(false)
-      setHovered(false)
-    },
-    [id, edgeData, midX, midY],
-  )
 
   const handleLabelClick = useCallback(() => {
     setDraft(typeof label === 'string' ? label : '')
@@ -78,18 +71,6 @@ export default function InsertableEdge({
     }
   }, [editing])
 
-  // Close menu on outside click
-  useEffect(() => {
-    if (!menuOpen) return
-    const handleClick = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as HTMLElement)) {
-        setMenuOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [menuOpen])
-
   // Close label editor on outside click
   useEffect(() => {
     if (!editing) return
@@ -101,8 +82,6 @@ export default function InsertableEdge({
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [editing, handleLabelSave])
-
-  const showButton = hovered || menuOpen
 
   return (
     <>
@@ -126,7 +105,7 @@ export default function InsertableEdge({
         strokeWidth={20}
         stroke="transparent"
         onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => { if (!menuOpen) setHovered(false) }}
+        onMouseLeave={() => setHovered(false)}
         style={{ cursor: 'default' }}
       />
 
@@ -210,52 +189,66 @@ export default function InsertableEdge({
         </foreignObject>
       )}
 
-      {/* Non-decision edges: + insert button */}
-      {!isDecisionEdge && showButton && (
-        <foreignObject
-          x={midX - 12}
-          y={midY - 12}
-          width={24}
-          height={24}
-          className="overflow-visible pointer-events-auto"
-        >
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v) }}
-            onMouseEnter={() => setHovered(true)}
-            className="w-[24px] h-[24px] flex items-center justify-center rounded-full bg-shell-surface border-2 border-shell-selected-text text-shell-selected-text hover:bg-shell-selected-text hover:text-shell-bg transition-colors cursor-pointer text-[14px] font-bold leading-none"
+      {/* Action edge: pill label centered on the edge path */}
+      {isActionEdge && edgeData?.actionLabel && (() => {
+        const isPlaceholder = !edgeData.actionTarget
+        // Strip "Component: " prefix (e.g. "Button: Ativar rendimento" → "Ativar rendimento")
+        const rawLabel = edgeData.actionTarget || edgeData.actionLabel || ''
+        const displayLabel = rawLabel.replace(/^[A-Za-z]+:\s*/, '')
+        const pillW = 260
+        const pillH = 36
+        return (
+          <foreignObject
+            x={labelX - pillW / 2}
+            y={labelY - pillH / 2}
+            width={pillW}
+            height={pillH}
+            className="overflow-visible pointer-events-auto"
           >
-            +
-          </button>
-        </foreignObject>
-      )}
-      {!isDecisionEdge && menuOpen && (
-        <foreignObject
-          x={midX - 72}
-          y={midY + 16}
-          width={144}
-          height={NODE_TYPE_CONFIG.length * 30 + 8}
-          className="overflow-visible pointer-events-auto"
-        >
-          <div
-            ref={menuRef}
-            className="bg-shell-surface border border-shell-border rounded-[var(--token-radius-md)] shadow-lg py-[var(--token-spacing-1)] overflow-hidden"
-            onMouseLeave={() => { setMenuOpen(false); setHovered(false) }}
-          >
-            {NODE_TYPE_CONFIG.map((opt) => (
-              <button
-                key={opt.type}
-                type="button"
-                onClick={(e) => { e.stopPropagation(); handleInsert(opt.type) }}
-                className="w-full flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-shell-text hover:bg-shell-hover transition-colors cursor-pointer"
-              >
-                <opt.icon size={12} style={{ color: opt.color }} className="shrink-0" />
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </foreignObject>
-      )}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                if (edgeData.actionNodeId) {
+                  edgeData.onSelectActionNode?.(edgeData.actionNodeId)
+                }
+              }}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr',
+                alignItems: 'center',
+                gap: '6px',
+                margin: '0 auto',
+                padding: '4px 12px',
+                borderRadius: '9999px',
+                fontSize: '11px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap' as const,
+                color: isPlaceholder ? '#6B9E6D' : '#86EFAC',
+                backgroundColor: isPlaceholder ? '#181E1A' : '#1B2E1E',
+                border: isPlaceholder ? '1.5px dashed #4A7A4D' : '1.5px solid #4ADE80',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
+                lineHeight: '16px',
+                opacity: isPlaceholder ? 0.8 : 1,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = isPlaceholder ? '#6B9E6D' : '#86EFAC'
+                e.currentTarget.style.backgroundColor = isPlaceholder ? '#1F2B21' : '#22402A'
+                e.currentTarget.style.opacity = '1'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = isPlaceholder ? '#4A7A4D' : '#4ADE80'
+                e.currentTarget.style.backgroundColor = isPlaceholder ? '#181E1A' : '#1B2E1E'
+                e.currentTarget.style.opacity = isPlaceholder ? '0.8' : '1'
+              }}
+            >
+              <PiHandTap size={14} />
+              <span style={{ paddingLeft: '20px' }}>{displayLabel}</span>
+            </button>
+          </foreignObject>
+        )
+      })()}
     </>
   )
 }

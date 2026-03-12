@@ -1,4 +1,5 @@
 import { RiArrowDownLine, RiArrowRightUpLine } from '@remixicon/react'
+import savingsPiggy from '../../../assets/images/savings-piggy-3d.jpg'
 import type { FlowScreenProps } from '../../../pages/simulator/flowRegistry'
 import { useScreenData } from '../../../lib/ScreenDataContext'
 import FeatureLayout from '../../../library/layout/FeatureLayout'
@@ -40,15 +41,28 @@ export default function Screen1_Dashboard({ onNext, onElementTap }: FlowScreenPr
 
   return (
     <FeatureLayout
-      imageBgColor="linear-gradient(225deg, #F2B5D4 0%, #E891B0 50%, #D4739A 100%)"
-      imageMaxHeight={260}
+      imageBgColor="#F2C0CB"
+      imageMaxHeight={300}
       imageHeader={
-        <Stack gap="none">
-          <Text variant="heading-lg" className="!text-white">Caixinhas</Text>
-          <Text variant="body-md" className="!text-white/80 leading-[140%]">
-            Rendimento automático e simples
-          </Text>
-        </Stack>
+        <>
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: `url(${savingsPiggy})`,
+              backgroundSize: '130%',
+              backgroundPosition: '48% 92%',
+              backgroundRepeat: 'no-repeat',
+              transform: 'scaleX(-1)',
+            }}
+          />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(180,60,100,0.75) 0%, rgba(180,60,100,0.35) 30%, transparent 55%)' }} />
+          <Stack gap="none" className="relative z-10">
+            <Text variant="heading-lg" className="!text-white">Caixinhas</Text>
+            <Text variant="body-md" className="!text-white/95 leading-[140%]">
+              Rendimento automático e simples
+            </Text>
+          </Stack>
+        </>
       }
     >
       <Stack gap="lg">

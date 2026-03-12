@@ -30,6 +30,7 @@ interface FlowGroupState {
   archivedFlows: Record<string, string>    // flowId → original domainId
   archivedGroups: Record<string, true>     // groupId → true
   ungroupedOrder: Record<string, string[]> // domainId → ordered flowIds
+  deletedFlows?: string[]                  // flow IDs hidden from sidebar (synced via singleton)
 }
 
 // ── Storage ──
@@ -119,9 +120,22 @@ function readState(): FlowGroupState {
     if (!state.archivedFlows) state.archivedFlows = {}
     if (!state.archivedGroups) state.archivedGroups = {}
     if (!state.ungroupedOrder) state.ungroupedOrder = {}
+    // Sync deleted-flows between state and legacy key (both directions)
+    const legacyRaw = localStorage.getItem('picnic-design-lab:deleted-flows')
+    const legacyDeleted: string[] = legacyRaw ? JSON.parse(legacyRaw) : []
+    const stateDeleted: string[] = state.deletedFlows ?? []
+    // Merge both sources (union)
+    const mergedSet = new Set([...legacyDeleted, ...stateDeleted])
+    state.deletedFlows = [...mergedSet]
+    // Write back to legacy key so dynamicFlowStore/flowRegistry can read it
+    localStorage.setItem('picnic-design-lab:deleted-flows', JSON.stringify(state.deletedFlows))
+    // Persist merged state back if deletedFlows was added from legacy key
+    if (mergedSet.size > stateDeleted.length) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+    }
     return state
   } catch {
-    return { groups: {}, memberships: {}, archivedFlows: {}, archivedGroups: {}, ungroupedOrder: {} }
+    return { groups: {}, memberships: {}, archivedFlows: {}, archivedGroups: {}, ungroupedOrder: {}, deletedFlows: [] }
   }
 }
 
@@ -204,6 +218,7 @@ export async function hydrateFlowGroupsFromSupabase(): Promise<boolean> {
         archivedFlows: { ...parsed.archivedFlows },
         archivedGroups: { ...parsed.archivedGroups },
         ungroupedOrder: { ...parsed.ungroupedOrder },
+        deletedFlows: parsed.deletedFlows ?? [],
       }
 
       // Apply code defaults: add groups/memberships from flow index files
@@ -211,6 +226,10 @@ export async function hydrateFlowGroupsFromSupabase(): Promise<boolean> {
       applyCodeDefaults(state)
 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+      // Sync deletedFlows to the legacy key so flowRegistry can read it
+      if (state.deletedFlows && state.deletedFlows.length > 0) {
+        localStorage.setItem('picnic-design-lab:deleted-flows', JSON.stringify(state.deletedFlows))
+      }
       notifyListeners()
 
       return true
@@ -441,6 +460,20 @@ export function getArchivedFlowIds(): string[] {
 
 export function getArchivedGroupIds(): string[] {
   return Object.keys(readState().archivedGroups)
+}
+
+export function addDeletedFlow(flowId: string): void {
+  const state = readState()
+  const set = new Set(state.deletedFlows ?? [])
+  set.add(flowId)
+  state.deletedFlows = [...set]
+  writeState(state, true)
+}
+
+export function removeDeletedFlow(flowId: string): void {
+  const state = readState()
+  state.deletedFlows = (state.deletedFlows ?? []).filter((id) => id !== flowId)
+  writeState(state, true)
 }
 
 // ── Public API: ungrouped order ──

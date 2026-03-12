@@ -119,12 +119,15 @@ export function markFlowDeleted(flowId: string): void {
   const deleted = readDeletedFlows()
   deleted.add(flowId)
   writeDeletedFlows(deleted)
+  // Also persist in flow_groups singleton (synced to Supabase)
+  import('./flowGroupStore').then((m) => m.addDeletedFlow(flowId))
 }
 
 export function unmarkFlowDeleted(flowId: string): void {
   const deleted = readDeletedFlows()
   deleted.delete(flowId)
   writeDeletedFlows(deleted)
+  import('./flowGroupStore').then((m) => m.removeDeletedFlow(flowId))
 }
 
 /**

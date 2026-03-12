@@ -174,7 +174,7 @@ export async function hydrateGraphsFromSupabase(): Promise<boolean> {
     if (error) return false
 
     const rows = data ?? []
-    if (rows.length === 0) return false // nothing in Supabase yet — keep localStorage
+    if (rows.length === 0) return true // empty table is valid — nothing to hydrate
 
     const all = readAllGraphs()
 
