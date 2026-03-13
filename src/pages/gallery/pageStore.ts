@@ -6,6 +6,7 @@
  */
 
 import { supabase, isSupabaseConnected } from '../../lib/supabase'
+import { markUnsynced, markRemoteUpdated } from '../../lib/syncStore'
 
 const STORAGE_KEY = 'picnic-design-lab:page-overrides'
 
@@ -37,50 +38,32 @@ export function getPageOverrides(pageId: string): PageOverrides {
   return readAll()[pageId] ?? {}
 }
 
-export async function setPageName(pageId: string, name: string): Promise<void> {
+export function setPageName(pageId: string, name: string): void {
   const all = readAll()
   if (!all[pageId]) all[pageId] = {}
   all[pageId].name = name
   writeAll(all)
-
-  if (isSupabaseConnected()) {
-    await supabase!.from('page_overrides').upsert(
-      { page_id: pageId, name, updated_at: new Date().toISOString() },
-      { onConflict: 'page_id' },
-    )
-  }
+  markUnsynced()
 }
 
-export async function setPageDescription(pageId: string, description: string): Promise<void> {
+export function setPageDescription(pageId: string, description: string): void {
   const all = readAll()
   if (!all[pageId]) all[pageId] = {}
   all[pageId].description = description
   writeAll(all)
-
-  if (isSupabaseConnected()) {
-    await supabase!.from('page_overrides').upsert(
-      { page_id: pageId, description, updated_at: new Date().toISOString() },
-      { onConflict: 'page_id' },
-    )
-  }
+  markUnsynced()
 }
 
-export async function resetPageOverrides(pageId: string): Promise<void> {
+export function resetPageOverrides(pageId: string): void {
   const all = readAll()
   delete all[pageId]
   writeAll(all)
-
-  if (isSupabaseConnected()) {
-    await supabase!.from('page_overrides').delete().eq('page_id', pageId)
-  }
+  markUnsynced()
 }
 
-export async function resetAllPageOverrides(): Promise<void> {
+export function resetAllPageOverrides(): void {
   localStorage.removeItem(STORAGE_KEY)
-
-  if (isSupabaseConnected()) {
-    await supabase!.from('page_overrides').delete().neq('page_id', '')
-  }
+  markUnsynced()
 }
 
 // ── Supabase → localStorage hydration ──
@@ -118,7 +101,8 @@ export function subscribeToPageChanges(onUpdate: () => void): (() => void) | nul
   const channel = supabase!
     .channel('page-changes')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'page_overrides' }, () => {
-      hydratePageOverridesFromSupabase().then(() => onUpdate())
+      markRemoteUpdated()
+      onUpdate()
     })
     .subscribe()
 

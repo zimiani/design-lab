@@ -4,7 +4,9 @@
  * PULL = Supabase → localStorage (remote replaces local)
  * PUSH = localStorage → Supabase (local replaces remote)
  *
- * User actions auto-push. Manual pull/push via AppHeader buttons.
+ * Individual saves are localStorage-only. Supabase writes happen
+ * exclusively via the Push button. Subscriptions notify of remote
+ * changes but don't auto-hydrate.
  */
 
 import { supabase, isSupabaseConnected } from './supabase'
@@ -16,12 +18,15 @@ import { hydrateDynamicPagesFromSupabase, getDynamicPages } from '../pages/galle
 import { hydrateTokensFromSupabase } from '../lib/tokenStore'
 import { hydrateCommentsFromSupabase, getAllCommentEntries } from '../pages/simulator/canvasCommentStore'
 
-export type SyncStatus = 'idle' | 'syncing' | 'synced' | 'unsynced' | 'error' | 'local'
+export type SyncStatus = 'idle' | 'syncing' | 'synced' | 'unsynced' | 'remote-updated' | 'error' | 'local'
 
 type Listener = (status: SyncStatus) => void
 
 let currentStatus: SyncStatus = isSupabaseConnected() ? 'idle' : 'local'
 const listeners = new Set<Listener>()
+
+/** Cooldown window after push/pull to ignore our own Postgres change events. */
+let ignoreRemoteUntil = 0
 
 export function getSyncStatus(): SyncStatus {
   return currentStatus
@@ -70,6 +75,7 @@ export async function pullFromSupabase(): Promise<boolean> {
 
     const allSucceeded = results.every(Boolean)
     const anySucceeded = results.some(Boolean)
+    ignoreRemoteUntil = Date.now() + 3000
     setStatus(allSucceeded ? 'synced' : anySucceeded ? 'error' : 'error')
     if (!allSucceeded) {
       const storeNames = ['graphs', 'dynamicFlows', 'flowGroups', 'pageOverrides', 'dynamicPages', 'tokens', 'comments']
@@ -203,6 +209,7 @@ export async function pushAllToSupabase(): Promise<boolean> {
       return false
     }
 
+    ignoreRemoteUntil = Date.now() + 3000
     setStatus('synced')
     return true
   } catch (e) {
@@ -214,17 +221,21 @@ export async function pushAllToSupabase(): Promise<boolean> {
 
 // ── Status helpers ──
 
-/** Mark status as synced (call after successful Supabase writes). */
-export function markSynced(): void {
-  if (isSupabaseConnected()) setStatus('synced')
-}
-
-/** Mark status as unsynced (call when local changes are made before Supabase write). */
+/** Mark status as unsynced (call when localStorage changes without pushing). */
 export function markUnsynced(): void {
   if (isSupabaseConnected()) setStatus('unsynced')
 }
 
-/** Mark status as error (call from write failures if desired). */
-export function markError(): void {
-  if (isSupabaseConnected()) setStatus('error')
+/** Mark status as remote-updated (call from real-time subscriptions). */
+export function markRemoteUpdated(): void {
+  // Only transition from synced → remote-updated.
+  // Don't overwrite 'unsynced' — local changes take priority.
+  // Ignore events during cooldown after our own push/pull.
+  if (Date.now() < ignoreRemoteUntil) return
+  if (isSupabaseConnected() && currentStatus === 'synced') setStatus('remote-updated')
+}
+
+/** Check if there are unpushed local changes. */
+export function hasUnpushedChanges(): boolean {
+  return currentStatus === 'unsynced'
 }

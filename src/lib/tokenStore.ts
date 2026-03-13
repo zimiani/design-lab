@@ -1,8 +1,9 @@
 /**
- * Token persistence — Supabase with localStorage fallback.
+ * Token persistence — localStorage with Supabase sync via Pull/Push.
  */
 
 import { supabase, isSupabaseConnected } from './supabase'
+import { markUnsynced, markRemoteUpdated } from './syncStore'
 
 const STORAGE_KEY = 'picnic-design-lab:token-overrides'
 
@@ -25,45 +26,30 @@ export function getLocalTokenOverrides(): TokenMap {
   return readLocal()
 }
 
-export async function setTokenOverride(cssVar: string, value: string): Promise<void> {
+export function setTokenOverride(cssVar: string, value: string): void {
   const all = readLocal()
   all[cssVar] = value
   writeLocal(all)
-
-  if (isSupabaseConnected()) {
-    await supabase!.from('token_overrides').upsert(
-      { css_var: cssVar, value, updated_at: new Date().toISOString() },
-      { onConflict: 'css_var' },
-    )
-  }
+  markUnsynced()
 }
 
-export async function resetTokenOverride(cssVar: string): Promise<void> {
+export function resetTokenOverride(cssVar: string): void {
   const all = readLocal()
   delete all[cssVar]
   writeLocal(all)
-
-  if (isSupabaseConnected()) {
-    await supabase!.from('token_overrides').delete().eq('css_var', cssVar)
-  }
+  markUnsynced()
 }
 
-export async function resetTokenCategory(cssVars: string[]): Promise<void> {
+export function resetTokenCategory(cssVars: string[]): void {
   const all = readLocal()
   for (const v of cssVars) delete all[v]
   writeLocal(all)
-
-  if (isSupabaseConnected()) {
-    await supabase!.from('token_overrides').delete().in('css_var', cssVars)
-  }
+  markUnsynced()
 }
 
-export async function resetAllTokenOverrides(): Promise<void> {
+export function resetAllTokenOverrides(): void {
   localStorage.removeItem(STORAGE_KEY)
-
-  if (isSupabaseConnected()) {
-    await supabase!.from('token_overrides').delete().neq('css_var', '')
-  }
+  markUnsynced()
 }
 
 export async function hydrateTokensFromSupabase(): Promise<boolean> {
@@ -96,7 +82,8 @@ export function subscribeToTokenChanges(onUpdate: () => void): (() => void) | nu
   const channel = supabase!
     .channel('token-changes')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'token_overrides' }, () => {
-      hydrateTokensFromSupabase().then(() => onUpdate())
+      markRemoteUpdated()
+      onUpdate()
     })
     .subscribe()
 

@@ -1,10 +1,9 @@
 /**
- * Canvas comment persistence — localStorage + Supabase dual-write.
- * Follows the same pattern as flowGraphStore.ts.
+ * Canvas comment persistence — localStorage with Supabase sync via Pull/Push.
  */
 
 import { supabase, isSupabaseConnected } from '../../lib/supabase'
-import { markSynced, markUnsynced, markError } from '../../lib/syncStore'
+import { markUnsynced } from '../../lib/syncStore'
 
 export interface CanvasComment {
   id: string
@@ -44,7 +43,7 @@ export function addComment(comment: CanvasComment): void {
   list.push(comment)
   all[comment.flowId] = list
   writeAll(all)
-  pushCommentsToSupabase(comment.flowId, all[comment.flowId])
+  markUnsynced()
 }
 
 export function deleteComment(flowId: string, commentId: string): void {
@@ -52,7 +51,7 @@ export function deleteComment(flowId: string, commentId: string): void {
   const list = all[flowId] ?? []
   all[flowId] = list.filter(c => c.id !== commentId)
   writeAll(all)
-  pushCommentsToSupabase(flowId, all[flowId])
+  markUnsynced()
 }
 
 export function updateCommentText(flowId: string, commentId: string, text: string): void {
@@ -62,25 +61,7 @@ export function updateCommentText(flowId: string, commentId: string, text: strin
   if (comment) {
     comment.text = text
     writeAll(all)
-    pushCommentsToSupabase(flowId, list)
-  }
-}
-
-// ── Supabase layer ──
-
-async function pushCommentsToSupabase(flowId: string, comments: CanvasComment[]): Promise<void> {
-  if (!isSupabaseConnected() || !supabase) return
-  markUnsynced()
-  try {
-    const { error } = await supabase.from('canvas_comments').upsert({
-      flow_id: flowId,
-      comments: JSON.stringify(comments),
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'flow_id' })
-    if (error) { markError(); console.error('[canvasCommentStore] push error:', error.message) }
-    else markSynced()
-  } catch {
-    markError()
+    markUnsynced()
   }
 }
 

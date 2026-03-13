@@ -4,6 +4,7 @@
  */
 
 import { supabase, isSupabaseConnected } from '../../lib/supabase'
+import { markUnsynced, markRemoteUpdated } from '../../lib/syncStore'
 
 const STORAGE_KEY = 'picnic-design-lab:dynamic-pages'
 
@@ -40,36 +41,18 @@ export function getDynamicPage(id: string): DynamicPageDef | null {
   return readAll()[id] ?? null
 }
 
-export async function saveDynamicPage(page: DynamicPageDef): Promise<void> {
+export function saveDynamicPage(page: DynamicPageDef): void {
   const all = readAll()
   all[page.id] = page
   writeAll(all)
-
-  if (isSupabaseConnected()) {
-    const { error } = await supabase!.from('dynamic_pages').upsert(
-      {
-        id: page.id,
-        name: page.name,
-        description: page.description,
-        area: page.area,
-        components_used: JSON.stringify(page.componentsUsed),
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'id' },
-    )
-    if (error) console.error('[dynamicPageStore] Supabase upsert failed:', error.message)
-  }
+  markUnsynced()
 }
 
-export async function deleteDynamicPage(id: string): Promise<void> {
+export function deleteDynamicPage(id: string): void {
   const all = readAll()
   delete all[id]
   writeAll(all)
-
-  if (isSupabaseConnected()) {
-    const { error } = await supabase!.from('dynamic_pages').delete().eq('id', id)
-    if (error) console.error('[dynamicPageStore] Supabase delete failed:', error.message)
-  }
+  markUnsynced()
 }
 
 // ── Supabase → localStorage hydration ──
@@ -109,7 +92,8 @@ export function subscribeToDynamicPageChanges(onUpdate: () => void): (() => void
   const channel = supabase!
     .channel('dynamic-page-changes')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'dynamic_pages' }, () => {
-      hydrateDynamicPagesFromSupabase().then(() => onUpdate())
+      markRemoteUpdated()
+      onUpdate()
     })
     .subscribe()
 
