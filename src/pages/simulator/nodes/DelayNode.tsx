@@ -35,11 +35,9 @@ function DelayNode({ data, selected }: NodeProps) {
           <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#e0e0e0] truncate block">
             {nodeData.label}
           </span>
-          {subtitle && (
-            <span className="text-[length:var(--token-font-size-caption)] text-[#888] truncate block capitalize">
-              {subtitle}
-            </span>
-          )}
+          <span className={`text-[length:var(--token-font-size-caption)] truncate block capitalize ${subtitle ? 'text-[#888]' : 'text-[#555] italic'}`}>
+            {subtitle || 'timer · duration'}
+          </span>
         </div>
       </div>
       <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-[#FB923C] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302518]" />

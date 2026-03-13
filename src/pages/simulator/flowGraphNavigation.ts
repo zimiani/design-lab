@@ -31,6 +31,10 @@ function isScreenNode(node: Node): boolean {
   if (d.nodeType === 'screen' || d.nodeType === 'page') {
     return d.screenId !== null || d.pageId !== undefined
   }
+  // Full-screen error nodes with a linked screen are navigable
+  if (d.nodeType === 'error' && (d.errorDisplay ?? 'full-screen') === 'full-screen' && d.screenId) {
+    return true
+  }
   return false
 }
 
@@ -448,7 +452,7 @@ export function resolveScreenElementTarget(
           if (dd.nodeType === 'flow-reference' && dd.targetFlowId) {
             return { type: 'flow', flowId: dd.targetFlowId }
           }
-          if ((dd.nodeType === 'screen' || dd.nodeType === 'page') && (dd.screenId || dd.pageId)) {
+          if (isScreenNode(destNode) && (dd.screenId || dd.pageId)) {
             const destScreenId = (dd.screenId ?? dd.pageId)!
             // If destination is same screen, keep following to find the real target
             if (destScreenId === originScreenId) {
@@ -514,7 +518,7 @@ export function resolveOverlayElementTarget(
         if (dd.nodeType === 'flow-reference' && dd.targetFlowId) {
           return { type: 'flow', flowId: dd.targetFlowId }
         }
-        if ((dd.nodeType === 'screen' || dd.nodeType === 'page') && (dd.screenId || dd.pageId)) {
+        if (isScreenNode(destNode) && (dd.screenId || dd.pageId)) {
           return { type: 'screen', nodeId: destNode.id, screenId: (dd.screenId ?? dd.pageId)! }
         }
         // Keep following pass-through nodes (api-call, delay, decision, etc.)

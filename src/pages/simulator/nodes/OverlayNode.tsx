@@ -47,14 +47,12 @@ function OverlayNode({ data, selected }: NodeProps) {
           {overlayLabels[overlayType]}
         </span>
       </div>
-      {/* Description */}
-      {nodeData.description && (
-        <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
-          <p className="text-[length:var(--token-font-size-caption)] text-[#888] line-clamp-2">
-            {nodeData.description}
-          </p>
-        </div>
-      )}
+      {/* Description — always rendered for consistent node height */}
+      <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
+        <p className={`text-[length:var(--token-font-size-caption)] line-clamp-2 ${nodeData.description ? 'text-[#888]' : 'text-[#555] italic'}`}>
+          {nodeData.description || 'Overlay description...'}
+        </p>
+      </div>
       <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-[#2DD4BF] !w-[8px] !h-[8px] !border-[1.5px] !border-[#1A2A2E]" />
     </div>
   )

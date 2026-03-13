@@ -173,6 +173,8 @@ export function getHelperLines(
 
   lines.horizontal = guideH
   lines.vertical = guideV
+  lines.snapX = snapX != null ? Math.round(snapX) : undefined
+  lines.snapY = snapY != null ? Math.round(snapY) : undefined
 
   // Apply snap — round to integers to avoid sub-pixel drift
   const adjustedChanges = changes.map((c) => {

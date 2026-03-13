@@ -5,14 +5,23 @@ import { recalculateEdgeHandles } from './resolveEdgeHandles'
 import type { FlowNodeData } from './flowGraph.types'
 
 const DEFAULT_NODE_HEIGHT = 80
+const ACTION_NODE_HEIGHT = 28
 const SATELLITE_GAP = 80
+/** Uniform slot width for ELK — matches the most common node width (screen/decision/etc).
+ *  Narrow nodes (action pills) get center-offset within the slot after layout. */
+const SLOT_WIDTH = 200
 
 const elk = new ELK()
 
 /**
  * Repositions all existing nodes using ELK (Eclipse Layout Kernel) for
- * crossing-minimized hierarchical layout, then positions satellites
- * (overlays, fail branches, hidden actions) relative to their parents.
+ * crossing-minimized hierarchical layout, then positions overlay satellites
+ * relative to their parent screens.
+ *
+ * All non-overlay nodes participate in the ELK spine — including action pills,
+ * decision branches, and error nodes. ELK guarantees no overlaps within the spine.
+ * Only overlay nodes (which have a parent-child visual relationship) are positioned
+ * manually as satellites.
  */
 export async function alignNodes(
   nodes: Node[],
@@ -20,61 +29,23 @@ export async function alignNodes(
 ): Promise<{ nodes: Node[]; edges: Edge[] }> {
   if (nodes.length === 0) return { nodes, edges }
 
-  // Identify hidden action nodes (same logic as FlowCanvas enrichedNodes):
-  // action nodes with exactly 1 incoming edge that don't bridge to overlays and have outgoing edges
-  const hiddenActionNodeIds = new Set<string>()
-  {
-    const inCount = new Map<string, number>()
-    const outTargets = new Map<string, string[]>()
-    for (const e of edges) {
-      inCount.set(e.target, (inCount.get(e.target) ?? 0) + 1)
-      if (!outTargets.has(e.source)) outTargets.set(e.source, [])
-      outTargets.get(e.source)!.push(e.target)
-    }
-    const nm = new Map(nodes.map((n) => [n.id, n]))
-    for (const n of nodes) {
-      const d = n.data as FlowNodeData
-      if (d.nodeType !== 'action') continue
-      if ((inCount.get(n.id) ?? 0) !== 1) continue
-      const targets = outTargets.get(n.id) ?? []
-      if (targets.length === 0) continue
-      const bridgesToOverlay = targets.some((tid) => {
-        const t = nm.get(tid)
-        return t && (t.data as FlowNodeData).nodeType === 'overlay'
-      })
-      if (bridgesToOverlay) continue
-      hiddenActionNodeIds.add(n.id)
-    }
-  }
-
   const nodeMap = new Map(nodes.map((n) => [n.id, n]))
 
   // Build edge lookup
-  const edgesFromSource = new Map<string, Edge[]>()
   const edgesToTarget = new Map<string, Edge[]>()
   for (const edge of edges) {
-    if (!edgesFromSource.has(edge.source)) edgesFromSource.set(edge.source, [])
-    edgesFromSource.get(edge.source)!.push(edge)
     if (!edgesToTarget.has(edge.target)) edgesToTarget.set(edge.target, [])
     edgesToTarget.get(edge.target)!.push(edge)
   }
 
-  // ── Identify satellite nodes (excluded from ELK layout) ──
-  const satelliteNodeIds = new Set<string>(hiddenActionNodeIds)
-
-  // --- Overlay satellites ---
+  // ── Identify satellite nodes: overlays (left) + inline errors (right) + their bridge action nodes ──
+  const satelliteNodeIds = new Set<string>()
   const overlaySatellitesOf = new Map<string, { actionId: string; overlayId: string }[]>()
+  const errorSatellitesOf = new Map<string, { actionId: string; errorId: string }[]>()
 
-  for (const node of nodes) {
-    const data = node.data as FlowNodeData
-    if (data.nodeType !== 'overlay' || !data.parentScreenNodeId) continue
-
-    const parentId = data.parentScreenNodeId
-    if (!nodeMap.has(parentId)) continue
-
-    const incomingEdges = edgesToTarget.get(node.id) ?? []
-    let bridgeActionId: string | null = null
-
+  /** Find the bridge action node between a parent screen and a satellite node. */
+  function findBridgeAction(satelliteNodeId: string, parentId: string): string | null {
+    const incomingEdges = edgesToTarget.get(satelliteNodeId) ?? []
     for (const inEdge of incomingEdges) {
       const sourceNode = nodeMap.get(inEdge.source)
       if (!sourceNode) continue
@@ -82,47 +53,48 @@ export async function alignNodes(
       if (sourceData.nodeType === 'action') {
         const actionIncoming = edgesToTarget.get(sourceNode.id) ?? []
         if (actionIncoming.some((e) => e.source === parentId)) {
-          bridgeActionId = sourceNode.id
-          break
+          return sourceNode.id
         }
       }
     }
-
-    satelliteNodeIds.add(node.id)
-    if (bridgeActionId) satelliteNodeIds.add(bridgeActionId)
-
-    if (!overlaySatellitesOf.has(parentId)) overlaySatellitesOf.set(parentId, [])
-    overlaySatellitesOf.get(parentId)!.push({
-      actionId: bridgeActionId ?? '',
-      overlayId: node.id,
-    })
+    return null
   }
-
-  // --- Decision fail-branch satellites ---
-  const decisionFailTargets = new Map<string, string[]>()
 
   for (const node of nodes) {
     const data = node.data as FlowNodeData
-    if (data.nodeType !== 'decision') continue
 
-    const outEdges = edgesFromSource.get(node.id) ?? []
-    if (outEdges.length < 2) continue
+    // Overlay satellites (left side)
+    if (data.nodeType === 'overlay' && data.parentScreenNodeId) {
+      const parentId = data.parentScreenNodeId
+      if (!nodeMap.has(parentId)) continue
 
-    for (const edge of outEdges) {
-      const targetNode = nodeMap.get(edge.target)
-      if (!targetNode) continue
-      const targetData = targetNode.data as FlowNodeData
+      const bridgeActionId = findBridgeAction(node.id, parentId)
 
-      const isErrorTarget = targetData.nodeType === 'error'
-      const isRightHandle = edge.sourceHandle === 'right-source'
-      const label = (typeof edge.label === 'string' ? edge.label : '').toLowerCase()
-      const isFailLabel = /fail|error|no|expired|block/i.test(label)
+      satelliteNodeIds.add(node.id)
+      if (bridgeActionId) satelliteNodeIds.add(bridgeActionId)
 
-      if (isErrorTarget || isRightHandle || isFailLabel) {
-        satelliteNodeIds.add(edge.target)
-        if (!decisionFailTargets.has(node.id)) decisionFailTargets.set(node.id, [])
-        decisionFailTargets.get(node.id)!.push(edge.target)
-      }
+      if (!overlaySatellitesOf.has(parentId)) overlaySatellitesOf.set(parentId, [])
+      overlaySatellitesOf.get(parentId)!.push({
+        actionId: bridgeActionId ?? '',
+        overlayId: node.id,
+      })
+    }
+
+    // Error satellites (right side) — only toast/banner modes with a parent
+    if (data.nodeType === 'error' && data.errorParentScreenNodeId && data.errorDisplay !== 'full-screen') {
+      const parentId = data.errorParentScreenNodeId
+      if (!nodeMap.has(parentId)) continue
+
+      const bridgeActionId = findBridgeAction(node.id, parentId)
+
+      satelliteNodeIds.add(node.id)
+      if (bridgeActionId) satelliteNodeIds.add(bridgeActionId)
+
+      if (!errorSatellitesOf.has(parentId)) errorSatellitesOf.set(parentId, [])
+      errorSatellitesOf.get(parentId)!.push({
+        actionId: bridgeActionId ?? '',
+        errorId: node.id,
+      })
     }
   }
 
@@ -131,9 +103,7 @@ export async function alignNodes(
     nodes.filter((n) => !satelliteNodeIds.has(n.id)).map((n) => n.id),
   )
 
-  // Build virtual spine edges, bridging through hidden satellite nodes.
-  // IMPORTANT: stop at the FIRST spine node reached — don't bridge transitively
-  // through spine nodes. This preserves the correct chain depth.
+  // Spine edges: direct edges between spine nodes, bridging through satellites
   const spineEdges: { id: string; source: string; target: string }[] = []
   const seenSpineEdges = new Set<string>()
 
@@ -144,7 +114,7 @@ export async function alignNodes(
     spineEdges.push({ id: edgeId, source, target })
   }
 
-  // For each edge, follow through satellites to find the immediate next spine nodes
+  // Follow through satellites to find the next spine nodes
   function followToNextSpine(startId: string): string[] {
     const results: string[] = []
     const visited = new Set<string>()
@@ -154,10 +124,8 @@ export async function alignNodes(
       if (visited.has(id)) continue
       visited.add(id)
       if (spineNodeIds.has(id)) {
-        // Found a spine node — record it but DON'T continue past it
         results.push(id)
       } else {
-        // Satellite — keep following outgoing edges
         for (const e of edges) {
           if (e.source === id) queue.push(e.target)
         }
@@ -183,25 +151,29 @@ export async function alignNodes(
     layoutOptions: {
       'elk.algorithm': 'layered',
       'elk.direction': 'DOWN',
-      // Spacing
-      'elk.spacing.nodeNode': '80',
-      'elk.layered.spacing.nodeNodeBetweenLayers': '120',
-      'elk.layered.spacing.edgeNodeBetweenLayers': '40',
-      'elk.spacing.edgeNode': '40',
+      // Spacing — horizontal generous to prevent edge/node overlap, vertical tight
+      'elk.spacing.nodeNode': '40',
+      'elk.layered.spacing.nodeNodeBetweenLayers': '40',
+      'elk.layered.spacing.edgeNodeBetweenLayers': '20',
+      'elk.spacing.edgeNode': '30',
+      'elk.spacing.edgeEdge': '20',
       // Crossing minimization
+      'elk.layered.thoroughness': '20',
       'elk.layered.crossingMinimization.strategy': 'LAYER_SWEEP',
-      // Node placement — NETWORK_SIMPLEX keeps connected nodes close
+      // Node placement — NETWORK_SIMPLEX with straight edges keeps vertical chains aligned
       'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX',
+      'elk.layered.nodePlacement.networkSimplex.nodeFlexibility.default': 'NODE_SIZE',
+      'elk.layered.nodePlacement.favorStraightEdges': 'true',
       // Respect edge order from the model
       'elk.layered.considerModelOrder.strategy': 'PREFER_EDGES',
-      // Compact layout
-      'elk.layered.compaction.postCompaction.strategy': 'EDGE_LENGTH',
     },
     children: [...spineNodeIds].map((id) => {
       const node = nodeMap.get(id)!
-      const w = node.measured?.width ?? NODE_WIDTHS[node.type ?? 'screen'] ?? 200
-      const h = node.measured?.height ?? DEFAULT_NODE_HEIGHT
-      return { id, width: w, height: h }
+      const data = node.data as FlowNodeData
+      const h = data.nodeType === 'action'
+        ? ACTION_NODE_HEIGHT
+        : (node.measured?.height ?? DEFAULT_NODE_HEIGHT)
+      return { id, width: SLOT_WIDTH, height: h }
     }),
     edges: spineEdges.map((e) => ({
       id: e.id,
@@ -223,8 +195,11 @@ export async function alignNodes(
     const offsetY = -totalH / 2
 
     for (const elkNode of layoutResult.children) {
+      const node = nodeMap.get(elkNode.id)!
+      const actualW = node.measured?.width ?? NODE_WIDTHS[node.type ?? 'screen'] ?? 200
+      const centerOffset = (SLOT_WIDTH - actualW) / 2
       newPositions.set(elkNode.id, {
-        x: (elkNode.x ?? 0) + offsetX,
+        x: (elkNode.x ?? 0) + offsetX + centerOffset,
         y: (elkNode.y ?? 0) + offsetY,
       })
     }
@@ -250,41 +225,21 @@ export async function alignNodes(
     }
   }
 
-  // ── Position decision fail targets to the right and slightly below ──
-  for (const [decisionId, failTargetIds] of decisionFailTargets) {
-    const decisionPos = newPositions.get(decisionId)
-    if (!decisionPos) continue
+  // ── Position error satellites to the right of their parent screen ──
+  for (const [parentId, satellites] of errorSatellitesOf) {
+    const parentPos = newPositions.get(parentId)
+    if (!parentPos) continue
 
-    for (let i = 0; i < failTargetIds.length; i++) {
-      const failX = decisionPos.x + (nodeWidth + SATELLITE_GAP) * (i + 1)
-      const failY = decisionPos.y + 30
-      newPositions.set(failTargetIds[i], { x: failX, y: failY })
-    }
-  }
+    for (let i = 0; i < satellites.length; i++) {
+      const { actionId, errorId } = satellites[i]
+      const verticalOffset = i * (DEFAULT_NODE_HEIGHT + 20)
+      const actionX = parentPos.x + nodeWidth + SATELLITE_GAP
+      const errorX = parentPos.x + (nodeWidth + SATELLITE_GAP) * 2
 
-  // Position hidden action nodes between their source and target (for correct edge routing)
-  for (const actionId of hiddenActionNodeIds) {
-    if (newPositions.has(actionId)) continue
-    const incoming = edges.find((e) => e.target === actionId)
-    const outgoing = edges.find((e) => e.source === actionId)
-    if (incoming && outgoing) {
-      const sourcePos = newPositions.get(incoming.source)
-      const targetPos = newPositions.get(outgoing.target)
-      if (sourcePos && targetPos) {
-        newPositions.set(actionId, {
-          x: (sourcePos.x + targetPos.x) / 2,
-          y: (sourcePos.y + targetPos.y) / 2,
-        })
-        continue
+      if (actionId) {
+        newPositions.set(actionId, { x: actionX, y: parentPos.y + verticalOffset })
       }
-    }
-    // Fallback: position at source
-    if (incoming) {
-      const sourcePos = newPositions.get(incoming.source)
-      if (sourcePos) {
-        newPositions.set(actionId, { ...sourcePos })
-        continue
-      }
+      newPositions.set(errorId, { x: errorX, y: parentPos.y + verticalOffset })
     }
   }
 

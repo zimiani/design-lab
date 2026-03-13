@@ -42,18 +42,14 @@ function ApiCallNode({ data, selected }: NodeProps) {
           {nodeData.label}
         </span>
       </div>
-      {(nodeData.apiEndpoint || nodeData.apiMethod) && (
-        <div className="flex items-center gap-[var(--token-spacing-1)] px-[var(--token-spacing-3)] pb-[var(--token-spacing-2)]">
-          <span className={`text-[length:10px] font-bold px-[5px] py-[1px] rounded-[4px] leading-tight ${methodColors[method]}`}>
-            {method}
-          </span>
-          {nodeData.apiEndpoint && (
-            <span className="text-[length:var(--token-font-size-caption)] text-[#888] truncate">
-              {nodeData.apiEndpoint}
-            </span>
-          )}
-        </div>
-      )}
+      <div className="flex items-center gap-[var(--token-spacing-1)] px-[var(--token-spacing-3)] pb-[var(--token-spacing-2)]">
+        <span className={`text-[length:10px] font-bold px-[5px] py-[1px] rounded-[4px] leading-tight ${methodColors[method]}`}>
+          {method}
+        </span>
+        <span className={`text-[length:var(--token-font-size-caption)] truncate ${nodeData.apiEndpoint ? 'text-[#888]' : 'text-[#555] italic'}`}>
+          {nodeData.apiEndpoint || '/endpoint'}
+        </span>
+      </div>
       <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-[#22D3EE] !w-[8px] !h-[8px] !border-[1.5px] !border-[#1A2E38]" />
     </div>
   )

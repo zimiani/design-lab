@@ -40,21 +40,12 @@ function ScreenNode({ data, selected }: NodeProps) {
           <RiPlayLine size={12} className="text-[#666] shrink-0" />
         )}
       </div>
-      {/* Description */}
-      {nodeData.description && (
-        <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
-          <p className="text-[length:var(--token-font-size-caption)] text-[#888] line-clamp-2">
-            {nodeData.description}
-          </p>
-        </div>
-      )}
-      {isPlaceholder && !nodeData.description && (
-        <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
-          <p className="text-[length:var(--token-font-size-caption)] text-[#666] italic">
-            Placeholder
-          </p>
-        </div>
-      )}
+      {/* Description — always rendered for consistent node height */}
+      <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
+        <p className={`text-[length:var(--token-font-size-caption)] line-clamp-2 ${nodeData.description ? 'text-[#888]' : 'text-[#555] italic'}`}>
+          {nodeData.description || (isPlaceholder ? 'Placeholder' : 'Screen description...')}
+        </p>
+      </div>
       <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-[#4ADE80] !w-[8px] !h-[8px] !border-[1.5px] !border-[#252525]" />
     </div>
   )

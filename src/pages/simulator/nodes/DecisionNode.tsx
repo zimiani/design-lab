@@ -32,13 +32,11 @@ function DecisionNode({ data, selected }: NodeProps) {
           {nodeData.label}
         </span>
       </div>
-      {nodeData.description && (
-        <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] border-t border-white/[0.06]">
-          <p className="text-[length:var(--token-font-size-caption)] text-[#888] line-clamp-2">
-            {nodeData.description}
-          </p>
-        </div>
-      )}
+      <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] border-t border-white/[0.06]">
+        <p className={`text-[length:var(--token-font-size-caption)] line-clamp-2 ${nodeData.description ? 'text-[#888]' : 'text-[#555] italic'}`}>
+          {nodeData.description || 'Condition...'}
+        </p>
+      </div>
       <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-[#FBBF24] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302A1E]" />
       <Handle type="source" position={Position.Left} id="left-source" className="!bg-[#FBBF24] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302A1E]" />
       <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#FBBF24] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302A1E]" />

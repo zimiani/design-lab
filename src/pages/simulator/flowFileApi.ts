@@ -37,6 +37,22 @@ export async function createScreenFile(
 }
 
 /**
+ * Create a new error screen .tsx scaffold (FeedbackLayout) on disk.
+ * Returns the relative filePath (e.g. 'my-flow/Screen1_ErrorState.tsx').
+ */
+export async function createErrorScreenFile(
+  flowId: string,
+  screenIndex: number,
+  title: string,
+): Promise<string | null> {
+  const data = await fetchFlowApi<{ filePath: string; existed: boolean }>(
+    'create-error-screen',
+    { flowId, screenIndex, title },
+  )
+  return data?.filePath ?? null
+}
+
+/**
  * Update the @screen/@description comment block at the top of a screen .tsx file.
  * Fire-and-forget — returns false in production or on error.
  */

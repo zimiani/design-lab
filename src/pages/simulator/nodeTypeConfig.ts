@@ -3,17 +3,22 @@
  * labels, colors, keyboard shortcuts, and insertable options.
  */
 
+import type { ComponentType } from 'react'
 import {
-  RiCursorLine, RiComputerLine, RiGitBranchLine, RiErrorWarningLine,
+  RiComputerLine, RiGitBranchLine, RiErrorWarningLine,
   RiExternalLinkLine, RiStackLine, RiServerLine, RiTimerLine, RiStickyNoteLine,
   RiLoginBoxLine,
 } from '@remixicon/react'
+import { PiHandTap } from 'react-icons/pi'
 import type { CreatableNodeType } from './flowGraph.types'
+
+/** Icon component that accepts at least size + className */
+export type NodeIcon = ComponentType<{ size?: number; className?: string }>
 
 export interface NodeTypeEntry {
   type: CreatableNodeType
   label: string
-  icon: typeof RiCursorLine
+  icon: NodeIcon
   color: string
   /** Keyboard shortcut key (lowercase, no modifier) */
   shortcut: string
@@ -27,7 +32,7 @@ export const NODE_TYPE_CONFIG: NodeTypeEntry[] = [
   { type: 'error',          label: 'Error State',     icon: RiErrorWarningLine,  color: '#F87171', shortcut: 'e' },
   { type: 'api-call',       label: 'API Call',        icon: RiServerLine,        color: '#22D3EE', shortcut: 'c' },
   { type: 'delay',          label: 'Delay',           icon: RiTimerLine,         color: '#FB923C', shortcut: 'w' },
-  { type: 'action',         label: 'Action',          icon: RiCursorLine,        color: '#A78BFA', shortcut: 'a' },
+  { type: 'action',         label: 'Action',          icon: PiHandTap,           color: '#4ADE80', shortcut: 'a' },
   { type: 'flow-reference', label: 'Flow Reference',  icon: RiExternalLinkLine,  color: '#60A5FA', shortcut: 'f' },
   { type: 'note',           label: 'Note',            icon: RiStickyNoteLine,    color: '#78716C', shortcut: 'n' },
   { type: 'entry-point',    label: 'Entry Point',     icon: RiLoginBoxLine,      color: '#F472B6', shortcut: 'p' },

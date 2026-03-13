@@ -9,7 +9,7 @@ export const NODE_WIDTHS: Record<string, number> = {
   decision: 200,
   error: 200,
   'flow-reference': 200,
-  action: 200,
+  action: 100,
   overlay: 200,
   state: 200,
   'api-call': 200,
@@ -18,7 +18,12 @@ export const NODE_WIDTHS: Record<string, number> = {
   'entry-point': 200,
 }
 
-const DEFAULT_NODE_HEIGHT = 60
+const DEFAULT_NODE_HEIGHT = 64
+
+/** Approximate node heights by type. Action pills are compact; card nodes have header + description. */
+const NODE_HEIGHTS: Record<string, number> = {
+  action: 30,
+}
 
 // Available handles on every node component:
 //   Source (outgoing): bottom, left-source, right-source
@@ -27,7 +32,7 @@ const DEFAULT_NODE_HEIGHT = 60
 
 function getNodeBounds(node: Node) {
   const w = node.measured?.width ?? NODE_WIDTHS[node.type ?? 'screen'] ?? 200
-  const h = node.measured?.height ?? DEFAULT_NODE_HEIGHT
+  const h = node.measured?.height ?? NODE_HEIGHTS[node.type ?? ''] ?? DEFAULT_NODE_HEIGHT
   return {
     w, h,
     cx: node.position.x + w / 2,
