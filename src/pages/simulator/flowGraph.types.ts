@@ -7,7 +7,7 @@ export type FlowNodeType = 'screen' | 'page' | 'decision' | 'error' | 'flow-refe
 export type CreatableNodeType = Exclude<FlowNodeType, 'page'>
 
 /** Action types for action nodes */
-export type ActionType = 'tap' | 'swipe' | 'input' | 'scroll' | 'long-press'
+export type ActionType = 'tap' | 'swipe' | 'input' | 'scroll' | 'long-press' | 'external'
 
 /** Overlay types for overlay nodes */
 export type OverlayType = 'bottom-sheet' | 'modal' | 'dialog' | 'popover' | 'toast'
@@ -17,6 +17,9 @@ export type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
 /** Delay/wait types for delay nodes */
 export type DelayType = 'timer' | 'polling' | 'webhook' | 'event'
+
+/** Display mode for error nodes */
+export type ErrorDisplayMode = 'full-screen' | 'toast' | 'banner'
 
 /**
  * Data payload stored inside each React Flow Node.
@@ -63,6 +66,10 @@ export interface FlowNodeData extends Record<string, unknown> {
   autoEntryPoints?: string[]
   /** For entry-point nodes: auto-computed linked-from flows (injected at render time) */
   linkedFromFlows?: { id: string; name: string }[]
+  /** For error nodes: how the error is displayed */
+  errorDisplay?: ErrorDisplayMode
+  /** For error nodes (toast/banner): which screen node shows the inline error */
+  errorParentScreenNodeId?: string
 }
 
 /** Typed React Flow node using our custom data */

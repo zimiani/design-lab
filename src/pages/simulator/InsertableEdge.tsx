@@ -1,27 +1,23 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import {
   BaseEdge,
   getSmoothStepPath,
+  useNodes,
   type EdgeProps,
 } from '@xyflow/react'
-import { PiHandTap } from 'react-icons/pi'
-import type { ActionType, CreatableNodeType } from './flowGraph.types'
+import type { CreatableNodeType } from './flowGraph.types'
 
 interface InsertableEdgeData {
   onInsertNode?: (edgeId: string, nodeType: CreatableNodeType, position: { x: number; y: number }) => void
   onEdgeLabelChange?: (edgeId: string, label: string) => void
   isDecisionEdge?: boolean
-  isActionEdge?: boolean
-  actionNodeId?: string
-  actionLabel?: string
-  actionType?: ActionType
-  actionTarget?: string
-  onSelectActionNode?: (nodeId: string) => void
   [key: string]: unknown
 }
 
 export default function InsertableEdge({
   id,
+  source,
+  target,
   sourceX,
   sourceY,
   targetX,
@@ -42,7 +38,13 @@ export default function InsertableEdge({
 
   const edgeData = data as InsertableEdgeData | undefined
   const isDecisionEdge = edgeData?.isDecisionEdge ?? false
-  const isActionEdge = edgeData?.isActionEdge ?? false
+
+  // Hide arrow on edges going into action nodes — they're small pass-through pills
+  const allNodes = useNodes()
+  const resolvedMarker = useMemo(() => {
+    const targetNode = allNodes.find((n) => n.id === target)
+    return targetNode?.type === 'action' ? undefined : markerEnd
+  }, [allNodes, target, markerEnd])
 
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX,
@@ -89,7 +91,7 @@ export default function InsertableEdge({
       <BaseEdge
         path={edgePath}
         style={style}
-        markerEnd={markerEnd}
+        markerEnd={resolvedMarker}
         label={isDecisionEdge ? undefined : label}
         labelX={labelX}
         labelY={labelY}
@@ -189,66 +191,6 @@ export default function InsertableEdge({
         </foreignObject>
       )}
 
-      {/* Action edge: pill label centered on the edge path */}
-      {isActionEdge && edgeData?.actionLabel && (() => {
-        const isPlaceholder = !edgeData.actionTarget
-        // Strip "Component: " prefix (e.g. "Button: Ativar rendimento" → "Ativar rendimento")
-        const rawLabel = edgeData.actionTarget || edgeData.actionLabel || ''
-        const displayLabel = rawLabel.replace(/^[A-Za-z]+:\s*/, '')
-        const pillW = 260
-        const pillH = 36
-        return (
-          <foreignObject
-            x={labelX - pillW / 2}
-            y={labelY - pillH / 2}
-            width={pillW}
-            height={pillH}
-            className="overflow-visible pointer-events-auto"
-          >
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                if (edgeData.actionNodeId) {
-                  edgeData.onSelectActionNode?.(edgeData.actionNodeId)
-                }
-              }}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'auto 1fr',
-                alignItems: 'center',
-                gap: '6px',
-                margin: '0 auto',
-                padding: '4px 12px',
-                borderRadius: '9999px',
-                fontSize: '11px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                whiteSpace: 'nowrap' as const,
-                color: isPlaceholder ? '#6B9E6D' : '#86EFAC',
-                backgroundColor: isPlaceholder ? '#181E1A' : '#1B2E1E',
-                border: isPlaceholder ? '1.5px dashed #4A7A4D' : '1.5px solid #4ADE80',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-                lineHeight: '16px',
-                opacity: isPlaceholder ? 0.8 : 1,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = isPlaceholder ? '#6B9E6D' : '#86EFAC'
-                e.currentTarget.style.backgroundColor = isPlaceholder ? '#1F2B21' : '#22402A'
-                e.currentTarget.style.opacity = '1'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = isPlaceholder ? '#4A7A4D' : '#4ADE80'
-                e.currentTarget.style.backgroundColor = isPlaceholder ? '#181E1A' : '#1B2E1E'
-                e.currentTarget.style.opacity = isPlaceholder ? '0.8' : '1'
-              }}
-            >
-              <PiHandTap size={14} />
-              <span style={{ paddingLeft: '20px' }}>{displayLabel}</span>
-            </button>
-          </foreignObject>
-        )
-      })()}
     </>
   )
 }

@@ -89,6 +89,35 @@ export default function Screen({ onNext, onBack, screenTitle, screenDescription 
 `
 }
 
+function createErrorScreenScaffold(title?: string, description?: string): string {
+  const metaBlock = title ? formatScreenMetaComment(title, description ?? '') : ''
+  return `${metaBlock}import type { FlowScreenProps } from '@/pages/simulator/flowRegistry'
+import FeedbackLayout from '@/library/layout/FeedbackLayout'
+import StickyFooter from '@/library/layout/StickyFooter'
+import Button from '@/library/inputs/Button'
+import Text from '@/library/foundations/Text'
+import Stack from '@/library/layout/Stack'
+
+export default function Screen({ onNext, onBack, screenTitle, screenDescription }: FlowScreenProps) {
+  return (
+    <FeedbackLayout animation={null} onClose={onBack}>
+      <Stack>
+        <Text variant="heading-lg">{screenTitle ?? 'Error'}</Text>
+        <Text variant="body-md" color="content-secondary">
+          {screenDescription ?? 'Something went wrong. Please try again.'}
+        </Text>
+      </Stack>
+      <StickyFooter>
+        <Button variant="primary" size="lg" onPress={onNext} fullWidth>
+          Tentar novamente
+        </Button>
+      </StickyFooter>
+    </FeedbackLayout>
+  )
+}
+`
+}
+
 const MAX_BODY_SIZE = 512 * 1024 // 512 KB
 
 /** Create a JSON POST endpoint handler with body parsing, size limit, and error handling. */
@@ -162,6 +191,27 @@ export default function flowFilesPlugin(): Plugin {
         }
 
         writeFileSync(absolutePath, createScreenScaffold(title, description), 'utf-8')
+        return { data: { filePath: relativePath, existed: false } }
+      }))
+
+      // Create error screen (FeedbackLayout scaffold)
+      server.middlewares.use(...createJsonEndpoint('/__flow-api/create-error-screen', (body) => {
+        const { flowId, screenIndex, title, description } = body as {
+          flowId: string; screenIndex: number; title: string; description?: string
+        }
+        const pascal = toPascalCase(title)
+        const fileName = `Screen${screenIndex}_${pascal}.tsx`
+        const relativePath = `${flowId}/${fileName}`
+        const absolutePath = resolve(projectRoot, 'src', 'flows', flowId, fileName)
+
+        const dir = dirname(absolutePath)
+        if (!existsSync(dir)) mkdirSync(dir, { recursive: true })
+
+        if (existsSync(absolutePath)) {
+          return { data: { filePath: relativePath, existed: true } }
+        }
+
+        writeFileSync(absolutePath, createErrorScreenScaffold(title, description), 'utf-8')
         return { data: { filePath: relativePath, existed: false } }
       }))
 

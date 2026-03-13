@@ -1,10 +1,17 @@
 import { memo } from 'react'
 import { Handle, Position, type NodeProps } from '@xyflow/react'
 import { RiErrorWarningLine } from '@remixicon/react'
-import type { FlowNodeData } from '../flowGraph.types'
+import type { FlowNodeData, ErrorDisplayMode } from '../flowGraph.types'
+
+const displayBadgeLabels: Record<ErrorDisplayMode, string> = {
+  'full-screen': 'Page',
+  toast: 'Toast',
+  banner: 'Banner',
+}
 
 function ErrorNode({ data, selected }: NodeProps) {
   const nodeData = data as FlowNodeData
+  const errorDisplay = nodeData.errorDisplay ?? 'full-screen'
 
   return (
     <div
@@ -30,17 +37,18 @@ function ErrorNode({ data, selected }: NodeProps) {
       <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#F87171] !w-[8px] !h-[8px] !border-[1.5px] !border-[#301E1E]" />
       <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
         <RiErrorWarningLine size={14} className="text-[#F87171] shrink-0" />
-        <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#e0e0e0] truncate">
+        <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#e0e0e0] truncate flex-1">
           {nodeData.label}
         </span>
+        <span className="text-[length:10px] text-[#F87171]/80 bg-[#F87171]/10 px-[6px] py-[1px] rounded-full shrink-0">
+          {displayBadgeLabels[errorDisplay]}
+        </span>
       </div>
-      {nodeData.description && (
-        <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] border-t border-white/[0.06]">
-          <p className="text-[length:var(--token-font-size-caption)] text-[#888] line-clamp-2">
-            {nodeData.description}
-          </p>
-        </div>
-      )}
+      <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] border-t border-white/[0.06]">
+        <p className={`text-[length:var(--token-font-size-caption)] line-clamp-2 ${nodeData.description ? 'text-[#888]' : 'text-[#555] italic'}`}>
+          {nodeData.description || 'Error description...'}
+        </p>
+      </div>
       <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-[#F87171] !w-[8px] !h-[8px] !border-[1.5px] !border-[#301E1E]" />
     </div>
   )

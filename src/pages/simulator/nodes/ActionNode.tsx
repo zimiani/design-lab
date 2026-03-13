@@ -1,63 +1,61 @@
 import { memo } from 'react'
 import { Handle, Position, type NodeProps } from '@xyflow/react'
+import type { ComponentType } from 'react'
 import {
-  RiCursorLine,
   RiDragMoveLine,
   RiInputMethodLine,
   RiCollapseVerticalLine,
   RiTapeLine,
+  RiUserLine,
 } from '@remixicon/react'
+import { PiHandTap } from 'react-icons/pi'
+import { cn } from '@/lib/cn'
 import type { FlowNodeData, ActionType } from '../flowGraph.types'
 
-const actionIcons: Record<ActionType, typeof RiCursorLine> = {
-  tap: RiCursorLine,
+const actionIcons: Record<ActionType, ComponentType<{ size?: number; className?: string }>> = {
+  tap: PiHandTap,
   swipe: RiDragMoveLine,
   input: RiInputMethodLine,
   scroll: RiCollapseVerticalLine,
   'long-press': RiTapeLine,
+  external: RiUserLine,
 }
 
 function ActionNode({ data, selected }: NodeProps) {
   const nodeData = data as FlowNodeData
   const actionType = nodeData.actionType ?? 'tap'
-  const Icon = actionIcons[actionType] ?? RiCursorLine
+  const isExternal = actionType === 'external'
+  const Icon = actionIcons[actionType] ?? PiHandTap
+
+  // Display: strip "Component: " prefix from actionTarget, or fall back to label
+  const rawLabel = nodeData.actionTarget || nodeData.label || 'Action'
+  const displayLabel = rawLabel.replace(/^[A-Za-z]+:\s*/, '')
 
   return (
     <div
-      className={`
-        w-[200px] rounded-full border overflow-hidden
-        transition-all duration-[var(--token-transition-fast)]
-        ${selected
-          ? 'border-[#A78BFA]/60'
-          : 'border-white/[0.08]'
-        }
-        bg-[#2A2240]
-      `}
+      className={cn(
+        'w-[100px] rounded-full border pl-3 pr-4 py-1 flex items-center gap-1.5 transition-all duration-[var(--token-transition-fast)]',
+        isExternal
+          ? 'bg-[#2A2520] text-[#FBBF24]'
+          : 'bg-[#1B2E1E] text-[#86EFAC]',
+        isExternal
+          ? (selected ? 'border-[#FBBF24]/60' : 'border-[#FBBF24]/30')
+          : (selected ? 'border-[#4ADE80]/60' : 'border-[#4ADE80]/30'),
+      )}
       style={{
         boxShadow: selected
-          ? '0 0 0 1px rgba(167,139,250,0.2), 0 4px 12px rgba(0,0,0,0.4)'
-          : '0 2px 8px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04)',
+          ? `0 0 0 1px ${isExternal ? 'rgba(251,191,36,0.2)' : 'rgba(74,222,128,0.2)'}, 0 4px 12px rgba(0,0,0,0.4)`
+          : '0 2px 8px rgba(0,0,0,0.3)',
       }}
     >
-      <Handle type="target" position={Position.Top} id="top" className="!bg-[#A78BFA] !w-[8px] !h-[8px] !border-[1.5px] !border-[#2A2240]" />
-      <Handle type="target" position={Position.Left} id="left-target" className="!bg-[#A78BFA] !w-[8px] !h-[8px] !border-[1.5px] !border-[#2A2240]" />
-      <Handle type="source" position={Position.Left} id="left-source" className="!bg-[#A78BFA] !w-[8px] !h-[8px] !border-[1.5px] !border-[#2A2240]" />
-      <Handle type="target" position={Position.Right} id="right-target" className="!bg-[#A78BFA] !w-[8px] !h-[8px] !border-[1.5px] !border-[#2A2240]" />
-      <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#A78BFA] !w-[8px] !h-[8px] !border-[1.5px] !border-[#2A2240]" />
-      <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
-        <Icon size={12} className="text-[#A78BFA] shrink-0" />
-        <span className="flex-1 min-w-0 text-[length:var(--token-font-size-caption)] text-[#999] truncate">
-          {nodeData.actionTarget && nodeData.label.includes(nodeData.actionTarget) ? (
-            <>
-              {nodeData.label.slice(0, nodeData.label.indexOf(nodeData.actionTarget))}
-              <span className="font-semibold text-[#e0e0e0]">{nodeData.actionTarget}</span>
-            </>
-          ) : (
-            nodeData.label
-          )}
-        </span>
-      </div>
-      <Handle type="source" position={Position.Bottom} id="bottom" className="!bg-[#A78BFA] !w-[8px] !h-[8px] !border-[1.5px] !border-[#2A2240]" />
+      <Handle type="target" position={Position.Top} id="top" className={cn('!w-[6px] !h-[6px] !border-[1px]', isExternal ? '!bg-[#FBBF24] !border-[#2A2520]' : '!bg-[#4ADE80] !border-[#1B2E1E]')} />
+      <Handle type="target" position={Position.Left} id="left-target" className={cn('!w-[6px] !h-[6px] !border-[1px]', isExternal ? '!bg-[#FBBF24] !border-[#2A2520]' : '!bg-[#4ADE80] !border-[#1B2E1E]')} />
+      <Handle type="source" position={Position.Left} id="left-source" className={cn('!w-[6px] !h-[6px] !border-[1px]', isExternal ? '!bg-[#FBBF24] !border-[#2A2520]' : '!bg-[#4ADE80] !border-[#1B2E1E]')} />
+      <Handle type="target" position={Position.Right} id="right-target" className={cn('!w-[6px] !h-[6px] !border-[1px]', isExternal ? '!bg-[#FBBF24] !border-[#2A2520]' : '!bg-[#4ADE80] !border-[#1B2E1E]')} />
+      <Handle type="source" position={Position.Right} id="right-source" className={cn('!w-[6px] !h-[6px] !border-[1px]', isExternal ? '!bg-[#FBBF24] !border-[#2A2520]' : '!bg-[#4ADE80] !border-[#1B2E1E]')} />
+      <Icon size={15} className="shrink-0" />
+      <span className="text-[12px] font-medium truncate">{displayLabel}</span>
+      <Handle type="source" position={Position.Bottom} id="bottom" className={cn('!w-[6px] !h-[6px] !border-[1px]', isExternal ? '!bg-[#FBBF24] !border-[#2A2520]' : '!bg-[#4ADE80] !border-[#1B2E1E]')} />
     </div>
   )
 }

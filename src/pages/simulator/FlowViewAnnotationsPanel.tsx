@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { RiPencilLine, RiCheckLine, RiPlayLine, RiRefreshLine, RiFileTextLine, RiCloseLine, RiAddLine, RiCodeSSlashLine } from '@remixicon/react'
+import { RiPencilLine, RiCheckLine, RiPlayLine, RiFileTextLine, RiCloseLine, RiAddLine } from '@remixicon/react'
 import type { Node, Edge } from '@xyflow/react'
 import type { Flow } from './flowRegistry'
 import { getAllFlows, getFlow, getLinkedFlows, getFlowsLinkingTo } from './flowRegistry'
@@ -19,10 +19,8 @@ interface FlowViewAnnotationsPanelProps {
   onOpenInPrototype: () => void
   onNodeUpdate: (nodeId: string, updates: Record<string, unknown>) => void
   onScreenDescriptionUpdate?: (screenId: string, description: string) => void
-  onAlignNodes?: () => void
   onFlowMetaUpdate?: (updates: { name?: string; description?: string }) => void
   onRenameFlow?: (newId: string) => Promise<boolean>
-  onSaveToCode?: () => Promise<{ ok: boolean; error?: string }>
 }
 
 function EditableField({
@@ -238,7 +236,7 @@ const nodeTypeConfig = Object.fromEntries([
   // screen/page use accent color instead of the green hex
   ['screen', (() => { const e = NODE_TYPE_CONFIG.find((c) => c.type === 'screen')!; return { label: 'Screen', icon: e.icon, color: 'text-shell-selected-text', description: '' } })()],
   ['page', (() => { const e = NODE_TYPE_CONFIG.find((c) => c.type === 'screen')!; return { label: 'Page', icon: e.icon, color: 'text-shell-selected-text', description: '' } })()],
-]) as Record<string, { label: string; icon: typeof import('@remixicon/react').RiCursorLine; color: string; description: string }>
+]) as Record<string, { label: string; icon: import('./nodeTypeConfig').NodeIcon; color: string; description: string }>
 
 const actionTypeLabels: Record<string, string> = {
   tap: 'Tap',
@@ -246,6 +244,7 @@ const actionTypeLabels: Record<string, string> = {
   input: 'Input',
   scroll: 'Scroll',
   'long-press': 'Long Press',
+  external: 'External',
 }
 
 function EntryPointSection({
@@ -369,15 +368,10 @@ export default function FlowViewAnnotationsPanel({
   onOpenInPrototype,
   onNodeUpdate,
   onScreenDescriptionUpdate,
-  onAlignNodes,
   onFlowMetaUpdate,
   onRenameFlow,
-  onSaveToCode,
 }: FlowViewAnnotationsPanelProps) {
   const navigate = useNavigate()
-  const [confirmReset, setConfirmReset] = useState(false)
-  const [confirmSaveToCode, setConfirmSaveToCode] = useState(false)
-  const [saveToCodeResult, setSaveToCodeResult] = useState<string | null>(null)
 
   const handleLabelSave = useCallback(
     (label: string) => {
@@ -475,106 +469,6 @@ export default function FlowViewAnnotationsPanel({
         </div>
       </div>
 
-      {/* Align nodes */}
-      {onAlignNodes && (
-        <div className="mt-[var(--token-spacing-3)]">
-          {confirmReset ? (
-            <div className="flex flex-col gap-[var(--token-spacing-2)]">
-              <p className="text-[length:var(--token-font-size-caption)] text-error">
-                Align all nodes in a centered layout? This will reposition nodes but keep all connections.
-              </p>
-              <div className="flex gap-[var(--token-spacing-2)]">
-                <button
-                  type="button"
-                  onClick={() => setConfirmReset(false)}
-                  className="flex-1 py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary rounded-[var(--token-radius-sm)] cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    onAlignNodes()
-                    setConfirmReset(false)
-                  }}
-                  className="flex-1 py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-error bg-error/10 border border-error/30 rounded-[var(--token-radius-sm)] font-medium hover:bg-error/20 cursor-pointer flex items-center justify-center gap-[4px]"
-                >
-                  <RiRefreshLine size={11} />
-                  Align
-                </button>
-              </div>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setConfirmReset(true)}
-              className="w-full flex items-center justify-center gap-[4px] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-error rounded-[var(--token-radius-sm)] transition-colors cursor-pointer"
-            >
-              <RiRefreshLine size={11} />
-              Align nodes
-            </button>
-          )}
-        </div>
-      )}
-
-      {/* Save to code */}
-      {onSaveToCode && import.meta.env.DEV && (() => {
-        return (
-          <div className="mt-[var(--token-spacing-2)]">
-            {saveToCodeResult ? (
-              <p className="text-[length:var(--token-font-size-caption)] text-center text-[#4ADE80] py-[var(--token-spacing-1)]">
-                {saveToCodeResult}
-              </p>
-            ) : confirmSaveToCode ? (
-              <div className="flex flex-col gap-[var(--token-spacing-2)]">
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-secondary">
-                  Generate index.ts from this flow? The flow graph layout will be preserved.
-                </p>
-                <div className="flex gap-[var(--token-spacing-2)]">
-                  <button
-                    type="button"
-                    onClick={() => setConfirmSaveToCode(false)}
-                    className="flex-1 py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary rounded-[var(--token-radius-sm)] cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      try {
-                        const result = await onSaveToCode()
-                        if (result.ok) {
-                          setSaveToCodeResult('Saved! Reload to activate.')
-                        } else {
-                          setSaveToCodeResult(result.error ?? 'Failed')
-                        }
-                      } catch (err) {
-                        setSaveToCodeResult(err instanceof Error ? err.message : 'Unexpected error')
-                      } finally {
-                        setConfirmSaveToCode(false)
-                      }
-                    }}
-                    className="flex-1 py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-[#4ADE80] bg-[#4ADE80]/10 border border-[#4ADE80]/30 rounded-[var(--token-radius-sm)] font-medium hover:bg-[#4ADE80]/20 cursor-pointer flex items-center justify-center gap-[4px]"
-                  >
-                    <RiCodeSSlashLine size={11} />
-                    Save
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setConfirmSaveToCode(true)}
-                title="Generate index.ts from this flow"
-                className="w-full flex items-center justify-center gap-[4px] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-[#4ADE80] rounded-[var(--token-radius-sm)] transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-shell-text-tertiary"
-              >
-                <RiCodeSSlashLine size={11} />
-                Save to code
-              </button>
-            )}
-          </div>
-        )
-      })()}
     </div>
   )
 
@@ -684,12 +578,18 @@ export default function FlowViewAnnotationsPanel({
                     <option value="input">Input</option>
                     <option value="scroll">Scroll</option>
                     <option value="long-press">Long Press</option>
+                    <option value="external">External (out of system)</option>
                   </select>
+                  {actionType === 'external' && (
+                    <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mt-[var(--token-spacing-1)] mb-[var(--token-spacing-1)]">
+                      Actions that happen outside the app (e.g., user pays a bill, receives an SMS)
+                    </p>
+                  )}
 
                   <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
                     Target
                   </p>
-                  {elements && elements.length > 0 ? (
+                  {elements && elements.length > 0 && actionType !== 'external' ? (
                     <select
                       value={actionTarget}
                       onChange={(e) => {
@@ -830,6 +730,56 @@ export default function FlowViewAnnotationsPanel({
                       ))}
                     </div>
                   </div>
+                )}
+              </div>
+            )}
+
+            {/* ── Error node properties ── */}
+            {nodeData.nodeType === 'error' && (
+              <div className="mb-[var(--token-spacing-lg)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+                  Display Mode
+                </p>
+                <select
+                  value={(nodeData as FlowNodeData).errorDisplay ?? 'full-screen'}
+                  onChange={(e) => {
+                    const newMode = e.target.value as 'full-screen' | 'toast' | 'banner'
+                    const updates: Record<string, unknown> = { errorDisplay: newMode }
+                    if (newMode === 'full-screen') {
+                      updates.errorParentScreenNodeId = null
+                    } else {
+                      updates.screenId = null
+                    }
+                    onNodeUpdate(selectedNode.id, updates)
+                  }}
+                  className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#F87171] cursor-pointer mb-[var(--token-spacing-2)]"
+                >
+                  <option value="full-screen">Full Screen</option>
+                  <option value="toast">Toast</option>
+                  <option value="banner">Banner</option>
+                </select>
+
+                {((nodeData as FlowNodeData).errorDisplay === 'toast' || (nodeData as FlowNodeData).errorDisplay === 'banner') && (
+                  <>
+                    <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+                      Parent Screen
+                    </p>
+                    <select
+                      value={(nodeData as FlowNodeData).errorParentScreenNodeId ?? ''}
+                      onChange={(e) => {
+                        onNodeUpdate(selectedNode.id, { errorParentScreenNodeId: e.target.value || null })
+                      }}
+                      className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#F87171] cursor-pointer"
+                    >
+                      <option value="">(None)</option>
+                      {nodes
+                        .filter((n) => (n.data as FlowNodeData).nodeType === 'screen')
+                        .map((n) => (
+                          <option key={n.id} value={n.id}>{(n.data as FlowNodeData).label}</option>
+                        ))
+                      }
+                    </select>
+                  </>
                 )}
               </div>
             )}
