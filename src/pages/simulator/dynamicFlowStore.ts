@@ -6,7 +6,7 @@
 
 import { supabase, isSupabaseConnected } from '../../lib/supabase'
 import { parseIfString } from '../../lib/parseIfString'
-import { markSynced, markUnsynced, markError } from '../../lib/syncStore'
+import { markUnsynced, markRemoteUpdated } from '../../lib/syncStore'
 import { updateScreenMeta } from './flowFileApi'
 
 const DELETED_KEY = 'picnic-design-lab:deleted-flows'
@@ -69,34 +69,6 @@ function writeAll(data: Record<string, DynamicFlowDef>): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
 }
 
-// ── Supabase helpers ──
-
-async function upsertFlowToSupabase(flow: DynamicFlowDef): Promise<void> {
-  if (!isSupabaseConnected()) return
-  markUnsynced()
-  const { error } = await supabase!.from('dynamic_flows').upsert(
-    {
-      id: flow.id,
-      name: flow.name,
-      description: flow.description,
-      domain: flow.domain,
-      screens: JSON.stringify(flow.screens),
-      spec_content: flow.specContent ?? null,
-      level: flow.level ?? null,
-      linked_flows: flow.linkedFlows ? JSON.stringify(flow.linkedFlows) : null,
-      entry_points: flow.entryPoints ? JSON.stringify(flow.entryPoints) : null,
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: 'id' },
-  )
-  if (error) {
-    console.error('[dynamicFlowStore] Supabase upsert failed:', error.message)
-    markError()
-  } else {
-    markSynced()
-  }
-}
-
 // ── Public API ──
 
 export function getDynamicFlows(): DynamicFlowDef[] {
@@ -112,18 +84,14 @@ export function saveDynamicFlow(flow: DynamicFlowDef): void {
   flow.updatedAt = new Date().toISOString()
   all[flow.id] = flow
   writeAll(all)
-  upsertFlowToSupabase(flow)
+  markUnsynced()
 }
 
-export async function deleteDynamicFlow(id: string): Promise<void> {
+export function deleteDynamicFlow(id: string): void {
   const all = readAll()
   delete all[id]
   writeAll(all)
-
-  if (isSupabaseConnected()) {
-    const { error } = await supabase!.from('dynamic_flows').delete().eq('id', id)
-    if (error) console.error('[dynamicFlowStore] Supabase delete failed:', error.message)
-  }
+  markUnsynced()
 }
 
 export function addScreenToFlow(flowId: string, screen: DynamicScreen): void {
@@ -133,7 +101,7 @@ export function addScreenToFlow(flowId: string, screen: DynamicScreen): void {
   flow.screens.push(screen)
   flow.updatedAt = new Date().toISOString()
   writeAll(all)
-  upsertFlowToSupabase(flow)
+  markUnsynced()
 }
 
 export function removeScreenFromFlow(flowId: string, screenId: string): void {
@@ -143,7 +111,7 @@ export function removeScreenFromFlow(flowId: string, screenId: string): void {
   flow.screens = flow.screens.filter((s) => s.id !== screenId)
   flow.updatedAt = new Date().toISOString()
   writeAll(all)
-  upsertFlowToSupabase(flow)
+  markUnsynced()
 }
 
 export function updateScreenInFlow(
@@ -159,7 +127,7 @@ export function updateScreenInFlow(
   Object.assign(screen, updates)
   flow.updatedAt = new Date().toISOString()
   writeAll(all)
-  upsertFlowToSupabase(flow)
+  markUnsynced()
 
   // Auto-sync title/description to .tsx file comment block
   if (screen.filePath && (updates.title || updates.description)) {
@@ -169,7 +137,7 @@ export function updateScreenInFlow(
 
 // ── Rename ──
 
-export async function renameDynamicFlow(oldId: string, newId: string): Promise<void> {
+export function renameDynamicFlow(oldId: string, newId: string): void {
   const all = readAll()
   const flow = all[oldId]
   if (!flow) return
@@ -185,12 +153,7 @@ export async function renameDynamicFlow(oldId: string, newId: string): Promise<v
   })
   all[newId] = flow
   writeAll(all)
-
-  // Supabase: delete old, upsert new
-  if (isSupabaseConnected()) {
-    await supabase!.from('dynamic_flows').delete().eq('id', oldId)
-  }
-  await upsertFlowToSupabase(flow)
+  markUnsynced()
 }
 
 // ── Supabase → localStorage hydration ──
@@ -253,7 +216,8 @@ export function subscribeToDynamicFlowChanges(onUpdate: () => void): (() => void
   const channel = supabase!
     .channel('dynamic-flow-changes')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'dynamic_flows' }, () => {
-      hydrateDynamicFlowsFromSupabase().then(() => onUpdate())
+      markRemoteUpdated()
+      onUpdate()
     })
     .subscribe()
 
@@ -280,10 +244,7 @@ export function migrateSavingsToEarnDomain(): void {
   }
   if (changed) {
     writeAll(all)
-    // Push updates to Supabase
-    for (const flow of Object.values(all)) {
-      if (flow.domain === 'earn') upsertFlowToSupabase(flow)
-    }
+    markUnsynced()
   }
 
   // Also fix flowGroupStore archived flows and ungrouped order keyed under 'savings'

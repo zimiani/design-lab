@@ -5,7 +5,7 @@
 
 import { supabase, isSupabaseConnected } from '../../lib/supabase'
 import { parseIfString } from '../../lib/parseIfString'
-import { markSynced, markUnsynced, markError } from '../../lib/syncStore'
+import { markUnsynced } from '../../lib/syncStore'
 import { getAllFlows, duplicateFlowWithId } from './flowRegistry'
 
 // ── Types ──
@@ -143,7 +143,6 @@ function writeState(state: FlowGroupState, isUserAction = false): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
   if (isUserAction || userActionsEnabled) {
     markUnsynced()
-    upsertToSupabase(state)
   }
   notifyListeners()
 }
@@ -159,26 +158,6 @@ function notifyListeners(): void {
 export function subscribeToGroupChanges(fn: () => void): () => void {
   listeners.add(fn)
   return () => { listeners.delete(fn) }
-}
-
-// ── Supabase helpers ──
-
-async function upsertToSupabase(state: FlowGroupState): Promise<void> {
-  if (!isSupabaseConnected()) return
-  const { error } = await supabase!.from('flow_groups').upsert(
-    {
-      id: 'singleton',
-      data: JSON.stringify(state),
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: 'id' },
-  )
-  if (error) {
-    console.error('[flowGroupStore] Supabase upsert failed:', error.message)
-    markError()
-  } else {
-    markSynced()
-  }
 }
 
 /**

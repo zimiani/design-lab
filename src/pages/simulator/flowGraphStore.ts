@@ -1,14 +1,13 @@
 /**
- * Flow graph persistence — Supabase with localStorage fallback.
+ * Flow graph persistence — localStorage with Supabase sync via Pull/Push.
  *
- * Follows the exact same dual-write pattern as flowStore.ts.
- * Write path: Supabase (if connected) + localStorage (always, as cache/fallback).
- * Read path: localStorage first (instant), then Supabase hydrate overwrites.
+ * Write path: localStorage only (immediate). Supabase writes happen via pushAllToSupabase().
+ * Read path: localStorage first (instant), then Supabase hydrate on Pull.
  */
 
 import type { Node, Edge } from '@xyflow/react'
 import { supabase, isSupabaseConnected } from '../../lib/supabase'
-import { markSynced, markUnsynced, markError } from '../../lib/syncStore'
+import { markUnsynced, markRemoteUpdated } from '../../lib/syncStore'
 import type { FlowGraph } from './flowGraph.types'
 import { isFlowDeleted } from './flowRegistry'
 
@@ -55,52 +54,28 @@ export function getFlowGraph(flowId: string): FlowGraph | null {
   return readAllGraphs()[flowId] ?? null
 }
 
-export async function saveFlowGraph(
+export function saveFlowGraph(
   flowId: string,
   nodes: Node[],
   edges: Edge[],
-): Promise<void> {
+): void {
   const updatedAt = new Date().toISOString()
-
-  // localStorage (immediate)
   const all = readAllGraphs()
   all[flowId] = { flowId, nodes, edges, updatedAt }
   writeAllGraphs(all)
-
-  // Supabase (async)
-  if (isSupabaseConnected()) {
-    markUnsynced()
-    const { error } = await supabase!.from('flow_graphs').upsert(
-      {
-        flow_id: flowId,
-        nodes: JSON.stringify(nodes),
-        edges: JSON.stringify(edges),
-        updated_at: updatedAt,
-      },
-      { onConflict: 'flow_id' },
-    )
-    if (error) {
-      console.error('[flowGraphStore] Supabase upsert failed:', error.message)
-      markError()
-    } else {
-      markSynced()
-    }
-  }
+  markUnsynced()
 }
 
-export async function deleteFlowGraph(flowId: string): Promise<void> {
+export function deleteFlowGraph(flowId: string): void {
   const all = readAllGraphs()
   delete all[flowId]
   writeAllGraphs(all)
-
-  if (isSupabaseConnected()) {
-    await supabase!.from('flow_graphs').delete().eq('flow_id', flowId)
-  }
+  markUnsynced()
 }
 
 // ── Rename ──
 
-export async function renameFlowGraph(oldId: string, newId: string): Promise<void> {
+export function renameFlowGraph(oldId: string, newId: string): void {
   const all = readAllGraphs()
   const graph = all[oldId]
   if (!graph) return
@@ -123,20 +98,7 @@ export async function renameFlowGraph(oldId: string, newId: string): Promise<voi
 
   all[newId] = { flowId: newId, nodes: updatedNodes, edges: graph.edges, updatedAt: new Date().toISOString() }
   writeAllGraphs(all)
-
-  // Supabase: delete old, upsert new
-  if (isSupabaseConnected()) {
-    await supabase!.from('flow_graphs').delete().eq('flow_id', oldId)
-    await supabase!.from('flow_graphs').upsert(
-      {
-        flow_id: newId,
-        nodes: JSON.stringify(updatedNodes),
-        edges: JSON.stringify(graph.edges),
-        updated_at: all[newId].updatedAt,
-      },
-      { onConflict: 'flow_id' },
-    )
-  }
+  markUnsynced()
 }
 
 // ── Update flow-reference nodes across ALL graphs ──
@@ -210,7 +172,8 @@ export function subscribeToGraphChanges(onUpdate: () => void): (() => void) | nu
   const channel = supabase!
     .channel('flow-graph-changes')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'flow_graphs' }, () => {
-      hydrateGraphsFromSupabase().then(() => onUpdate())
+      markRemoteUpdated()
+      onUpdate()
     })
     .subscribe()
 
