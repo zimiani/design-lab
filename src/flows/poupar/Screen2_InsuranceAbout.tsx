@@ -13,7 +13,7 @@ export default function Screen2_InsuranceAbout({ onBack }: FlowScreenProps) {
     <BaseLayout>
       <Header
         title="Seu dinheiro protegido"
-        description="Toda caixinha já vem com seguro incluso. Sem contratação, sem custo extra. A proteção ativa no momento em que você guarda."
+        description="Toda caixinha já vem com cobertura. Sem contratação, sem custo extra. A proteção ativa no momento em que você guarda."
         onBack={onBack}
       />
 
@@ -23,9 +23,9 @@ export default function Screen2_InsuranceAbout({ onBack }: FlowScreenProps) {
           <GroupHeader text="O que o seguro cobre" />
           <Summary
             data={[
-              { icon: <RiBugLine size={20} />, title: 'Falha técnica no sistema', description: 'Um erro na tecnologia afeta seu saldo? Você é reembolsado.' },
+              { icon: <RiBugLine size={20} />, title: 'Falha técnica no sistema', description: 'Cobre erros técnicos no provedor do investimento' },
               { icon: <RiAlertLine size={20} />, title: 'Dados de preço incorretos', description: 'Se uma informação errada causar perda, a cobertura entra em ação.' },
-              { icon: <RiRefundLine size={20} />, title: 'Problema na liquidação', description: 'Algo trava na hora de processar? O seguro garante a devolução.' },
+              { icon: <RiRefundLine size={20} />, title: 'Problema na liquidação', description: 'Cobre problemas em resgatar o dinheiro investido' },
             ]}
           />
         </Stack>
@@ -34,7 +34,7 @@ export default function Screen2_InsuranceAbout({ onBack }: FlowScreenProps) {
           <GroupHeader text="Detalhes" />
           <DataList data={[
             { label: 'Provedor', value: 'Nexus Mutual' },
-            { label: 'Custo', value: 'Grátis' },
+            { label: 'Custo', value: 'Incluso' },
             { label: 'Cobertura', value: '97% do valor investido' },
             { label: 'Prazo de análise', value: 'Até 14 dias' },
             { label: 'Reembolso após aprovação', value: 'Até 30 dias' },

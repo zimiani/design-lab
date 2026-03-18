@@ -56,7 +56,7 @@ export default function Screen2_Review({ onNext, onBack, onElementTap }: FlowScr
               label: 'Resgate',
               value: <span className="text-[var(--color-feedback-success)] font-medium">Imediato</span>,
             },
-            { label: 'Proteção', value: 'Seguro incluso' },
+            { label: 'Proteção', value: 'Cobertura inclusa' },
           ]} />
         </Stack>
 

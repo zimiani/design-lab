@@ -58,7 +58,7 @@ export default function Screen4_Success({ onBack, onElementTap }: FlowScreenProp
         <Banner
           variant="neutral"
           title="Seu saldo está protegido"
-          description="Seu rendimento é coberto por um seguro automático contra falhas técnicas — sem custo adicional."
+          description="Seu rendimento é coberto contra falhas técnicas — sem custo adicional."
         />
       </Stack>
 

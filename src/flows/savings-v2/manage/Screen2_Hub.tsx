@@ -57,7 +57,7 @@ export default function Screen2_Hub({ onNext, onBack, onElementTap }: FlowScreen
       <Stack gap="lg">
         <Stack direction="row" gap="sm" align="center" className="-mt-2">
           <Badge variant="lime" size="md" icon={<RiTimeLine size={14} />}>Resgate imediato</Badge>
-          <Badge variant="lime" size="md" icon={<RiShieldCheckLine size={14} />}>Cobertura garantida</Badge>
+          <Badge variant="lime" size="md" icon={<RiShieldCheckLine size={14} />}>Cobertura inclusa</Badge>
         </Stack>
 
         <Stack gap="none" className="gap-1">

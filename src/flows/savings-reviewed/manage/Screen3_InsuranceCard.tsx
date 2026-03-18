@@ -50,7 +50,7 @@ export default function Screen3_InsuranceCard({ onBack }: FlowScreenProps) {
           <GroupHeader text="Detalhes" />
           <DataList data={[
             { label: 'Provedor', value: 'Nexus Mutual' },
-            { label: 'Custo', value: 'Grátis' },
+            { label: 'Custo', value: 'Incluso' },
             { label: 'Cobertura', value: '97% do valor investido' },
             { label: 'Prazo de análise', value: 'Até 14 dias' },
             { label: 'Reembolso após aprovação', value: 'Até 30 dias' },
