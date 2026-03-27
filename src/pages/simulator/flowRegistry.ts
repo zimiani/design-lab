@@ -72,6 +72,7 @@ registerDomain({ id: 'add-funds', name: 'Add Funds', order: 5 })
 registerDomain({ id: 'send-funds', name: 'Send Funds', order: 6 })
 registerDomain({ id: 'perks', name: 'Perks', order: 7 })
 registerDomain({ id: 'earn', name: 'Earn', order: 8 })
+registerDomain({ id: 'investments', name: 'Investments', order: 8.5 })
 registerDomain({ id: 'transaction-history', name: 'Transaction History', order: 9 })
 registerDomain({ id: 'settings', name: 'Settings', order: 10 })
 
@@ -171,6 +172,41 @@ export function registerDynamicFlow(def: DynamicFlowDef): void {
     }
   }
 
+  // If the dynamic store has 0 screens but the static registration has screens,
+  // keep the static screens — the dynamic entry is stale.
+  const dynScreenIds = new Set(def.screens.map((s) => s.id))
+  const resolvedScreens = def.screens.length > 0
+    ? def.screens.map((s) => {
+        const staticScreen = staticScreens.get(s.id)
+        const resolved = resolveComponent(s.filePath)
+        const pageId = s.pageId ?? staticScreen?.pageId
+        // Fall back: file path → static flow screen → page registry (by pageId or screen id) → by component ref → placeholder
+        const registeredPage = (pageId ? getBasePage(pageId) : undefined) ?? getBasePage(s.id)
+        const finalComponent = resolved ?? staticScreen?.component ?? registeredPage?.component
+        // For renamed flows, look up the original page by component reference to inherit states/interactiveElements
+        const sourcePage = registeredPage ?? (finalComponent ? getPageByComponent(finalComponent) : undefined)
+        return {
+          id: s.id,
+          title: s.title,
+          description: s.description,
+          componentsUsed: s.componentsUsed,
+          component: finalComponent ?? createPlaceholderComponent(s.title, s.description),
+          pageId,
+          states: sourcePage?.states ?? (s.states as PageStateDefinition[] | undefined) ?? staticScreen?.states,
+          interactiveElements: staticScreen?.interactiveElements ?? s.interactiveElements,
+        }
+      })
+    : existingFlow?.screens ?? []
+
+  // Append any static screens missing from the dynamic store (new screens added in code)
+  if (existingFlow && def.screens.length > 0) {
+    for (const s of existingFlow.screens) {
+      if (!dynScreenIds.has(s.id)) {
+        resolvedScreens.push(s)
+      }
+    }
+  }
+
   const flow: Flow = {
     id: def.id,
     name: def.name,
@@ -180,26 +216,7 @@ export function registerDynamicFlow(def: DynamicFlowDef): void {
     level: def.level ?? existingFlow?.level,
     linkedFlows: def.linkedFlows ?? existingFlow?.linkedFlows,
     entryPoints: def.entryPoints ?? existingFlow?.entryPoints,
-    screens: def.screens.map((s) => {
-      const staticScreen = staticScreens.get(s.id)
-      const resolved = resolveComponent(s.filePath)
-      const pageId = s.pageId ?? staticScreen?.pageId
-      // Fall back: file path → static flow screen → page registry (by pageId or screen id) → by component ref → placeholder
-      const registeredPage = (pageId ? getBasePage(pageId) : undefined) ?? getBasePage(s.id)
-      const finalComponent = resolved ?? staticScreen?.component ?? registeredPage?.component
-      // For renamed flows, look up the original page by component reference to inherit states/interactiveElements
-      const sourcePage = registeredPage ?? (finalComponent ? getPageByComponent(finalComponent) : undefined)
-      return {
-        id: s.id,
-        title: s.title,
-        description: s.description,
-        componentsUsed: s.componentsUsed,
-        component: finalComponent ?? createPlaceholderComponent(s.title, s.description),
-        pageId,
-        states: sourcePage?.states ?? (s.states as PageStateDefinition[] | undefined) ?? staticScreen?.states,
-        interactiveElements: staticScreen?.interactiveElements ?? s.interactiveElements,
-      }
-    }),
+    screens: resolvedScreens,
   }
   flows.set(flow.id, flow)
 

@@ -339,6 +339,13 @@ export default function DesignCanvas({ flow }: DesignCanvasProps) {
     : 'cursor-default'
 
   if (screenGroups.length === 0) {
+    console.warn(`[DesignCanvas] No screens for "${flow.id}":`, {
+      flowScreenCount: flow.screens.length,
+      flowScreenIds: flow.screens.map(s => s.id),
+      navPathLength: navPath.length,
+      graphExists: !!graph,
+      graphNodes: graph?.nodes.length ?? 0,
+    })
     return (
       <div className="flex-1 flex items-center justify-center text-shell-text-tertiary">
         No screens in this flow

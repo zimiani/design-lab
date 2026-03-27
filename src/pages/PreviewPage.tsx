@@ -16,7 +16,10 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  RiHomeLine, RiBankCardLine, RiGiftLine,
+  RiHomeLine, RiHomeFill,
+  RiBankCardLine, RiBankCardFill,
+  RiGiftLine, RiGiftFill,
+  RiPieChart2Line, RiPieChart2Fill,
 } from '@remixicon/react'
 import { PiPiggyBank, PiPiggyBankFill } from 'react-icons/pi'
 
@@ -49,10 +52,11 @@ import {
 hydrateDynamicFlows()
 
 const navItems = [
-  { id: 'home', label: 'Início', icon: <RiHomeLine size={20} /> },
-  { id: 'cards', label: 'Cartão', icon: <RiBankCardLine size={20} /> },
-  { id: 'invest', label: 'Caixinha', icon: <PiPiggyBank size={20} />, activeIcon: <PiPiggyBankFill size={20} /> },
-  { id: 'perks', label: 'Benefícios', icon: <RiGiftLine size={20} /> },
+  { id: 'home', label: 'Início', icon: <RiHomeLine size={20} />, activeIcon: <RiHomeFill size={20} /> },
+  { id: 'cards', label: 'Cartão', icon: <RiBankCardLine size={20} />, activeIcon: <RiBankCardFill size={20} /> },
+  { id: 'invest', label: 'Caixinha', icon: <PiPiggyBank size={20} />, activeIcon: <PiPiggyBankFill size={20} />, linkedFlowId: 'save-manage' },
+  { id: 'investir', label: 'Investir', icon: <RiPieChart2Line size={20} />, activeIcon: <RiPieChart2Fill size={20} />, linkedFlowId: 'invest-manage' },
+  { id: 'perks', label: 'Benefícios', icon: <RiGiftLine size={20} />, activeIcon: <RiGiftFill size={20} /> },
 ]
 
 const slideVariants = {
@@ -120,9 +124,14 @@ export default function PreviewPage() {
 
       const msg = event.data
       if (msg.type === 'render') {
-        setRenderState(msg as RenderMessage)
-        if ((msg as RenderMessage).activeNavId) {
-          setActiveNavId((msg as RenderMessage).activeNavId)
+        const rm = msg as RenderMessage
+        setRenderState(rm)
+        // Sync active tab: prefer flow-linked tab, fall back to host's activeNavId
+        const matchedTab = navItems.find((n) => n.linkedFlowId === rm.flowId)
+        if (matchedTab) {
+          setActiveNavId(matchedTab.id)
+        } else if (rm.activeNavId) {
+          setActiveNavId(rm.activeNavId)
         }
       } else if (msg.type === 'set-safe-areas') {
         document.documentElement.style.setProperty('--safe-area-top', msg.safeAreaTop)
@@ -274,6 +283,14 @@ export default function PreviewPage() {
     postToHost({ type: 'state-change', stateId })
   }, [])
 
+  const handleTabChange = useCallback((id: string) => {
+    setActiveNavId(id)
+    const item = navItems.find((n) => n.id === id)
+    if (item?.linkedFlowId) {
+      postToHost({ type: 'navigate-flow', flowId: item.linkedFlowId })
+    }
+  }, [])
+
   if (!renderState || !flow || !screen) {
     return (
       <div className="flex items-center justify-center h-screen bg-surface-primary text-content-secondary">
@@ -297,7 +314,7 @@ export default function PreviewPage() {
     <TabBar
       items={navItems}
       activeId={activeNavId}
-      onChange={setActiveNavId}
+      onChange={handleTabChange}
     />
   )
 

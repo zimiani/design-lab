@@ -151,7 +151,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: 'ss01' 1, 'ss03' 1, 'cv05' 1, 'cv10' 1, 'calt' 1, 'liga' 1;
+    font-feature-settings: 'ss01' 1, 'ss03' 1, 'cv10' 1, 'calt' 1, 'liga' 1;
     font-variation-settings: 'opsz' 20;
   }
 

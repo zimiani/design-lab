@@ -30,6 +30,8 @@ export interface FeatureLayoutProps {
   imageClassName?: string
   /** Optional node rendered over the image at bottom-left (e.g. Badge) */
   imageOverlay?: ReactNode
+  /** Header stays fixed while body scrolls over it */
+  parallax?: boolean
   children: ReactNode
   className?: string
 }
@@ -46,6 +48,7 @@ export default function FeatureLayout({
   imageClassName,
   onClose,
   imageOverlay,
+  parallax = false,
   children,
   className,
 }: FeatureLayoutProps) {
@@ -133,60 +136,63 @@ export default function FeatureLayout({
   }
 
   // Mobile: full-screen layout with sticky footer and gradient fade
+  const heroBlock = (
+    <div
+      className={cn('relative w-full shrink-0 overflow-hidden', parallax && 'sticky top-0 z-0')}
+      style={{
+        ...(imageSrc ? { maxHeight: resolvedMaxHeight } : { height: resolvedMaxHeight }),
+        backgroundColor: imageBgColor,
+        ...(imageBgImage ? {
+          backgroundImage: imageBgImage,
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: imageBgSize ?? 'cover',
+          backgroundPosition: imageBgPosition ?? 'center',
+        } : {}),
+      }}
+    >
+      {imageSrc && (
+        <img
+          src={imageSrc}
+          alt={imageAlt}
+          className={cn('w-full h-full object-cover', imageClassName)}
+        />
+      )}
+
+      {imageHeader && (
+        <div className="absolute inset-0 flex flex-col justify-end px-[var(--token-spacing-6)] pb-[var(--token-spacing-12)]">
+          {imageHeader}
+        </div>
+      )}
+
+      {onClose && (
+        <div className="absolute top-[var(--safe-area-top,12px)] right-[var(--token-spacing-6)]">
+          <IconButton
+            variant="base"
+            inverted
+            icon={<RiCloseLine size={24} />}
+            onPress={onClose}
+          />
+        </div>
+      )}
+
+      {imageOverlay && (
+        <div className="absolute bottom-[36px] left-[var(--token-spacing-6)]">
+          {imageOverlay}
+        </div>
+      )}
+    </div>
+  )
+
   return (
     <div
       data-component="FeatureLayout"
       className={cn('flex flex-col h-full bg-surface-primary overflow-hidden', className)}
     >
       <div className="flex-1 overflow-y-auto">
-        {/* Full-bleed header hero — image or solid color */}
-        <div
-          className="relative w-full shrink-0 overflow-hidden"
-          style={{
-            ...(imageSrc ? { maxHeight: resolvedMaxHeight } : { height: resolvedMaxHeight }),
-            backgroundColor: imageBgColor,
-            ...(imageBgImage ? {
-              backgroundImage: imageBgImage,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: imageBgSize ?? 'cover',
-              backgroundPosition: imageBgPosition ?? 'center',
-            } : {}),
-          }}
-        >
-          {imageSrc && (
-            <img
-              src={imageSrc}
-              alt={imageAlt}
-              className={cn('w-full h-full object-cover', imageClassName)}
-            />
-          )}
-
-          {imageHeader && (
-            <div className="absolute inset-0 flex flex-col justify-end px-[var(--token-spacing-6)] pb-[var(--token-spacing-12)]">
-              {imageHeader}
-            </div>
-          )}
-
-          {onClose && (
-            <div className="absolute top-[var(--safe-area-top,12px)] right-[var(--token-spacing-6)]">
-              <IconButton
-                variant="base"
-                inverted
-                icon={<RiCloseLine size={24} />}
-                onPress={onClose}
-              />
-            </div>
-          )}
-
-          {imageOverlay && (
-            <div className="absolute bottom-[36px] left-[var(--token-spacing-6)]">
-              {imageOverlay}
-            </div>
-          )}
-        </div>
+        {heroBlock}
 
         {/* Content — overlaps hero with rounded top corners */}
-        <div className="relative -mt-[20px] rounded-t-[24px] bg-surface-primary px-[var(--token-spacing-6)] pt-[var(--token-spacing-6)] pb-[40px] flex flex-col gap-[var(--token-spacing-4)]">
+        <div className="relative z-10 -mt-[20px] rounded-t-[48px] bg-surface-primary px-[var(--token-spacing-6)] pt-[var(--token-spacing-8)] pb-[40px] flex flex-col gap-[var(--token-spacing-4)] shadow-[0_-8px_24px_rgba(0,0,0,0.08)]" style={{ cornerShape: 'squircle' } as React.CSSProperties}>
           {rest}
         </div>
       </div>

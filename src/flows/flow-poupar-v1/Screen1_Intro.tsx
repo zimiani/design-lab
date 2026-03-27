@@ -40,7 +40,7 @@ export default function Screen1_Intro({ onNext, onBack, onElementTap }: FlowScre
             data={[
               { icon: <RiExchangeDollarLine size={20} />, title: 'Rendimento automático', description: 'Seu saldo rende todos os dias, sem precisar fazer nada' },
               { icon: <RiTimeLine size={20} />, title: 'Resgate quando quiser', description: 'Sem carência — retire seus fundos a qualquer momento' },
-              { icon: <RiShieldCheckLine size={20} />, title: 'Protegido por seguro', description: 'Se uma falha técnica afetar seu saldo, você é reembolsado automaticamente', linkText: 'Saiba mais', onLinkPress: handleSaibaMais },
+              { icon: <RiShieldCheckLine size={20} />, title: 'Seu dinheiro protegido', description: 'Se uma falha técnica afetar seu saldo, você é reembolsado em até 30 dias', linkText: 'Saiba mais', onLinkPress: handleSaibaMais },
             ]}
           />
         </Stack>

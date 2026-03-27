@@ -34,9 +34,9 @@ const primarySizeStyles = {
 } as const
 
 const sizeStyles = {
-  sm: 'h-[36px] px-[16px] text-[13px] rounded-[8px]',
+  sm: 'h-[36px] px-[20px] text-[13px] rounded-full',
   md: 'h-[44px] px-[24px] text-[15px] rounded-[12px]',
-  lg: 'h-[52px] px-[32px] text-[17px] rounded-[12px]',
+  lg: 'h-[56px] px-[32px] text-[16px] tracking-[-0.16px] rounded-[12px]',
 } as const
 
 /** Extract a stable text ID from children (string content only). */
