@@ -11,7 +11,7 @@ import { getDynamicFlow, saveDynamicFlow, type DynamicFlowDef } from './dynamicF
 import { resolveFilePath, hasFileOnDisk } from './screenResolver'
 
 const MIGRATION_FLAG = 'picnic-design-lab:hardcoded-migration-v1'
-const MIGRATION_V2_FLAG = 'picnic-design-lab:hardcoded-migration-v2'
+// V2 flag no longer used — migrateStaleScreenPaths now runs every load
 
 // Read persisted metadata overrides (name/description/domain) for hardcoded flows.
 // After migration these are baked into the dynamic store and the overrides system is removed.
@@ -56,13 +56,11 @@ export function migrateHardcodedFlows(): void {
 }
 
 /**
- * V2 migration: refresh dynamic store entries whose screen files no longer exist on disk.
- * This handles the case where screen files were renamed/replaced but the dynamic store
- * still references the old file paths.
+ * Refresh dynamic store entries whose screen files no longer exist on disk,
+ * or whose screen IDs don't match the current static definition.
+ * Runs every load (cheap check) to handle renamed/replaced screen files.
  */
 export function migrateStaleScreenPaths(): void {
-  if (localStorage.getItem(MIGRATION_V2_FLAG)) return
-
   const allFlows = getAllFlows()
   let refreshed = 0
 
@@ -74,7 +72,16 @@ export function migrateStaleScreenPaths(): void {
     const hasStaleFiles = dynFlow.screens.some(
       (s) => s.filePath && !hasFileOnDisk(s.filePath),
     )
-    if (!hasStaleFiles) continue
+
+    // Check if screen IDs diverged (screens were renamed in index.ts)
+    const staticIds = new Set(flow.screens.map((s) => s.id))
+    const dynIds = new Set(dynFlow.screens.map((s) => s.id))
+    const hasStaleIds = flow.screens.length > 0 && (
+      staticIds.size !== dynIds.size ||
+      [...staticIds].some((id) => !dynIds.has(id))
+    )
+
+    if (!hasStaleFiles && !hasStaleIds) continue
 
     // Replace the dynamic store entry with the current static definition
     const def = flowToDynamicDef(flow)
@@ -82,10 +89,8 @@ export function migrateStaleScreenPaths(): void {
     refreshed++
   }
 
-  localStorage.setItem(MIGRATION_V2_FLAG, new Date().toISOString())
-
   if (refreshed > 0) {
-    console.log(`[flowMigration] Refreshed ${refreshed} flows with stale screen paths`)
+    console.log(`[flowMigration] Refreshed ${refreshed} flows with stale screen paths/IDs`)
   }
 }
 

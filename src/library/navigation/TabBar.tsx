@@ -6,6 +6,8 @@ export interface TabBarItem {
   label: string
   icon: ReactNode
   activeIcon?: ReactNode
+  /** When set, tapping this tab navigates to the specified flow */
+  linkedFlowId?: string
 }
 
 export interface TabBarProps {
@@ -27,7 +29,7 @@ export default function TabBar({
       className={`
         flex items-start justify-between shrink-0
         px-[24px] py-[4px] pb-[var(--safe-area-bottom,8px)]
-        bg-surface-primary border-t border-border-default
+        bg-white/70 backdrop-blur-xl border-t border-white/30
         ${className}
       `}
     >

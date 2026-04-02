@@ -42,7 +42,7 @@ export default function AppShell({
   return (
     <div data-component="AppShell" data-part="shell-root" className="flex flex-col h-full w-full">
       {level === 1 && topBar}
-      <div data-part="content-area" className="flex-1 overflow-hidden">
+      <div data-part="content-area" className="flex-1 overflow-y-auto">
         {children}
       </div>
       {level === 1 && tabBar}

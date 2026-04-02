@@ -86,6 +86,7 @@ export default function SimulatorPage() {
     pullFromSupabase().then((ok) => {
       enableUserActions()
       if (ok) {
+        migrateStaleScreenPaths()
         hydrateDynamicFlows()
         setVersion((v) => v + 1)
       }

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { registerComponent } from '../registry'
 import { cn } from '../../lib/cn'
@@ -12,6 +12,7 @@ export interface SegmentedControlProps {
   /** @deprecated pill is now the only style — this prop is ignored */
   variant?: 'default' | 'pill'
   className?: string
+  style?: React.CSSProperties
 }
 
 function getLabel(seg: SegmentItem): string {
@@ -27,14 +28,17 @@ export default function SegmentedControl({
   activeIndex,
   onChange,
   className = '',
+  style,
 }: SegmentedControlProps) {
+  const instanceId = useId()
   return (
     <div
       data-component="SegmentedControl"
       className={cn(
-        'flex gap-[4px] p-[4px] rounded-[20px] bg-surface-secondary',
+        'flex gap-[4px]',
         className,
       )}
+      style={style}
     >
       {segments.map((seg, i) => {
         const label = getLabel(seg)
@@ -47,18 +51,19 @@ export default function SegmentedControl({
             type="button"
             onClick={() => onChange(i)}
             className={cn(
-              'relative flex items-center justify-center gap-[6px]',
-              'px-[16px] py-[8px] rounded-[16px]',
-              'text-[14px] leading-[20px] font-semibold',
-              'cursor-pointer transition-colors',
-              isActive ? 'text-content-primary' : 'text-content-secondary',
+              'relative flex items-center justify-center gap-[6px] border-none',
+              'px-[16px] py-[8px] rounded-full',
+              'text-[16px] font-semibold',
+              'cursor-pointer',
+              isActive ? 'text-white' : 'text-content-primary',
             )}
+            style={{ background: 'transparent' }}
           >
             {isActive && (
               <motion.span
-                layoutId={`seg-bg-${className}`}
-                className="absolute inset-0 bg-surface-primary rounded-[16px] shadow-sm"
-                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                layoutId={`seg-bg-${instanceId}`}
+                className="absolute inset-0 bg-[var(--color-content-primary)] rounded-full"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
               />
             )}
             {icon && (

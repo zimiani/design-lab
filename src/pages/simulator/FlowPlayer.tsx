@@ -246,6 +246,13 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow, 
     : flow.screens[0]
 
   if (!current) {
+    console.warn(`[FlowPlayer] No screens for "${flowId}":`, {
+      flowScreenCount: flow.screens.length,
+      flowScreenIds: flow.screens.map(s => s.id),
+      navPathLength: navPath.length,
+      graphNodes: graph?.nodes.length ?? 0,
+      graphEdges: graph?.edges.length ?? 0,
+    })
     return (
       <div className="flex-1 flex items-center justify-center text-shell-text-tertiary">
         No screens in this flow

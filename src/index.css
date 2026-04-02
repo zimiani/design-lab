@@ -151,7 +151,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: 'ss01' 1, 'ss03' 1, 'cv05' 1, 'cv10' 1, 'calt' 1, 'liga' 1;
+    font-feature-settings: 'ss01' 1, 'ss03' 1, 'cv10' 1, 'calt' 1, 'liga' 1;
     font-variation-settings: 'opsz' 20;
   }
 
@@ -169,6 +169,16 @@
   #root {
     min-height: 100vh;
   }
+}
+
+/* Page-level padding utilities for mixed padded / edge-to-edge layouts */
+.page-pad {
+  padding-left: var(--token-spacing-6);
+  padding-right: var(--token-spacing-6);
+}
+.full-bleed {
+  margin-left: calc(-1 * var(--token-spacing-6));
+  margin-right: calc(-1 * var(--token-spacing-6));
 }
 
 /* React Flow dark theme overrides to match shell chrome */
@@ -223,4 +233,15 @@
 .desktop-visible-scroll::-webkit-scrollbar-track,
 .desktop-visible-scroll *::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.03);
+}
+
+/* Flat black phone frame for component demo */
+.demo-phone-flat > div > div {
+  box-shadow: 0 0 0 8px #000 !important;
+}
+.demo-phone-flat [class*="bg-[#2a2a2a]"] {
+  background-color: #000 !important;
+}
+.demo-phone-flat [class*="bg-neutral-900"] {
+  background-color: #000 !important;
 }

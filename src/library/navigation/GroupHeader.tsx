@@ -5,19 +5,28 @@ import { cn } from '../../lib/cn'
 export interface GroupHeaderProps {
   text: string
   subtitle?: string
+  /** Text displayed on the right side, same line as the title */
+  rightText?: string
   icon?: ReactNode
   className?: string
 }
 
-export default function GroupHeader({ text, subtitle, icon, className = '' }: GroupHeaderProps) {
+export default function GroupHeader({ text, subtitle, rightText, icon, className = '' }: GroupHeaderProps) {
   return (
     <div data-component="GroupHeader" className={cn('w-full pt-[var(--token-spacing-3)] pb-[var(--token-spacing-3)] mb-[var(--token-spacing-2)] border-b border-[var(--token-neutral-100)]', className)}>
       <div className="flex items-center gap-[var(--token-spacing-2)]">
         {icon && <span className="shrink-0 text-content-secondary">{icon}</span>}
-        <div className="flex flex-col gap-[var(--token-spacing-1)]">
-          <span data-text-id={text} className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium text-content-primary">
-            {text}
-          </span>
+        <div className="flex flex-col gap-[var(--token-spacing-1)] flex-1 min-w-0">
+          <div className="flex items-center justify-between">
+            <span data-text-id={text} className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium text-content-primary">
+              {text}
+            </span>
+            {rightText && (
+              <span data-text-id={rightText} className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium text-content-primary">
+                {rightText}
+              </span>
+            )}
+          </div>
           {subtitle && (
             <span data-text-id={subtitle} className="text-[length:var(--token-font-size-body-xs)] leading-[var(--token-line-height-body-xs)] text-content-tertiary">
               {subtitle}

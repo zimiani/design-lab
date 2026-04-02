@@ -97,10 +97,15 @@ function applyCodeDefaults(state: FlowGroupState): void {
     }
   }
 
+  const deletedSet = new Set(state.deletedFlows ?? [])
+
   for (const [flowId, def] of _codeMembershipDefaults) {
     if (!registeredFlows.has(flowId)) continue
     if (flowId in state.memberships) continue
     if (!(def.groupId in state.groups)) continue
+    // Don't re-add memberships for archived or deleted flows
+    if (flowId in state.archivedFlows) continue
+    if (deletedSet.has(flowId)) continue
 
     const existing = Object.values(state.memberships).filter((m) => m.groupId === def.groupId)
     const maxOrder = existing.reduce((max, m) => Math.max(max, m.order), -1)
@@ -190,14 +195,24 @@ export async function hydrateFlowGroupsFromSupabase(): Promise<boolean> {
       if (!parsed.archivedGroups) parsed.archivedGroups = {}
       if (!parsed.ungroupedOrder) parsed.ungroupedOrder = {}
 
-      // Remote is the base — replaces local entirely
+      // Remote is the base — but merge archive/delete state (union of local + remote)
+      // so that local deletions/archives are never lost by a Pull
+      const localState = readState()
       const state: FlowGroupState = {
         groups: { ...parsed.groups },
         memberships: { ...parsed.memberships },
-        archivedFlows: { ...parsed.archivedFlows },
-        archivedGroups: { ...parsed.archivedGroups },
+        archivedFlows: { ...parsed.archivedFlows, ...localState.archivedFlows },
+        archivedGroups: { ...parsed.archivedGroups, ...localState.archivedGroups },
         ungroupedOrder: { ...parsed.ungroupedOrder },
-        deletedFlows: parsed.deletedFlows ?? [],
+        deletedFlows: [...new Set([...(parsed.deletedFlows ?? []), ...(localState.deletedFlows ?? [])])],
+      }
+
+      // Clean up: remove memberships for deleted flows
+      const deletedSet = new Set(state.deletedFlows)
+      for (const flowId of Object.keys(state.memberships)) {
+        if (deletedSet.has(flowId)) {
+          delete state.memberships[flowId]
+        }
       }
 
       // Apply code defaults: add groups/memberships from flow index files
@@ -446,6 +461,9 @@ export function addDeletedFlow(flowId: string): void {
   const set = new Set(state.deletedFlows ?? [])
   set.add(flowId)
   state.deletedFlows = [...set]
+  // Clean up: remove stale membership and archive entry
+  delete state.memberships[flowId]
+  delete state.archivedFlows[flowId]
   writeState(state, true)
 }
 
@@ -524,6 +542,13 @@ export function renameFlowInGroups(oldId: string, newId: string): void {
       order[idx] = newId
       changed = true
     }
+  }
+
+  // Also re-key in-memory code-defaults so Pull doesn't lose the membership
+  const oldMemberDefault = _codeMembershipDefaults.get(oldId)
+  if (oldMemberDefault) {
+    _codeMembershipDefaults.delete(oldId)
+    _codeMembershipDefaults.set(newId, { flowId: newId, groupId: oldMemberDefault.groupId })
   }
 
   if (changed) writeState(state)

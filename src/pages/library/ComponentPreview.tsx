@@ -44,6 +44,7 @@ import SegmentedControl from '../../library/navigation/SegmentedControl'
 import GroupHeader from '../../library/navigation/GroupHeader'
 import Sidebar from '../../library/navigation/Sidebar'
 import Breadcrumb from '../../library/navigation/Breadcrumb'
+import Subheader from '../../library/navigation/Subheader'
 import { LayoutProvider } from '../../library/layout/LayoutProvider'
 import AppShell from '../../library/layout/AppShell'
 import BaseLayout from '../../library/layout/BaseLayout'
@@ -156,6 +157,8 @@ function PreviewContent({ name }: { name: string }) {
       return <SidebarPreview />
     case 'Breadcrumb':
       return <BreadcrumbPreview />
+    case 'Subheader':
+      return <SubheaderPreview />
     case 'AppShell':
       return <AppShellPreview />
     case 'BaseLayout':
@@ -239,7 +242,7 @@ function LinkPreview() {
 function ButtonPreview() {
   return (
     <div className="flex flex-col gap-[var(--token-spacing-md)]">
-      {(['primary', 'secondary', 'ghost', 'destructive'] as const).map((v) => (
+      {(['accent', 'primary', 'secondary', 'ghost', 'destructive'] as const).map((v) => (
         <div key={v}>
           <SectionLabel>{v}</SectionLabel>
           <div className="flex flex-wrap gap-[var(--token-spacing-2)] items-center">
@@ -758,7 +761,7 @@ function DataListPreview() {
             {
               label: 'Limite diário de gastos',
               value: 'US$ 5.000,00',
-              action: <Button variant="secondary" size="sm" onPress={() => {}}>Editar</Button>,
+              action: <Button variant="primary" size="sm" onPress={() => {}}>Editar</Button>,
             },
             { label: 'Limite por transação', value: 'US$ 5.000,00' },
             { label: 'Instruções para uso', value: 'Escolha sempre o método crédito e a moeda local ao realizar compras.' },
@@ -1058,6 +1061,19 @@ function GroupHeaderPreview() {
   )
 }
 
+function SubheaderPreview() {
+  return (
+    <div className="bg-surface-primary rounded-[var(--token-radius-md)] max-w-[400px] flex flex-col">
+      <Subheader text="Minha carteira" />
+      <div className="px-5 py-3"><Text variant="body-md">Content below...</Text></div>
+      <Subheader text="Favoritos" actionLabel="Ver todos" onAction={() => {}} />
+      <div className="px-5 py-3"><Text variant="body-md">Card carousel...</Text></div>
+      <Subheader text="Todos os ativos" right={<span className="text-[12px] text-[var(--color-content-secondary)]">Sort ↕</span>} />
+      <div className="px-5 py-3"><Text variant="body-md">Asset list...</Text></div>
+    </div>
+  )
+}
+
 /* ===================== LAYOUT ===================== */
 
 function BaseLayoutPreview() {
@@ -1231,7 +1247,7 @@ function ModalPreview() {
   return (
     <div className="flex gap-[var(--token-spacing-3)]">
       <Button onPress={() => setRegularOpen(true)}>Center Modal</Button>
-      <Button variant="secondary" onPress={() => setBottomOpen(true)}>Bottom Modal</Button>
+      <Button variant="primary" onPress={() => setBottomOpen(true)}>Bottom Modal</Button>
       <Modal
         isVisible={regularOpen}
         variant="regular"
