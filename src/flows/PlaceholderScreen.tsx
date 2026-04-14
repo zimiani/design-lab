@@ -22,14 +22,14 @@ export default function PlaceholderScreen({
   return (
     <BaseLayout>
       <Header title={screenTitle} onBack={onBack} />
-      <div className="flex-1 flex flex-col items-center justify-center gap-[var(--token-spacing-md)]">
+      <div className="flex-1 flex flex-col items-center justify-center gap-[var(--token-gap-lg)]">
         <EmptyState
           icon={<RiComputerLine size={32} className="text-interactive-foreground" />}
           title={screenTitle}
           description={screenDescription || 'This screen is a placeholder. Build the actual screen component to replace it.'}
         />
         {overlays && overlays.length > 0 && (
-          <div className="flex flex-col gap-[var(--token-spacing-2)] w-full px-[var(--token-spacing-md)]">
+          <div className="flex flex-col gap-[var(--token-spacing-8)] w-full px-[var(--token-gap-lg)]">
             {overlays.map((overlay) => (
               <Button
                 key={overlay.nodeId}

@@ -23,16 +23,16 @@ function SummaryRow({ item }: { item: SummaryItem }) {
   const isPending = item.status === 'pending'
 
   return (
-    <div className="flex items-start gap-[var(--token-spacing-3)]">
+    <div className="flex items-start gap-[var(--token-spacing-12)]">
       <span className={cn(
         'shrink-0 flex items-center justify-center',
         (isDone || isPending) && 'opacity-40',
       )}>
         {item.icon}
       </span>
-      <div className="flex flex-col gap-[var(--token-spacing-1)]">
+      <div className="flex flex-col gap-[var(--token-spacing-4)]">
         <span data-text-id={item.title} className={cn(
-          'text-[length:var(--token-font-size-body-lg)] font-semibold leading-[var(--token-line-height-body-md)] tracking-[-0.16px] inline-flex items-center gap-[var(--token-spacing-1)]',
+          'text-[length:var(--token-font-size-body-lg)] font-semibold leading-[var(--token-line-height-body-md)] tracking-[-0.16px] inline-flex items-center gap-[var(--token-spacing-4)]',
           isDone ? 'text-[var(--color-content-tertiary)]' : isPending ? 'text-[var(--color-content-secondary)]' : 'text-[var(--color-content-primary)]',
         )}>
           {item.title}
@@ -51,7 +51,7 @@ function SummaryRow({ item }: { item: SummaryItem }) {
             type="button"
             onClick={item.onLinkPress}
             data-text-id={item.linkText}
-            className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-sm)] font-medium text-[var(--color-interactive-primary)] text-left cursor-pointer underline decoration-[var(--color-interactive-accent)] decoration-2 underline-offset-8"
+            className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-sm)] font-medium text-[var(--color-surface-inverse-level-0)] text-left cursor-pointer underline decoration-[var(--color-action-accent)] decoration-2 underline-offset-8"
           >
             {item.linkText}
           </button>
@@ -67,7 +67,7 @@ export default function Summary({
   className,
 }: SummaryProps) {
   return (
-    <div data-component="Summary" className={cn('w-full flex flex-col gap-[var(--token-spacing-md)] py-[var(--token-spacing-4)]', className)}>
+    <div data-component="Summary" className={cn('w-full flex flex-col gap-[var(--token-gap-lg)] py-[var(--token-spacing-16)]', className)}>
       {header && (
         <span data-text-id={header} className="text-[length:var(--token-font-size-body-lg)] font-semibold leading-[var(--token-line-height-body-lg)] text-[var(--color-content-primary)]">
           {header}

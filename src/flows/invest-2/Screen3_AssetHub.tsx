@@ -123,13 +123,13 @@ export default function Screen3_AssetHub({ onNext, onBack, onElementTap }: FlowS
             <Stack direction="row" gap="default" align="center">
               <Avatar src={asset.icon} size="lg" bgColor="rgba(255,255,255,0.15)" />
               <Stack gap="none" className="flex-1">
-                <Text variant="heading-md" className="text-white">{asset.name}</Text>
+                <Text variant="h2" className="text-white">{asset.name}</Text>
                 <Stack direction="row" gap="sm" align="center" className="mt-1">
                   <Badge variant={CATEGORY_BADGE_VARIANT[asset.category]} size="md">
                     {CATEGORY_INFO[asset.category].label}
                   </Badge>
                   {!volatile && (
-                    <Badge variant="success" size="md">Resgate imediato</Badge>
+                    <Badge variant="positive" size="md">Resgate imediato</Badge>
                   )}
                 </Stack>
               </Stack>
@@ -143,7 +143,7 @@ export default function Screen3_AssetHub({ onNext, onBack, onElementTap }: FlowS
                 </Text>
                 <BalanceDisplay value={position.currentValue} symbol="R$" inverted />
                 {volatile && asset.change24h !== undefined && (
-                  <Badge variant={asset.change24h >= 0 ? 'success' : 'error'} size="sm">
+                  <Badge variant={asset.change24h >= 0 ? 'positive' : 'critical'} size="sm">
                     {formatPercentChange(asset.change24h)}
                   </Badge>
                 )}
@@ -158,7 +158,7 @@ export default function Screen3_AssetHub({ onNext, onBack, onElementTap }: FlowS
                     <Text variant="body-sm" className="text-white/70">Preço atual</Text>
                     <BalanceDisplay value={asset.price!} symbol="R$" inverted />
                     {asset.change24h !== undefined && (
-                      <Badge variant={asset.change24h >= 0 ? 'success' : 'error'} size="sm">
+                      <Badge variant={asset.change24h >= 0 ? 'positive' : 'critical'} size="sm">
                         {formatPercentChange(asset.change24h)} (24h)
                       </Badge>
                     )}

@@ -138,10 +138,10 @@ export function getCategoryLabel(category: AssetCategory): string {
   }
 }
 
-export function getCategoryBadgeVariant(category: AssetCategory): 'info' | 'lime' | 'grape' {
+export function getCategoryBadgeVariant(category: AssetCategory): 'neutral' | 'inverse' | 'positive' {
   switch (category) {
-    case 'crypto': return 'info'
-    case 'commodity': return 'grape'
-    case 'fixed-income': return 'lime'
+    case 'crypto': return 'neutral'
+    case 'commodity': return 'inverse'
+    case 'fixed-income': return 'positive'
   }
 }

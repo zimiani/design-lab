@@ -48,7 +48,7 @@ export default function Screen1_NameIcon({ onNext, onBack, onElementTap }: FlowS
 
       <Stack gap="lg">
         <Stack gap="sm">
-          <Text variant="heading-lg">Crie sua caixinha</Text>
+          <Text variant="h1">Crie sua caixinha</Text>
           <Text variant="body-md" color="content-secondary">
             Escolha um nome e um ícone para organizar seus objetivos.
           </Text>
@@ -62,7 +62,7 @@ export default function Screen1_NameIcon({ onNext, onBack, onElementTap }: FlowS
             bgColor="var(--color-brand-core-500)"
             iconColor="#ffffff"
           />
-          <Text variant="heading-sm">
+          <Text variant="h3">
             {name.trim() || 'Minha caixinha'}
           </Text>
         </Stack>

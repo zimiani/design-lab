@@ -229,10 +229,10 @@ export default function B_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps)
 
         {/* White container with rounded top — overlaps hero (flat on desktop) */}
         <div className={`relative bg-surface-primary ${isDesktop ? '' : 'rounded-t-[35px]'}`}>
-          <Stack gap="lg" className="px-[var(--token-spacing-6)] pt-[24px] pb-[48px]">
+          <Stack gap="lg" className="px-[var(--token-spacing-24)] pt-[24px] pb-[48px]">
             {/* Title + Balance + Actions */}
             <Stack gap="lg">
-              <Text variant="heading-lg" className="tracking-[-0.6px]">Caixinha</Text>
+              <Text variant="h1" className="tracking-[-0.6px]">Caixinha</Text>
 
               {hasGoal ? (
                 <GoalCard balance={CURRENT_BALANCE} goalAmount={GOAL_AMOUNT} reached={!!goalReached} />

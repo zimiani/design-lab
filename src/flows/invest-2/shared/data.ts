@@ -50,10 +50,10 @@ export const CATEGORY_INFO: Record<AssetCategory, { label: string; emoji: string
   stablecoin: { label: 'Stablecoins', emoji: '💵', description: 'Moedas pareadas ao dólar para estabilidade' },
 }
 
-export const CATEGORY_BADGE_VARIANT: Record<AssetCategory, 'info' | 'grape' | 'lime' | 'neutral'> = {
-  crypto: 'info',
-  commodity: 'grape',
-  'fixed-income': 'lime',
+export const CATEGORY_BADGE_VARIANT: Record<AssetCategory, 'neutral' | 'inverse' | 'positive'> = {
+  crypto: 'neutral',
+  commodity: 'inverse',
+  'fixed-income': 'positive',
   stablecoin: 'neutral',
 }
 

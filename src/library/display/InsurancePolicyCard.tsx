@@ -43,7 +43,7 @@ export default function InsurancePolicyCard({ providerName, coverItems, classNam
         </div>
 
         {/* Cover info heading */}
-        <Text variant="heading-sm" className="text-white">
+        <Text variant="h3" className="text-white">
           Cover Info
         </Text>
 

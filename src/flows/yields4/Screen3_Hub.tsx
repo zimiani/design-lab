@@ -45,7 +45,7 @@ export default function Screen3_Hub({ onNext, onBack, onElementTap }: FlowScreen
         >
           <Stack direction="row" align="between">
             <Text variant="caption" className="text-[#8a8a8a]">Renda Protegida</Text>
-            <Badge variant="success" size="sm">Protegido</Badge>
+            <Badge variant="positive" size="sm">Protegido</Badge>
           </Stack>
 
           <Amount value={MOCK_BALANCE} currency="US$" size="lg" className="text-white" />

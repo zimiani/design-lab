@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import NavRail from './components/NavRail'
@@ -6,6 +7,7 @@ import SimulatorPage from './pages/SimulatorPage'
 import FlowMapPage from './pages/FlowMapPage'
 import PageGalleryPage from './pages/PageGalleryPage'
 import PreviewPage from './pages/PreviewPage'
+import { applySemanticOverrides } from './lib/tokenStore'
 
 function ShellLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,6 +21,10 @@ function ShellLayout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  useEffect(() => {
+    applySemanticOverrides()
+  }, [])
+
   return (
     <AnimatePresence mode="wait">
       <Routes>

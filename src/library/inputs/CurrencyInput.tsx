@@ -90,7 +90,7 @@ export default function CurrencyInput({
   const valueColor = hasValue ? 'text-content-primary' : 'text-content-tertiary'
 
   return (
-    <div data-component="CurrencyInput" className={`flex flex-col gap-[8px] items-end pt-[6px] pb-[var(--token-spacing-4)] ${className}`}>
+    <div data-component="CurrencyInput" className={`flex flex-col gap-[8px] items-end pt-[6px] pb-[var(--token-spacing-16)] ${className}`}>
       {label && (
         <span className="text-[14px] font-medium leading-[22px] text-content-secondary">
           {label}
@@ -159,7 +159,7 @@ export default function CurrencyInput({
           type="button"
           onClick={onBalanceTap}
           disabled={!onBalanceTap}
-          className={`flex items-center gap-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] ${balanceError ? 'text-[var(--color-feedback-critical)]' : 'text-content-tertiary'} ${onBalanceTap ? 'cursor-pointer underline decoration-dotted underline-offset-2' : ''}`}
+          className={`flex items-center gap-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] ${balanceError ? 'text-[var(--color-feedback-error)]' : 'text-content-tertiary'} ${onBalanceTap ? 'cursor-pointer underline decoration-dotted underline-offset-2' : ''}`}
         >
           {balanceError && <RiErrorWarningLine size={18} />}
           Saldo: {balance}

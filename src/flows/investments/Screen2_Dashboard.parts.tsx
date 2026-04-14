@@ -18,12 +18,12 @@ export function AssetRow({ asset, onPress }: { asset: Asset; onPress?: () => voi
       left={<Avatar src={asset.icon} size="md" />}
       right={
         isFixed ? (
-          <Badge variant="lime" size="sm">{asset.apyDisplay}</Badge>
+          <Badge variant="positive" size="sm">{asset.apyDisplay}</Badge>
         ) : (
           <Stack gap="none" align="end">
             <Text variant="body-sm">{formatBRL(asset.price!)}</Text>
             <Badge
-              variant={asset.change24h! >= 0 ? 'success' : 'error'}
+              variant={asset.change24h! >= 0 ? 'positive' : 'critical'}
               size="sm"
             >
               {formatPercentChange(asset.change24h!)}
@@ -50,7 +50,7 @@ export function PositionRow({ position, onPress }: { position: Position; onPress
       right={
         <Stack gap="none" align="end">
           <Text variant="body-sm">{formatBRL(position.currentValue)}</Text>
-          <Badge variant={pnl >= 0 ? 'success' : 'error'} size="sm">
+          <Badge variant={pnl >= 0 ? 'positive' : 'critical'} size="sm">
             {formatPercentChange(pnl)}
           </Badge>
         </Stack>

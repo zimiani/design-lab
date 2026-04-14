@@ -10,9 +10,9 @@ export interface SectionProps {
 
 export default function Section({ children, title, className = '' }: SectionProps) {
   return (
-    <div data-component="Section" className={cn('flex flex-col gap-[var(--token-spacing-3)]', className)}>
+    <div data-component="Section" className={cn('flex flex-col gap-[var(--token-spacing-12)]', className)}>
       {title && (
-        <h2 className="text-[length:var(--token-font-size-heading-sm)] leading-[var(--token-line-height-heading-sm)] font-semibold text-content-primary tracking-[-0.2px] m-0">
+        <h2 className="text-[length:var(--token-font-size-h3)] leading-[var(--token-line-height-h3)] font-semibold text-content-primary tracking-[-0.2px] m-0">
           {title}
         </h2>
       )}

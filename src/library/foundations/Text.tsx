@@ -5,6 +5,7 @@ import { cn } from '../../lib/cn'
 
 export interface TextProps {
   variant?: TypographyVariant
+  bold?: boolean
   color?: string
   align?: 'left' | 'center' | 'right'
   children: ReactNode
@@ -14,17 +15,21 @@ export interface TextProps {
 
 const variantStyles: Record<TypographyVariant, string> = {
   display:
-    'text-[length:var(--token-font-size-display)] leading-[var(--token-line-height-display)] font-semibold tracking-tight',
-  'heading-lg':
-    'text-[length:var(--token-font-size-heading-lg)] leading-[var(--token-line-height-heading-lg)] font-semibold',
-  'heading-md':
-    'text-[length:var(--token-font-size-heading-md)] leading-[var(--token-line-height-heading-md)] font-semibold',
-  'heading-sm':
-    'text-[length:var(--token-font-size-heading-sm)] leading-[var(--token-line-height-heading-sm)] font-medium',
+    'text-[length:var(--token-font-size-display)] leading-[var(--token-line-height-display)] font-semibold tracking-[var(--token-letter-spacing-display)]',
+  h1:
+    'text-[length:var(--token-font-size-h1)] leading-[var(--token-line-height-h1)] font-semibold tracking-[var(--token-letter-spacing-h1)]',
+  h2:
+    'text-[length:var(--token-font-size-h2)] leading-[var(--token-line-height-h2)] font-semibold tracking-[var(--token-letter-spacing-h2)]',
+  h3:
+    'text-[length:var(--token-font-size-h3)] leading-[var(--token-line-height-h3)] font-semibold tracking-[var(--token-letter-spacing-h3)]',
+  h4:
+    'text-[length:var(--token-font-size-h4)] leading-[var(--token-line-height-h4)] font-semibold tracking-[var(--token-letter-spacing-h4)]',
+  overline:
+    'text-[length:var(--token-font-size-overline)] leading-[var(--token-line-height-overline)] font-semibold tracking-[var(--token-letter-spacing-overline)] uppercase',
   'body-lg':
-    'text-[length:var(--token-font-size-body-lg)] leading-[var(--token-line-height-body-lg)] font-normal',
+    'text-[length:var(--token-font-size-body-lg)] leading-[var(--token-line-height-body-lg)] font-normal tracking-[var(--token-letter-spacing-body-lg)]',
   'body-md':
-    'text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] font-normal',
+    'text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] font-normal tracking-[var(--token-letter-spacing-body-md)]',
   'body-sm':
     'text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-normal',
   caption:
@@ -33,9 +38,11 @@ const variantStyles: Record<TypographyVariant, string> = {
 
 const defaultTag: Record<TypographyVariant, TextProps['as']> = {
   display: 'h1',
-  'heading-lg': 'h2',
-  'heading-md': 'h3',
-  'heading-sm': 'h4',
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  overline: 'span',
   'body-lg': 'p',
   'body-md': 'p',
   'body-sm': 'p',
@@ -51,6 +58,7 @@ function deriveTextId(children: ReactNode): string | undefined {
 
 export default function Text({
   variant = 'body-md',
+  bold = false,
   color,
   align = 'left',
   children,
@@ -68,7 +76,7 @@ export default function Text({
     <Tag
       data-component="Text"
       data-text-id={textId}
-      className={cn(variantStyles[variant], alignClass, className)}
+      className={cn(variantStyles[variant], alignClass, bold && 'font-semibold', className)}
       style={colorStyle}
     >
       {children}
@@ -83,9 +91,11 @@ registerComponent({
   component: Text,
   variants: [
     'display',
-    'heading-lg',
-    'heading-md',
-    'heading-sm',
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'overline',
     'body-lg',
     'body-md',
     'body-sm',
@@ -93,6 +103,7 @@ registerComponent({
   ],
   props: [
     { name: 'variant', type: 'TypographyVariant', required: false, defaultValue: 'body-md', description: 'Typography scale variant' },
+    { name: 'bold', type: 'boolean', required: false, defaultValue: 'false', description: 'Semibold weight (600) for body emphasis' },
     { name: 'color', type: 'string', required: false, description: 'Token color name (e.g. "text-secondary")' },
     { name: 'align', type: '"left" | "center" | "right"', required: false, defaultValue: 'left', description: 'Text alignment' },
     { name: 'children', type: 'ReactNode', required: true, description: 'Text content' },

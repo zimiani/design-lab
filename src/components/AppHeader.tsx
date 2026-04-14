@@ -64,9 +64,9 @@ export default function AppHeader({ center, actions, onSynced }: AppHeaderProps)
 
   return (
     <>
-      <header className="h-[48px] flex items-center justify-between px-[var(--token-spacing-md)] border-b border-shell-border bg-shell-surface shrink-0">
+      <header className="h-[48px] flex items-center justify-between px-[var(--token-gap-lg)] border-b border-shell-border bg-shell-surface shrink-0">
         {/* Left: sync status */}
-        <div className="flex items-center gap-[var(--token-spacing-2)] min-w-[120px]">
+        <div className="flex items-center gap-[var(--token-spacing-8)] min-w-[120px]">
           {isSupabaseConnected() ? (
             <div className="relative" ref={popoverRef}>
               <button
@@ -130,7 +130,7 @@ export default function AppHeader({ center, actions, onSynced }: AppHeaderProps)
         </div>
 
         {/* Right: page-specific actions */}
-        <div className="flex items-center gap-[var(--token-spacing-2)] min-w-[200px] justify-end">
+        <div className="flex items-center gap-[var(--token-spacing-8)] min-w-[200px] justify-end">
           {actions}
         </div>
       </header>
@@ -139,25 +139,25 @@ export default function AppHeader({ center, actions, onSynced }: AppHeaderProps)
       {showPullConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setShowPullConfirm(false)} />
-          <div className="relative z-10 w-[380px] bg-shell-surface border border-shell-border rounded-[var(--token-radius-lg)] shadow-lg p-[var(--token-spacing-md)] flex flex-col gap-[var(--token-spacing-3)]">
-            <h3 className="text-[length:var(--token-font-size-heading-sm)] font-semibold text-shell-text">
+          <div className="relative z-10 w-[380px] bg-shell-surface border border-shell-border rounded-[var(--token-radius-lg)] shadow-lg p-[var(--token-gap-lg)] flex flex-col gap-[var(--token-spacing-12)]">
+            <h3 className="text-[length:var(--token-font-size-h3)] font-semibold text-shell-text">
               Replace local changes?
             </h3>
             <p className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary leading-relaxed">
               You have local changes that haven't been pushed. Pulling will replace them with the remote version.
             </p>
-            <div className="flex justify-end gap-[var(--token-spacing-2)] pt-[var(--token-spacing-2)]">
+            <div className="flex justify-end gap-[var(--token-spacing-8)] pt-[var(--token-spacing-8)]">
               <button
                 type="button"
                 onClick={() => setShowPullConfirm(false)}
-                className="px-[var(--token-spacing-4)] py-[var(--token-spacing-2)] text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary hover:text-shell-text rounded-[var(--token-radius-sm)] cursor-pointer"
+                className="px-[var(--token-spacing-16)] py-[var(--token-spacing-8)] text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary hover:text-shell-text rounded-[var(--token-radius-sm)] cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={executePull}
-                className="px-[var(--token-spacing-4)] py-[var(--token-spacing-2)] text-[length:var(--token-font-size-body-sm)] bg-[#F87171] text-white rounded-[var(--token-radius-sm)] font-medium cursor-pointer hover:bg-[#EF4444]"
+                className="px-[var(--token-spacing-16)] py-[var(--token-spacing-8)] text-[length:var(--token-font-size-body-sm)] bg-[#F87171] text-white rounded-[var(--token-radius-sm)] font-medium cursor-pointer hover:bg-[#EF4444]"
               >
                 Replace local data
               </button>

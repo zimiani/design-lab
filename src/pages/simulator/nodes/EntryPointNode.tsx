@@ -33,7 +33,7 @@ function EntryPointNode({ data, selected }: NodeProps) {
       <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#F472B6] !w-[8px] !h-[8px] !border-[1.5px] !border-[#252525]" />
 
       {/* Header */}
-      <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] bg-[#F472B6]/[0.08]">
+      <div className="flex items-center gap-[var(--token-spacing-8)] px-[var(--token-spacing-12)] py-[var(--token-spacing-8)] bg-[#F472B6]/[0.08]">
         <RiLoginBoxLine size={14} className="text-[#F472B6] shrink-0" />
         <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#e0e0e0] truncate flex-1">
           Entry Points
@@ -41,7 +41,7 @@ function EntryPointNode({ data, selected }: NodeProps) {
       </div>
 
       {/* Body: pills */}
-      <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] flex flex-wrap gap-[var(--token-spacing-1)]">
+      <div className="px-[var(--token-spacing-12)] py-[var(--token-spacing-8)] flex flex-wrap gap-[var(--token-spacing-4)]">
         {!hasEntries && (
           <p className="text-[length:var(--token-font-size-caption)] text-[#666] italic">
             No entry points defined
@@ -52,7 +52,7 @@ function EntryPointNode({ data, selected }: NodeProps) {
         {autoEntries.map((entry) => (
           <span
             key={`auto-${entry}`}
-            className="px-[var(--token-spacing-2)] py-[1px] bg-[#F472B6]/10 text-[#F472B6] rounded-full text-[length:var(--token-font-size-caption)]"
+            className="px-[var(--token-spacing-8)] py-[1px] bg-[#F472B6]/10 text-[#F472B6] rounded-full text-[length:var(--token-font-size-caption)]"
           >
             {entry}
           </span>
@@ -62,7 +62,7 @@ function EntryPointNode({ data, selected }: NodeProps) {
         {linkedFrom.map((f) => (
           <span
             key={`link-${f.id}`}
-            className="px-[var(--token-spacing-2)] py-[1px] bg-[#60A5FA]/10 text-[#60A5FA] rounded-full text-[length:var(--token-font-size-caption)]"
+            className="px-[var(--token-spacing-8)] py-[1px] bg-[#60A5FA]/10 text-[#60A5FA] rounded-full text-[length:var(--token-font-size-caption)]"
           >
             <span className="font-mono">{f.id}</span>
           </span>
@@ -72,7 +72,7 @@ function EntryPointNode({ data, selected }: NodeProps) {
         {manualEntries.map((entry) => (
           <span
             key={`manual-${entry}`}
-            className="px-[var(--token-spacing-2)] py-[1px] border border-[#F472B6]/30 text-[#F472B6] rounded-full text-[length:var(--token-font-size-caption)]"
+            className="px-[var(--token-spacing-8)] py-[1px] border border-[#F472B6]/30 text-[#F472B6] rounded-full text-[length:var(--token-font-size-caption)]"
           >
             {entry}
           </span>

@@ -19,7 +19,7 @@ export default function Screen1_FirstAccess({ onNext, onBack }: FlowScreenProps)
       imageAlt="US banking illustration"
       onClose={onBack}
       imageOverlay={
-        <Badge variant="lime" icon={<RiFlashlightLine size={16} />}>
+        <Badge variant="positive" icon={<RiFlashlightLine size={16} />}>
           Novidade
         </Badge>
       }

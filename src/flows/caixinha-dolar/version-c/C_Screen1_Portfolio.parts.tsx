@@ -33,7 +33,7 @@ export function ProductListItem({ onPress }: ProductListItemProps) {
       }
       right={
         <Stack gap="none" align="end">
-          <Badge variant="lime" size="sm">5% a.a.</Badge>
+          <Badge variant="positive" size="sm">5% a.a.</Badge>
           <Text variant="caption" className="text-[#22c55e] mt-1">
             +{formatUsd(YIELD_TODAY)}/dia
           </Text>
@@ -65,7 +65,7 @@ export function DiscoverSection({ onActivate }: DiscoverSectionProps) {
             iconColor="#f59e0b"
           />
         }
-        right={<Badge variant="lime" size="sm">Novo</Badge>}
+        right={<Badge variant="positive" size="sm">Novo</Badge>}
         onPress={onActivate}
       />
     </Stack>

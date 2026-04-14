@@ -45,8 +45,8 @@ export default function PinInput({
     : 'border-border-default focus:border-interactive-default'
 
   return (
-    <div data-component="PinInput" className={`flex flex-col items-center gap-[var(--token-spacing-2)] ${className}`}>
-      <div className="flex gap-[var(--token-spacing-2)]">
+    <div data-component="PinInput" className={`flex flex-col items-center gap-[var(--token-spacing-8)] ${className}`}>
+      <div className="flex gap-[var(--token-spacing-8)]">
         {Array.from({ length }, (_, i) => (
           <input
             key={i}
@@ -60,8 +60,8 @@ export default function PinInput({
             disabled={disabled}
             className={`
               w-[48px] h-[56px] text-center
-              text-[length:var(--token-font-size-heading-md)] font-semibold
-              bg-surface-primary border rounded-[var(--token-radius-md)]
+              text-[length:var(--token-font-size-h2)] font-semibold
+              bg-surface-level-0 border rounded-[var(--token-radius-md)]
               outline-none transition-colors duration-[var(--token-transition-fast)]
               text-text-primary
               ${borderColor}

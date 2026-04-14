@@ -27,23 +27,23 @@ const variantConfig: Record<
 > = {
   neutral: {
     icon: <RiInformationLine size={24} />,
-    bg: 'bg-[var(--color-surface-shade)]',
-    avatarBg: 'bg-[var(--color-surface-shade)]',
+    bg: 'bg-[var(--color-surface-level-1)]',
+    avatarBg: 'bg-[var(--color-surface-level-1)]',
     titleColor: 'text-[var(--color-content-primary)]',
     descColor: 'text-[var(--color-content-secondary)]',
     linkColor: 'text-[var(--color-content-primary)]',
   },
   success: {
     icon: <RiCheckLine size={24} />,
-    bg: 'bg-[var(--color-surface-shade)]',
-    avatarBg: 'bg-[var(--color-surface-shade)]',
+    bg: 'bg-[var(--color-surface-level-1)]',
+    avatarBg: 'bg-[var(--color-surface-level-1)]',
     titleColor: 'text-[var(--color-content-primary)]',
     descColor: 'text-[var(--color-content-secondary)]',
     linkColor: 'text-[var(--color-content-primary)]',
   },
   warning: {
     icon: <RiErrorWarningLine size={24} />,
-    bg: 'bg-[var(--color-surface-shade)]',
+    bg: 'bg-[var(--color-surface-level-1)]',
     avatarBg: 'bg-[var(--token-warning-light)]',
     titleColor: 'text-[var(--color-content-primary)]',
     descColor: 'text-[var(--color-content-secondary)]',
@@ -51,8 +51,8 @@ const variantConfig: Record<
   },
   critical: {
     icon: <RiCloseLine size={24} />,
-    bg: 'bg-[var(--color-feedback-critical)]',
-    avatarBg: 'bg-[var(--color-surface-shade)]',
+    bg: 'bg-[var(--color-feedback-error)]',
+    avatarBg: 'bg-[var(--color-surface-level-1)]',
     titleColor: 'text-white',
     descColor: 'text-white',
     linkColor: 'text-white',
@@ -95,7 +95,7 @@ export default function Banner({
       <div
         data-component="Banner"
         className={`
-          bg-white border border-[var(--color-border-default)]
+          bg-white border border-[var(--color-border)]
           flex gap-[12px] items-start p-[16px] rounded-[12px] w-full
           cursor-pointer overflow-hidden
           ${expanded ? '' : 'h-[56px]'}

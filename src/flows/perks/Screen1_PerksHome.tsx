@@ -16,7 +16,7 @@ export default function Screen1_PerksHome({ onNext, onBack }: FlowScreenProps) {
       imageAlt="Picnic benefits"
       onClose={onBack}
       imageOverlay={
-        <Badge variant="lime" icon={<RiSparklingLine size={16} />}>Benefícios</Badge>
+        <Badge variant="positive" icon={<RiSparklingLine size={16} />}>Benefícios</Badge>
       }
     >
       <Stack gap="sm">
@@ -45,7 +45,7 @@ export default function Screen1_PerksHome({ onNext, onBack }: FlowScreenProps) {
 
       <StickyFooter>
         <Button fullWidth size="lg" onPress={onNext}>
-          <span className="flex items-center gap-[var(--token-spacing-2)]">
+          <span className="flex items-center gap-[var(--token-spacing-8)]">
             Ver mais benefícios
             <RiArrowRightLine size={18} />
           </span>

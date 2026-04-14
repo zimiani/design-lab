@@ -12,9 +12,9 @@ export interface StackProps {
 
 const gapClasses: Record<NonNullable<StackProps['gap']>, string> = {
   none: 'gap-0',
-  sm: 'gap-[var(--token-spacing-2)]',
-  default: 'gap-[var(--token-spacing-4)]',
-  lg: 'gap-[var(--token-spacing-6)]',
+  sm: 'gap-[var(--token-spacing-8)]',
+  default: 'gap-[var(--token-spacing-16)]',
+  lg: 'gap-[var(--token-spacing-24)]',
 }
 
 const alignClasses: Record<NonNullable<StackProps['align']>, string> = {

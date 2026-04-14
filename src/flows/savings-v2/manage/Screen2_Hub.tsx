@@ -56,8 +56,8 @@ export default function Screen2_Hub({ onNext, onBack, onElementTap }: FlowScreen
 
       <Stack gap="lg">
         <Stack direction="row" gap="sm" align="center" className="-mt-2">
-          <Badge variant="lime" size="md" icon={<RiTimeLine size={14} />}>Resgate imediato</Badge>
-          <Badge variant="lime" size="md" icon={<RiShieldCheckLine size={14} />}>Cobertura inclusa</Badge>
+          <Badge variant="positive" size="md" icon={<RiTimeLine size={14} />}>Resgate imediato</Badge>
+          <Badge variant="positive" size="md" icon={<RiShieldCheckLine size={14} />}>Cobertura inclusa</Badge>
         </Stack>
 
         <Stack gap="none" className="gap-1">
@@ -65,7 +65,7 @@ export default function Screen2_Hub({ onNext, onBack, onElementTap }: FlowScreen
             <BalanceDisplay value={hasBalance ? CURRENT_BALANCE : 0} symbol="US$" />
           </div>
           {hasPending && (
-            <div className="flex items-center gap-[var(--token-spacing-2)]">
+            <div className="flex items-center gap-[var(--token-spacing-8)]">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}

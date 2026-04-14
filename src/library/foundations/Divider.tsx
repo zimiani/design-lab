@@ -6,9 +6,9 @@ export interface DividerProps {
 }
 
 const spacingMap = {
-  sm: 'my-[var(--token-spacing-sm)]',
+  sm: 'my-[var(--token-gap-md)]',
   md: 'my-[8px]',
-  lg: 'my-[var(--token-spacing-lg)]',
+  lg: 'my-[var(--token-padding-lg)]',
 } as const
 
 export default function Divider({ spacing = 'md', className = '' }: DividerProps) {

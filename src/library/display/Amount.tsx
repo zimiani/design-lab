@@ -10,7 +10,7 @@ export interface AmountProps {
 const sizeStyles = {
   sm: 'text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]',
   md: 'text-[length:var(--token-font-size-body-lg)] leading-[var(--token-line-height-body-lg)]',
-  lg: 'text-[length:var(--token-font-size-heading-lg)] leading-[var(--token-line-height-heading-lg)] font-semibold',
+  lg: 'text-[length:var(--token-font-size-h1)] leading-[var(--token-line-height-h1)] font-semibold',
   display: 'text-[length:var(--token-font-size-display)] leading-[var(--token-line-height-display)] font-semibold',
 } as const
 

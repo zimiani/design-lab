@@ -20,7 +20,7 @@ const sizeStyles = {
   sm: 'w-[32px] h-[32px] text-[length:var(--token-font-size-caption)]',
   md: 'w-[40px] h-[40px] text-[length:var(--token-font-size-body-sm)]',
   lg: 'w-[56px] h-[56px] text-[length:var(--token-font-size-body-lg)]',
-  xl: 'w-[72px] h-[72px] text-[length:var(--token-font-size-heading-md)]',
+  xl: 'w-[72px] h-[72px] text-[length:var(--token-font-size-h2)]',
 } as const
 
 const iconSizes = { sm: 14, md: 18, lg: 24, xl: 32 } as const
@@ -53,7 +53,7 @@ export default function Avatar({
 }: AvatarProps) {
   const base = cn(
     'inline-flex items-center justify-center shrink-0 rounded-[var(--token-radius-full)] overflow-hidden font-medium',
-    !bgColor && 'bg-[var(--color-surface-shade)]',
+    !bgColor && 'bg-[var(--color-surface-level-1)]',
     !iconColor && 'text-[var(--color-content-secondary)]',
     sizeStyles[size],
   )
@@ -81,7 +81,7 @@ export default function Avatar({
       {overlay && (
         <div
           className={cn(
-            'absolute bottom-[-2px] right-[-2px] rounded-[var(--token-radius-full)] bg-[var(--color-surface-shade)] border-2 border-[var(--color-surface-primary)] flex items-center justify-center overflow-hidden',
+            'absolute bottom-[-2px] right-[-2px] rounded-[var(--token-radius-full)] bg-[var(--color-surface-level-1)] border-2 border-[var(--color-surface-level-0)] flex items-center justify-center overflow-hidden',
             overlaySizes[size],
           )}
         >
@@ -92,7 +92,7 @@ export default function Avatar({
       {badge && (
         <div
           className={cn(
-            'absolute rounded-[var(--token-radius-full)] border-2 border-[var(--color-surface-primary)]',
+            'absolute rounded-[var(--token-radius-full)] border-2 border-[var(--color-surface-level-0)]',
             badgeSizes[size],
           )}
           style={{ backgroundColor: badgeColor }}

@@ -66,8 +66,8 @@ function SkeletonHeader() {
 function Scene({ children }: { children: ReactNode }) {
   return (
     <LayoutProvider isDesktop={false}>
-      <div className="bg-surface-primary min-h-full flex flex-col relative" style={{ paddingTop: 'var(--safe-area-top, 62px)', color: '#171717', '--color-content-primary': '#171717' } as React.CSSProperties}>
-        <div className="flex-1 px-[var(--token-spacing-6)] pt-[var(--token-spacing-4)] pb-[48px] flex flex-col gap-[var(--token-spacing-6)]">
+      <div className="bg-surface-level-0 min-h-full flex flex-col relative" style={{ paddingTop: 'var(--safe-area-top, 62px)', color: '#171717', '--color-content-primary': '#171717' } as React.CSSProperties}>
+        <div className="flex-1 px-[var(--token-spacing-24)] pt-[var(--token-spacing-16)] pb-[48px] flex flex-col gap-[var(--token-spacing-24)]">
           <SkeletonHeader />
           {children}
         </div>
@@ -194,7 +194,7 @@ function getScene(meta: ComponentMeta): ReactNode {
         <Scene>
           <C variant="elevated">
             <Text variant="body-sm" color="content-secondary">Saldo disponível</Text>
-            <Text variant="heading-md">US$ 2.450,00</Text>
+            <Text variant="h2">US$ 2.450,00</Text>
           </C>
           <SkeletonCard />
         </Scene>
@@ -210,9 +210,9 @@ function getScene(meta: ComponentMeta): ReactNode {
     case 'Badge':
       return (
         <Scene>
-          <ListItem title="Cartão físico" right={<C variant="success">Ativo</C>} />
+          <ListItem title="Cartão físico" right={<C variant="positive">Ativo</C>} />
           <ListItem title="Verificação" right={<C variant="warning">Pendente</C>} />
-          <ListItem title="Conta virtual" right={<C variant="info">Novo</C>} />
+          <ListItem title="Conta virtual" right={<C variant="neutral">Novo</C>} />
         </Scene>
       )
     case 'Avatar':
@@ -296,7 +296,7 @@ function getScene(meta: ComponentMeta): ReactNode {
         <Scene>
           <SkeletonLines count={2} />
           <SkeletonCard />
-          <C message="Copiado com sucesso!" variant="success" visible />
+          <C message="Copiado com sucesso!" variant="positive" visible />
         </Scene>
       )
     case 'EmptyState':
@@ -350,8 +350,8 @@ function getScene(meta: ComponentMeta): ReactNode {
     case 'TabBar':
       return (
         <LayoutProvider isDesktop={false}>
-          <div className="bg-surface-primary min-h-full flex flex-col" style={{ paddingTop: 'var(--safe-area-top, 62px)' }}>
-            <div className="flex-1 px-[var(--token-spacing-6)] pt-[var(--token-spacing-4)] flex flex-col gap-[var(--token-spacing-6)]">
+          <div className="bg-surface-level-0 min-h-full flex flex-col" style={{ paddingTop: 'var(--safe-area-top, 62px)' }}>
+            <div className="flex-1 px-[var(--token-spacing-24)] pt-[var(--token-spacing-16)] flex flex-col gap-[var(--token-spacing-24)]">
               <SkeletonHeader />
               <SkeletonLines count={4} />
             </div>
@@ -457,7 +457,7 @@ function getScene(meta: ComponentMeta): ReactNode {
     case 'Text':
       return (
         <Scene>
-          <C variant="heading-md">Título principal</C>
+          <C variant="h2">Título principal</C>
           <C variant="body-md" color="content-secondary">Texto de descrição com mais detalhes sobre o conteúdo.</C>
           <C variant="caption" color="content-tertiary">Legenda ou informação secundária</C>
         </Scene>

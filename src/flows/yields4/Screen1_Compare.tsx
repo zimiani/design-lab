@@ -39,7 +39,7 @@ function YieldOption({ title, rate, badge, icon, features, recommended, onPress 
         <Stack direction="row" align="between">
           <Stack direction="row" gap="sm" align="center">
             {icon}
-            <Text variant="heading-sm">{title}</Text>
+            <Text variant="h3">{title}</Text>
           </Stack>
           {badge}
         </Stack>
@@ -49,7 +49,7 @@ function YieldOption({ title, rate, badge, icon, features, recommended, onPress 
           data={features.map((f) => ({ label: f, value: '' }))}
         />
         {recommended && (
-          <Badge variant="lime" size="sm">Recomendado</Badge>
+          <Badge variant="positive" size="sm">Recomendado</Badge>
         )}
       </Stack>
     </Card>
@@ -76,7 +76,7 @@ export default function Screen1_Compare({ onNext, onBack, onElementTap }: FlowSc
         <YieldOption
           title="Protegido"
           rate={`~${formatPct(NET_APY)} a.a.`}
-          badge={<Badge variant="success" size="sm">Segurado</Badge>}
+          badge={<Badge variant="positive" size="sm">Segurado</Badge>}
           icon={<RiShieldCheckLine size={20} className="text-[var(--color-feedback-success)]" />}
           features={['97,5% cobertura de seguro', 'OpenCover / Nexus Mutual', 'Liquidez imediata']}
           recommended
@@ -95,7 +95,7 @@ export default function Screen1_Compare({ onNext, onBack, onElementTap }: FlowSc
         <YieldOption
           title="Conservador"
           rate="3,20% a.a."
-          badge={<Badge variant="info" size="sm">USDC</Badge>}
+          badge={<Badge variant="neutral" size="sm">USDC</Badge>}
           icon={<RiStarLine size={20} className="text-content-secondary" />}
           features={['Stablecoin mais conservadora', 'Aave v3 na Ethereum', 'Liquidez imediata']}
           onPress={() => handleSelect('Conservador')}

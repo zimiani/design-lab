@@ -60,7 +60,7 @@ function EditableField({
 
   if (editing) {
     return (
-      <div className="flex flex-col gap-[var(--token-spacing-1)]">
+      <div className="flex flex-col gap-[var(--token-spacing-4)]">
         {multiline ? (
           <textarea
             value={draft}
@@ -68,7 +68,7 @@ function EditableField({
             onKeyDown={handleKeyDown}
             rows={4}
             autoFocus
-            className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none resize-y"
+            className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none resize-y"
           />
         ) : (
           <input
@@ -77,21 +77,21 @@ function EditableField({
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={handleKeyDown}
             autoFocus
-            className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none"
+            className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none"
           />
         )}
-        <div className="flex gap-[var(--token-spacing-1)] justify-end">
+        <div className="flex gap-[var(--token-spacing-4)] justify-end">
           <button
             type="button"
             onClick={() => setEditing(false)}
-            className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
+            className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px]"
+            className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px]"
           >
             <RiCheckLine size={12} />
             Save
@@ -108,7 +108,7 @@ function EditableField({
       onClick={handleEdit}
       onKeyDown={(e) => { if (e.key === 'Enter') handleEdit() }}
       title={`Click to edit ${label}`}
-      className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-1)] px-[var(--token-spacing-1)] py-[2px] -mx-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
+      className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-4)] px-[var(--token-spacing-4)] py-[2px] -mx-[var(--token-spacing-4)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
     >
       <span className="flex-1">{value || '(empty)'}</span>
       <RiPencilLine
@@ -165,23 +165,23 @@ function EditableSlug({
 
   if (editing) {
     return (
-      <div className="flex flex-col gap-[var(--token-spacing-1)]">
+      <div className="flex flex-col gap-[var(--token-spacing-4)]">
         <input
           type="text"
           value={draft}
           onChange={(e) => { setDraft(formatSlug(e.target.value)); setError(null) }}
           onKeyDown={handleKeyDown}
           autoFocus
-          className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none font-mono"
+          className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none font-mono"
         />
         {error && (
           <p className="text-[length:var(--token-font-size-caption)] text-error">{error}</p>
         )}
-        <div className="flex gap-[var(--token-spacing-1)] justify-end">
+        <div className="flex gap-[var(--token-spacing-4)] justify-end">
           <button
             type="button"
             onClick={() => setEditing(false)}
-            className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
+            className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
           >
             Cancel
           </button>
@@ -189,7 +189,7 @@ function EditableSlug({
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px] disabled:opacity-40"
+            className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px] disabled:opacity-40"
           >
             <RiCheckLine size={12} />
             {saving ? 'Saving...' : 'Save'}
@@ -206,7 +206,7 @@ function EditableSlug({
       onClick={handleEdit}
       onKeyDown={(e) => { if (e.key === 'Enter') handleEdit() }}
       title={`Click to edit ${label}`}
-      className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-1)] px-[var(--token-spacing-1)] py-[2px] -mx-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
+      className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-4)] px-[var(--token-spacing-4)] py-[2px] -mx-[var(--token-spacing-4)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
     >
       <span className="flex-1">{value}</span>
       <RiPencilLine
@@ -276,18 +276,18 @@ function EntryPointSection({
   }
 
   return (
-    <div className="mb-[var(--token-spacing-lg)]">
+    <div className="mb-[var(--token-padding-lg)]">
       {/* Auto entries */}
       {autoEntries.length > 0 && (
-        <div className="mb-[var(--token-spacing-3)]">
-          <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+        <div className="mb-[var(--token-spacing-12)]">
+          <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
             Entry Points
           </p>
-          <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
+          <div className="flex flex-wrap gap-[var(--token-spacing-4)]">
             {autoEntries.map((entry) => (
               <span
                 key={entry}
-                className="px-[var(--token-spacing-2)] py-[1px] bg-[#F472B6]/15 text-[#F472B6] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)]"
+                className="px-[var(--token-spacing-8)] py-[1px] bg-[#F472B6]/15 text-[#F472B6] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)]"
               >
                 {entry}
               </span>
@@ -298,15 +298,15 @@ function EntryPointSection({
 
       {/* Linked from flows */}
       {linkedFrom.length > 0 && (
-        <div className="mb-[var(--token-spacing-3)]">
-          <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+        <div className="mb-[var(--token-spacing-12)]">
+          <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
             Linked From
           </p>
-          <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
+          <div className="flex flex-wrap gap-[var(--token-spacing-4)]">
             {linkedFrom.map((f) => (
               <span
                 key={f.id}
-                className="px-[var(--token-spacing-2)] py-[1px] bg-[#60A5FA]/15 text-[#60A5FA] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-mono"
+                className="px-[var(--token-spacing-8)] py-[1px] bg-[#60A5FA]/15 text-[#60A5FA] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-mono"
               >
                 {f.id}
               </span>
@@ -317,15 +317,15 @@ function EntryPointSection({
 
       {/* Manual entries */}
       <div>
-        <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+        <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
           Custom Entries
         </p>
         {manualEntries.length > 0 && (
-          <div className="flex flex-wrap gap-[var(--token-spacing-1)] mb-[var(--token-spacing-2)]">
+          <div className="flex flex-wrap gap-[var(--token-spacing-4)] mb-[var(--token-spacing-8)]">
             {manualEntries.map((entry) => (
               <span
                 key={entry}
-                className="inline-flex items-center gap-[2px] px-[var(--token-spacing-2)] py-[1px] border border-[#F472B6]/40 text-[#F472B6] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)]"
+                className="inline-flex items-center gap-[2px] px-[var(--token-spacing-8)] py-[1px] border border-[#F472B6]/40 text-[#F472B6] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)]"
               >
                 {entry}
                 <button
@@ -339,19 +339,19 @@ function EntryPointSection({
             ))}
           </div>
         )}
-        <div className="flex gap-[var(--token-spacing-1)]">
+        <div className="flex gap-[var(--token-spacing-4)]">
           <input
             type="text"
             value={newEntry}
             onChange={(e) => setNewEntry(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') handleAdd() }}
             placeholder="Add entry..."
-            className="flex-1 px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#F472B6]"
+            className="flex-1 px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-caption)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#F472B6]"
           />
           <button
             type="button"
             onClick={handleAdd}
-            className="px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[#F472B6] hover:bg-[#F472B6]/15 rounded-[var(--token-radius-sm)] transition-colors cursor-pointer"
+            className="px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[#F472B6] hover:bg-[#F472B6]/15 rounded-[var(--token-radius-sm)] transition-colors cursor-pointer"
           >
             <RiAddLine size={14} />
           </button>
@@ -408,20 +408,20 @@ export default function FlowViewAnnotationsPanel({
     const linksFrom = getFlowsLinkingTo(flow.id)
     if (linksTo.length === 0 && linksFrom.length === 0) return null
     return (
-      <div className="p-[var(--token-spacing-md)] border-t border-shell-border">
-        <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+      <div className="p-[var(--token-gap-lg)] border-t border-shell-border">
+        <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-8)]">
           Connections
         </p>
         {linksTo.length > 0 && (
-          <div className="mb-[var(--token-spacing-2)]">
-            <p className="text-[length:10px] text-shell-text-tertiary mb-[var(--token-spacing-1)]">Links to</p>
-            <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
+          <div className="mb-[var(--token-spacing-8)]">
+            <p className="text-[length:10px] text-shell-text-tertiary mb-[var(--token-spacing-4)]">Links to</p>
+            <div className="flex flex-wrap gap-[var(--token-spacing-4)]">
               {linksTo.map((f) => (
                 <button
                   key={f.id}
                   type="button"
                   onClick={() => navigate(`/flows?flow=${f.id}`)}
-                  className="px-[var(--token-spacing-2)] py-[1px] bg-[#4ADE80]/15 text-[#4ADE80] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] hover:bg-[#4ADE80]/25 transition-colors cursor-pointer"
+                  className="px-[var(--token-spacing-8)] py-[1px] bg-[#4ADE80]/15 text-[#4ADE80] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] hover:bg-[#4ADE80]/25 transition-colors cursor-pointer"
                 >
                   <span className="font-mono">{f.id}</span>
                 </button>
@@ -431,14 +431,14 @@ export default function FlowViewAnnotationsPanel({
         )}
         {linksFrom.length > 0 && (
           <div>
-            <p className="text-[length:10px] text-shell-text-tertiary mb-[var(--token-spacing-1)]">Linked from</p>
-            <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
+            <p className="text-[length:10px] text-shell-text-tertiary mb-[var(--token-spacing-4)]">Linked from</p>
+            <div className="flex flex-wrap gap-[var(--token-spacing-4)]">
               {linksFrom.map((f) => (
                 <button
                   key={f.id}
                   type="button"
                   onClick={() => navigate(`/flows?flow=${f.id}`)}
-                  className="px-[var(--token-spacing-2)] py-[1px] bg-[#60A5FA]/15 text-[#60A5FA] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] hover:bg-[#60A5FA]/25 transition-colors cursor-pointer font-mono"
+                  className="px-[var(--token-spacing-8)] py-[1px] bg-[#60A5FA]/15 text-[#60A5FA] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] hover:bg-[#60A5FA]/25 transition-colors cursor-pointer font-mono"
                 >
                   {f.id}
                 </button>
@@ -451,11 +451,11 @@ export default function FlowViewAnnotationsPanel({
   })()
 
   const flowInfoSection = (
-    <div className="p-[var(--token-spacing-md)] border-t border-shell-border">
-      <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+    <div className="p-[var(--token-gap-lg)] border-t border-shell-border">
+      <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-8)]">
         Flow Info
       </p>
-      <div className="flex flex-col gap-[var(--token-spacing-1)]">
+      <div className="flex flex-col gap-[var(--token-spacing-4)]">
         <div className="flex justify-between text-[length:var(--token-font-size-body-sm)]">
           <span className="text-shell-text-secondary">Domain</span>
           <span className="text-shell-text">{flow.domain}</span>
@@ -479,21 +479,21 @@ export default function FlowViewAnnotationsPanel({
       {selectedNode && nodeData && typeConfig ? (
         /* ═══════════ NODE SELECTED ═══════════ */
         <>
-          <div className="p-[var(--token-spacing-md)] border-b border-shell-border">
-            <div className={`flex items-center gap-[var(--token-spacing-2)] ${typeConfig.color}`}>
+          <div className="p-[var(--token-gap-lg)] border-b border-shell-border">
+            <div className={`flex items-center gap-[var(--token-spacing-8)] ${typeConfig.color}`}>
               <typeConfig.icon size={14} />
               <span className="text-[length:var(--token-font-size-body-sm)] font-medium">
                 {typeConfig.label}
               </span>
             </div>
             {typeConfig.description && (
-              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mt-[var(--token-spacing-1)]">
+              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mt-[var(--token-spacing-4)]">
                 {typeConfig.description}
               </p>
             )}
           </div>
 
-          <div className="p-[var(--token-spacing-md)] flex-1">
+          <div className="p-[var(--token-gap-lg)] flex-1">
 
             {/* ── Screen / Page nodes ── */}
             {(nodeData.nodeType === 'screen' || nodeData.nodeType === 'page') && (
@@ -504,8 +504,8 @@ export default function FlowViewAnnotationsPanel({
                   const page = pid ? getPage(pid) : null
                   if (!page?.states?.length) return null
                   return (
-                    <div className="mb-[var(--token-spacing-lg)]">
-                      <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+                    <div className="mb-[var(--token-padding-lg)]">
+                      <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                         Active State
                       </p>
                       <select
@@ -513,7 +513,7 @@ export default function FlowViewAnnotationsPanel({
                         onChange={(e) => {
                           onNodeUpdate(selectedNode.id, { activeStateId: e.target.value || undefined })
                         }}
-                        className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text cursor-pointer"
+                        className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text cursor-pointer"
                       >
                         <option value="">(Default)</option>
                         {page.states.map((s) => (
@@ -556,8 +556,8 @@ export default function FlowViewAnnotationsPanel({
               const actionTarget = (nodeData as { actionTarget?: string }).actionTarget ?? ''
 
               return (
-                <div className="mb-[var(--token-spacing-lg)]">
-                  <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+                <div className="mb-[var(--token-padding-lg)]">
+                  <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                     Action Type
                   </p>
                   <select
@@ -572,7 +572,7 @@ export default function FlowViewAnnotationsPanel({
                       }
                       onNodeUpdate(selectedNode.id, updates)
                     }}
-                    className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#A78BFA] cursor-pointer mb-[var(--token-spacing-2)]"
+                    className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#A78BFA] cursor-pointer mb-[var(--token-spacing-8)]"
                   >
                     <option value="tap">Tap</option>
                     <option value="swipe">Swipe</option>
@@ -582,12 +582,12 @@ export default function FlowViewAnnotationsPanel({
                     <option value="external">External (out of system)</option>
                   </select>
                   {actionType === 'external' && (
-                    <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mt-[var(--token-spacing-1)] mb-[var(--token-spacing-1)]">
+                    <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mt-[var(--token-spacing-4)] mb-[var(--token-spacing-4)]">
                       Actions that happen outside the app (e.g., user pays a bill, receives an SMS)
                     </p>
                   )}
 
-                  <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+                  <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                     Target
                   </p>
                   {elements && elements.length > 0 && actionType !== 'external' ? (
@@ -603,7 +603,7 @@ export default function FlowViewAnnotationsPanel({
                         }
                         onNodeUpdate(selectedNode.id, updates)
                       }}
-                      className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#A78BFA] cursor-pointer"
+                      className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#A78BFA] cursor-pointer"
                     >
                       <option value="">(Select target)</option>
                       {elements.map((el) => (
@@ -628,7 +628,7 @@ export default function FlowViewAnnotationsPanel({
                   )}
 
                   {/* Auto-generated label preview */}
-                  <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mt-[var(--token-spacing-2)]">
+                  <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary mt-[var(--token-spacing-8)]">
                     {nodeData.label}
                   </p>
                 </div>
@@ -637,11 +637,11 @@ export default function FlowViewAnnotationsPanel({
 
             {/* ── Non-action nodes: editable Label ── */}
             {!isAction && (
-              <div className="mb-[var(--token-spacing-2)]">
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+              <div className="mb-[var(--token-spacing-8)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                   Label
                 </p>
-                <div className="text-[length:var(--token-font-size-heading-sm)] font-medium text-shell-text">
+                <div className="text-[length:var(--token-font-size-h3)] font-medium text-shell-text">
                   <EditableField value={nodeData.label} onSave={handleLabelSave} label="node label" />
                 </div>
               </div>
@@ -659,8 +659,8 @@ export default function FlowViewAnnotationsPanel({
 
             {/* ── Flow-reference: target flow ── */}
             {nodeData.nodeType === 'flow-reference' && (
-              <div className="mb-[var(--token-spacing-lg)]">
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+              <div className="mb-[var(--token-padding-lg)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                   Target Flow
                 </p>
                 <select
@@ -668,7 +668,7 @@ export default function FlowViewAnnotationsPanel({
                   onChange={(e) => {
                     onNodeUpdate(selectedNode.id, { targetFlowId: e.target.value || null })
                   }}
-                  className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text cursor-pointer"
+                  className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text cursor-pointer"
                 >
                   <option value="">(None)</option>
                   {(() => {
@@ -693,8 +693,8 @@ export default function FlowViewAnnotationsPanel({
 
             {/* ── Overlay node properties ── */}
             {nodeData.nodeType === 'overlay' && (
-              <div className="mb-[var(--token-spacing-lg)]">
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+              <div className="mb-[var(--token-padding-lg)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                   Overlay Type
                 </p>
                 <select
@@ -702,7 +702,7 @@ export default function FlowViewAnnotationsPanel({
                   onChange={(e) => {
                     onNodeUpdate(selectedNode.id, { overlayType: e.target.value })
                   }}
-                  className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#2DD4BF] cursor-pointer mb-[var(--token-spacing-2)]"
+                  className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#2DD4BF] cursor-pointer mb-[var(--token-spacing-8)]"
                 >
                   <option value="bottom-sheet">Bottom Sheet</option>
                   <option value="modal">Modal</option>
@@ -711,7 +711,7 @@ export default function FlowViewAnnotationsPanel({
                   <option value="toast">Toast</option>
                 </select>
 
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                   Parent Screen
                 </p>
                 <select
@@ -719,7 +719,7 @@ export default function FlowViewAnnotationsPanel({
                   onChange={(e) => {
                     onNodeUpdate(selectedNode.id, { parentScreenNodeId: e.target.value || null })
                   }}
-                  className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#2DD4BF] cursor-pointer"
+                  className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#2DD4BF] cursor-pointer"
                 >
                   <option value="">(None)</option>
                   {flow.screens.map((s) => (
@@ -729,15 +729,15 @@ export default function FlowViewAnnotationsPanel({
 
                 {/* Interactive elements */}
                 {(nodeData as FlowNodeData).interactiveElements && (nodeData as FlowNodeData).interactiveElements!.length > 0 && (
-                  <div className="mt-[var(--token-spacing-3)]">
-                    <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+                  <div className="mt-[var(--token-spacing-12)]">
+                    <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-8)]">
                       Interactive Elements
                     </p>
-                    <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
+                    <div className="flex flex-wrap gap-[var(--token-spacing-4)]">
                       {(nodeData as FlowNodeData).interactiveElements!.map((el) => (
                         <span
                           key={el.id}
-                          className="px-[var(--token-spacing-2)] py-[1px] bg-[#2DD4BF]/15 text-[#2DD4BF] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)]"
+                          className="px-[var(--token-spacing-8)] py-[1px] bg-[#2DD4BF]/15 text-[#2DD4BF] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)]"
                         >
                           {el.component}: {el.label}
                         </span>
@@ -750,8 +750,8 @@ export default function FlowViewAnnotationsPanel({
 
             {/* ── Error node properties ── */}
             {nodeData.nodeType === 'error' && (
-              <div className="mb-[var(--token-spacing-lg)]">
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+              <div className="mb-[var(--token-padding-lg)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                   Display Mode
                 </p>
                 <select
@@ -766,7 +766,7 @@ export default function FlowViewAnnotationsPanel({
                     }
                     onNodeUpdate(selectedNode.id, updates)
                   }}
-                  className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#F87171] cursor-pointer mb-[var(--token-spacing-2)]"
+                  className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#F87171] cursor-pointer mb-[var(--token-spacing-8)]"
                 >
                   <option value="full-screen">Full Screen</option>
                   <option value="toast">Toast</option>
@@ -775,7 +775,7 @@ export default function FlowViewAnnotationsPanel({
 
                 {((nodeData as FlowNodeData).errorDisplay === 'toast' || (nodeData as FlowNodeData).errorDisplay === 'banner') && (
                   <>
-                    <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+                    <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                       Parent Screen
                     </p>
                     <select
@@ -783,7 +783,7 @@ export default function FlowViewAnnotationsPanel({
                       onChange={(e) => {
                         onNodeUpdate(selectedNode.id, { errorParentScreenNodeId: e.target.value || null })
                       }}
-                      className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#F87171] cursor-pointer"
+                      className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#F87171] cursor-pointer"
                     >
                       <option value="">(None)</option>
                       {nodes
@@ -800,8 +800,8 @@ export default function FlowViewAnnotationsPanel({
 
             {/* ── API Call node properties ── */}
             {nodeData.nodeType === 'api-call' && (
-              <div className="mb-[var(--token-spacing-lg)]">
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+              <div className="mb-[var(--token-padding-lg)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                   Method
                 </p>
                 <select
@@ -809,7 +809,7 @@ export default function FlowViewAnnotationsPanel({
                   onChange={(e) => {
                     onNodeUpdate(selectedNode.id, { apiMethod: e.target.value })
                   }}
-                  className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#22D3EE] cursor-pointer mb-[var(--token-spacing-2)]"
+                  className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#22D3EE] cursor-pointer mb-[var(--token-spacing-8)]"
                 >
                   <option value="GET">GET</option>
                   <option value="POST">POST</option>
@@ -817,7 +817,7 @@ export default function FlowViewAnnotationsPanel({
                   <option value="DELETE">DELETE</option>
                 </select>
 
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                   Endpoint
                 </p>
                 <EditableField
@@ -830,8 +830,8 @@ export default function FlowViewAnnotationsPanel({
 
             {/* ── Delay node properties ── */}
             {nodeData.nodeType === 'delay' && (
-              <div className="mb-[var(--token-spacing-lg)]">
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+              <div className="mb-[var(--token-padding-lg)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                   Delay Type
                 </p>
                 <select
@@ -839,7 +839,7 @@ export default function FlowViewAnnotationsPanel({
                   onChange={(e) => {
                     onNodeUpdate(selectedNode.id, { delayType: e.target.value })
                   }}
-                  className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#FB923C] cursor-pointer mb-[var(--token-spacing-2)]"
+                  className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-[#FB923C] cursor-pointer mb-[var(--token-spacing-8)]"
                 >
                   <option value="timer">Timer</option>
                   <option value="polling">Polling</option>
@@ -847,7 +847,7 @@ export default function FlowViewAnnotationsPanel({
                   <option value="event">Event</option>
                 </select>
 
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                   Duration
                 </p>
                 <EditableField
@@ -861,8 +861,8 @@ export default function FlowViewAnnotationsPanel({
             {/* ── Description ── */}
             {/* For screen/page nodes with a linked screen, show the screen description (syncs to .tsx).
                 For all other node types, show the graph node description. */}
-            <div className="mb-[var(--token-spacing-lg)]">
-              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+            <div className="mb-[var(--token-padding-lg)]">
+              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                 Description
               </p>
               <div className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary">
@@ -890,11 +890,11 @@ export default function FlowViewAnnotationsPanel({
 
             {/* ── Linked screen info ── */}
             {linkedScreen && (
-              <div className="mb-[var(--token-spacing-lg)]">
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+              <div className="mb-[var(--token-padding-lg)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-8)]">
                   Linked Screen
                 </p>
-                <div className="flex flex-col gap-[var(--token-spacing-1)]">
+                <div className="flex flex-col gap-[var(--token-spacing-4)]">
                   <div className="flex justify-between text-[length:var(--token-font-size-body-sm)]">
                     <span className="text-shell-text-secondary">Screen</span>
                     <span className="text-shell-text">{linkedScreen.title}</span>
@@ -909,17 +909,17 @@ export default function FlowViewAnnotationsPanel({
 
             {/* Components used */}
             {linkedScreen && linkedScreen.componentsUsed.length > 0 && (
-              <div className="mb-[var(--token-spacing-lg)]">
-                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+              <div className="mb-[var(--token-padding-lg)]">
+                <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-8)]">
                   Components
                 </p>
-                <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
+                <div className="flex flex-wrap gap-[var(--token-spacing-4)]">
                   {linkedScreen.componentsUsed.map((c) => (
                     <button
                       key={c}
                       type="button"
                       onClick={() => navigate(`/components?selected=${encodeURIComponent(c)}`)}
-                      className="px-[var(--token-spacing-2)] py-[1px] bg-shell-hover rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary hover:bg-shell-active hover:text-shell-text transition-colors cursor-pointer"
+                      className="px-[var(--token-spacing-8)] py-[1px] bg-shell-hover rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary hover:bg-shell-active hover:text-shell-text transition-colors cursor-pointer"
                     >
                       {c}
                     </button>
@@ -934,16 +934,16 @@ export default function FlowViewAnnotationsPanel({
               const page = pid ? getPage(pid) : null
               if (!page?.states?.length) return null
               return (
-                <div className="mb-[var(--token-spacing-lg)]">
-                  <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+                <div className="mb-[var(--token-padding-lg)]">
+                  <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-8)]">
                     States
                   </p>
-                  <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
+                  <div className="flex flex-wrap gap-[var(--token-spacing-4)]">
                     {page.states.map((s) => (
                       <span
                         key={s.id}
                         title={s.description}
-                        className={`px-[var(--token-spacing-2)] py-[1px] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] ${
+                        className={`px-[var(--token-spacing-8)] py-[1px] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] ${
                           s.isDefault
                             ? 'bg-shell-selected-text/15 text-shell-selected-text'
                             : 'bg-shell-hover text-shell-text-secondary'
@@ -959,11 +959,11 @@ export default function FlowViewAnnotationsPanel({
 
             {/* Open in Prototype button */}
             {nodeData.screenId && (
-              <div className="flex flex-col gap-[var(--token-spacing-2)]">
+              <div className="flex flex-col gap-[var(--token-spacing-8)]">
                 <button
                   type="button"
                   onClick={onOpenInPrototype}
-                  className="w-full flex items-center justify-center gap-[var(--token-spacing-2)] py-[var(--token-spacing-2)] px-[var(--token-spacing-3)] bg-shell-selected-text/10 border border-shell-selected-text/30 text-shell-selected-text rounded-[var(--token-radius-md)] text-[length:var(--token-font-size-body-sm)] font-medium hover:bg-shell-selected-text/20 transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-center gap-[var(--token-spacing-8)] py-[var(--token-spacing-8)] px-[var(--token-spacing-12)] bg-shell-selected-text/10 border border-shell-selected-text/30 text-shell-selected-text rounded-[var(--token-radius-md)] text-[length:var(--token-font-size-body-sm)] font-medium hover:bg-shell-selected-text/20 transition-colors cursor-pointer"
                 >
                   <RiPlayLine size={14} />
                   Open in Prototype
@@ -972,7 +972,7 @@ export default function FlowViewAnnotationsPanel({
                   <button
                     type="button"
                     onClick={() => navigate(`/pages?selected=${encodeURIComponent(linkedScreen.pageId!)}`)}
-                    className="w-full flex items-center justify-center gap-[var(--token-spacing-2)] py-[var(--token-spacing-2)] px-[var(--token-spacing-3)] bg-shell-hover border border-shell-border text-shell-text-secondary rounded-[var(--token-radius-md)] text-[length:var(--token-font-size-body-sm)] font-medium hover:text-shell-text hover:border-shell-active transition-colors cursor-pointer"
+                    className="w-full flex items-center justify-center gap-[var(--token-spacing-8)] py-[var(--token-spacing-8)] px-[var(--token-spacing-12)] bg-shell-hover border border-shell-border text-shell-text-secondary rounded-[var(--token-radius-md)] text-[length:var(--token-font-size-body-sm)] font-medium hover:text-shell-text hover:border-shell-active transition-colors cursor-pointer"
                   >
                     <RiFileTextLine size={14} />
                     View Page
@@ -987,8 +987,8 @@ export default function FlowViewAnnotationsPanel({
         /* ═══════════ NO NODE SELECTED — FLOW OVERVIEW ═══════════ */
         <>
           {/* Flow name + description */}
-          <div className="p-[var(--token-spacing-md)]">
-            <div className="text-[length:var(--token-font-size-heading-sm)] font-semibold text-shell-text mb-[var(--token-spacing-1)] font-mono">
+          <div className="p-[var(--token-gap-lg)]">
+            <div className="text-[length:var(--token-font-size-h3)] font-semibold text-shell-text mb-[var(--token-spacing-4)] font-mono">
               {onRenameFlow ? (
                 <EditableSlug value={flow.id} onSave={onRenameFlow} label="flow slug" />
               ) : (

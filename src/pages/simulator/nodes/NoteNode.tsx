@@ -23,7 +23,7 @@ function NoteNode({ data, selected }: NodeProps) {
           : '0 2px 8px rgba(0,0,0,0.3)',
       }}
     >
-      <div className="flex items-start gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
+      <div className="flex items-start gap-[var(--token-spacing-8)] px-[var(--token-spacing-12)] py-[var(--token-spacing-8)]">
         <RiStickyNoteLine size={14} className="text-[#666] shrink-0 mt-[1px]" />
         <div className="flex-1 min-w-0">
           <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#999] truncate block">

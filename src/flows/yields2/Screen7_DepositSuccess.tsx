@@ -15,7 +15,7 @@ export default function Screen7_DepositSuccess({ onBack, onElementTap, onNext }:
     <FeedbackLayout onClose={onBack}>
       <Stack gap="sm" align="center">
         <Text variant="display">Depósito protegido!</Text>
-        <Badge variant="success" size="md">Protegido</Badge>
+        <Badge variant="positive" size="md">Protegido</Badge>
       </Stack>
 
       <Stack gap="none">

@@ -27,9 +27,9 @@ export default function BaseLayout({
   if (isDesktop) {
     // On desktop, let the AppShell card handle scrolling
     return (
-      <div data-component="BaseLayout" className={cn('flex flex-col min-h-full bg-surface-primary', className)}>
-        <div className="pt-[var(--token-spacing-6)]">
-          <div className="px-[var(--token-spacing-6)] pb-[48px] flex flex-col gap-[var(--token-spacing-6)]">
+      <div data-component="BaseLayout" className={cn('flex flex-col min-h-full bg-surface-level-0', className)}>
+        <div className="pt-[var(--token-spacing-24)]">
+          <div className="px-[var(--token-spacing-24)] pb-[48px] flex flex-col gap-[var(--token-spacing-24)]">
             {rest}
           </div>
         </div>
@@ -39,9 +39,9 @@ export default function BaseLayout({
   }
 
   return (
-    <div data-component="BaseLayout" className={cn('flex flex-col h-full bg-surface-primary overflow-hidden', className)}>
+    <div data-component="BaseLayout" className={cn('flex flex-col h-full bg-surface-level-0 overflow-hidden', className)}>
       <div className={cn('flex-1 overflow-y-auto pt-[var(--safe-area-top,0px)]')}>
-        <div className="px-[var(--token-spacing-6)] pb-[48px] flex flex-col gap-[var(--token-spacing-6)]">
+        <div className="px-[var(--token-spacing-24)] pb-[48px] flex flex-col gap-[var(--token-spacing-24)]">
           {rest}
         </div>
       </div>

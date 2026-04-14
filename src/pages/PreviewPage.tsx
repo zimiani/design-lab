@@ -306,7 +306,7 @@ export default function PreviewPage() {
       items={navItems}
       activeId={activeNavId}
       onChange={setActiveNavId}
-      header={<Text variant="heading-sm">Picnic</Text>}
+      header={<Text variant="h3">Picnic</Text>}
     />
   )
 

@@ -43,8 +43,8 @@ export default function Tooltip({
         >
           {position === 'top' && <Arrow position="top" />}
 
-          <div className="bg-[#22232F] rounded-[var(--token-radius-md)] p-[var(--token-spacing-4)] w-full overflow-hidden">
-            <div className="flex gap-[var(--token-spacing-4)] items-start">
+          <div className="bg-[#22232F] rounded-[var(--token-radius-md)] p-[var(--token-spacing-16)] w-full overflow-hidden">
+            <div className="flex gap-[var(--token-spacing-16)] items-start">
               <div className="flex-1 text-[14px] font-normal leading-[21px] text-white">
                 {children}
               </div>
@@ -52,7 +52,7 @@ export default function Tooltip({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="shrink-0 w-[24px] h-[24px] rounded-full bg-[var(--color-interactive-secondary,#DBE0D8)] flex items-center justify-center cursor-pointer"
+                  className="shrink-0 w-[24px] h-[24px] rounded-full bg-[var(--color-surface-items,#DBE0D8)] flex items-center justify-center cursor-pointer"
                 >
                   <RiCloseLine size={16} className="text-content-primary" />
                 </button>

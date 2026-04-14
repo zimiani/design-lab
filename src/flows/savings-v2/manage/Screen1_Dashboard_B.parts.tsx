@@ -68,7 +68,7 @@ export function GlassCurrencyCard({ currency, balance, yieldToday, disabled, onP
       <Stack gap="none" className="flex-1 min-w-0">
         <Stack direction="row" gap="sm" align="center">
           <Text variant="body-md" className="font-medium text-white">{curr.name}</Text>
-          <Badge variant="lime" size="sm">{curr.apyDisplay}</Badge>
+          <Badge variant="positive" size="sm">{curr.apyDisplay}</Badge>
         </Stack>
         {hasBalance ? (
           <>

@@ -28,12 +28,12 @@ export function AssetRow({ asset, onPress, showFavorite, onToggleFavorite }: Ass
       right={
         <Stack direction="row" gap="sm" align="center">
           {isFixed ? (
-            <Badge variant="lime" size="sm">{asset.apyDisplay}</Badge>
+            <Badge variant="positive" size="sm">{asset.apyDisplay}</Badge>
           ) : (
             <Stack gap="none" align="end">
               <Text variant="body-sm">{formatBRL(asset.price!)}</Text>
               <Badge
-                variant={asset.change24h! >= 0 ? 'success' : 'error'}
+                variant={asset.change24h! >= 0 ? 'positive' : 'critical'}
                 size="sm"
               >
                 {formatPercentChange(asset.change24h!)}
@@ -78,7 +78,7 @@ export function DiscoveryCard({ asset, onPress }: { asset: Asset; onPress?: () =
         </Stack>
         {!isFixed && asset.change24h !== undefined && (
           <Badge
-            variant={asset.change24h >= 0 ? 'success' : 'error'}
+            variant={asset.change24h >= 0 ? 'positive' : 'critical'}
             size="sm"
           >
             {formatPercentChange(asset.change24h)}

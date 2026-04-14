@@ -41,20 +41,20 @@ export default function BottomSheet({
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
             className={`
               absolute bottom-0 left-0 right-0 z-50
-              bg-surface-elevated
+              bg-surface-level-1
               rounded-t-[var(--token-radius-xl)]
               max-h-[85vh] overflow-hidden
               flex flex-col
               ${className}
             `}
           >
-            <div className="flex justify-center pt-[var(--token-spacing-2)] pb-[var(--token-spacing-1)]">
+            <div className="flex justify-center pt-[var(--token-spacing-8)] pb-[var(--token-spacing-4)]">
               <div className="w-[36px] h-[4px] rounded-[var(--token-radius-full)] bg-neutral-300" />
             </div>
             {(title || showCloseButton) && (
-              <div className="flex items-center px-[var(--token-spacing-md)] py-[var(--token-spacing-3)]">
+              <div className="flex items-center px-[var(--token-gap-lg)] py-[var(--token-spacing-12)]">
                 {title ? (
-                  <h2 className="flex-1 text-[length:var(--token-font-size-heading-md)] leading-[var(--token-line-height-heading-md)] font-semibold text-content-primary">
+                  <h2 className="flex-1 text-[length:var(--token-font-size-h2)] leading-[var(--token-line-height-h2)] font-semibold text-content-primary">
                     {title}
                   </h2>
                 ) : (
@@ -64,14 +64,14 @@ export default function BottomSheet({
                   <button
                     type="button"
                     onClick={onClose}
-                    className="shrink-0 w-[32px] h-[32px] rounded-full bg-[var(--color-surface-shade)] flex items-center justify-center cursor-pointer hover:opacity-80"
+                    className="shrink-0 w-[32px] h-[32px] rounded-full bg-[var(--color-surface-level-1)] flex items-center justify-center cursor-pointer hover:opacity-80"
                   >
                     <RiCloseLine size={20} className="text-[var(--color-content-primary)]" />
                   </button>
                 )}
               </div>
             )}
-            <div className="flex-1 overflow-y-auto px-[var(--token-spacing-md)] pb-[var(--token-spacing-xl)]">
+            <div className="flex-1 overflow-y-auto px-[var(--token-gap-lg)] pb-[var(--token-gap-xl)]">
               {children}
             </div>
           </motion.div>

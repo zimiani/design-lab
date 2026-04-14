@@ -47,7 +47,7 @@ export default function Screen1_AccountData({ onNext, onBack, onElementTap }: Fl
       </Stack>
 
       <Stack gap="sm">
-        <Text variant="heading-lg">Receba dólares</Text>
+        <Text variant="h1">Receba dólares</Text>
         <Text variant="body-md" color="content-secondary">
           Use os dados abaixo para receber dólar de qualquer banco
         </Text>

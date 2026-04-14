@@ -35,9 +35,9 @@ export default function Screen6_Share({ onBack }: FlowScreenProps) {
       {/* Savings card */}
       <Card variant="flat">
         <Stack gap="sm" className="items-center text-center">
-          <div className="flex items-center gap-[var(--token-spacing-2)]">
+          <div className="flex items-center gap-[var(--token-spacing-8)]">
             <RiShareLine size={20} className="text-interactive-foreground" />
-            <Badge variant="success" size="md">Economia</Badge>
+            <Badge variant="positive" size="md">Economia</Badge>
           </div>
           <Amount value={1250} size="display" />
           <Text variant="body-sm" color="content-secondary">de economia</Text>
@@ -49,7 +49,7 @@ export default function Screen6_Share({ onBack }: FlowScreenProps) {
 
       {/* Share options */}
       <Section title="Compartilhar via">
-        <div className="grid grid-cols-4 gap-[var(--token-spacing-4)]">
+        <div className="grid grid-cols-4 gap-[var(--token-spacing-16)]">
           {shareChannels.map((ch) => (
             <ShortcutButton
               key={ch.label}
@@ -81,7 +81,7 @@ export default function Screen6_Share({ onBack }: FlowScreenProps) {
         Ganhe $5 a cada amigo que se cadastrar com seu código.
       </Text>
 
-      <div className="fixed top-[var(--token-spacing-6)] left-1/2 -translate-x-1/2 z-50">
+      <div className="fixed top-[var(--token-spacing-24)] left-1/2 -translate-x-1/2 z-50">
         <Toast variant="success" message="Link copiado!" visible={showToast} />
       </div>
     </BaseLayout>

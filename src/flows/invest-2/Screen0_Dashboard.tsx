@@ -96,7 +96,7 @@ export default function Screen0_Dashboard({ onNext, onBack, onElementTap }: Flow
               <RiCoinLine size={32} className="text-[var(--color-content-tertiary)]" />
             </div>
             <Stack gap="sm" align="center">
-              <Text variant="heading-md" align="center">Comece a investir</Text>
+              <Text variant="h2" align="center">Comece a investir</Text>
               <Text variant="body-md" color="content-secondary" align="center">
                 Explore ativos digitais, renda fixa em dólar e commodities — tudo em um só lugar.
               </Text>

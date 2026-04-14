@@ -38,7 +38,7 @@ function OverlayNode({ data, selected }: NodeProps) {
       <Handle type="target" position={Position.Right} id="right-target" className="!bg-[#2DD4BF] !w-[8px] !h-[8px] !border-[1.5px] !border-[#1A2A2E]" />
       <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#2DD4BF] !w-[8px] !h-[8px] !border-[1.5px] !border-[#1A2A2E]" />
       {/* Header bar */}
-      <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] bg-[#2DD4BF]/[0.06]">
+      <div className="flex items-center gap-[var(--token-spacing-8)] px-[var(--token-spacing-12)] py-[var(--token-spacing-8)] bg-[#2DD4BF]/[0.06]">
         <RiStackLine size={14} className="text-[#2DD4BF] shrink-0" />
         <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#e0e0e0] truncate flex-1">
           {nodeData.label}
@@ -48,7 +48,7 @@ function OverlayNode({ data, selected }: NodeProps) {
         </span>
       </div>
       {/* Description — always rendered for consistent node height */}
-      <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
+      <div className="px-[var(--token-spacing-12)] py-[var(--token-spacing-8)]">
         <p className={`text-[length:var(--token-font-size-caption)] line-clamp-2 ${nodeData.description ? 'text-[#888]' : 'text-[#555] italic'}`}>
           {nodeData.description || 'Overlay description...'}
         </p>

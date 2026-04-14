@@ -219,9 +219,9 @@ export default function C_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps)
 
         {/* White container with rounded top */}
         <div className="relative -mt-[24px] rounded-t-[35px] bg-surface-primary">
-          <Stack gap="lg" className="px-[var(--token-spacing-6)] pt-[24px] pb-[48px]">
+          <Stack gap="lg" className="px-[var(--token-spacing-24)] pt-[24px] pb-[48px]">
             <Stack gap="lg">
-              <Text variant="heading-lg" className="tracking-[-0.6px]">Caixinha</Text>
+              <Text variant="h1" className="tracking-[-0.6px]">Caixinha</Text>
 
               {hasGoal ? (
                 <GoalCard balance={CURRENT_BALANCE} goalAmount={GOAL_AMOUNT} reached={!!goalReached} />

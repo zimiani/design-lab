@@ -34,15 +34,15 @@ function FlowMapNode({ data }: NodeProps) {
       <Handle type="target" position={Position.Top} className="!bg-shell-border !w-[8px] !h-[8px]" />
       <Handle type="target" position={Position.Left} className="!bg-shell-border !w-[8px] !h-[8px]" />
 
-      <div className="w-[240px] rounded-[var(--token-radius-md)] bg-shell-surface border border-shell-border cursor-pointer hover:border-shell-selected-text transition-colors p-[var(--token-spacing-3)]">
+      <div className="w-[240px] rounded-[var(--token-radius-md)] bg-shell-surface border border-shell-border cursor-pointer hover:border-shell-selected-text transition-colors p-[var(--token-spacing-12)]">
         {/* Flow name */}
-        <p className="text-[length:var(--token-font-size-body-sm)] font-semibold text-shell-text truncate mb-[var(--token-spacing-1)]">
+        <p className="text-[length:var(--token-font-size-body-sm)] font-semibold text-shell-text truncate mb-[var(--token-spacing-4)]">
           {nodeData.label}
         </p>
 
         {/* Domain badge + screen count */}
-        <div className="flex items-center gap-[var(--token-spacing-2)] mb-[var(--token-spacing-2)]">
-          <span className={`px-[var(--token-spacing-2)] py-[1px] rounded-[var(--token-radius-full)] text-[length:10px] font-medium ${colors.bg} ${colors.text}`}>
+        <div className="flex items-center gap-[var(--token-spacing-8)] mb-[var(--token-spacing-8)]">
+          <span className={`px-[var(--token-spacing-8)] py-[1px] rounded-[var(--token-radius-full)] text-[length:10px] font-medium ${colors.bg} ${colors.text}`}>
             {nodeData.domain}
           </span>
           <span className="text-[length:10px] text-shell-text-tertiary">
@@ -56,7 +56,7 @@ function FlowMapNode({ data }: NodeProps) {
             {nodeData.entryPoints.map((ep) => (
               <span
                 key={ep}
-                className="px-[var(--token-spacing-1)] py-[1px] rounded-[var(--token-radius-sm)] bg-shell-hover text-[length:9px] font-mono text-shell-text-tertiary"
+                className="px-[var(--token-spacing-4)] py-[1px] rounded-[var(--token-radius-sm)] bg-shell-hover text-[length:9px] font-mono text-shell-text-tertiary"
               >
                 {ep}
               </span>

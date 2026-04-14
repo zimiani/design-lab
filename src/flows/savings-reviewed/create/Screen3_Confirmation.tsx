@@ -16,7 +16,7 @@ export default function Screen3_Confirmation({ onNext, onBack, onElementTap }: F
       <Header title="" onBack={onBack} />
 
       <Stack gap="lg">
-        <Text variant="heading-lg">Confirme sua caixinha</Text>
+        <Text variant="h1">Confirme sua caixinha</Text>
 
         {/* Preview */}
         <Stack gap="sm" align="center">
@@ -26,7 +26,7 @@ export default function Screen3_Confirmation({ onNext, onBack, onElementTap }: F
             bgColor="var(--color-brand-core-500)"
             iconColor="#ffffff"
           />
-          <Text variant="heading-sm">Viagem Europa</Text>
+          <Text variant="h3">Viagem Europa</Text>
         </Stack>
 
         <Stack gap="none">

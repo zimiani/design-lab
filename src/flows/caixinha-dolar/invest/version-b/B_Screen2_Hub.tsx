@@ -40,7 +40,7 @@ export default function B_Screen2_Hub({ onNext, onBack, onElementTap }: FlowScre
 
       <Stack gap="default">
         <Stack gap="sm" align="center">
-          <Badge variant="lime" size="sm">5% a.a.</Badge>
+          <Badge variant="positive" size="sm">5% a.a.</Badge>
           <Amount value={MOCK_BALANCE} currency="US$" size="lg" />
           <Text variant="caption" color="content-secondary">
             +US$ {YIELD_TODAY.toFixed(2).replace('.', ',')} hoje

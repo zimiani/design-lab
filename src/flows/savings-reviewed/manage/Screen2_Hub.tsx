@@ -94,10 +94,10 @@ export default function Screen2_Hub({ onNext, onBack, onElementTap }: FlowScreen
                 iconColor="#ffffff"
               />
               <Stack gap="none" className="flex-1">
-                <Text variant="heading-md" className="text-white">{caixinhaName}</Text>
+                <Text variant="h2" className="text-white">{caixinhaName}</Text>
                 <Stack direction="row" gap="sm" align="center" className="mt-1">
-                  <Badge variant="lime" size="md">{currInfo.apyDisplay}</Badge>
-                  <Badge variant="success" size="md">Resgate imediato</Badge>
+                  <Badge variant="positive" size="md">{currInfo.apyDisplay}</Badge>
+                  <Badge variant="positive" size="md">Resgate imediato</Badge>
                 </Stack>
               </Stack>
             </Stack>
@@ -114,7 +114,7 @@ export default function Screen2_Hub({ onNext, onBack, onElementTap }: FlowScreen
 
             {isZeroBalance && (
               <Stack gap="sm">
-                <Text variant="heading-sm" className="text-white/70">Saldo zerado</Text>
+                <Text variant="h3" className="text-white/70">Saldo zerado</Text>
                 <Text variant="body-sm" className="text-white/50">
                   Adicione fundos ou exclua esta caixinha.
                 </Text>

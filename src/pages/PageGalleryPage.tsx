@@ -76,7 +76,7 @@ export default function PageGalleryPage() {
           <button
             type="button"
             onClick={() => setShowNewDialog(true)}
-            className="flex items-center gap-[var(--token-spacing-1)] px-[var(--token-spacing-3)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] font-medium text-shell-bg bg-shell-selected-text rounded-[var(--token-radius-sm)] cursor-pointer hover:bg-[#6EE7A0] transition-colors"
+            className="flex items-center gap-[var(--token-spacing-4)] px-[var(--token-spacing-12)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] font-medium text-shell-bg bg-shell-selected-text rounded-[var(--token-radius-sm)] cursor-pointer hover:bg-[#6EE7A0] transition-colors"
           >
             <RiAddLine size={14} />
             New Page
@@ -85,7 +85,7 @@ export default function PageGalleryPage() {
       />
 
       {/* Sub-header */}
-      <div className="h-[40px] flex items-center px-[var(--token-spacing-md)] border-b border-shell-border bg-shell-surface shrink-0">
+      <div className="h-[40px] flex items-center px-[var(--token-gap-lg)] border-b border-shell-border bg-shell-surface shrink-0">
         <span className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary">
           {pages.length} page{pages.length !== 1 ? 's' : ''}
         </span>
@@ -101,7 +101,7 @@ export default function PageGalleryPage() {
         ) : (
           <div className="flex-1 flex items-center justify-center text-shell-text-tertiary">
             <div className="text-center">
-              <p className="text-[length:var(--token-font-size-body)] mb-[var(--token-spacing-2)]">No pages yet</p>
+              <p className="text-[length:var(--token-font-size-body)] mb-[var(--token-spacing-8)]">No pages yet</p>
               <button
                 type="button"
                 onClick={() => setShowNewDialog(true)}

@@ -106,7 +106,7 @@ export function EmptyState() {
         bgColor="var(--color-surface-shade)"
         iconColor="var(--color-content-tertiary)"
       />
-      <Text variant="heading-sm" align="center">Organize suas economias</Text>
+      <Text variant="h3" align="center">Organize suas economias</Text>
       <Text variant="body-sm" color="content-secondary" align="center">
         Crie caixinhas em dólar, real ou euro. Cada uma rende automaticamente com seguro incluso.
       </Text>

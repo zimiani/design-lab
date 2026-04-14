@@ -18,13 +18,13 @@ export interface ButtonProps {
 
 const variantStyles = {
   accent:
-    'bg-[var(--color-interactive-default)] text-[var(--color-content-primary)] font-semibold hover:bg-[var(--color-interactive-hover)] active:bg-[var(--color-interactive-pressed)]',
+    'bg-[var(--color-action)] text-[var(--color-content-primary)] font-semibold hover:bg-[var(--color-action-accent)] active:bg-[var(--color-action)]',
   primary:
-    'bg-[var(--color-interactive-primary)] text-[var(--color-content-inverse)] font-semibold hover:opacity-80 active:opacity-70',
+    'bg-[var(--color-surface-inverse-level-0)] text-[var(--color-content-inverse)] font-semibold hover:opacity-80 active:opacity-70',
   secondary:
-    'bg-[var(--color-surface-shade)] text-[var(--color-content-primary)] font-semibold hover:opacity-80 active:opacity-70',
+    'bg-[var(--color-surface-level-1)] text-[var(--color-content-primary)] font-semibold hover:opacity-80 active:opacity-70',
   ghost:
-    'bg-transparent text-[var(--color-interactive-primary)] font-medium hover:bg-[var(--color-interactive-primary)]/5 active:bg-[var(--color-interactive-primary)]/10',
+    'bg-transparent text-[var(--color-surface-inverse-level-0)] font-medium hover:bg-[var(--color-surface-inverse-level-0)]/5 active:bg-[var(--color-surface-inverse-level-0)]/10',
   destructive:
     'bg-[var(--color-error)] text-white font-medium hover:bg-[#B91C1C] active:bg-[#991B1B]',
 } as const

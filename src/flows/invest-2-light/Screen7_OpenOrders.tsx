@@ -134,7 +134,7 @@ export default function Screen7_OpenOrders({ onBack }: FlowScreenProps) {
         <div className="full-bleed mt-4">
           {orderGroups.map(group => (
             <Stack gap="none" key={group.date}>
-              <GroupHeader text={group.date} className="px-[var(--token-spacing-6)]" />
+              <GroupHeader text={group.date} className="px-[var(--token-spacing-24)]" />
               {group.orders.map((order) => {
                 const asset = getAsset(order.asset)
                 const isBuy = order.side === 'buy'
@@ -147,7 +147,7 @@ export default function Screen7_OpenOrders({ onBack }: FlowScreenProps) {
                     key={order.id}
                     title={`${sideLabel} ${asset.name}`}
                     subtitle={`Preço alvo: ${formatBRL(order.triggerPrice)}`}
-                    className={`[--token-font-size-body-lg:16px] px-[var(--token-spacing-6)] ${isCancelled ? 'opacity-50' : ''}`}
+                    className={`[--token-font-size-body-lg:16px] px-[var(--token-spacing-24)] ${isCancelled ? 'opacity-50' : ''}`}
                     left={<OrderAvatar order={order} />}
                     onPress={() => setSelectedOrder(order)}
                     right={

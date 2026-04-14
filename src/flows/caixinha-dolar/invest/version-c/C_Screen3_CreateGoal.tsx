@@ -29,12 +29,12 @@ export default function C_Screen3_CreateGoal({ onNext, onBack }: FlowScreenProps
 
       <Stack gap="default">
         <Stack gap="sm">
-          <Text variant="heading-sm">Quanto você quer guardar?</Text>
+          <Text variant="h3">Quanto você quer guardar?</Text>
           <CurrencyInput label="Meta" value={targetValue} onChange={setTargetValue} tokenIcon={USD_ICON} currencySymbol="US$" />
         </Stack>
 
         <Stack gap="sm">
-          <Text variant="heading-sm">Até quando?</Text>
+          <Text variant="h3">Até quando?</Text>
           <RadioGroup
             value={selectedHorizon}
             onChange={(v) => setSelectedHorizon(String(v))}

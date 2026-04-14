@@ -27,7 +27,7 @@ export default function Screen2_CurrencyPicker({ onNext, onBack, onElementTap }:
 
       <Stack gap="lg">
         <Stack gap="sm">
-          <Text variant="heading-lg">Escolha a moeda</Text>
+          <Text variant="h1">Escolha a moeda</Text>
           <Text variant="body-md" color="content-secondary">
             Cada moeda tem seu próprio rendimento. Você pode criar caixinhas em moedas diferentes.
           </Text>
@@ -42,7 +42,7 @@ export default function Screen2_CurrencyPicker({ onNext, onBack, onElementTap }:
                 title={c.name}
                 subtitle={subtitle}
                 left={<Avatar src={c.flagIcon} size="md" />}
-                right={<Badge variant="lime" size="md">{c.apyDisplay}</Badge>}
+                right={<Badge variant="positive" size="md">{c.apyDisplay}</Badge>}
                 onPress={() => handleSelect(code)}
               />
             )

@@ -40,7 +40,7 @@ export default function Screen3_DollarRate({ onNext, onBack }: FlowScreenProps) 
       onClose={onBack}
     >
       <Stack gap="sm">
-        <Text variant="heading-lg">
+        <Text variant="h1">
           O dólar mais barato do Brasil.
         </Text>
         <Stack gap="sm">
@@ -64,13 +64,13 @@ export default function Screen3_DollarRate({ onNext, onBack }: FlowScreenProps) 
 
       {/* Savings card — bespoke visual with background image */}
       <div
-        className="relative overflow-hidden rounded-[var(--token-radius-lg)] px-[var(--token-spacing-4)] py-[var(--token-spacing-4)] flex flex-col justify-between"
+        className="relative overflow-hidden rounded-[var(--token-radius-lg)] px-[var(--token-spacing-16)] py-[var(--token-spacing-16)] flex flex-col justify-between"
         style={{ minHeight: 171 }}
       >
         <div className="absolute inset-0 overflow-hidden rounded-[var(--token-radius-lg)] pointer-events-none">
           <img src={savingsBg} alt="" className="absolute h-full left-[-47%] top-0 w-[157%] max-w-none object-cover" />
         </div>
-        <div className="absolute top-[var(--token-spacing-4)] right-[var(--token-spacing-4)]">
+        <div className="absolute top-[var(--token-spacing-16)] right-[var(--token-spacing-16)]">
           <IconButton
             variant="base"
             inverted
@@ -91,7 +91,7 @@ export default function Screen3_DollarRate({ onNext, onBack }: FlowScreenProps) 
 
       <BottomSheet open={sheetOpen} onClose={() => setSheetOpen(false)}>
         <Stack>
-          <Text variant="heading-md">
+          <Text variant="h2">
             Como calculamos sua economia
           </Text>
           <Text variant="body-sm" color="content-secondary">

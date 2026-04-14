@@ -55,7 +55,7 @@ export default function Screen1_Dashboard_B({ onNext, onElementTap }: FlowScreen
           </div>
 
           {/* Content */}
-          <div className="relative px-[var(--token-spacing-6)] pt-[calc(var(--safe-area-top,12px)+16px)] pb-[48px]">
+          <div className="relative px-[var(--token-spacing-24)] pt-[calc(var(--safe-area-top,12px)+16px)] pb-[48px]">
             <Stack gap="lg">
               {/* Hero section — piggy + balance */}
               <motion.div

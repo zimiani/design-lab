@@ -38,7 +38,7 @@ export default function Screen4_AssetDetail_Fixed({ onNext, onBack, onElementTap
 
       <Stack gap="sm" align="center">
         <Avatar src={asset.icon} size="lg" />
-        <Badge variant="lime" size="md">Renda Fixa</Badge>
+        <Badge variant="positive" size="md">Renda Fixa</Badge>
         <Text variant="display">{asset.apyDisplay}</Text>
       </Stack>
 

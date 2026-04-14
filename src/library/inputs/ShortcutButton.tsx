@@ -12,8 +12,8 @@ export interface ShortcutButtonProps {
 }
 
 const variantStyles = {
-  primary: 'bg-[var(--color-interactive-accent)] hover:bg-[var(--color-interactive-accent-hover)]',
-  secondary: 'bg-[var(--color-interactive-secondary)] hover:opacity-80',
+  primary: 'bg-[var(--color-action-accent)] hover:bg-[var(--color-brand-300)]',
+  secondary: 'bg-[var(--color-surface-items)] hover:opacity-80',
 } as const
 
 export default function ShortcutButton({
@@ -38,7 +38,7 @@ export default function ShortcutButton({
         {icon}
       </motion.div>
       {label && (
-        <span className="text-[var(--color-interactive-primary)] text-sm font-medium leading-[18px] tracking-[-0.28px] text-center">
+        <span className="text-[var(--color-surface-inverse-level-0)] text-sm font-medium leading-[18px] tracking-[-0.28px] text-center">
           {label}
         </span>
       )}

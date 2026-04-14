@@ -13,10 +13,10 @@ export interface GroupHeaderProps {
 
 export default function GroupHeader({ text, subtitle, rightText, icon, className = '' }: GroupHeaderProps) {
   return (
-    <div data-component="GroupHeader" className={cn('w-full pt-[var(--token-spacing-3)] pb-[var(--token-spacing-3)] mb-[var(--token-spacing-2)] border-b border-[var(--token-neutral-100)]', className)}>
-      <div className="flex items-center gap-[var(--token-spacing-2)]">
+    <div data-component="GroupHeader" className={cn('w-full pt-[var(--token-spacing-12)] pb-[var(--token-spacing-12)] mb-[var(--token-spacing-8)] border-b border-[var(--color-border)]', className)}>
+      <div className="flex items-center gap-[var(--token-spacing-8)]">
         {icon && <span className="shrink-0 text-content-secondary">{icon}</span>}
-        <div className="flex flex-col gap-[var(--token-spacing-1)] flex-1 min-w-0">
+        <div className="flex flex-col gap-[var(--token-spacing-4)] flex-1 min-w-0">
           <div className="flex items-center justify-between">
             <span data-text-id={text} className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium text-content-primary">
               {text}

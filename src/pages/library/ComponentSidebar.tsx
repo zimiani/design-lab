@@ -47,8 +47,8 @@ export default function ComponentSidebar({ selected, onSelect, activeTab }: Comp
 
   return (
     <aside className="w-[240px] h-full shrink-0 overflow-y-auto border-r border-shell-border bg-shell-surface">
-      <div className="p-[var(--token-spacing-md)]">
-        <h2 className="text-[length:var(--token-font-size-caption)] leading-[var(--token-line-height-caption)] font-semibold text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-3)]">
+      <div className="p-[var(--token-gap-lg)]">
+        <h2 className="text-[length:var(--token-font-size-caption)] leading-[var(--token-line-height-caption)] font-semibold text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-12)]">
           {sidebarTitles[activeTab]}
         </h2>
       </div>
@@ -64,7 +64,7 @@ export default function ComponentSidebar({ selected, onSelect, activeTab }: Comp
                 type="button"
                 onClick={() => onSelect(id)}
                 className={`
-                  w-full text-left px-[var(--token-spacing-md)] py-[var(--token-spacing-2)]
+                  w-full text-left px-[var(--token-gap-lg)] py-[var(--token-spacing-8)]
                   text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]
                   transition-colors duration-[var(--token-transition-fast)] cursor-pointer
                   ${
@@ -84,21 +84,21 @@ export default function ComponentSidebar({ selected, onSelect, activeTab }: Comp
       {/* Components */}
       {activeTab === 'components' && (
         <>
-          <div className="px-[var(--token-spacing-md)] pb-[var(--token-spacing-3)]">
+          <div className="px-[var(--token-gap-lg)] pb-[var(--token-spacing-12)]">
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search components..."
-              className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-caption)] text-shell-text placeholder:text-shell-text-tertiary outline-none focus:border-shell-selected-text transition-colors"
+              className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-caption)] text-shell-text placeholder:text-shell-text-tertiary outline-none focus:border-shell-selected-text transition-colors"
             />
           </div>
           {componentCategories.map(({ key, label }) => {
             const components = getComponentsByCategory(key).filter((c) => !query || c.name.toLowerCase().includes(query))
             if (components.length === 0) return null
             return (
-              <div key={key} className="mb-[var(--token-spacing-2)]">
-                <p className="px-[var(--token-spacing-md)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider">
+              <div key={key} className="mb-[var(--token-spacing-8)]">
+                <p className="px-[var(--token-gap-lg)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider">
                   {label}
                 </p>
                 {components.map((c) => (
@@ -107,7 +107,7 @@ export default function ComponentSidebar({ selected, onSelect, activeTab }: Comp
                     type="button"
                     onClick={() => onSelect(c.name)}
                     className={`
-                      w-full text-left px-[var(--token-spacing-md)] py-[var(--token-spacing-2)]
+                      w-full text-left px-[var(--token-gap-lg)] py-[var(--token-spacing-8)]
                       text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]
                       transition-colors duration-[var(--token-transition-fast)] cursor-pointer
                       ${
@@ -125,12 +125,12 @@ export default function ComponentSidebar({ selected, onSelect, activeTab }: Comp
           })}
 
           {/* Screen Parts */}
-          <div className="mb-[var(--token-spacing-2)]">
+          <div className="mb-[var(--token-spacing-8)]">
             <button
               type="button"
               onClick={() => onSelect('screen-parts')}
               className={`
-                w-full text-left px-[var(--token-spacing-md)] py-[var(--token-spacing-1)]
+                w-full text-left px-[var(--token-gap-lg)] py-[var(--token-spacing-4)]
                 text-[length:var(--token-font-size-caption)] font-medium uppercase tracking-wider
                 transition-colors duration-[var(--token-transition-fast)] cursor-pointer
                 ${
@@ -157,7 +157,7 @@ export default function ComponentSidebar({ selected, onSelect, activeTab }: Comp
                 type="button"
                 onClick={() => onSelect(id)}
                 className={`
-                  w-full text-left px-[var(--token-spacing-md)] py-[var(--token-spacing-2)]
+                  w-full text-left px-[var(--token-gap-lg)] py-[var(--token-spacing-8)]
                   text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]
                   transition-colors duration-[var(--token-transition-fast)] cursor-pointer
                   ${

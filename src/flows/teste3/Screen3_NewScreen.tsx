@@ -46,7 +46,7 @@ export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps
             <Stack gap="sm">
               <Stack direction="row" align="between">
                 <Text variant="caption" color="content-secondary">Saldo investido</Text>
-                <Badge variant="success" size="sm">Segurado</Badge>
+                <Badge variant="positive" size="sm">Segurado</Badge>
               </Stack>
               <Amount value={MOCK_BALANCE} currency="US$" size="lg" />
               <Text variant="caption" className="text-[var(--color-feedback-success)]">
@@ -103,7 +103,7 @@ export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps
       <Header title="Renda Protegida" onBack={onBack} />
       <Stack gap="default">
         <Stack gap="sm" align="center">
-          <Badge variant="success" size="md">Segurado</Badge>
+          <Badge variant="positive" size="md">Segurado</Badge>
           <Text variant="display">~{formatPct(NET_APY)} a.a.</Text>
           <Text variant="body-sm" color="content-secondary">
             sDAI na Gnosis Chain com seguro automático

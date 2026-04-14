@@ -37,7 +37,7 @@ export default function TextInput({
   }
 
   return (
-    <div data-component="TextInput" className={`flex flex-col gap-[var(--token-spacing-1)] ${className}`}>
+    <div data-component="TextInput" className={`flex flex-col gap-[var(--token-spacing-4)] ${className}`}>
       {label && (
         <label className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium text-text-primary">
           {label}
@@ -45,9 +45,9 @@ export default function TextInput({
       )}
       <div
         className={`
-          flex items-center gap-[var(--token-spacing-2)]
-          h-[48px] px-[var(--token-spacing-md)]
-          bg-surface-primary border rounded-[var(--token-radius-md)]
+          flex items-center gap-[var(--token-spacing-8)]
+          h-[48px] px-[var(--token-gap-lg)]
+          bg-surface-level-0 border rounded-[var(--token-radius-md)]
           transition-colors duration-[var(--token-transition-fast)]
           ${borderColor}
           ${disabled ? 'opacity-50 cursor-not-allowed bg-surface-secondary' : ''}

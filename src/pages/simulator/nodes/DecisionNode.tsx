@@ -26,13 +26,13 @@ function DecisionNode({ data, selected }: NodeProps) {
       <Handle type="target" position={Position.Top} id="top" className="!bg-[#FBBF24] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302A1E]" />
       <Handle type="target" position={Position.Left} id="left-target" className="!bg-[#FBBF24] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302A1E]" />
       <Handle type="target" position={Position.Right} id="right-target" className="!bg-[#FBBF24] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302A1E]" />
-      <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
+      <div className="flex items-center gap-[var(--token-spacing-8)] px-[var(--token-spacing-12)] py-[var(--token-spacing-8)]">
         <RiGitBranchLine size={14} className="text-[#FBBF24] shrink-0" />
         <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#e0e0e0] truncate">
           {nodeData.label}
         </span>
       </div>
-      <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] border-t border-white/[0.06]">
+      <div className="px-[var(--token-spacing-12)] py-[var(--token-spacing-8)] border-t border-white/[0.06]">
         <p className={`text-[length:var(--token-font-size-caption)] line-clamp-2 ${nodeData.description ? 'text-[#888]' : 'text-[#555] italic'}`}>
           {nodeData.description || 'Condition...'}
         </p>

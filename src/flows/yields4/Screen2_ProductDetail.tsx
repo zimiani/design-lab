@@ -37,7 +37,7 @@ export default function Screen2_ProductDetail({ onNext, onBack }: FlowScreenProp
 
       <Stack gap="default">
         <Stack gap="sm" align="center">
-          <Badge variant="success" size="md">Segurado</Badge>
+          <Badge variant="positive" size="md">Segurado</Badge>
           <Text variant="display">~{formatPct(NET_APY)} a.a.</Text>
           <Text variant="body-sm" color="content-secondary">
             sDAI na Gnosis Chain com seguro automático

@@ -50,7 +50,7 @@ export default function EditableFlowSlug({ value, onSave, variant = 'block' }: E
   if (editing) {
     const isInline = variant === 'inline'
     return (
-      <div className={isInline ? 'flex items-center gap-[var(--token-spacing-1)]' : 'flex flex-col gap-[var(--token-spacing-1)]'}>
+      <div className={isInline ? 'flex items-center gap-[var(--token-spacing-4)]' : 'flex flex-col gap-[var(--token-spacing-4)]'}>
         <input
           type="text"
           value={draft}
@@ -61,8 +61,8 @@ export default function EditableFlowSlug({ value, onSave, variant = 'block' }: E
           className={`
             font-mono bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none text-shell-text
             ${isInline
-              ? 'px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] w-[200px]'
-              : 'w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]'
+              ? 'px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] w-[200px]'
+              : 'w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]'
             }
           `}
         />
@@ -80,11 +80,11 @@ export default function EditableFlowSlug({ value, onSave, variant = 'block' }: E
             {error && (
               <p className="text-[length:var(--token-font-size-caption)] text-error">{error}</p>
             )}
-            <div className="flex gap-[var(--token-spacing-1)] justify-end">
+            <div className="flex gap-[var(--token-spacing-4)] justify-end">
               <button
                 type="button"
                 onClick={() => setEditing(false)}
-                className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
+                className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
               >
                 Cancel
               </button>
@@ -92,7 +92,7 @@ export default function EditableFlowSlug({ value, onSave, variant = 'block' }: E
                 type="button"
                 onClick={handleSave}
                 disabled={saving}
-                className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px] disabled:opacity-40"
+                className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px] disabled:opacity-40"
               >
                 <RiCheckLine size={12} />
                 {saving ? 'Saving...' : 'Save'}
@@ -113,7 +113,7 @@ export default function EditableFlowSlug({ value, onSave, variant = 'block' }: E
         type="button"
         onClick={handleEdit}
         title="Click to rename flow"
-        className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary font-mono cursor-pointer hover:text-shell-text-secondary flex items-center gap-[var(--token-spacing-1)] group"
+        className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary font-mono cursor-pointer hover:text-shell-text-secondary flex items-center gap-[var(--token-spacing-4)] group"
       >
         {value}
         <RiPencilLine size={11} className="opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -128,9 +128,9 @@ export default function EditableFlowSlug({ value, onSave, variant = 'block' }: E
       onClick={handleEdit}
       onKeyDown={(e) => { if (e.key === 'Enter') handleEdit() }}
       title="Click to rename flow"
-      className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-1)] px-[var(--token-spacing-1)] py-[2px] -mx-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
+      className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-4)] px-[var(--token-spacing-4)] py-[2px] -mx-[var(--token-spacing-4)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
     >
-      <span className="flex-1 text-[length:var(--token-font-size-heading-sm)] font-medium text-shell-text font-mono">
+      <span className="flex-1 text-[length:var(--token-font-size-h3)] font-medium text-shell-text font-mono">
         {value}
       </span>
       <RiPencilLine

@@ -79,7 +79,7 @@ export default function Screen2_BenefitsPromos({ onNext, onBack }: FlowScreenPro
                 left={item.icon}
                 title={item.title}
                 subtitle={item.subtitle}
-                right={item.badge ? <Badge variant="success" size="sm">{item.badge}</Badge> : undefined}
+                right={item.badge ? <Badge variant="positive" size="sm">{item.badge}</Badge> : undefined}
                 onPress={onNext}
               />
             ))}

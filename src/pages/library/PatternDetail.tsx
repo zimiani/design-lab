@@ -71,21 +71,21 @@ export default function PatternDetail({ pattern }: PatternDetailProps) {
   return (
     <div className="flex-1 overflow-y-auto bg-shell-bg">
       <div className="py-[32px] px-[120px] max-w-[960px]">
-        <div className="flex items-start justify-between mb-[var(--token-spacing-2)]">
-          <h2 className="text-[length:var(--token-font-size-heading-lg)] font-semibold text-shell-text">
+        <div className="flex items-start justify-between mb-[var(--token-spacing-8)]">
+          <h2 className="text-[length:var(--token-font-size-h1)] font-semibold text-shell-text">
             {info.title}
           </h2>
           {Preview && (
             <button
               type="button"
               onClick={() => setPhoneView(!phoneView)}
-              className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] text-[length:var(--token-font-size-body-sm)] border border-shell-border rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors cursor-pointer text-shell-text"
+              className="px-[var(--token-spacing-12)] py-[var(--token-spacing-8)] text-[length:var(--token-font-size-body-sm)] border border-shell-border rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors cursor-pointer text-shell-text"
             >
               {phoneView ? '\u2194 Expanded' : '\uD83D\uDCF1 Phone (393px)'}
             </button>
           )}
         </div>
-        <p className="text-[length:var(--token-font-size-body-md)] text-shell-text-secondary mb-[var(--token-spacing-6)]">
+        <p className="text-[length:var(--token-font-size-body-md)] text-shell-text-secondary mb-[var(--token-spacing-24)]">
           {info.description}
         </p>
 
@@ -93,7 +93,7 @@ export default function PatternDetail({ pattern }: PatternDetailProps) {
         {Preview && (
           <div
             className={`
-              bg-[#F5F6F8] text-content-primary rounded-[var(--token-radius-lg)] mb-[var(--token-spacing-6)] overflow-hidden
+              bg-[#F5F6F8] text-content-primary rounded-[var(--token-radius-lg)] mb-[var(--token-spacing-24)] overflow-hidden
               ${phoneView ? 'max-w-[393px] mx-auto' : ''}
             `}
           >
@@ -101,15 +101,15 @@ export default function PatternDetail({ pattern }: PatternDetailProps) {
           </div>
         )}
 
-        <div className="mb-[var(--token-spacing-6)]">
-          <h3 className="text-[length:var(--token-font-size-heading-sm)] font-semibold text-shell-text mb-[var(--token-spacing-3)]">
+        <div className="mb-[var(--token-spacing-24)]">
+          <h3 className="text-[length:var(--token-font-size-h3)] font-semibold text-shell-text mb-[var(--token-spacing-12)]">
             Recipe
           </h3>
-          <div className="flex flex-wrap gap-[var(--token-spacing-2)]">
+          <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
             {info.recipe.map((component) => (
               <span
                 key={component}
-                className="px-[var(--token-spacing-3)] py-[var(--token-spacing-1)] bg-shell-surface border border-shell-border rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-body-sm)] text-shell-text font-mono"
+                className="px-[var(--token-spacing-12)] py-[var(--token-spacing-4)] bg-shell-surface border border-shell-border rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-body-sm)] text-shell-text font-mono"
               >
                 {component}
               </span>
@@ -118,7 +118,7 @@ export default function PatternDetail({ pattern }: PatternDetailProps) {
         </div>
 
         <div>
-          <h3 className="text-[length:var(--token-font-size-heading-sm)] font-semibold text-shell-text mb-[var(--token-spacing-3)]">
+          <h3 className="text-[length:var(--token-font-size-h3)] font-semibold text-shell-text mb-[var(--token-spacing-12)]">
             How it works
           </h3>
           <p className="text-[length:var(--token-font-size-body-md)] text-shell-text leading-[var(--token-line-height-body-md)]">

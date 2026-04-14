@@ -46,7 +46,7 @@ export default function RadioGroup({
               onClick={() => !isDisabled && onChange(option.value)}
               disabled={isDisabled}
               className={cn(
-                'w-full flex items-center justify-between gap-[var(--token-spacing-3)] py-[var(--token-spacing-3)] text-left',
+                'w-full flex items-center justify-between gap-[var(--token-spacing-12)] py-[var(--token-spacing-12)] text-left',
                 isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
               )}
             >
@@ -59,7 +59,7 @@ export default function RadioGroup({
                 </span>
                 {option.description && (
                   <span className={cn(
-                    'text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-content-secondary mt-[var(--token-spacing-0-5)]',
+                    'text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-content-secondary mt-[var(--token-spacing-8)]',
                     isDisabled && 'text-content-tertiary',
                   )}>
                     {option.description}

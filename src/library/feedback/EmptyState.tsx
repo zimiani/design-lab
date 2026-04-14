@@ -17,15 +17,15 @@ export default function EmptyState({
   className = '',
 }: EmptyStateProps) {
   return (
-    <div data-component="EmptyState" className={`flex flex-col items-center text-center px-[var(--token-spacing-xl)] py-[var(--token-spacing-2xl)] ${className}`}>
+    <div data-component="EmptyState" className={`flex flex-col items-center text-center px-[var(--token-gap-xl)] py-[var(--token-spacing-48)] ${className}`}>
       {icon && (
-        <div className="mb-[var(--token-spacing-md)] text-text-tertiary">{icon}</div>
+        <div className="mb-[var(--token-gap-lg)] text-text-tertiary">{icon}</div>
       )}
-      <h3 className="text-[length:var(--token-font-size-heading-sm)] leading-[var(--token-line-height-heading-sm)] font-medium text-text-primary mb-[var(--token-spacing-2)]">
+      <h3 className="text-[length:var(--token-font-size-h3)] leading-[var(--token-line-height-h3)] font-medium text-text-primary mb-[var(--token-spacing-8)]">
         {title}
       </h3>
       {description && (
-        <p className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] text-text-secondary mb-[var(--token-spacing-lg)]">
+        <p className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] text-text-secondary mb-[var(--token-padding-lg)]">
           {description}
         </p>
       )}

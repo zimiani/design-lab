@@ -7,7 +7,7 @@ export type SearchBarProps = React.InputHTMLAttributes<HTMLInputElement>
 const SearchBar = forwardRef<HTMLInputElement, SearchBarProps>(
   ({ className = '', ...inputProps }, ref) => {
     return (
-      <div data-component="SearchBar" className={`flex items-center gap-4 py-4 border-b border-[var(--color-border-default)] bg-white ${className}`}>
+      <div data-component="SearchBar" className={`flex items-center gap-4 py-4 border-b border-[var(--color-border)] bg-white ${className}`}>
         <RiSearchLine size={20} className="shrink-0 text-[var(--color-content-tertiary)]" />
         <input
           ref={ref}

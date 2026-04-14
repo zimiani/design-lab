@@ -15,7 +15,7 @@ export function PriceHeader({ asset }: { asset: Asset }) {
       <Stack gap="none" align="center">
         <Text variant="display">{formatBRL(asset.price!)}</Text>
         <Badge
-          variant={asset.change24h! >= 0 ? 'success' : 'error'}
+          variant={asset.change24h! >= 0 ? 'positive' : 'critical'}
           size="sm"
         >
           {formatPercentChange(asset.change24h!)}

@@ -63,7 +63,7 @@ interface ComponentPreviewProps {
 
 export default function ComponentPreview({ meta }: ComponentPreviewProps) {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)]">
       <PreviewContent name={meta.name} />
     </div>
   )
@@ -71,7 +71,7 @@ export default function ComponentPreview({ meta }: ComponentPreviewProps) {
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <p className="text-[length:var(--token-font-size-caption)] font-medium text-text-secondary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+    <p className="text-[length:var(--token-font-size-caption)] font-medium text-text-secondary uppercase tracking-wider mb-[var(--token-spacing-8)]">
       {children}
     </p>
   )
@@ -186,11 +186,11 @@ function PreviewContent({ name }: { name: string }) {
 
 function TextPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-2)] bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+    <div className="flex flex-col gap-[var(--token-spacing-8)] bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
       <Text variant="display">Display — R$ 12,450.00</Text>
-      <Text variant="heading-lg">Heading Large</Text>
-      <Text variant="heading-md">Heading Medium</Text>
-      <Text variant="heading-sm">Heading Small</Text>
+      <Text variant="h1">Heading Large</Text>
+      <Text variant="h2">Heading Medium</Text>
+      <Text variant="h3">Heading Small</Text>
       <Text variant="body-lg">Body Large — regular paragraph text</Text>
       <Text variant="body-md">Body Medium — standard content</Text>
       <Text variant="body-sm">Body Small — secondary information</Text>
@@ -202,7 +202,7 @@ function TextPreview() {
 
 function DividerPreview() {
   return (
-    <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+    <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
       <Text variant="body-sm">Content above</Text>
       <Divider spacing="sm" />
       <Text variant="body-sm">Spacing SM</Text>
@@ -216,7 +216,7 @@ function DividerPreview() {
 
 function LinkPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)] bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)] bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
       <div>
         <SectionLabel>xs (default)</SectionLabel>
         <Link linkText="View details" size="xs" />
@@ -241,11 +241,11 @@ function LinkPreview() {
 
 function ButtonPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)]">
       {(['accent', 'primary', 'secondary', 'ghost', 'destructive'] as const).map((v) => (
         <div key={v}>
           <SectionLabel>{v}</SectionLabel>
-          <div className="flex flex-wrap gap-[var(--token-spacing-2)] items-center">
+          <div className="flex flex-wrap gap-[var(--token-spacing-8)] items-center">
             {(['sm', 'md', 'lg'] as const).map((s) => (
               <Button key={s} variant={v} size={s}>
                 {v} {s}
@@ -267,7 +267,7 @@ function ButtonPreview() {
 function TextInputPreview() {
   const [val, setVal] = useState('')
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)] max-w-[360px]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)] max-w-[360px]">
       <TextInput label="Full name" placeholder="Enter your name" value={val} onChange={setVal} />
       <TextInput label="Email" placeholder="you@email.com" helperText="We'll never share your email" prefix={<span>@</span>} />
       <TextInput label="Amount" error="Minimum deposit is R$ 10.00" value="5" suffix={<span>BRL</span>} />
@@ -279,7 +279,7 @@ function TextInputPreview() {
 function CurrencyInputPreview() {
   const [val, setVal] = useState('15000')
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)] max-w-[360px]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)] max-w-[360px]">
       <CurrencyInput label="Amount to deposit" value={val} onChange={setVal} currencySymbol="R$" helperText="Min R$ 10.00" />
       <CurrencyInput label="With error" value="0" currencySymbol="US$" error="Amount must be greater than zero" />
       <CurrencyInput label="Receba" value="100000" currencySymbol="US$" />
@@ -292,7 +292,7 @@ function PinInputPreview() {
   const [pin4, setPin4] = useState('')
   const [pin6, setPin6] = useState('')
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)] items-center">
+    <div className="flex flex-col gap-[var(--token-padding-lg)] items-center">
       <div>
         <SectionLabel>4 digits</SectionLabel>
         <PinInput length={4} value={pin4} onChange={setPin4} />
@@ -311,7 +311,7 @@ function PinInputPreview() {
 
 function CheckboxPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-2)] max-w-[400px]">
+    <div className="flex flex-col gap-[var(--token-spacing-8)] max-w-[400px]">
       <ListItem title="Email marketing" subtitle="Receive promotional emails" right={<Checkbox checked={false} />} trailing={null} />
       <ListItem title="SMS alerts" subtitle="Get text message notifications" right={<Checkbox checked />} trailing={null} />
       <ListItem title="Accept terms" subtitle="Required to continue" right={<Checkbox checked disabled />} trailing={null} disabled />
@@ -321,7 +321,7 @@ function CheckboxPreview() {
 
 function TogglePreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-2)] max-w-[400px]">
+    <div className="flex flex-col gap-[var(--token-spacing-8)] max-w-[400px]">
       <ListItem title="Push notifications" subtitle="Get notified about transactions" right={<Toggle checked />} trailing={null} />
       <ListItem title="Dark mode" subtitle="Switch to dark theme" right={<Toggle checked={false} />} trailing={null} />
       <ListItem title="Biometric login" subtitle="Use Face ID or fingerprint" right={<Toggle checked disabled />} trailing={null} disabled />
@@ -332,7 +332,7 @@ function TogglePreview() {
 function SelectPreview() {
   const [val, setVal] = useState('')
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)] max-w-[360px]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)] max-w-[360px]">
       <Select
         label="Account type"
         options={[
@@ -352,11 +352,11 @@ function SelectPreview() {
 
 function IconButtonPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)]">
       {(['large', 'base', 'small', 'no_background'] as const).map((v) => (
         <div key={v}>
           <SectionLabel>{v}</SectionLabel>
-          <div className="flex gap-[var(--token-spacing-3)] items-end">
+          <div className="flex gap-[var(--token-spacing-12)] items-end">
             <IconButton icon={<RiSettings3Line size={v === 'small' ? 16 : 20} />} variant={v} backgroundColor="#ECEFEB" />
             <IconButton icon={<RiNotificationLine size={v === 'small' ? 16 : 20} />} variant={v} backgroundColor="#ECEFEB" />
             <IconButton icon={<RiSearchLine size={v === 'small' ? 16 : 20} />} variant={v} backgroundColor="#ECEFEB" />
@@ -367,7 +367,7 @@ function IconButtonPreview() {
         <SectionLabel>inverted (on image)</SectionLabel>
         <div className="relative w-fit rounded-[var(--token-radius-md)] overflow-hidden">
           <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=300&h=80&fit=crop&q=80" alt="" className="w-[300px] h-[80px] object-cover" />
-          <div className="absolute top-2 right-2 flex gap-[var(--token-spacing-2)]">
+          <div className="absolute top-2 right-2 flex gap-[var(--token-spacing-8)]">
             <IconButton icon={<RiCloseLine size={20} />} variant="base" inverted />
             <IconButton icon={<RiSettings3Line size={20} />} variant="base" inverted />
           </div>
@@ -375,7 +375,7 @@ function IconButtonPreview() {
       </div>
       <div>
         <SectionLabel>disabled</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-3)]">
+        <div className="flex gap-[var(--token-spacing-12)]">
           <IconButton icon={<RiSettings3Line size={20} />} variant="base" disabled />
         </div>
       </div>
@@ -397,10 +397,10 @@ function SearchBarPreview() {
 
 function ShortcutButtonPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)]">
       <div>
         <SectionLabel>primary</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-4)]">
+        <div className="flex gap-[var(--token-spacing-16)]">
           <ShortcutButton icon={<RiArrowRightUpLine size={22} className="text-[#1d211a]" />} label="Send" variant="primary" />
           <ShortcutButton icon={<RiArrowLeftDownLine size={22} className="text-[#1d211a]" />} label="Receive" variant="primary" />
           <ShortcutButton icon={<RiArrowLeftRightLine size={22} className="text-[#1d211a]" />} label="Swap" variant="primary" />
@@ -409,7 +409,7 @@ function ShortcutButtonPreview() {
       </div>
       <div>
         <SectionLabel>secondary</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-4)]">
+        <div className="flex gap-[var(--token-spacing-16)]">
           <ShortcutButton icon={<RiQrCodeLine size={22} />} label="PIX" variant="secondary" />
           <ShortcutButton icon={<RiBankCardLine size={22} />} label="Card" variant="secondary" />
         </div>
@@ -426,11 +426,11 @@ function SliderPreview() {
   const [val1, setVal1] = useState(500)
   const [val2, setVal2] = useState(50)
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)] max-w-[400px]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)] max-w-[400px]">
       <div>
         <SectionLabel>with labels</SectionLabel>
-        <Text variant="heading-sm" align="center">{val1.toLocaleString()}</Text>
-        <div className="h-[var(--token-spacing-sm)]" />
+        <Text variant="h3" align="center">{val1.toLocaleString()}</Text>
+        <div className="h-[var(--token-gap-md)]" />
         <Slider value={val1} minimumValue={100} maximumValue={5000} step={100} onValueChange={setVal1} />
       </div>
       <div>
@@ -448,7 +448,7 @@ function SliderPreview() {
 function RadioGroupPreview() {
   const [val, setVal] = useState<string | number>('pix')
   return (
-    <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+    <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
       <RadioGroup
         label="Payment method"
         value={val}
@@ -468,12 +468,12 @@ function RadioGroupPreview() {
 
 function CardPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)]">
       {(['elevated', 'flat'] as const).map((v) => (
         <div key={v}>
           <SectionLabel>{v}</SectionLabel>
           <Card variant={v}>
-            <Text variant="heading-sm">Account Balance</Text>
+            <Text variant="h3">Account Balance</Text>
             <Text variant="display">R$ 12,450.00</Text>
           </Card>
         </div>
@@ -490,11 +490,11 @@ function CardPreview() {
 
 function ListItemPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)]">
       {/* Box variant (default) */}
       <div>
         <SectionLabel>box variant (default)</SectionLabel>
-        <div className="flex flex-col gap-[var(--token-spacing-2)] max-w-[400px]">
+        <div className="flex flex-col gap-[var(--token-spacing-8)] max-w-[400px]">
           <ListItem
             title="Account & Security"
             subtitle="Manage your account settings"
@@ -505,7 +505,7 @@ function ListItemPreview() {
             title="Rewards"
             subtitle="View your cashback and perks"
             left={<Avatar size="md" icon={<RiStarLine size={20} />} />}
-            right={<Badge variant="lime" size="sm">3 new</Badge>}
+            right={<Badge variant="positive" size="sm">3 new</Badge>}
             onPress={() => {}}
           />
           <ListItem
@@ -521,7 +521,7 @@ function ListItemPreview() {
       {/* Inverted */}
       <div>
         <SectionLabel>inverted (subtitle is bold)</SectionLabel>
-        <div className="flex flex-col gap-[var(--token-spacing-2)] max-w-[400px]">
+        <div className="flex flex-col gap-[var(--token-spacing-8)] max-w-[400px]">
           <ListItem
             inverted
             title="Picnic Account"
@@ -535,7 +535,7 @@ function ListItemPreview() {
       {/* With right slots */}
       <div>
         <SectionLabel>right slot variations</SectionLabel>
-        <div className="flex flex-col gap-[var(--token-spacing-2)] max-w-[400px]">
+        <div className="flex flex-col gap-[var(--token-spacing-8)] max-w-[400px]">
           <ListItem title="View details" subtitle="Transaction #42" right={<Link linkText="Open" size="xs" />} trailing={null} />
           <ListItem title="Tag example" subtitle="Categorized item" right={<Tag label="DeFi" />} trailing={null} />
         </div>
@@ -544,7 +544,7 @@ function ListItemPreview() {
       {/* Disabled */}
       <div>
         <SectionLabel>disabled</SectionLabel>
-        <div className="flex flex-col gap-[var(--token-spacing-2)] max-w-[400px]">
+        <div className="flex flex-col gap-[var(--token-spacing-8)] max-w-[400px]">
           <ListItem title="Disabled" subtitle="Can't interact" disabled onPress={() => {}} />
         </div>
       </div>
@@ -554,27 +554,27 @@ function ListItemPreview() {
 
 function BadgePreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)]">
       <div>
-        <SectionLabel>semantic</SectionLabel>
-        <div className="flex flex-wrap gap-[var(--token-spacing-2)]">
-          {(['success', 'warning', 'error', 'info', 'neutral'] as const).map((v) => (
+        <SectionLabel>filled</SectionLabel>
+        <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
+          {(['neutral', 'neutral-light', 'inverse', 'inverse-light', 'positive', 'warning', 'critical'] as const).map((v) => (
             <Badge key={v} variant={v} size="md">{v}</Badge>
           ))}
         </div>
       </div>
       <div>
-        <SectionLabel>brand colors</SectionLabel>
-        <div className="flex flex-wrap gap-[var(--token-spacing-2)]">
-          <Badge variant="guava" size="md">Guava</Badge>
-          <Badge variant="grape" size="md">Grape</Badge>
-          <Badge variant="lime" size="md">Lime</Badge>
-          <Badge variant="none" size="md">None</Badge>
+        <SectionLabel>outline</SectionLabel>
+        <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
+          {(['neutral', 'neutral-light', 'inverse', 'inverse-light', 'positive', 'warning', 'critical'] as const).map((v) => (
+            <Badge key={v} variant={v} size="md" outline>{v}</Badge>
+          ))}
         </div>
       </div>
       <div>
         <SectionLabel>with icon</SectionLabel>
-        <Badge variant="success" size="md" icon={<RiStarLine size={12} />}>Featured</Badge>
+        <Badge variant="positive" size="md" icon={<RiStarLine size={12} />}>Featured</Badge>
+        <Badge variant="critical" size="md" outline icon={<RiStarLine size={12} />}>Error</Badge>
       </div>
     </div>
   )
@@ -582,10 +582,10 @@ function BadgePreview() {
 
 function AvatarPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)]">
       <div>
         <SectionLabel>sizes (initials)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-3)] items-end">
+        <div className="flex gap-[var(--token-spacing-12)] items-end">
           {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
             <Avatar key={size} size={size} initials="RP" />
           ))}
@@ -593,7 +593,7 @@ function AvatarPreview() {
       </div>
       <div>
         <SectionLabel>initials</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-3)]">
+        <div className="flex gap-[var(--token-spacing-12)]">
           <Avatar initials="AB" />
           <Avatar initials="JD" />
           <Avatar initials="MK" />
@@ -601,7 +601,7 @@ function AvatarPreview() {
       </div>
       <div>
         <SectionLabel>src (crypto tokens via coingecko)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-3)]">
+        <div className="flex gap-[var(--token-spacing-12)]">
           <Avatar src={tokenIcons.BTC} />
           <Avatar src={tokenIcons.ETH} />
           <Avatar src={tokenIcons.SOL} />
@@ -612,7 +612,7 @@ function AvatarPreview() {
       </div>
       <div>
         <SectionLabel>src (photo)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-3)]">
+        <div className="flex gap-[var(--token-spacing-12)]">
           <Avatar src="https://i.pravatar.cc/80?u=alice" />
           <Avatar src="https://i.pravatar.cc/80?u=bob" />
           <Avatar src="https://i.pravatar.cc/80?u=carol" />
@@ -620,7 +620,7 @@ function AvatarPreview() {
       </div>
       <div>
         <SectionLabel>icon</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-3)]">
+        <div className="flex gap-[var(--token-spacing-12)]">
           <Avatar icon={<RiWalletLine size={18} />} />
           <Avatar icon={<RiGlobalLine size={18} />} />
           <Avatar />
@@ -628,7 +628,7 @@ function AvatarPreview() {
       </div>
       <div>
         <SectionLabel>bgColor + iconColor</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-3)]">
+        <div className="flex gap-[var(--token-spacing-12)]">
           <Avatar icon={<RiWalletLine size={18} />} bgColor="#EFF6FF" iconColor="#3B82F6" />
           <Avatar icon={<RiGlobalLine size={18} />} bgColor="#F0FDF4" iconColor="#22C55E" />
           <Avatar initials="RP" bgColor="#2F289F" iconColor="#FFFFFF" />
@@ -636,7 +636,7 @@ function AvatarPreview() {
       </div>
       <div>
         <SectionLabel>with overlay (chain logo, bottom-right)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-4)] items-end">
+        <div className="flex gap-[var(--token-spacing-16)] items-end">
           <Avatar size="xl" src={tokenIcons.ETH} overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} />
           <Avatar size="lg" src="https://i.pravatar.cc/80?u=alice" overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} />
           <Avatar size="md" src={tokenIcons.USDC} overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} />
@@ -644,7 +644,7 @@ function AvatarPreview() {
       </div>
       <div>
         <SectionLabel>with badge (notification, top-right)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-4)] items-end">
+        <div className="flex gap-[var(--token-spacing-16)] items-end">
           <Avatar size="xl" src="https://i.pravatar.cc/80?u=bob" badge />
           <Avatar size="lg" initials="JD" badge />
           <Avatar size="md" src={tokenIcons.BTC} badge badgeColor="#10B981" />
@@ -652,7 +652,7 @@ function AvatarPreview() {
       </div>
       <div>
         <SectionLabel>overlay + badge combined</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-4)] items-end">
+        <div className="flex gap-[var(--token-spacing-16)] items-end">
           <Avatar size="xl" src="https://i.pravatar.cc/80?u=carol" overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} badge />
           <Avatar size="lg" icon={<RiWalletLine size={24} />} overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} badge badgeColor="#EAB308" />
         </div>
@@ -663,7 +663,7 @@ function AvatarPreview() {
 
 function TagPreview() {
   return (
-    <div className="flex flex-wrap gap-[var(--token-spacing-2)]">
+    <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
       <Tag label="Crypto" />
       <Tag label="PIX" />
       <Tag label="Removable" removable onRemove={() => {}} />
@@ -674,7 +674,7 @@ function TagPreview() {
 
 function ProgressBarPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)] max-w-[360px]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)] max-w-[360px]">
       {[25, 50, 75, 100].map((v) => (
         <div key={v}>
           <SectionLabel>{`${v}%`}</SectionLabel>
@@ -687,7 +687,7 @@ function ProgressBarPreview() {
 
 function AmountPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-3)] bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+    <div className="flex flex-col gap-[var(--token-spacing-12)] bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
       <Amount value={12450.0} size="display" />
       <Amount value={5280.5} size="lg" />
       <Amount value={150.0} size="md" />
@@ -699,10 +699,10 @@ function AmountPreview() {
 
 function DataListPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)]">
       <div>
         <SectionLabel>transaction details</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <DataList data={[
             { label: 'Amount', value: 'R$ 150.00' },
             { label: 'Fee', value: 'Free', secondaryValue: 'PIX transfer' },
@@ -713,7 +713,7 @@ function DataListPreview() {
       </div>
       <div>
         <SectionLabel>with copy & info</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <DataList data={[
             { label: 'PIX code', value: '8a7f3e...c92d', copyable: true },
             { label: 'Network fee', value: 'R$ 0.00', info: 'No fee for this transfer' },
@@ -724,7 +724,7 @@ function DataListPreview() {
       </div>
       <div>
         <SectionLabel>with expandable breakdown</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <DataList data={[
             { label: 'Amount', value: 'R$ 200.00' },
             {
@@ -743,7 +743,7 @@ function DataListPreview() {
       </div>
       <div>
         <SectionLabel>vertical — card details</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <DataList variant="vertical" data={[
             { label: 'Nome', value: 'Cartão Virtual' },
             { label: 'Número', value: '0234 3829 3090 3849', copyable: true },
@@ -756,7 +756,7 @@ function DataListPreview() {
       </div>
       <div>
         <SectionLabel>vertical — with action button</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <DataList variant="vertical" data={[
             {
               label: 'Limite diário de gastos',
@@ -774,10 +774,10 @@ function DataListPreview() {
 
 function SummaryPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)] max-w-[400px]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)] max-w-[400px]">
       <div>
         <SectionLabel>default</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
           <Summary
             header="Transfer summary"
             data={[
@@ -790,7 +790,7 @@ function SummaryPreview() {
       </div>
       <div>
         <SectionLabel>with done status</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
           <Summary
             data={[
               { icon: <RiGlobalLine size={24} className="text-[var(--color-content-primary)]" />, title: 'Identity verified', description: 'Your documents have been approved.', status: 'done' },
@@ -802,7 +802,7 @@ function SummaryPreview() {
       </div>
       <div>
         <SectionLabel>with pending status</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
           <Summary
             data={[
               { icon: <RiGlobalLine size={24} className="text-[var(--color-content-primary)]" />, title: 'Identity verified', description: 'Your documents have been approved.', status: 'done' },
@@ -839,22 +839,22 @@ const lineChartAreaData = Array.from({ length: 13 }, (_, i) => ({
 
 function LineChartPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)] max-w-[480px]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)] max-w-[480px]">
       <div>
         <SectionLabel>baseline (price chart)</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
           <LineChart data={lineChartBaselineData} variant="baseline" height={180} />
         </div>
       </div>
       <div>
         <SectionLabel>area (yield projection)</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
           <LineChart data={lineChartAreaData} variant="area" height={180} />
         </div>
       </div>
       <div>
         <SectionLabel>with axes visible</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
           <LineChart data={lineChartBaselineData} variant="baseline" height={200} showPriceScale showTimeScale />
         </div>
       </div>
@@ -866,7 +866,7 @@ function LineChartPreview() {
 
 function ToastPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-3)]">
+    <div className="flex flex-col gap-[var(--token-spacing-12)]">
       {(['success', 'error', 'info', 'warning'] as const).map((v) => (
         <Toast key={v} variant={v} message={`This is a ${v} toast notification`} onDismiss={() => {}} />
       ))}
@@ -889,9 +889,9 @@ function EmptyStatePreview() {
 
 function LoadingSpinnerPreview() {
   return (
-    <div className="flex items-end gap-[var(--token-spacing-lg)]">
+    <div className="flex items-end gap-[var(--token-padding-lg)]">
       {(['sm', 'md', 'lg'] as const).map((size) => (
-        <div key={size} className="flex flex-col items-center gap-[var(--token-spacing-2)]">
+        <div key={size} className="flex flex-col items-center gap-[var(--token-spacing-8)]">
           <LoadingSpinner size={size} />
           <Text variant="caption">{size}</Text>
         </div>
@@ -902,10 +902,10 @@ function LoadingSpinnerPreview() {
 
 function SkeletonPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-md)] bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[320px]">
-      <div className="flex items-center gap-[var(--token-spacing-3)]">
+    <div className="flex flex-col gap-[var(--token-gap-lg)] bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[320px]">
+      <div className="flex items-center gap-[var(--token-spacing-12)]">
         <Skeleton variant="circle" height="40px" />
-        <div className="flex-1 flex flex-col gap-[var(--token-spacing-2)]">
+        <div className="flex-1 flex flex-col gap-[var(--token-spacing-8)]">
           <Skeleton height="14px" width="60%" />
           <Skeleton height="12px" width="40%" />
         </div>
@@ -919,7 +919,7 @@ function SkeletonPreview() {
 
 function BannerPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)] max-w-[400px]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)] max-w-[400px]">
       {(['neutral', 'success', 'warning', 'critical'] as const).map((v) => (
         <Banner key={v} title={`${v.charAt(0).toUpperCase() + v.slice(1)} banner`} description="This is the description text for this banner variant." variant={v} />
       ))}
@@ -947,7 +947,7 @@ function TooltipPreview() {
   const [visible1, setVisible1] = useState(true)
   const [visible2, setVisible2] = useState(true)
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)] max-w-[400px]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)] max-w-[400px]">
       <div>
         <SectionLabel>arrow top (default)</SectionLabel>
         <Tooltip visible={visible1} onClose={() => setVisible1(!visible1)} position="top">
@@ -976,28 +976,28 @@ function TooltipPreview() {
 
 function HeaderPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)]">
       <div>
         <SectionLabel>with back button</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Header title="Limites e taxas" onBack={() => {}} />
         </div>
       </div>
       <div>
         <SectionLabel>with close button</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Header title="Settings" onClose={() => {}} />
         </div>
       </div>
       <div>
         <SectionLabel>with description</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Header title="Deposit" description="Choose the asset and amount you want to deposit." onBack={() => {}} />
         </div>
       </div>
       <div>
         <SectionLabel>back + right action</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Header
             title="Limites e taxas"
             onBack={() => {}}
@@ -1046,7 +1046,7 @@ function SegmentedControlPreview() {
 
 function GroupHeaderPreview() {
   return (
-    <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+    <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
       <GroupHeader text="GENERAL" />
       <div className="py-3"><Text variant="body-md">Some content...</Text></div>
       <GroupHeader text="SECURITY" />
@@ -1101,10 +1101,10 @@ function BaseLayoutPreview() {
 
 function StackPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)]">
       <div>
         <SectionLabel>default (16px)</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Stack>
             <TextInput label="First name" placeholder="John" />
             <TextInput label="Last name" placeholder="Doe" />
@@ -1124,17 +1124,17 @@ function StackPreview() {
       </div>
       <div>
         <SectionLabel>sm (8px)</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Stack gap="sm">
-            <Badge variant="success" size="md">Completed</Badge>
-            <Badge variant="info" size="md">Processing</Badge>
+            <Badge variant="positive" size="md">Completed</Badge>
+            <Badge variant="neutral" size="md">Processing</Badge>
             <Badge variant="warning" size="md">Pending</Badge>
           </Stack>
         </div>
       </div>
       <div>
         <SectionLabel>lg (24px)</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Stack gap="lg">
             <Card variant="flat"><Text variant="body-md">Card one</Text></Card>
             <Card variant="flat"><Text variant="body-md">Card two</Text></Card>
@@ -1147,10 +1147,10 @@ function StackPreview() {
 
 function SectionPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)]">
       <div>
         <SectionLabel>with title</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Section title="Account Settings">
             <Stack gap="none">
               <ListItem title="Profile" subtitle="Manage your info" onPress={() => {}} />
@@ -1161,7 +1161,7 @@ function SectionPreview() {
       </div>
       <div>
         <SectionLabel>without title</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Section>
             <Text variant="body-md">Sections without a title work as semantic grouping containers. BaseLayout separates them with 24px gaps.</Text>
           </Section>
@@ -1169,7 +1169,7 @@ function SectionPreview() {
       </div>
       <div>
         <SectionLabel>multiple sections (as in BaseLayout)</SectionLabel>
-        <div className="bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)] max-w-[400px] flex flex-col gap-[var(--token-spacing-6)]">
+        <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px] flex flex-col gap-[var(--token-spacing-24)]">
           <Section title="General">
             <Stack gap="none">
               <ListItem title="Language" subtitle="English" onPress={() => {}} />
@@ -1190,7 +1190,7 @@ function SectionPreview() {
 
 function StickyFooterPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-4)]">
+    <div className="flex flex-col gap-[var(--token-spacing-16)]">
       <SectionLabel>Mobile (sticky bottom)</SectionLabel>
       <div className="h-[300px] rounded-[var(--token-radius-md)] overflow-hidden border border-border-default">
         <LayoutProvider isDesktop={false}>
@@ -1229,11 +1229,11 @@ function BottomSheetPreview() {
     <>
       <Button onPress={() => setOpen(true)}>Open Bottom Sheet</Button>
       <BottomSheet open={open} onClose={() => setOpen(false)} title="Transfer Details">
-        <div className="flex flex-col gap-[var(--token-spacing-3)]">
+        <div className="flex flex-col gap-[var(--token-spacing-12)]">
           <Text variant="body-md">Amount: R$ 150.00</Text>
           <Text variant="body-md">To: John Doe</Text>
           <Text variant="body-md">Via: PIX</Text>
-          <div className="h-[var(--token-spacing-md)]" />
+          <div className="h-[var(--token-gap-lg)]" />
           <Button fullWidth onPress={() => setOpen(false)}>Confirm</Button>
         </div>
       </BottomSheet>
@@ -1245,7 +1245,7 @@ function ModalPreview() {
   const [regularOpen, setRegularOpen] = useState(false)
   const [bottomOpen, setBottomOpen] = useState(false)
   return (
-    <div className="flex gap-[var(--token-spacing-3)]">
+    <div className="flex gap-[var(--token-spacing-12)]">
       <Button onPress={() => setRegularOpen(true)}>Center Modal</Button>
       <Button variant="primary" onPress={() => setBottomOpen(true)}>Bottom Modal</Button>
       <Modal
@@ -1276,7 +1276,7 @@ function ModalPreview() {
 
 function FeedbackLayoutPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-4)]">
+    <div className="flex flex-col gap-[var(--token-spacing-16)]">
       <SectionLabel>Success with pending result</SectionLabel>
       <div className="h-[600px] border border-border-default rounded-[var(--token-radius-md)] overflow-hidden">
         <FeedbackLayout onClose={() => {}}>
@@ -1302,7 +1302,7 @@ function FeedbackLayoutPreview() {
 
 function CountdownPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-4)] bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+    <div className="flex flex-col gap-[var(--token-spacing-16)] bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
       <div>
         <SectionLabel>Normal (5 minutes)</SectionLabel>
         <Countdown seconds={300} label="Código válido por" />
@@ -1328,7 +1328,7 @@ function LoadingScreenPreview() {
   ]
 
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-4)]">
+    <div className="flex flex-col gap-[var(--token-spacing-16)]">
       <SectionLabel>Auto-advancing (1.5s per step)</SectionLabel>
       <div className="h-[500px] border border-border-default rounded-[var(--token-radius-md)] overflow-hidden">
         <LoadingScreen steps={steps} autoAdvance autoAdvanceInterval={1500} />
@@ -1353,7 +1353,7 @@ function SidebarPreview() {
         ]}
         activeId={activeId}
         onChange={setActiveId}
-        header={<Text variant="heading-md">Picnic</Text>}
+        header={<Text variant="h2">Picnic</Text>}
       />
     </div>
   )
@@ -1361,7 +1361,7 @@ function SidebarPreview() {
 
 function BreadcrumbPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-4)] bg-surface-primary p-[var(--token-spacing-md)] rounded-[var(--token-radius-md)]">
+    <div className="flex flex-col gap-[var(--token-spacing-16)] bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
       <div>
         <SectionLabel>Two levels</SectionLabel>
         <Breadcrumb items={[
@@ -1392,7 +1392,7 @@ function AppShellPreview() {
       ]}
       activeId={activeTab}
       onChange={setActiveTab}
-      header={<Text variant="heading-sm">Picnic</Text>}
+      header={<Text variant="h3">Picnic</Text>}
     />
   )
   const tabBarNode = (
@@ -1408,7 +1408,7 @@ function AppShellPreview() {
   )
 
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-4)]">
+    <div className="flex flex-col gap-[var(--token-spacing-16)]">
       <SectionLabel>Desktop (isDesktop=true)</SectionLabel>
       <div className="h-[350px] border border-border-default rounded-[var(--token-radius-md)] overflow-hidden">
         <LayoutProvider isDesktop={true}>
@@ -1487,7 +1487,7 @@ function FeatureLayoutPreview() {
   )
 
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-lg)]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)]">
       <div>
         <SectionLabel>mobile (full-screen, sticky footer)</SectionLabel>
         <div className="h-[640px] max-w-[393px] rounded-[var(--token-radius-lg)] overflow-hidden border border-shell-border">
@@ -1497,7 +1497,7 @@ function FeatureLayoutPreview() {
               imageAlt="Feature preview"
               onClose={() => {}}
               imageOverlay={
-                <Badge variant="lime" icon={<RiFlashlightLine size={16} />}>New</Badge>
+                <Badge variant="positive" icon={<RiFlashlightLine size={16} />}>New</Badge>
               }
             >
               {featureContent}
@@ -1517,7 +1517,7 @@ function FeatureLayoutPreview() {
               imageAlt="Feature preview"
               onClose={() => {}}
               imageOverlay={
-                <Badge variant="lime" icon={<RiFlashlightLine size={16} />}>New</Badge>
+                <Badge variant="positive" icon={<RiFlashlightLine size={16} />}>New</Badge>
               }
             >
               {featureContent}

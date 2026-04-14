@@ -36,13 +36,13 @@ function ApiCallNode({ data, selected }: NodeProps) {
       <Handle type="source" position={Position.Left} id="left-source" className="!bg-[#22D3EE] !w-[8px] !h-[8px] !border-[1.5px] !border-[#1A2E38]" />
       <Handle type="target" position={Position.Right} id="right-target" className="!bg-[#22D3EE] !w-[8px] !h-[8px] !border-[1.5px] !border-[#1A2E38]" />
       <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#22D3EE] !w-[8px] !h-[8px] !border-[1.5px] !border-[#1A2E38]" />
-      <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
+      <div className="flex items-center gap-[var(--token-spacing-8)] px-[var(--token-spacing-12)] py-[var(--token-spacing-8)]">
         <RiServerLine size={14} className="text-[#22D3EE] shrink-0" />
         <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#e0e0e0] truncate">
           {nodeData.label}
         </span>
       </div>
-      <div className="flex items-center gap-[var(--token-spacing-1)] px-[var(--token-spacing-3)] pb-[var(--token-spacing-2)]">
+      <div className="flex items-center gap-[var(--token-spacing-4)] px-[var(--token-spacing-12)] pb-[var(--token-spacing-8)]">
         <span className={`text-[length:10px] font-bold px-[5px] py-[1px] rounded-[4px] leading-tight ${methodColors[method]}`}>
           {method}
         </span>

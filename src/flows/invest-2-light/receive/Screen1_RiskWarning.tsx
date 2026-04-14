@@ -26,10 +26,10 @@ export default function Screen1_RiskWarning({ onNext, onBack, onElementTap }: Fl
     <div className="relative flex flex-col min-h-screen bg-[var(--color-surface-primary)]">
       {/* Background: asset selection page (dimmed by BottomSheet backdrop) */}
       <div className="flex-1 overflow-hidden" style={{ paddingTop: 'var(--safe-area-top)' }}>
-        <div className="px-[var(--token-spacing-6)] pt-4 pb-3">
+        <div className="px-[var(--token-spacing-24)] pt-4 pb-3">
           <Header title="Qual criptomoeda?" description="Escolha o ativo que deseja depositar." onBack={onBack} />
         </div>
-        <div className="px-[var(--token-spacing-6)]">
+        <div className="px-[var(--token-spacing-24)]">
           {cryptoAssets.map(asset => {
             const palette = getAssetPalette(asset.ticker)
             return (
@@ -58,7 +58,7 @@ export default function Screen1_RiskWarning({ onNext, onBack, onElementTap }: Fl
 
           {/* Title + body */}
           <Stack gap="sm">
-            <Text variant="heading-lg" className="text-center">Prossiga com cuidado</Text>
+            <Text variant="h1" className="text-center">Prossiga com cuidado</Text>
             <Text variant="body-md" color="content-secondary" className="text-center">
               Receba criptomoedas de qualquer carteira web3 ou corretora.
             </Text>

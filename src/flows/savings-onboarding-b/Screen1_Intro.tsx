@@ -14,7 +14,7 @@ export default function Screen1_Intro({ onNext, onElementTap }: FlowScreenProps)
     <FeatureLayout
       imageSrc="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80"
       imageAlt="Growing savings"
-      imageOverlay={<Badge variant="lime" size="md">5% a.a.</Badge>}
+      imageOverlay={<Badge variant="positive" size="md">5% a.a.</Badge>}
     >
       <Stack gap="lg">
         <Stack gap="sm">

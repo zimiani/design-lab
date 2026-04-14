@@ -40,7 +40,7 @@ export default function Screen1_Receive({ onBack }: FlowScreenProps) {
 
       <Stack gap="lg">
         <Stack gap="sm">
-          <Text variant="heading-md">Receba ativos na sua conta Picnic</Text>
+          <Text variant="h2">Receba ativos na sua conta Picnic</Text>
           <Text variant="body-md" color="content-secondary">
             Use o endereço abaixo para receber ativos na rede selecionada.
           </Text>
@@ -64,7 +64,7 @@ export default function Screen1_Receive({ onBack }: FlowScreenProps) {
           <button
             type="button"
             onClick={handleCopyAddress}
-            className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] rounded-[var(--token-radius-md)] bg-[var(--color-surface-shade)] cursor-pointer border-none"
+            className="px-[var(--token-spacing-12)] py-[var(--token-spacing-8)] rounded-[var(--token-radius-md)] bg-[var(--color-surface-shade)] cursor-pointer border-none"
           >
             <Text variant="body-sm" color="content-secondary">
               {SHORT_ADDRESS}

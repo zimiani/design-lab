@@ -25,10 +25,10 @@ export default function Screen({ onBack, onNext, onElementTap }: FlowScreenProps
       imageSrc="https://i.pravatar.cc/600?img=5"
       imageMaxHeight={320}
       onClose={onBack}
-      imageOverlay={<Badge variant="success">Ótimo match</Badge>}
+      imageOverlay={<Badge variant="positive">Ótimo match</Badge>}
     >
       <Stack>
-        <Text variant="heading-lg">Maria Clara</Text>
+        <Text variant="h1">Maria Clara</Text>
         <Text variant="body-md" color="content-secondary">
           26 anos · São Paulo, SP
         </Text>
@@ -36,7 +36,7 @@ export default function Screen({ onBack, onNext, onElementTap }: FlowScreenProps
 
       <Stack gap="none">
         <GroupHeader text="Interesses" />
-        <div className="flex flex-wrap gap-[var(--token-spacing-2)] px-[var(--token-spacing-4)] py-[var(--token-spacing-3)]">
+        <div className="flex flex-wrap gap-[var(--token-spacing-8)] px-[var(--token-spacing-16)] py-[var(--token-spacing-12)]">
           <Tag label="Viagens" />
           <Tag label="Culinária japonesa" />
           <Tag label="Fotografia" />

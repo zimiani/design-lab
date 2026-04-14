@@ -32,7 +32,7 @@ const AVAILABLE_PRODUCTS = [
     icon: <RiShieldCheckLine size={20} className="text-[var(--color-feedback-success)]" />,
     title: 'Renda Protegida',
     subtitle: `~${formatPct(NET_APY)} a.a. · Segurado`,
-    badge: <Badge variant="success" size="sm">Segurado</Badge>,
+    badge: <Badge variant="positive" size="sm">Segurado</Badge>,
     balance: `US$ ${MOCK_BALANCE.toFixed(2).replace('.', ',')}`,
     label: 'Renda Protegida',
     enabled: true,

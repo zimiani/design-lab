@@ -77,7 +77,7 @@ export default function Modal({
               {shouldRenderCloseButton && (
                 <button
                   onClick={onBackdropPress}
-                  className="w-8 h-8 rounded-full bg-[var(--color-surface-secondary)] flex items-center justify-center cursor-pointer hover:opacity-70 shrink-0"
+                  className="w-8 h-8 rounded-full bg-[var(--color-surface-level-2)] flex items-center justify-center cursor-pointer hover:opacity-70 shrink-0"
                 >
                   <RiCloseLine size={18} className="text-[var(--color-content-primary)]" />
                 </button>

@@ -189,7 +189,7 @@ export default function Screen1_AmountEntry({ onNext, onBack, onElementTap, onSt
                 label: 'Outros custos',
                 info: () => {},
                 value: (
-                  <span className="flex items-center gap-[var(--token-spacing-1)]">
+                  <span className="flex items-center gap-[var(--token-spacing-4)]">
                     <span className="text-content-tertiary line-through">R$ 28,32</span>
                     <span className="text-[var(--color-feedback-success)] font-medium">Grátis</span>
                   </span>

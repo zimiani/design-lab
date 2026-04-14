@@ -29,14 +29,14 @@ function FlowReferenceNode({ data, selected }: NodeProps) {
       <Handle type="target" position={Position.Right} id="right-target" className="!bg-[#60A5FA] !w-[8px] !h-[8px] !border-[1.5px] !border-[#252525]" />
       <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#60A5FA] !w-[8px] !h-[8px] !border-[1.5px] !border-[#252525]" />
       {/* Header bar */}
-      <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] bg-[#60A5FA]/[0.08]">
+      <div className="flex items-center gap-[var(--token-spacing-8)] px-[var(--token-spacing-12)] py-[var(--token-spacing-8)] bg-[#60A5FA]/[0.08]">
         <RiExternalLinkLine size={14} className="text-[#60A5FA] shrink-0" />
         <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#e0e0e0] truncate flex-1">
           {nodeData.label}
         </span>
       </div>
       {/* Description / target info */}
-      <div className="px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
+      <div className="px-[var(--token-spacing-12)] py-[var(--token-spacing-8)]">
         {nodeData.targetFlowId ? (
           <p className="text-[length:var(--token-font-size-caption)] text-[#60A5FA]">
             {nodeData.targetFlowId}

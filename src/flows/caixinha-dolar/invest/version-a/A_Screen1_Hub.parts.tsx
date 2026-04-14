@@ -24,7 +24,7 @@ export function BalanceHero({ balance, yieldToday }: BalanceHeroProps) {
       <Stack gap="sm">
         <Stack direction="row" align="between">
           <Text variant="caption" color="content-secondary">Caixinha do Dólar</Text>
-          <Badge variant="lime" size="sm">5% a.a.</Badge>
+          <Badge variant="positive" size="sm">5% a.a.</Badge>
         </Stack>
         <Amount value={balance} currency="US$" size="lg" />
         <Text variant="caption" className="text-[#22c55e]">

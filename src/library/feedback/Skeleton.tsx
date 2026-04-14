@@ -52,7 +52,7 @@ function DataListSkeletonRow({ isLast = false, labelWidth = '40%', valueWidth = 
   return (
     <div
       aria-hidden="true"
-      className={`w-full flex items-center justify-between py-[var(--token-spacing-4)] ${isLast ? '' : 'border-b border-[var(--token-neutral-100)]'}`}
+      className={`w-full flex items-center justify-between py-[var(--token-spacing-16)] ${isLast ? '' : 'border-b border-[var(--token-neutral-100)]'}`}
     >
       <Skeleton width={labelWidth} height="16px" />
       <Skeleton width={valueWidth} height="16px" />

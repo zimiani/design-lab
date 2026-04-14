@@ -44,15 +44,15 @@ export default function FeedbackLayout({
   return (
     <div
       data-component="FeedbackLayout"
-      className={cn('flex flex-col h-full bg-surface-primary overflow-hidden', className)}
+      className={cn('flex flex-col h-full bg-surface-level-0 overflow-hidden', className)}
     >
       <div
         className={cn(
           'flex-1 overflow-y-auto',
-          isDesktop ? 'pt-[var(--token-spacing-6)]' : 'pt-[var(--safe-area-top,0px)]',
+          isDesktop ? 'pt-[var(--token-spacing-24)]' : 'pt-[var(--safe-area-top,0px)]',
         )}
       >
-        <div className="px-[var(--token-spacing-6)] pb-[var(--safe-area-bottom,16px)] flex flex-col gap-[var(--token-spacing-3)]">
+        <div className="px-[var(--token-spacing-24)] pb-[var(--safe-area-bottom,16px)] flex flex-col gap-[var(--token-spacing-12)]">
           {/* Close button — top-right */}
           {onClose && (
             <div className="flex justify-end">
@@ -74,7 +74,7 @@ export default function FeedbackLayout({
             </div>
           ) : animation ? (
             <div
-              style={{ width: ANIMATION_SIZE, height: ANIMATION_SIZE, marginLeft: -ANIMATION_SIZE * 0.2, marginBottom: 'calc(-1 * var(--token-spacing-6))' }}
+              style={{ width: ANIMATION_SIZE, height: ANIMATION_SIZE, marginLeft: -ANIMATION_SIZE * 0.2, marginBottom: 'calc(-1 * var(--token-spacing-24))' }}
               className="shrink-0"
             >
               <Lottie

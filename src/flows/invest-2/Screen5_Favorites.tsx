@@ -48,14 +48,14 @@ export default function Screen5_Favorites({ onBack, onNext, onElementTap }: Flow
                     <Stack gap="none" align="end">
                       <Text variant="body-sm">{formatBRL(asset.price!)}</Text>
                       <Badge
-                        variant={asset.change24h! >= 0 ? 'success' : 'error'}
+                        variant={asset.change24h! >= 0 ? 'positive' : 'critical'}
                         size="sm"
                       >
                         {formatPercentChange(asset.change24h!)}
                       </Badge>
                     </Stack>
                   ) : isFixed ? (
-                    <Badge variant="lime" size="sm">{asset.apyDisplay}</Badge>
+                    <Badge variant="positive" size="sm">{asset.apyDisplay}</Badge>
                   ) : (
                     <Text variant="body-sm">{formatBRL(asset.price!)}</Text>
                   )

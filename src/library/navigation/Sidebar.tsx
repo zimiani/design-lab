@@ -22,13 +22,13 @@ export default function Sidebar({
   header,
 }: SidebarProps) {
   return (
-    <aside data-component="Sidebar" className="w-[240px] h-full bg-surface-primary border-r border-border-default flex flex-col shrink-0">
+    <aside data-component="Sidebar" className="w-[240px] h-full bg-surface-level-0 border-r border-border flex flex-col shrink-0">
       {header && (
-        <div className="px-[var(--token-spacing-5)] py-[var(--token-spacing-5)]">
+        <div className="px-[var(--token-spacing-20)] py-[var(--token-spacing-20)]">
           {header}
         </div>
       )}
-      <nav className="flex flex-col gap-[var(--token-spacing-1)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
+      <nav className="flex flex-col gap-[var(--token-spacing-4)] px-[var(--token-spacing-12)] py-[var(--token-spacing-8)]">
         {items.map((item) => {
           const active = item.id === activeId
           return (
@@ -37,7 +37,7 @@ export default function Sidebar({
               type="button"
               onClick={() => onChange(item.id)}
               className={cn(
-                'flex items-center gap-[var(--token-spacing-3)] h-[48px] px-[var(--token-spacing-3)] rounded-[var(--token-radius-md)] transition-colors duration-[var(--token-transition-fast)] cursor-pointer border-0 bg-transparent w-full text-left',
+                'flex items-center gap-[var(--token-spacing-12)] h-[48px] px-[var(--token-spacing-12)] rounded-[var(--token-radius-md)] transition-colors duration-[var(--token-transition-fast)] cursor-pointer border-0 bg-transparent w-full text-left',
                 active
                   ? 'bg-surface-secondary text-content-primary font-medium'
                   : 'text-content-secondary hover:bg-surface-secondary'

@@ -13,11 +13,11 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
   if (items.length === 0) return null
 
   return (
-    <nav data-component="Breadcrumb" className="flex items-center gap-[var(--token-spacing-2)]">
+    <nav data-component="Breadcrumb" className="flex items-center gap-[var(--token-spacing-8)]">
       {items.map((item, i) => {
         const isLast = i === items.length - 1
         return (
-          <span key={i} className="flex items-center gap-[var(--token-spacing-2)]">
+          <span key={i} className="flex items-center gap-[var(--token-spacing-8)]">
             {i > 0 && (
               <span className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-content-tertiary select-none">
                 /

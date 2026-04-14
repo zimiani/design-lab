@@ -60,7 +60,7 @@ function EditableField({
 
   if (editing) {
     return (
-      <div className="flex flex-col gap-[var(--token-spacing-1)]">
+      <div className="flex flex-col gap-[var(--token-spacing-4)]">
         {multiline ? (
           <textarea
             value={draft}
@@ -68,7 +68,7 @@ function EditableField({
             onKeyDown={handleKeyDown}
             rows={4}
             autoFocus
-            className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none resize-y"
+            className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none resize-y"
           />
         ) : (
           <input
@@ -77,21 +77,21 @@ function EditableField({
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={handleKeyDown}
             autoFocus
-            className="w-full px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none"
+            className="w-full px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-shell-text bg-shell-input border border-shell-selected-text rounded-[var(--token-radius-sm)] outline-none"
           />
         )}
-        <div className="flex gap-[var(--token-spacing-1)] justify-end">
+        <div className="flex gap-[var(--token-spacing-4)] justify-end">
           <button
             type="button"
             onClick={() => setEditing(false)}
-            className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
+            className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text-secondary cursor-pointer"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px]"
+            className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-selected-text hover:text-[#6EE7A0] font-medium cursor-pointer flex items-center gap-[2px]"
           >
             <RiCheckLine size={12} />
             Save
@@ -108,7 +108,7 @@ function EditableField({
       onClick={handleEdit}
       onKeyDown={(e) => { if (e.key === 'Enter') handleEdit() }}
       title={`Click to edit ${label}`}
-      className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-1)] px-[var(--token-spacing-1)] py-[2px] -mx-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
+      className="w-full text-left cursor-pointer flex items-start gap-[var(--token-spacing-4)] px-[var(--token-spacing-4)] py-[2px] -mx-[var(--token-spacing-4)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover transition-colors border border-transparent hover:border-shell-border"
     >
       <span className="flex-1">{value || '(empty)'}</span>
       <RiPencilLine
@@ -152,17 +152,17 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
 
   return (
     <aside className="w-[300px] h-full shrink-0 overflow-y-auto border-l border-shell-border bg-shell-surface">
-      <div className="p-[var(--token-spacing-md)] border-b border-shell-border">
+      <div className="p-[var(--token-gap-lg)] border-b border-shell-border">
         <h2 className="text-[length:var(--token-font-size-caption)] leading-[var(--token-line-height-caption)] font-semibold text-shell-text-tertiary uppercase tracking-wider">
           Page Properties
         </h2>
       </div>
 
       {page && nodeData ? (
-        <div className="p-[var(--token-spacing-md)]">
+        <div className="p-[var(--token-gap-lg)]">
           {/* Page type badge */}
-          <div className="mb-[var(--token-spacing-lg)]">
-            <div className="flex items-center gap-[var(--token-spacing-2)] text-shell-selected-text">
+          <div className="mb-[var(--token-padding-lg)]">
+            <div className="flex items-center gap-[var(--token-spacing-8)] text-shell-selected-text">
               <RiFileTextLine size={14} />
               <span className="text-[length:var(--token-font-size-caption)] font-semibold uppercase tracking-wider">
                 Page
@@ -172,13 +172,13 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
 
           {/* Live preview */}
           {PageComponent && (
-            <div className="mb-[var(--token-spacing-lg)]">
-              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-2)]">
+            <div className="mb-[var(--token-padding-lg)]">
+              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-8)]">
                 Preview
               </p>
               {/* State switcher pills */}
               {pageStates && pageStates.length > 1 && (
-                <div className="flex flex-wrap gap-[var(--token-spacing-1)] mb-[var(--token-spacing-2)]">
+                <div className="flex flex-wrap gap-[var(--token-spacing-4)] mb-[var(--token-spacing-8)]">
                   {pageStates.map((state) => {
                     const isActive = activeState?.id === state.id
                     return (
@@ -187,7 +187,7 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
                         type="button"
                         onClick={() => setActiveStateId(state.id)}
                         className={`
-                          px-[var(--token-spacing-2)] py-[1px] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-medium transition-colors cursor-pointer
+                          px-[var(--token-spacing-8)] py-[1px] rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-medium transition-colors cursor-pointer
                           ${isActive
                             ? 'bg-shell-selected text-shell-selected-text'
                             : 'bg-shell-hover text-shell-text-secondary hover:text-shell-text'
@@ -221,8 +221,8 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
           )}
 
           {/* Name */}
-          <div className="mb-[var(--token-spacing-md)]">
-            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+          <div className="mb-[var(--token-gap-lg)]">
+            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
               Name
             </p>
             <div className="text-[length:var(--token-font-size-body-sm)] text-shell-text leading-[var(--token-line-height-body-sm)]">
@@ -234,8 +234,8 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
           </div>
 
           {/* Description */}
-          <div className="mb-[var(--token-spacing-md)]">
-            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+          <div className="mb-[var(--token-gap-lg)]">
+            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
               Description
             </p>
             <div className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary leading-[var(--token-line-height-body-sm)]">
@@ -244,27 +244,27 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
           </div>
 
           {/* Area */}
-          <div className="mb-[var(--token-spacing-md)]">
-            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+          <div className="mb-[var(--token-gap-lg)]">
+            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
               Area
             </p>
-            <span className="px-[var(--token-spacing-2)] py-[1px] bg-shell-hover rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary">
+            <span className="px-[var(--token-spacing-8)] py-[1px] bg-shell-hover rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary">
               {page.area}
             </span>
           </div>
 
           {/* Components used */}
           {page.componentsUsed.length > 0 && (
-            <div className="mb-[var(--token-spacing-md)]">
-              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+            <div className="mb-[var(--token-gap-lg)]">
+              <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
                 Components
               </p>
-              <div className="flex flex-wrap gap-[var(--token-spacing-1)]">
+              <div className="flex flex-wrap gap-[var(--token-spacing-4)]">
                 {page.componentsUsed.map((comp) => (
                   <Link
                     key={comp}
                     to={`/components?selected=${encodeURIComponent(comp)}`}
-                    className="flex items-center gap-[2px] px-[var(--token-spacing-2)] py-[1px] bg-shell-hover rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary hover:text-shell-selected-text cursor-pointer transition-colors no-underline"
+                    className="flex items-center gap-[2px] px-[var(--token-spacing-8)] py-[1px] bg-shell-hover rounded-[var(--token-radius-sm)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary hover:text-shell-selected-text cursor-pointer transition-colors no-underline"
                   >
                     <RiArchiveLine size={10} />
                     {comp}
@@ -275,17 +275,17 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
           )}
 
           {/* Flows using this page */}
-          <div className="mb-[var(--token-spacing-md)]">
-            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-1)]">
+          <div className="mb-[var(--token-gap-lg)]">
+            <p className="text-[length:var(--token-font-size-caption)] text-shell-text-tertiary uppercase tracking-wider mb-[var(--token-spacing-4)]">
               Used in Flows
             </p>
             {flowRefs.length > 0 ? (
-              <div className="flex flex-col gap-[var(--token-spacing-1)]">
+              <div className="flex flex-col gap-[var(--token-spacing-4)]">
                 {flowRefs.map((ref) => (
                   <Link
                     key={`${ref.flowId}-${ref.screenId}`}
                     to={`/flows?flow=${encodeURIComponent(ref.flowId)}`}
-                    className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover text-left transition-colors no-underline"
+                    className="flex items-center gap-[var(--token-spacing-8)] px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] rounded-[var(--token-radius-sm)] hover:bg-shell-hover text-left transition-colors no-underline"
                   >
                     <RiGitBranchLine size={12} className="text-shell-text-tertiary shrink-0" />
                     <div className="min-w-0">
@@ -307,7 +307,7 @@ export default function PageDetailPanel({ page, selectedNode, onPageChanged }: P
           </div>
         </div>
       ) : (
-        <div className="p-[var(--token-spacing-md)]">
+        <div className="p-[var(--token-gap-lg)]">
           <p className="text-[length:var(--token-font-size-body-sm)] text-shell-text-tertiary">
             Select a page to view its properties
           </p>

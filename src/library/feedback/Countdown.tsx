@@ -57,7 +57,7 @@ export default function Countdown({
   const isUrgent = remaining <= 60
 
   return (
-    <div data-component="Countdown" className={`flex items-center gap-[var(--token-spacing-2)] ${className}`}>
+    <div data-component="Countdown" className={`flex items-center gap-[var(--token-spacing-8)] ${className}`}>
       <RiTimerLine
         size={20}
         className={isUrgent ? 'text-[var(--token-error)]' : 'text-[var(--color-content-primary)]'}

@@ -112,7 +112,7 @@ export default function Screen3c_OrderConfig({ onNext, onBack, onElementTap }: F
       <Header title="Configurar ordem" onBack={onBack} />
 
       {/* Edge-to-edge chart */}
-      <div className="relative -mx-[var(--token-spacing-6)]">
+      <div className="relative -mx-[var(--token-spacing-24)]">
         <LineChart
           data={chartData}
           height={280}
@@ -172,8 +172,8 @@ export default function Screen3c_OrderConfig({ onNext, onBack, onElementTap }: F
         <GroupHeader text="Configurações" />
 
         {/* Compra programada */}
-        <div className="flex items-center justify-between gap-[var(--token-spacing-3)]">
-          <div className="flex flex-col gap-[var(--token-spacing-1)] flex-1">
+        <div className="flex items-center justify-between gap-[var(--token-spacing-12)]">
+          <div className="flex flex-col gap-[var(--token-spacing-4)] flex-1">
             <span className="text-[18px] font-bold text-content-primary">Compra programada</span>
             <Text variant="caption" color="content-secondary">
               {programmedEnabled
@@ -185,8 +185,8 @@ export default function Screen3c_OrderConfig({ onNext, onBack, onElementTap }: F
         </div>
 
         {/* Realizar lucro */}
-        <div className="flex items-center justify-between gap-[var(--token-spacing-3)]">
-          <div className="flex flex-col gap-[var(--token-spacing-1)] flex-1">
+        <div className="flex items-center justify-between gap-[var(--token-spacing-12)]">
+          <div className="flex flex-col gap-[var(--token-spacing-4)] flex-1">
             <span className="text-[18px] font-bold text-content-primary">Realizar lucro</span>
             <Text variant="caption" color="content-secondary">
               {tpEnabled
@@ -198,8 +198,8 @@ export default function Screen3c_OrderConfig({ onNext, onBack, onElementTap }: F
         </div>
 
         {/* Stop Loss */}
-        <div className="flex items-center justify-between gap-[var(--token-spacing-3)]">
-          <div className="flex flex-col gap-[var(--token-spacing-1)] flex-1">
+        <div className="flex items-center justify-between gap-[var(--token-spacing-12)]">
+          <div className="flex flex-col gap-[var(--token-spacing-4)] flex-1">
             <span className="text-[18px] font-bold text-content-primary">Stop Loss</span>
             <Text variant="caption" color="content-secondary">
               {slEnabled

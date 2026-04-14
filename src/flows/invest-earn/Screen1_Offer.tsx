@@ -31,8 +31,8 @@ export default function Screen1_Offer({ onNext, onBack }: FlowScreenProps) {
         <Card variant="flat">
           <Stack gap="sm">
             <Stack direction="row" align="between">
-              <Text variant="heading-sm">USD Savings</Text>
-              <Badge variant="lime">5% APY</Badge>
+              <Text variant="h3">USD Savings</Text>
+              <Badge variant="positive">5% APY</Badge>
             </Stack>
             <Text variant="body-sm" color="content-secondary">
               Earn 5% annual yield on your dollar balance. No lock-up, withdraw anytime.
@@ -51,7 +51,7 @@ export default function Screen1_Offer({ onNext, onBack }: FlowScreenProps) {
 
         {/* How it works */}
         <Stack gap="sm">
-          <Text variant="heading-sm">How it works</Text>
+          <Text variant="h3">How it works</Text>
           <DataList
             data={[
               { label: 'Annual yield', value: '5.00% APY' },

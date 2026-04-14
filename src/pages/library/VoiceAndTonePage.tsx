@@ -127,7 +127,7 @@ const ease = [0.22, 1, 0.36, 1] as const
 
 function AnimatedTitle({ text, delay = 0 }: { text: string; delay?: number }) {
   return (
-    <div className="flex justify-center py-[var(--token-spacing-10)]">
+    <div className="flex justify-center py-[var(--token-spacing-40)]">
       <h3 className="text-[80px] leading-[1] font-bold tracking-tight" aria-label={text}>
         {text.split('').map((char, i) => (
           <motion.span
@@ -148,7 +148,7 @@ function AnimatedTitle({ text, delay = 0 }: { text: string; delay?: number }) {
 
 function ToneBar({ label, value, delay = 0 }: { label: string; value: number; delay?: number }) {
   return (
-    <div className="flex items-center gap-[var(--token-spacing-3)]">
+    <div className="flex items-center gap-[var(--token-spacing-12)]">
       <span className="w-[80px] text-[length:var(--token-font-size-caption)] text-shell-text-secondary shrink-0">{label}</span>
       <div className="flex-1 h-[8px] bg-shell-hover rounded-[var(--token-radius-full)] overflow-hidden">
         <motion.div
@@ -169,7 +169,7 @@ function Chip({ children, delay = 0 }: { children: string; delay?: number }) {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3, ease, delay }}
-      className="inline-flex px-[var(--token-spacing-3)] py-[var(--token-spacing-1)] bg-shell-hover rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary"
+      className="inline-flex px-[var(--token-spacing-12)] py-[var(--token-spacing-4)] bg-shell-hover rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] text-shell-text-secondary"
     >
       {children}
     </motion.span>
@@ -182,12 +182,12 @@ export default function VoiceAndTonePage() {
   return (
     <div className="flex-1 overflow-y-auto bg-shell-bg">
       {/* ─── Nossa voz ─── */}
-      <section className="max-w-[1100px] mx-auto px-[120px] pt-[var(--token-spacing-10)] pb-[var(--token-spacing-6)]">
+      <section className="max-w-[1100px] mx-auto px-[120px] pt-[var(--token-spacing-40)] pb-[var(--token-spacing-24)]">
         <motion.h3
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease, delay: 0.1 }}
-          className="text-[36px] leading-[1.1] font-bold text-shell-text mb-[var(--token-spacing-2)]"
+          className="text-[36px] leading-[1.1] font-bold text-shell-text mb-[var(--token-spacing-8)]"
         >
           Nossa voz
         </motion.h3>
@@ -211,18 +211,18 @@ export default function VoiceAndTonePage() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease, delay: 0.5 + pillarIdx * 0.15 }}
-              className="grid grid-cols-[1fr_1.2fr] gap-[var(--token-spacing-10)] pb-[var(--token-spacing-12)]"
+              className="grid grid-cols-[1fr_1.2fr] gap-[var(--token-spacing-40)] pb-[var(--token-spacing-48)]"
             >
               {/* Left: Overview + Should/Shouldn't */}
               <div>
                 <span className="text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider">Overview</span>
-                <p className="text-[length:var(--token-font-size-body-md)] text-shell-text leading-relaxed mt-[var(--token-spacing-2)] mb-[var(--token-spacing-8)]">
+                <p className="text-[length:var(--token-font-size-body-md)] text-shell-text leading-relaxed mt-[var(--token-spacing-8)] mb-[var(--token-spacing-32)]">
                   {pillar.overview}
                 </p>
-                <div className="grid grid-cols-2 gap-[var(--token-spacing-6)]">
+                <div className="grid grid-cols-2 gap-[var(--token-spacing-24)]">
                   <div>
                     <span className="text-[length:var(--token-font-size-caption)] font-medium text-[#28D278] uppercase tracking-wider">Somos</span>
-                    <div className="flex flex-col gap-[var(--token-spacing-1)] mt-[var(--token-spacing-2)]">
+                    <div className="flex flex-col gap-[var(--token-spacing-4)] mt-[var(--token-spacing-8)]">
                       {pillar.shouldBe.map((s) => (
                         <span key={s} className="text-[length:var(--token-font-size-body-sm)] text-shell-text">{s}</span>
                       ))}
@@ -230,7 +230,7 @@ export default function VoiceAndTonePage() {
                   </div>
                   <div>
                     <span className="text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider">Não somos</span>
-                    <div className="flex flex-col gap-[var(--token-spacing-1)] mt-[var(--token-spacing-2)]">
+                    <div className="flex flex-col gap-[var(--token-spacing-4)] mt-[var(--token-spacing-8)]">
                       {pillar.shouldNotBe.map((s) => (
                         <span key={s} className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary">{s}</span>
                       ))}
@@ -242,10 +242,10 @@ export default function VoiceAndTonePage() {
               {/* Right: Tactics */}
               <div>
                 <span className="text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider">Táticas</span>
-                <div className="grid grid-cols-2 gap-[var(--token-spacing-4)] mt-[var(--token-spacing-2)]">
+                <div className="grid grid-cols-2 gap-[var(--token-spacing-16)] mt-[var(--token-spacing-8)]">
                   {pillar.tactics.map((t) => (
-                    <div key={t.title} className="border-t border-shell-border pt-[var(--token-spacing-3)]">
-                      <h4 className="text-[length:var(--token-font-size-body-sm)] font-semibold text-shell-text mb-[var(--token-spacing-1)]">
+                    <div key={t.title} className="border-t border-shell-border pt-[var(--token-spacing-12)]">
+                      <h4 className="text-[length:var(--token-font-size-body-sm)] font-semibold text-shell-text mb-[var(--token-spacing-4)]">
                         {t.title}
                       </h4>
                       <p className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary leading-relaxed">
@@ -261,12 +261,12 @@ export default function VoiceAndTonePage() {
       ))}
 
       {/* ─── Nosso tom ─── */}
-      <section className="max-w-[1100px] mx-auto px-[120px] pt-[var(--token-spacing-12)] pb-[var(--token-spacing-6)]">
+      <section className="max-w-[1100px] mx-auto px-[120px] pt-[var(--token-spacing-48)] pb-[var(--token-spacing-24)]">
         <motion.h3
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease, delay: 0.3 }}
-          className="text-[36px] leading-[1.1] font-bold text-shell-text mb-[var(--token-spacing-2)]"
+          className="text-[36px] leading-[1.1] font-bold text-shell-text mb-[var(--token-spacing-8)]"
         >
           Nosso tom
         </motion.h3>
@@ -274,11 +274,11 @@ export default function VoiceAndTonePage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease, delay: 0.4 }}
-          className="text-[length:var(--token-font-size-body-md)] text-shell-text-tertiary max-w-[640px] mb-[var(--token-spacing-4)]"
+          className="text-[length:var(--token-font-size-body-md)] text-shell-text-tertiary max-w-[640px] mb-[var(--token-spacing-16)]"
         >
           Nossa atitude; como nos adaptamos ao contexto. Antes de escrever, pergunte:
         </motion.p>
-        <div className="flex flex-col gap-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-md)] text-shell-text max-w-[640px]">
+        <div className="flex flex-col gap-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-md)] text-shell-text max-w-[640px]">
           {['O que esse texto precisa fazer?', 'Em que cenário estamos?', 'Com quem estamos falando?'].map((q, i) => (
             <motion.span
               key={i}
@@ -293,23 +293,23 @@ export default function VoiceAndTonePage() {
       </section>
 
       {/* ─── Tone Context Cards ─── */}
-      <section className="max-w-[1100px] mx-auto px-[120px] pb-[var(--token-spacing-12)]">
-        <div className="grid grid-cols-3 gap-[var(--token-spacing-4)] mt-[var(--token-spacing-6)]">
+      <section className="max-w-[1100px] mx-auto px-[120px] pb-[var(--token-spacing-48)]">
+        <div className="grid grid-cols-3 gap-[var(--token-spacing-16)] mt-[var(--token-spacing-24)]">
           {toneContexts.map((ctx, i) => (
             <motion.div
               key={ctx.title}
               initial={{ opacity: 0, y: 20, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.5, ease, delay: 0.2 + i * 0.08 }}
-              className="bg-shell-surface border border-shell-border rounded-[var(--token-radius-md)] p-[var(--token-spacing-5)] flex flex-col"
+              className="bg-shell-surface border border-shell-border rounded-[var(--token-radius-md)] p-[var(--token-spacing-20)] flex flex-col"
             >
-              <h4 className="text-[length:var(--token-font-size-body-md)] font-semibold text-shell-text mb-[var(--token-spacing-2)]">
+              <h4 className="text-[length:var(--token-font-size-body-md)] font-semibold text-shell-text mb-[var(--token-spacing-8)]">
                 {ctx.title}
               </h4>
-              <p className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary leading-relaxed mb-[var(--token-spacing-6)] flex-1">
+              <p className="text-[length:var(--token-font-size-body-sm)] text-shell-text-secondary leading-relaxed mb-[var(--token-spacing-24)] flex-1">
                 {ctx.description}
               </p>
-              <div className="flex flex-col gap-[var(--token-spacing-2)] mb-[var(--token-spacing-4)]">
+              <div className="flex flex-col gap-[var(--token-spacing-8)] mb-[var(--token-spacing-16)]">
                 <ToneBar label="Direto" value={ctx.bars.direto} delay={0.6 + i * 0.08} />
                 <ToneBar label="Leve" value={ctx.bars.leve} delay={0.7 + i * 0.08} />
                 <ToneBar label="Confiante" value={ctx.bars.confiante} delay={0.8 + i * 0.08} />
@@ -318,7 +318,7 @@ export default function VoiceAndTonePage() {
                 <span className="text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider">
                   Touchpoints
                 </span>
-                <div className="flex flex-col gap-[var(--token-spacing-0-5)] mt-[var(--token-spacing-1)]">
+                <div className="flex flex-col gap-[var(--token-spacing-8)] mt-[var(--token-spacing-4)]">
                   {ctx.touchpoints.map((tp) => (
                     <span key={tp} className="text-[length:var(--token-font-size-caption)] text-shell-text-secondary">
                       · {tp}
@@ -333,20 +333,20 @@ export default function VoiceAndTonePage() {
 
       {/* ─── Quick Reference: Terminology + Forbidden ─── */}
       <section className="border-t border-shell-border">
-        <div className="max-w-[1100px] mx-auto px-[120px] py-[var(--token-spacing-10)]">
-          <div className="grid grid-cols-[1fr_1fr] gap-[var(--token-spacing-10)]">
+        <div className="max-w-[1100px] mx-auto px-[120px] py-[var(--token-spacing-40)]">
+          <div className="grid grid-cols-[1fr_1fr] gap-[var(--token-spacing-40)]">
             {/* Terminology */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease, delay: 0.2 }}
             >
-              <h4 className="text-[length:var(--token-font-size-heading-sm)] font-semibold text-shell-text mb-[var(--token-spacing-4)]">
+              <h4 className="text-[length:var(--token-font-size-h3)] font-semibold text-shell-text mb-[var(--token-spacing-16)]">
                 Terminologia
               </h4>
               <div className="flex flex-col">
                 {terminology.map(([tech, user]) => (
-                  <div key={tech} className="flex items-center justify-between py-[var(--token-spacing-2)] border-b border-shell-border">
+                  <div key={tech} className="flex items-center justify-between py-[var(--token-spacing-8)] border-b border-shell-border">
                     <span className="text-[length:var(--token-font-size-body-sm)] text-shell-text-tertiary line-through">{tech}</span>
                     <span className="text-[length:var(--token-font-size-body-sm)] text-shell-text font-medium">{user}</span>
                   </div>
@@ -360,18 +360,18 @@ export default function VoiceAndTonePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease, delay: 0.3 }}
             >
-              <h4 className="text-[length:var(--token-font-size-heading-sm)] font-semibold text-shell-text mb-[var(--token-spacing-4)]">
+              <h4 className="text-[length:var(--token-font-size-h3)] font-semibold text-shell-text mb-[var(--token-spacing-16)]">
                 Proibido
               </h4>
-              <div className="mb-[var(--token-spacing-4)]">
+              <div className="mb-[var(--token-spacing-16)]">
                 <span className="text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider">Palavras</span>
-                <div className="flex flex-wrap gap-[var(--token-spacing-2)] mt-[var(--token-spacing-2)]">
+                <div className="flex flex-wrap gap-[var(--token-spacing-8)] mt-[var(--token-spacing-8)]">
                   {forbiddenWords.map((w, i) => <Chip key={w} delay={0.4 + i * 0.03}>{w}</Chip>)}
                 </div>
               </div>
               <div>
                 <span className="text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider">Tons</span>
-                <div className="flex flex-wrap gap-[var(--token-spacing-2)] mt-[var(--token-spacing-2)]">
+                <div className="flex flex-wrap gap-[var(--token-spacing-8)] mt-[var(--token-spacing-8)]">
                   {forbiddenTones.map((t, i) => <Chip key={t} delay={0.5 + i * 0.03}>{t}</Chip>)}
                 </div>
               </div>

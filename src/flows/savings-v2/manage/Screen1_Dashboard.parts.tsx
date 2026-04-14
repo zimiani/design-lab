@@ -58,7 +58,7 @@ export function CurrencyCard({ currency, balance, yieldToday, disabled, onPress 
       <Stack gap="none" className="flex-1 min-w-0">
         <Stack direction="row" gap="sm" align="center">
           <Text variant="body-md" className="font-medium">{curr.name}</Text>
-          <Badge variant="lime" size="sm">{curr.apyDisplay}</Badge>
+          <Badge variant="positive" size="sm">{curr.apyDisplay}</Badge>
         </Stack>
         {hasBalance ? (
           <Text variant="body-md" className="font-semibold tabular-nums">

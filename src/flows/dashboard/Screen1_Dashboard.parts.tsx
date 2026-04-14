@@ -77,7 +77,7 @@ export function BalanceCard({ hidden, updating }: BalanceCardProps) {
         </div>
 
         <div>
-          <Text variant="heading-lg" className="text-white">
+          <Text variant="h1" className="text-white">
             {hidden ? 'US$ ••••' : 'US$ 81,72'}
           </Text>
           <Text variant="caption" className="text-[#8a8a8a] mt-1">
@@ -112,7 +112,7 @@ const quickActionItems = [
 
 export function QuickActions({ onElementTap }: QuickActionsProps) {
   return (
-    <div className="-mx-[var(--token-spacing-6)] px-[var(--token-spacing-6)] flex overflow-x-auto gap-8 scrollbar-none">
+    <div className="-mx-[var(--token-spacing-24)] px-[var(--token-spacing-24)] flex overflow-x-auto gap-8 scrollbar-none">
       {quickActionItems.map((item) => (
         <ShortcutButton
           key={item.label}
@@ -178,7 +178,7 @@ export function PromoCarousel() {
               gap: 4,
             }}
           >
-            <Text variant="heading-sm" className={card.textClass}>
+            <Text variant="h3" className={card.textClass}>
               {card.title}
             </Text>
             <Text variant="body-sm" className={`${card.textClass} opacity-80`}>
@@ -243,7 +243,7 @@ export function EarnStatusCard({ onPress }: EarnStatusCardProps) {
             5% a.a.
           </span>
         </Stack>
-        <Text variant="heading-sm" className="text-white">US$ 1.243,57</Text>
+        <Text variant="h3" className="text-white">US$ 1.243,57</Text>
         <Text variant="caption" className="text-[#a5f20c]">+US$ 0,17 hoje</Text>
       </Stack>
     </div>
@@ -262,7 +262,7 @@ export function TransactionList({ hidden, onElementTap }: TransactionListProps) 
     return (
       <Stack gap="default">
         <Stack direction="row" align="between">
-          <Text variant="heading-sm">Histórico</Text>
+          <Text variant="h3">Histórico</Text>
           <Text variant="body-sm" className="text-[var(--token-interactive-default)]">Ver tudo</Text>
         </Stack>
         <Text variant="body-sm" align="center" className="text-[#8a8a8a] py-6">
@@ -275,7 +275,7 @@ export function TransactionList({ hidden, onElementTap }: TransactionListProps) 
   return (
     <Stack gap="default">
       <Stack direction="row" align="between">
-        <Text variant="heading-sm">Histórico</Text>
+        <Text variant="h3">Histórico</Text>
         <Text variant="body-sm" className="text-[var(--token-interactive-default)]">Ver tudo</Text>
       </Stack>
 

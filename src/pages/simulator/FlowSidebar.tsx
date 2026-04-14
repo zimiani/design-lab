@@ -77,11 +77,11 @@ function ArchiveSection({
   const ChevronIcon = collapsed ? RiArrowRightSLine : RiArrowDownSLine
 
   return (
-    <div className="border-t border-shell-border mt-[var(--token-spacing-1)]">
+    <div className="border-t border-shell-border mt-[var(--token-spacing-4)]">
       <button
         type="button"
         onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center gap-[var(--token-spacing-1)] w-full px-[var(--token-spacing-md)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary/60 uppercase tracking-wider hover:text-shell-text-tertiary transition-colors cursor-pointer"
+        className="flex items-center gap-[var(--token-spacing-4)] w-full px-[var(--token-gap-lg)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary/60 uppercase tracking-wider hover:text-shell-text-tertiary transition-colors cursor-pointer"
       >
         <ChevronIcon size={14} className="shrink-0" />
         <span className="flex-1 text-left">Archive</span>
@@ -106,7 +106,7 @@ function ArchiveSection({
               <div key={group.id}>
                 {renderGroupHeader(group, groupFlows.length, group.domainId, 'unarchive')}
                 {!group.collapsed && groupFlows.length > 0 && (
-                  <div className="ml-[calc(var(--token-spacing-md)+18px)] border-l border-shell-border">
+                  <div className="ml-[calc(var(--token-gap-lg)+18px)] border-l border-shell-border">
                     {groupFlows.map((flow) =>
                       renderFlowItem(flow, group.id, flow.domain, 'unarchive')
                     )}
@@ -527,10 +527,10 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
           type="button"
           onClick={() => onSelect(flow.id)}
           className={`
-            w-full text-left pr-[var(--token-spacing-md)] py-[var(--token-spacing-2)]
+            w-full text-left pr-[var(--token-gap-lg)] py-[var(--token-spacing-8)]
             text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]
             transition-colors duration-[var(--token-transition-fast)] cursor-pointer
-            ${isInGroup ? 'pl-[var(--token-spacing-md)]' : 'pl-[calc(var(--token-spacing-md)+14px)]'}
+            ${isInGroup ? 'pl-[var(--token-gap-lg)]' : 'pl-[calc(var(--token-gap-lg)+14px)]'}
             ${isSelected
               ? 'bg-shell-selected text-shell-selected-text font-medium'
               : 'text-shell-text hover:bg-shell-hover'
@@ -544,7 +544,7 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
         </button>
         {/* Action buttons — visible on hover */}
         {!isConfirmingDelete && (
-          <div className="absolute right-[var(--token-spacing-2)] top-1/2 -translate-y-1/2 items-center gap-[2px] hidden group-hover:flex">
+          <div className="absolute right-[var(--token-spacing-8)] top-1/2 -translate-y-1/2 items-center gap-[2px] hidden group-hover:flex">
             {archiveMode === 'archive' ? (
               <>
                 <button
@@ -596,21 +596,21 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
         )}
         {/* Inline delete confirmation */}
         {isConfirmingDelete && (
-          <div className="flex items-center gap-[var(--token-spacing-1)] px-[var(--token-spacing-md)] py-[var(--token-spacing-1)] bg-error/5 border-y border-error/20">
+          <div className="flex items-center gap-[var(--token-spacing-4)] px-[var(--token-gap-lg)] py-[var(--token-spacing-4)] bg-error/5 border-y border-error/20">
             <span className="text-[length:var(--token-font-size-caption)] text-error flex-1">
               Delete this flow?
             </span>
             <button
               type="button"
               onClick={() => setConfirmDeleteId(null)}
-              className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text cursor-pointer"
+              className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={() => handleDeleteFlow(flow.id)}
-              className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-error hover:text-[#FCA5A5] font-medium cursor-pointer"
+              className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-error hover:text-[#FCA5A5] font-medium cursor-pointer"
             >
               Delete
             </button>
@@ -647,10 +647,10 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
         }}
         onDrop={(e) => { e.stopPropagation(); handleDropOnGroup(e, group.id, domainId) }}
       >
-        <div className="group/grp flex items-center gap-[var(--token-spacing-1)] pl-[var(--token-spacing-md)] pr-[var(--token-spacing-2)] py-[var(--token-spacing-1)]">
+        <div className="group/grp flex items-center gap-[var(--token-spacing-4)] pl-[var(--token-gap-lg)] pr-[var(--token-spacing-8)] py-[var(--token-spacing-4)]">
           {isRenaming ? (
             <form
-              className="flex items-center gap-[var(--token-spacing-1)] flex-1 min-w-0"
+              className="flex items-center gap-[var(--token-spacing-4)] flex-1 min-w-0"
               onSubmit={(e) => { e.preventDefault(); handleRenameGroup(group.id) }}
             >
               <input
@@ -659,7 +659,7 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
                 value={renameValue}
                 onChange={(e) => setRenameValue(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Escape') setRenamingGroupId(null) }}
-                className="flex-1 min-w-0 px-[var(--token-spacing-1)] py-0 text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text"
+                className="flex-1 min-w-0 px-[var(--token-spacing-4)] py-0 text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text"
               />
               <button type="submit" className="w-[16px] h-[16px] flex items-center justify-center text-shell-selected-text cursor-pointer">
                 <RiCheckLine size={12} />
@@ -673,13 +673,13 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
               <button
                 type="button"
                 onClick={() => setGroupCollapsed(group.id, !isCollapsed)}
-                className="flex items-center gap-[var(--token-spacing-1)] flex-1 min-w-0 text-left text-[length:13px] font-[500] text-shell-text hover:text-shell-text transition-colors cursor-pointer"
+                className="flex items-center gap-[var(--token-spacing-4)] flex-1 min-w-0 text-left text-[length:13px] font-[500] text-shell-text hover:text-shell-text transition-colors cursor-pointer"
               >
                 <ChevronIcon size={12} className="shrink-0" />
                 <span className="truncate">{group.name}</span>
                 <span className="text-[length:10px] text-shell-text-tertiary tabular-nums shrink-0">{flowCount}</span>
               </button>
-              <div className="hidden group-hover/grp:flex items-center gap-[var(--token-spacing-1)]">
+              <div className="hidden group-hover/grp:flex items-center gap-[var(--token-spacing-4)]">
                 {archiveMode === 'archive' ? (
                   <>
                     <button
@@ -741,21 +741,21 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
         </div>
         {/* Delete group confirmation */}
         {isConfirmingDelete && (
-          <div className="flex items-center gap-[var(--token-spacing-1)] px-[var(--token-spacing-md)] py-[var(--token-spacing-1)] bg-error/5 border-y border-error/20">
+          <div className="flex items-center gap-[var(--token-spacing-4)] px-[var(--token-gap-lg)] py-[var(--token-spacing-4)] bg-error/5 border-y border-error/20">
             <span className="text-[length:var(--token-font-size-caption)] text-error flex-1">
               {isGroupArchived(group.id) ? 'Delete group and all its flows?' : 'Delete group? Flows become ungrouped.'}
             </span>
             <button
               type="button"
               onClick={() => setConfirmDeleteGroupId(null)}
-              className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text cursor-pointer"
+              className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-shell-text-tertiary hover:text-shell-text cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={() => handleDeleteGroup(group.id)}
-              className="px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)] text-error hover:text-[#FCA5A5] font-medium cursor-pointer"
+              className="px-[var(--token-spacing-8)] py-[1px] text-[length:var(--token-font-size-caption)] text-error hover:text-[#FCA5A5] font-medium cursor-pointer"
             >
               Delete
             </button>
@@ -768,11 +768,11 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
   return (
     <>
       <aside className="w-[240px] h-full shrink-0 overflow-y-auto border-r border-shell-border bg-shell-surface flex flex-col">
-        <div className="p-[var(--token-spacing-md)] flex items-center justify-between">
+        <div className="p-[var(--token-gap-lg)] flex items-center justify-between">
           <h2 className="text-[length:var(--token-font-size-caption)] leading-[var(--token-line-height-caption)] font-semibold text-shell-text-tertiary uppercase tracking-wider">
             Flows
           </h2>
-          <div className="flex items-center gap-[var(--token-spacing-1)]">
+          <div className="flex items-center gap-[var(--token-spacing-4)]">
             <button
               type="button"
               onClick={toggleCollapseAll}
@@ -794,7 +794,7 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
 
         <div className="flex-1 overflow-y-auto">
           {orderedDomainIds.length === 0 && (
-            <p className="px-[var(--token-spacing-md)] text-[length:var(--token-font-size-body-sm)] text-shell-text-tertiary">
+            <p className="px-[var(--token-gap-lg)] text-[length:var(--token-font-size-body-sm)] text-shell-text-tertiary">
               No flows yet
             </p>
           )}
@@ -842,9 +842,9 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
             const isCrossDomainDrop = dragState?.kind === 'flow' && dragState.sourceDomainId !== domainId
 
             return (
-              <div key={domainId} className="mb-[var(--token-spacing-1)]">
+              <div key={domainId} className="mb-[var(--token-spacing-4)]">
                 <div
-                  className={`group/domain flex items-center px-[var(--token-spacing-md)] py-[var(--token-spacing-1)] transition-colors ${isDomainDropTarget && isCrossDomainDrop ? 'bg-shell-selected-text/10' : ''}`}
+                  className={`group/domain flex items-center px-[var(--token-gap-lg)] py-[var(--token-spacing-4)] transition-colors ${isDomainDropTarget && isCrossDomainDrop ? 'bg-shell-selected-text/10' : ''}`}
                   onDragOver={(e) => {
                     if (dragState?.kind === 'flow') {
                       handleDragOver(e)
@@ -871,7 +871,7 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
                   <button
                     type="button"
                     onClick={() => toggleCollapse(domainId)}
-                    className="flex items-center gap-[var(--token-spacing-1)] flex-1 min-w-0 text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider hover:text-shell-text-secondary transition-colors cursor-pointer"
+                    className="flex items-center gap-[var(--token-spacing-4)] flex-1 min-w-0 text-[length:var(--token-font-size-caption)] font-medium text-shell-text-tertiary uppercase tracking-wider hover:text-shell-text-secondary transition-colors cursor-pointer"
                   >
                     <ChevronIcon size={14} className="shrink-0" />
                     <span className="flex-1 text-left">{domainName}</span>
@@ -880,7 +880,7 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); setCreatingGroupInDomain(domainId) }}
-                    className="w-[16px] h-[16px] items-center justify-center text-shell-text-tertiary hover:text-shell-selected-text transition-colors cursor-pointer hidden group-hover/domain:flex shrink-0 ml-[var(--token-spacing-1)]"
+                    className="w-[16px] h-[16px] items-center justify-center text-shell-text-tertiary hover:text-shell-selected-text transition-colors cursor-pointer hidden group-hover/domain:flex shrink-0 ml-[var(--token-spacing-4)]"
                     title="New Group"
                   >
                     <RiFolderAddLine size={12} />
@@ -908,7 +908,7 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
                         <div key={group.id}>
                           {renderGroupHeader(group, groupFlows.length, domainId)}
                           {!group.collapsed && groupFlows.length > 0 && (
-                            <div className="ml-[calc(var(--token-spacing-md)+18px)] border-l border-shell-border">
+                            <div className="ml-[calc(var(--token-gap-lg)+18px)] border-l border-shell-border">
                               {groupFlows.map((flow) => renderFlowItem(flow, group.id, domainId))}
                             </div>
                           )}
@@ -919,7 +919,7 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
                     {/* Create group inline */}
                     {creatingGroupInDomain === domainId && (
                       <form
-                        className="flex items-center gap-[var(--token-spacing-1)] px-[var(--token-spacing-md)] py-[var(--token-spacing-1)]"
+                        className="flex items-center gap-[var(--token-spacing-4)] px-[var(--token-gap-lg)] py-[var(--token-spacing-4)]"
                         onSubmit={(e) => { e.preventDefault(); handleCreateGroup(domainId) }}
                       >
                         <input
@@ -929,7 +929,7 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
                           onChange={(e) => setNewGroupName(e.target.value)}
                           onKeyDown={(e) => { if (e.key === 'Escape') { setCreatingGroupInDomain(null); setNewGroupName('') } }}
                           placeholder="Group name..."
-                          className="flex-1 min-w-0 px-[var(--token-spacing-2)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text"
+                          className="flex-1 min-w-0 px-[var(--token-spacing-8)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-body-sm)] text-shell-text bg-shell-input border border-shell-border rounded-[var(--token-radius-sm)] outline-none focus:border-shell-selected-text"
                         />
                         <button type="submit" disabled={!newGroupName.trim()} className="w-[20px] h-[20px] flex items-center justify-center text-shell-selected-text disabled:opacity-40 cursor-pointer">
                           <RiCheckLine size={12} />
@@ -955,11 +955,11 @@ export default function FlowSidebar({ selectedFlowId, onSelect, onFlowCreated, o
         />
 
         {/* New flow button at bottom */}
-        <div className="p-[var(--token-spacing-2)] border-t border-shell-border">
+        <div className="p-[var(--token-spacing-8)] border-t border-shell-border">
           <button
             type="button"
             onClick={() => setShowNewDialog(true)}
-            className="w-full flex items-center justify-center gap-[var(--token-spacing-1)] py-[var(--token-spacing-2)] text-[length:var(--token-font-size-body-sm)] text-shell-text-tertiary hover:text-shell-selected-text hover:bg-shell-hover rounded-[var(--token-radius-sm)] transition-colors cursor-pointer"
+            className="w-full flex items-center justify-center gap-[var(--token-spacing-4)] py-[var(--token-spacing-8)] text-[length:var(--token-font-size-body-sm)] text-shell-text-tertiary hover:text-shell-selected-text hover:bg-shell-hover rounded-[var(--token-radius-sm)] transition-colors cursor-pointer"
           >
             <RiAddLine size={14} />
             New Flow

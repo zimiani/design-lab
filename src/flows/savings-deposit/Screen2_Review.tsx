@@ -14,7 +14,7 @@ export default function Screen2_Review({ onNext, onBack, onElementTap }: FlowScr
     <BaseLayout>
       <Header title="" onBack={onBack} />
 
-      <Text variant="heading-lg">Revise os dados</Text>
+      <Text variant="h1">Revise os dados</Text>
 
       <Stack gap="default">
         <Stack gap="none">

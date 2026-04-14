@@ -26,7 +26,7 @@ export default function Header({
   const showLeftButton = !isDesktop && (onBack || onClose)
 
   return (
-    <div data-component="Header" className={cn('w-full flex flex-col gap-[var(--token-spacing-2)]', className)}>
+    <div data-component="Header" className={cn('w-full flex flex-col gap-[var(--token-spacing-8)]', className)}>
       {/* Top actions row */}
       <div className="flex items-center justify-between w-full">
         <div className="flex flex-1 items-center">
@@ -43,15 +43,15 @@ export default function Header({
         </div>
 
         {rightAction && (
-          <div className="flex items-center gap-[var(--token-spacing-3)]">
+          <div className="flex items-center gap-[var(--token-spacing-12)]">
             {rightAction}
           </div>
         )}
       </div>
 
       {/* Title + description */}
-      <div className="flex flex-col gap-[var(--token-spacing-2)]">
-        <h1 data-text-id={title} className="text-[length:var(--token-font-size-heading-lg)] leading-[var(--token-line-height-heading-lg)] font-semibold tracking-[-0.6px] text-content-primary m-0">
+      <div className="flex flex-col gap-[var(--token-spacing-8)]">
+        <h1 data-text-id={title} className="text-[length:var(--token-font-size-h1)] leading-[var(--token-line-height-h1)] font-semibold tracking-[-0.6px] text-content-primary m-0">
           {title}
         </h1>
         {description && (

@@ -38,7 +38,7 @@ export default function D_Screen1_CaixinhaList({ onNext, onBack, onElementTap }:
         <Stack gap="sm" align="center">
           <Stack direction="row" gap="sm" align="center">
             <Text variant="caption" color="content-secondary">Total investido</Text>
-            <Badge variant="lime" size="sm">5% a.a.</Badge>
+            <Badge variant="positive" size="sm">5% a.a.</Badge>
           </Stack>
           <Amount value={totalBalance} currency="US$" size="lg" />
           {totalYield > 0 && (

@@ -26,7 +26,7 @@ export default function C_Screen4_CaixinhaDetail({ onNext, onBack, onElementTap 
       <Stack gap="default">
         <Stack gap="sm" align="center">
           <span style={{ fontSize: 40 }}>{caixinha.emoji}</span>
-          <Badge variant="lime" size="sm">5% a.a.</Badge>
+          <Badge variant="positive" size="sm">5% a.a.</Badge>
           <Amount value={caixinha.balance} currency="US$" size="lg" />
           <Text variant="caption" className="text-[#22c55e]">
             +{formatUsd(caixinha.yieldToday)} hoje

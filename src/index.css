@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand Colors */
-  --color-brand-50: var(--token-brand-50);
+  /* ── Base palette (acesso Tailwind) ── */
+  --color-brand-white: var(--token-brand-white);
+  --color-brand-black: var(--token-brand-black);
   --color-brand-100: var(--token-brand-100);
   --color-brand-200: var(--token-brand-200);
   --color-brand-300: var(--token-brand-300);
@@ -13,76 +14,6 @@
   --color-brand-800: var(--token-brand-800);
   --color-brand-900: var(--token-brand-900);
 
-  /* Semantic Colors */
-  --color-success: var(--token-success);
-  --color-success-light: var(--token-success-light);
-  --color-warning: var(--token-warning);
-  --color-warning-light: var(--token-warning-light);
-  --color-error: var(--token-error);
-  --color-error-light: var(--token-error-light);
-  --color-info: var(--token-info);
-  --color-info-light: var(--token-info-light);
-
-  /* Surface Colors */
-  --color-background: var(--token-background);
-  --color-surface-primary: var(--token-surface-primary);
-  --color-surface-secondary: var(--token-surface-secondary);
-  --color-surface-elevated: var(--token-surface-elevated);
-
-  /* Content (Text) Colors */
-  --color-content-primary: var(--token-content-primary);
-  --color-content-secondary: var(--token-content-secondary);
-  --color-content-tertiary: var(--token-content-tertiary);
-  --color-content-inverse: var(--token-content-inverse);
-
-  /* Interactive Colors */
-  --color-interactive-default: var(--token-interactive-default);
-  --color-interactive-hover: var(--token-interactive-hover);
-  --color-interactive-pressed: var(--token-interactive-pressed);
-  --color-interactive-disabled: var(--token-interactive-disabled);
-  --color-interactive-secondary: var(--token-interactive-secondary);
-  --color-interactive-foreground: var(--token-interactive-foreground);
-
-  /* Picnic Brand Palettes */
-  --color-brand-core-100: #14B876;
-  --color-brand-core-300: #29A372;
-  --color-brand-core-500: #1A4D3D;
-  --color-brand-lime-100: #E8F9B8;
-  --color-brand-lime-200: #CDED74;
-  --color-brand-lime-300: #CDF460;
-  --color-brand-lime-500: #A3D41C;
-  --color-brand-lime-900: #38632B;
-  --color-brand-grape-100: #C0BAF7;
-  --color-brand-grape-300: #2F289F;
-  --color-brand-grape-500: #242060;
-  --color-brand-guava-100: #F39AA9;
-  --color-brand-guava-300: #ED795E;
-  --color-brand-guava-500: #994633;
-
-  /* Feedback Colors (Picnic) */
-  --color-feedback-success: #10B981;
-  --color-feedback-critical: #B91C1C;
-  --color-feedback-warning: #EAB308;
-
-  /* Surface extras */
-  --color-surface-shade: #ECEFEB;
-  --color-surface-dark: #CCD2C8;
-
-  /* Interactive extras */
-  --color-interactive-accent: #B3F53D;
-  --color-interactive-accent-hover: #DFFC6F;
-  --color-interactive-primary: #211D1A;
-
-  /* Content extras */
-  --color-content-number-positive: #10B981;
-  --color-content-number-negative: #F87171;
-
-  /* Border Colors */
-  --color-border-default: var(--token-border-default);
-  --color-border-strong: var(--token-border-strong);
-
-  /* Neutrals */
-  --color-neutral-50: var(--token-neutral-50);
   --color-neutral-100: var(--token-neutral-100);
   --color-neutral-200: var(--token-neutral-200);
   --color-neutral-300: var(--token-neutral-300);
@@ -93,20 +24,106 @@
   --color-neutral-800: var(--token-neutral-800);
   --color-neutral-900: var(--token-neutral-900);
 
+  --color-avocado-100: var(--token-avocado-100);
+  --color-avocado-200: var(--token-avocado-200);
+  --color-avocado-300: var(--token-avocado-300);
+  --color-avocado-400: var(--token-avocado-400);
+  --color-avocado-500: var(--token-avocado-500);
+  --color-avocado-600: var(--token-avocado-600);
+  --color-avocado-700: var(--token-avocado-700);
+  --color-avocado-800: var(--token-avocado-800);
+  --color-avocado-900: var(--token-avocado-900);
+
+  --color-banana-100: var(--token-banana-100);
+  --color-banana-200: var(--token-banana-200);
+  --color-banana-300: var(--token-banana-300);
+  --color-banana-400: var(--token-banana-400);
+  --color-banana-500: var(--token-banana-500);
+  --color-banana-600: var(--token-banana-600);
+  --color-banana-700: var(--token-banana-700);
+  --color-banana-800: var(--token-banana-800);
+  --color-banana-900: var(--token-banana-900);
+
+  --color-apple-50:  var(--token-apple-50);
+  --color-apple-100: var(--token-apple-100);
+  --color-apple-200: var(--token-apple-200);
+  --color-apple-300: var(--token-apple-300);
+  --color-apple-400: var(--token-apple-400);
+  --color-apple-500: var(--token-apple-500);
+  --color-apple-600: var(--token-apple-600);
+  --color-apple-700: var(--token-apple-700);
+  --color-apple-800: var(--token-apple-800);
+  --color-apple-900: var(--token-apple-900);
+
+  --color-grape-50:  var(--token-grape-50);
+  --color-grape-100: var(--token-grape-100);
+  --color-grape-200: var(--token-grape-200);
+  --color-grape-300: var(--token-grape-300);
+  --color-grape-400: var(--token-grape-400);
+  --color-grape-500: var(--token-grape-500);
+  --color-grape-600: var(--token-grape-600);
+  --color-grape-700: var(--token-grape-700);
+  --color-grape-800: var(--token-grape-800);
+  --color-grape-900: var(--token-grape-900);
+
+  --color-guava-100: var(--token-guava-100);
+  --color-guava-200: var(--token-guava-200);
+  --color-guava-300: var(--token-guava-300);
+  --color-guava-400: var(--token-guava-400);
+  --color-guava-500: var(--token-guava-500);
+  --color-guava-600: var(--token-guava-600);
+  --color-guava-700: var(--token-guava-700);
+  --color-guava-800: var(--token-guava-800);
+  --color-guava-900: var(--token-guava-900);
+
+  /* ── Semantic tokens — use estes em componentes ── */
+  --color-surface-level-0: var(--token-neutral-100);
+  --color-surface-level-1: var(--token-neutral-200);
+  --color-surface-level-2: var(--token-neutral-300);
+  --color-surface-inverse-level-0: var(--token-brand-black);
+  --color-surface-inverse-level-1: var(--token-neutral-900);
+  --color-surface-inverse-level-2: var(--token-neutral-800);
+  --color-surface-items: var(--token-neutral-400);
+
+  --color-content-primary: var(--token-brand-black);
+  --color-content-secondary: var(--token-neutral-700);
+  --color-content-tertiary: var(--token-neutral-600);
+  --color-content-inverse-primary: var(--token-neutral-100);
+  --color-content-inverse-secondary: var(--token-neutral-300);
+  --color-content-inverse-tertiary: var(--token-neutral-600);
+
+  --color-action: var(--token-brand-500);
+  --color-action-accent: var(--token-brand-400);
+  --color-action-disabled: var(--token-neutral-500);
+
+  --color-border: var(--token-neutral-400);
+
+  --color-feedback-success: var(--token-avocado-600);
+  --color-feedback-success-accent: var(--token-avocado-500);
+  --color-surface-feedback-success: var(--token-avocado-100);
+
+  --color-feedback-warning: var(--token-banana-500);
+  --color-feedback-warning-accent: var(--token-banana-400);
+  --color-surface-feedback-warning: var(--token-banana-100);
+
+  --color-feedback-error: var(--token-apple-600);
+  --color-feedback-error-accent: var(--token-apple-500);
+  --color-surface-feedback-error: var(--token-apple-50);
+
   /* Spacing */
   --spacing-0: var(--token-spacing-0);
-  --spacing-0_5: var(--token-spacing-0-5);
-  --spacing-1: var(--token-spacing-1);
-  --spacing-2: var(--token-spacing-2);
-  --spacing-3: var(--token-spacing-3);
+  --spacing-0_5: var(--token-spacing-8);
   --spacing-4: var(--token-spacing-4);
-  --spacing-5: var(--token-spacing-5);
-  --spacing-6: var(--token-spacing-6);
   --spacing-8: var(--token-spacing-8);
-  --spacing-10: var(--token-spacing-10);
   --spacing-12: var(--token-spacing-12);
   --spacing-16: var(--token-spacing-16);
   --spacing-20: var(--token-spacing-20);
+  --spacing-24: var(--token-spacing-24);
+  --spacing-32: var(--token-spacing-32);
+  --spacing-40: var(--token-spacing-40);
+  --spacing-48: var(--token-spacing-48);
+  --spacing-64: var(--token-spacing-64);
+  --spacing-80: var(--token-spacing-80);
 
   /* Border Radius */
   --radius-none: var(--token-radius-none);
@@ -173,12 +190,12 @@
 
 /* Page-level padding utilities for mixed padded / edge-to-edge layouts */
 .page-pad {
-  padding-left: var(--token-spacing-6);
-  padding-right: var(--token-spacing-6);
+  padding-left: var(--token-spacing-24);
+  padding-right: var(--token-spacing-24);
 }
 .full-bleed {
-  margin-left: calc(-1 * var(--token-spacing-6));
-  margin-right: calc(-1 * var(--token-spacing-6));
+  margin-left: calc(-1 * var(--token-spacing-24));
+  margin-right: calc(-1 * var(--token-spacing-24));
 }
 
 /* React Flow dark theme overrides to match shell chrome */

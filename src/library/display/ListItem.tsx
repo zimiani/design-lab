@@ -32,7 +32,7 @@ export default function ListItem({
   )
 
   const content = (
-    <div className="flex items-center gap-[var(--token-spacing-3)] w-full">
+    <div className="flex items-center gap-[var(--token-spacing-12)] w-full">
       {left && (
         <div className="shrink-0 flex items-center justify-center">
           {left}
@@ -79,7 +79,7 @@ export default function ListItem({
     </div>
   )
 
-  const baseClasses = 'bg-[var(--color-surface-primary)] rounded-[var(--token-radius-lg)] py-[var(--token-spacing-4)]'
+  const baseClasses = 'bg-[var(--color-surface-level-0)] rounded-[var(--token-radius-lg)] py-[var(--token-spacing-16)]'
 
   if (onPress) {
     return (
@@ -93,7 +93,7 @@ export default function ListItem({
           baseClasses,
           disabled
             ? 'opacity-50 cursor-not-allowed'
-            : 'cursor-pointer hover:bg-[var(--color-surface-shade)]',
+            : 'cursor-pointer hover:bg-[var(--color-surface-level-1)]',
           className,
         )}
       >

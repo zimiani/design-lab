@@ -2,49 +2,61 @@ import type { ReactNode } from 'react'
 import { registerComponent } from '../registry'
 
 export interface BadgeProps {
-  variant?: 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'guava' | 'grape' | 'lime' | 'none'
+  variant?: 'neutral' | 'neutral-light' | 'inverse' | 'inverse-light' | 'positive' | 'warning' | 'critical'
+  outline?: boolean
   size?: 'sm' | 'md'
   children: ReactNode
   icon?: ReactNode
   className?: string
 }
 
-const variantStyles = {
-  success: 'bg-success-light text-success',
-  warning: 'bg-warning-light text-warning',
-  error: 'bg-error-light text-error',
-  info: 'bg-info-light text-info',
-  neutral: 'bg-neutral-100 text-neutral-600',
-  guava: 'bg-[var(--color-brand-guava-300)] text-white',
-  grape: 'bg-[var(--color-brand-grape-300)] text-[var(--color-brand-lime-300)]',
-  lime: 'bg-[var(--color-brand-lime-300)] text-[var(--color-brand-core-500)]',
-  none: 'bg-transparent border border-[var(--color-border-default)] text-[var(--color-content-secondary)]',
-} as const
+const filledStyles: Record<NonNullable<BadgeProps['variant']>, string> = {
+  'neutral':       'bg-[var(--color-surface-items)] text-[var(--color-content-primary)]',
+  'neutral-light': 'bg-[var(--color-surface-level-0)] text-[var(--color-content-primary)]',
+  'inverse':       'bg-[var(--color-surface-inverse-level-0)] text-[var(--color-content-inverse-primary)]',
+  'inverse-light': 'bg-[var(--color-surface-inverse-level-2)] text-[var(--color-content-inverse-primary)]',
+  'positive':      'bg-[var(--color-feedback-success)] text-[var(--color-content-inverse-primary)]',
+  'warning':       'bg-[var(--color-feedback-warning)] text-[var(--color-content-primary)]',
+  'critical':      'bg-[var(--color-feedback-error)] text-[var(--color-content-inverse-primary)]',
+}
+
+const outlineStyles: Record<NonNullable<BadgeProps['variant']>, string> = {
+  'neutral':       'border border-[var(--color-border)] text-[var(--color-content-secondary)]',
+  'neutral-light': 'border border-[var(--color-content-inverse-primary)] text-[var(--color-content-primary)]',
+  'inverse':       'border border-[var(--color-content-primary)] text-[var(--color-content-primary)]',
+  'inverse-light': 'border border-[var(--color-content-secondary)] text-[var(--color-content-inverse-secondary)]',
+  'positive':      'border border-[var(--color-feedback-success)] text-[var(--color-content-primary)]',
+  'warning':       'border border-[var(--color-feedback-warning)] text-[var(--color-content-primary)]',
+  'critical':      'border border-[var(--color-feedback-error)] text-[var(--color-content-primary)]',
+}
 
 const sizeStyles = {
-  sm: 'px-[var(--token-spacing-2)] py-[1px] text-[length:var(--token-font-size-caption)]',
-  md: 'px-[var(--token-spacing-3)] py-[2px] text-[length:var(--token-font-size-body-sm)]',
+  sm: 'px-[8px] py-[4px] text-[12px] leading-[18px]',
+  md: 'px-[12px] py-[6px] text-[14px] leading-[20px]',
 } as const
 
 export default function Badge({
   variant = 'neutral',
+  outline = false,
   size = 'sm',
   children,
   icon,
   className = '',
 }: BadgeProps) {
   const textId = typeof children === 'string' ? children : typeof children === 'number' ? String(children) : undefined
+  const colorStyle = outline ? outlineStyles[variant] : filledStyles[variant]
 
   return (
     <span
       data-component="Badge"
       data-text-id={textId}
       className={`
-        inline-flex items-center gap-1 font-medium rounded-[var(--token-radius-full)]
-        ${variantStyles[variant]}
+        inline-flex items-center gap-[4px] font-semibold rounded-[var(--token-radius-full)]
+        ${colorStyle}
         ${sizeStyles[size]}
         ${className}
       `}
+      style={{ fontFeatureSettings: "'ss01' 1" }}
     >
       {icon}
       {children}
@@ -55,12 +67,13 @@ export default function Badge({
 registerComponent({
   name: 'Badge',
   category: 'presentation',
-  description: 'Small status indicator with color variants. Use for counts, labels, and status markers.',
+  description: 'Chip/badge for status and labels. 7 semantic variants × filled or outline style.',
   component: Badge,
-  variants: ['success', 'warning', 'error', 'info', 'neutral', 'guava', 'grape', 'lime', 'none'],
+  variants: ['neutral', 'neutral-light', 'inverse', 'inverse-light', 'positive', 'warning', 'critical'],
   sizes: ['sm', 'md'],
   props: [
-    { name: 'variant', type: '"success" | "warning" | "error" | "info" | "neutral" | "guava" | "grape" | "lime" | "none"', required: false, defaultValue: 'neutral', description: 'Color variant' },
+    { name: 'variant', type: '"neutral" | "neutral-light" | "inverse" | "inverse-light" | "positive" | "warning" | "critical"', required: false, defaultValue: 'neutral', description: 'Semantic color variant' },
+    { name: 'outline', type: 'boolean', required: false, defaultValue: 'false', description: 'Outline style instead of filled' },
     { name: 'size', type: '"sm" | "md"', required: false, defaultValue: 'sm', description: 'Badge size' },
     { name: 'children', type: 'ReactNode', required: true, description: 'Badge content' },
     { name: 'icon', type: 'ReactNode', required: false, description: 'Leading icon' },

@@ -59,7 +59,7 @@ export default function Screen2_ProductHub({ onNext, onBack, onElementTap }: Flo
         >
           <Stack direction="row" align="between">
             <Text variant="caption" className="text-[#8a8a8a]">Saldo alocado</Text>
-            <Badge variant="success" size="sm">Protegido</Badge>
+            <Badge variant="positive" size="sm">Protegido</Badge>
           </Stack>
 
           <Amount value={MOCK_BALANCE} currency="US$" size="lg" className="text-white" />

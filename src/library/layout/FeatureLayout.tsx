@@ -70,7 +70,7 @@ export default function FeatureLayout({
       <div
         data-component="FeatureLayout"
         className={cn(
-          'flex flex-col bg-surface-primary overflow-hidden rounded-[var(--token-radius-lg)]',
+          'flex flex-col bg-surface-level-0 overflow-hidden rounded-[var(--token-radius-lg)]',
           className,
         )}
       >
@@ -97,13 +97,13 @@ export default function FeatureLayout({
           )}
 
           {imageHeader && (
-            <div className="absolute inset-0 flex flex-col justify-end px-[var(--token-spacing-8)] pb-[var(--token-spacing-8)]">
+            <div className="absolute inset-0 flex flex-col justify-end px-[var(--token-spacing-32)] pb-[var(--token-spacing-32)]">
               {imageHeader}
             </div>
           )}
 
           {onClose && (
-            <div className="absolute top-[var(--token-spacing-8)] right-[var(--token-spacing-8)]">
+            <div className="absolute top-[var(--token-spacing-32)] right-[var(--token-spacing-32)]">
               <IconButton
                 variant="base"
                 inverted
@@ -114,20 +114,20 @@ export default function FeatureLayout({
           )}
 
           {imageOverlay && (
-            <div className="absolute bottom-[var(--token-spacing-6)] left-[var(--token-spacing-6)]">
+            <div className="absolute bottom-[var(--token-spacing-24)] left-[var(--token-spacing-24)]">
               {imageOverlay}
             </div>
           )}
         </div>
 
         {/* Content — 32px padding on desktop */}
-        <div className="px-[var(--token-spacing-8)] pt-[var(--token-spacing-8)] pb-[var(--token-spacing-4)] flex flex-col gap-[var(--token-spacing-4)]">
+        <div className="px-[var(--token-spacing-32)] pt-[var(--token-spacing-32)] pb-[var(--token-spacing-16)] flex flex-col gap-[var(--token-spacing-16)]">
           {rest}
         </div>
 
         {/* Footer — inline, right-aligned on desktop */}
         {footer && (
-          <div className="px-[var(--token-spacing-8)] pb-[var(--token-spacing-8)] flex justify-end">
+          <div className="px-[var(--token-spacing-32)] pb-[var(--token-spacing-32)] flex justify-end">
             <div>{footer}</div>
           </div>
         )}
@@ -159,13 +159,13 @@ export default function FeatureLayout({
       )}
 
       {imageHeader && (
-        <div className="absolute inset-0 flex flex-col justify-end px-[var(--token-spacing-6)] pb-[var(--token-spacing-12)]">
+        <div className="absolute inset-0 flex flex-col justify-end px-[var(--token-spacing-24)] pb-[var(--token-spacing-48)]">
           {imageHeader}
         </div>
       )}
 
       {onClose && (
-        <div className="absolute top-[var(--safe-area-top,12px)] right-[var(--token-spacing-6)]">
+        <div className="absolute top-[var(--safe-area-top,12px)] right-[var(--token-spacing-24)]">
           <IconButton
             variant="base"
             inverted
@@ -176,7 +176,7 @@ export default function FeatureLayout({
       )}
 
       {imageOverlay && (
-        <div className="absolute bottom-[36px] left-[var(--token-spacing-6)]">
+        <div className="absolute bottom-[36px] left-[var(--token-spacing-24)]">
           {imageOverlay}
         </div>
       )}
@@ -186,13 +186,13 @@ export default function FeatureLayout({
   return (
     <div
       data-component="FeatureLayout"
-      className={cn('flex flex-col h-full bg-surface-primary overflow-hidden', className)}
+      className={cn('flex flex-col h-full bg-surface-level-0 overflow-hidden', className)}
     >
       <div className="flex-1 overflow-y-auto">
         {heroBlock}
 
         {/* Content — overlaps hero with rounded top corners */}
-        <div className="relative z-10 -mt-[20px] rounded-t-[48px] bg-surface-primary px-[var(--token-spacing-6)] pt-[var(--token-spacing-8)] pb-[40px] flex flex-col gap-[var(--token-spacing-4)] shadow-[0_-8px_24px_rgba(0,0,0,0.08)]" style={{ cornerShape: 'squircle' } as React.CSSProperties}>
+        <div className="relative z-10 -mt-[20px] rounded-t-[48px] bg-surface-level-0 px-[var(--token-spacing-24)] pt-[var(--token-spacing-32)] pb-[40px] flex flex-col gap-[var(--token-spacing-16)] shadow-[0_-8px_24px_rgba(0,0,0,0.08)]" style={{ cornerShape: 'squircle' } as React.CSSProperties}>
           {rest}
         </div>
       </div>

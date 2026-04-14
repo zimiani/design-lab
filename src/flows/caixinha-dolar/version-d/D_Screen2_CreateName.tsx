@@ -22,7 +22,7 @@ export default function D_Screen2_CreateName({ onNext, onBack }: FlowScreenProps
 
       <Stack gap="default">
         <Stack gap="sm">
-          <Text variant="heading-sm">Escolha um ícone</Text>
+          <Text variant="h3">Escolha um ícone</Text>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {EMOJI_OPTIONS.map((emoji) => (
               <button
@@ -51,7 +51,7 @@ export default function D_Screen2_CreateName({ onNext, onBack }: FlowScreenProps
         {/* Preview */}
         <Stack gap="sm" align="center" className="py-4">
           <span style={{ fontSize: 48 }}>{selectedEmoji}</span>
-          <Text variant="heading-md" align="center">
+          <Text variant="h2" align="center">
             {name || 'Minha Caixinha'}
           </Text>
         </Stack>

@@ -24,12 +24,12 @@ export default function AppShell({
         {sidebar}
         <div data-part="main-area" className="flex-1 flex flex-col min-w-0 bg-background">
           {level >= 2 && breadcrumbs.length > 0 && (
-            <div data-part="breadcrumb-bar" className="px-[var(--token-spacing-8)] pt-[var(--token-spacing-6)]">
+            <div data-part="breadcrumb-bar" className="px-[var(--token-spacing-32)] pt-[var(--token-spacing-24)]">
               <Breadcrumb items={breadcrumbs} />
             </div>
           )}
-          <div data-part="scroll-area" className="flex-1 overflow-y-scroll desktop-visible-scroll py-[var(--token-spacing-8)] px-[var(--token-spacing-8)]">
-            <div data-part="page-card" className="w-full max-w-[600px] mx-auto bg-surface-primary rounded-xl shadow-sm overflow-hidden">
+          <div data-part="scroll-area" className="flex-1 overflow-y-scroll desktop-visible-scroll py-[var(--token-spacing-32)] px-[var(--token-spacing-32)]">
+            <div data-part="page-card" className="w-full max-w-[600px] mx-auto bg-surface-level-0 rounded-xl shadow-sm overflow-hidden">
               {children}
             </div>
           </div>

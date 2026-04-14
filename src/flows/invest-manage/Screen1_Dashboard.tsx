@@ -77,7 +77,7 @@ export default function Screen1_Dashboard({ onNext, onElementTap }: FlowScreenPr
             <RiRocketLine size={32} className="text-[var(--color-content-secondary)]" />
           </div>
           <Stack gap="sm">
-            <Text variant="heading-md">Comece a investir</Text>
+            <Text variant="h2">Comece a investir</Text>
             <Text variant="body-md" color="content-secondary">
               Criptomoedas, ouro, prata e renda fixa digital. Tudo em um só lugar, com resgate simples.
             </Text>
@@ -99,7 +99,7 @@ export default function Screen1_Dashboard({ onNext, onElementTap }: FlowScreenPr
       parallax
       imageHeader={
         <>
-          <Stack gap="lg" className="absolute top-[54px] left-[var(--token-spacing-6)] right-[var(--token-spacing-6)] z-10">
+          <Stack gap="lg" className="absolute top-[54px] left-[var(--token-spacing-24)] right-[var(--token-spacing-24)] z-10">
             <Header title="Investimentos" />
             <Stack gap="none" className="gap-1.5">
             <Text variant="body-sm" color="content-secondary">Total investido</Text>
@@ -116,7 +116,7 @@ export default function Screen1_Dashboard({ onNext, onElementTap }: FlowScreenPr
           </Stack>
 
           {/* Area chart + solid lime base strip — break out of parent padding */}
-          <div className="absolute bottom-0 -left-[var(--token-spacing-6)] -right-[var(--token-spacing-6)]">
+          <div className="absolute bottom-0 -left-[var(--token-spacing-24)] -right-[var(--token-spacing-24)]">
             <LineChart data={chartData} height={100} variant="area" lineWidth={3} smooth color="#B2FC1C" fillColor="#B2FC1C" tooltipFormatter={chartTooltip} />
             <div className="h-[64px] bg-[#B2FC1C]" />
           </div>

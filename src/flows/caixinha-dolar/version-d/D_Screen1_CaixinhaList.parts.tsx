@@ -50,7 +50,7 @@ export function EmptyState() {
   return (
     <Stack gap="sm" align="center" className="py-8">
       <span style={{ fontSize: 48 }}>💰</span>
-      <Text variant="heading-sm" align="center">Comece a guardar seus dólares</Text>
+      <Text variant="h3" align="center">Comece a guardar seus dólares</Text>
       <Text variant="body-sm" color="content-secondary" align="center">
         Crie caixinhas para organizar seus objetivos e ganhe 5% ao ano em cada uma.
       </Text>

@@ -73,7 +73,7 @@ export default function Screen2_Dashboard({ onNext, onBack, onElementTap }: Flow
                 <Text variant="caption" color="content-secondary">Valor total</Text>
                 <Stack direction="row" gap="sm" align="center">
                   <Text variant="display">{formatBRL(totalValue)}</Text>
-                  <Badge variant={totalChange >= 0 ? 'lime' : 'error'} size="sm">
+                  <Badge variant={totalChange >= 0 ? 'positive' : 'critical'} size="sm">
                     {formatPercentChange(totalChange)}
                   </Badge>
                 </Stack>
@@ -115,7 +115,7 @@ export default function Screen2_Dashboard({ onNext, onBack, onElementTap }: Flow
             </>
           ) : (
             <Stack gap="default" align="center" className="py-16">
-              <Text variant="heading-md" align="center">Comece a investir</Text>
+              <Text variant="h2" align="center">Comece a investir</Text>
               <Text variant="body-md" color="content-secondary" align="center">
                 Explore os ativos disponíveis e faça seu primeiro investimento.
               </Text>

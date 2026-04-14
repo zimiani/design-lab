@@ -344,9 +344,9 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow, 
   return (
     <div className="flex-1 flex overflow-hidden" data-version={_version}>
       {/* Center: Device + controls */}
-      <div className="flex-1 flex flex-col items-center justify-center gap-5 bg-shell-bg py-[var(--token-spacing-md)] overflow-auto">
+      <div className="flex-1 flex flex-col items-center justify-center gap-5 bg-shell-bg py-[var(--token-gap-lg)] overflow-auto">
         {/* Pagination controls — top */}
-        <div className="flex items-center gap-[var(--token-spacing-3)]">
+        <div className="flex items-center gap-[var(--token-spacing-12)]">
           <button
             type="button"
             onClick={goBack}
@@ -369,7 +369,7 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow, 
           <button
             type="button"
             onClick={restart}
-            className="w-[36px] h-[36px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-shell-surface border border-shell-border hover:bg-shell-hover transition-colors cursor-pointer ml-[var(--token-spacing-2)] text-shell-text"
+            className="w-[36px] h-[36px] flex items-center justify-center rounded-[var(--token-radius-full)] bg-shell-surface border border-shell-border hover:bg-shell-hover transition-colors cursor-pointer ml-[var(--token-spacing-8)] text-shell-text"
           >
             <RiRefreshLine size={16} />
           </button>
@@ -377,7 +377,7 @@ export default function FlowPlayer({ flowId, initialScreenId, onNavigateToFlow, 
 
         {/* State switcher pills */}
         {screenStates && screenStates.length > 1 && (
-          <div className="flex items-center gap-[var(--token-spacing-1)]">
+          <div className="flex items-center gap-[var(--token-spacing-4)]">
             {screenStates.map((state) => {
               const isActive = activeState?.id === state.id
               return (

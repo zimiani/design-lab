@@ -51,7 +51,7 @@ export default function Select({
       : 'border-border-default'
 
   return (
-    <div data-component="Select" ref={ref} className={`relative flex flex-col gap-[var(--token-spacing-1)] ${className}`}>
+    <div data-component="Select" ref={ref} className={`relative flex flex-col gap-[var(--token-spacing-4)] ${className}`}>
       {label && (
         <label className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] font-medium text-content-primary">
           {label}
@@ -63,8 +63,8 @@ export default function Select({
         disabled={disabled}
         className={`
           flex items-center justify-between
-          h-[48px] px-[var(--token-spacing-md)]
-          bg-surface-primary border rounded-[var(--token-radius-md)]
+          h-[48px] px-[var(--token-gap-lg)]
+          bg-surface-level-0 border rounded-[var(--token-radius-md)]
           transition-colors duration-[var(--token-transition-fast)]
           ${borderColor}
           ${disabled ? 'opacity-50 cursor-not-allowed bg-surface-secondary' : 'cursor-pointer'}
@@ -90,8 +90,8 @@ export default function Select({
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
             className="
-              absolute top-full left-0 right-0 z-50 mt-[var(--token-spacing-1)]
-              bg-surface-elevated border border-border-default rounded-[var(--token-radius-md)]
+              absolute top-full left-0 right-0 z-50 mt-[var(--token-spacing-4)]
+              bg-surface-level-1 border border-border rounded-[var(--token-radius-md)]
               shadow-md overflow-hidden
             "
           >
@@ -104,7 +104,7 @@ export default function Select({
                   setOpen(false)
                 }}
                 className={`
-                  w-full px-[var(--token-spacing-md)] py-[var(--token-spacing-3)]
+                  w-full px-[var(--token-gap-lg)] py-[var(--token-spacing-12)]
                   text-left text-[length:var(--token-font-size-body-md)]
                   transition-colors duration-[var(--token-transition-fast)]
                   ${option.value === value ? 'bg-brand-50 text-interactive-foreground' : 'text-content-primary hover:bg-surface-secondary'}

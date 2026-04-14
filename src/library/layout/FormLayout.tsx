@@ -16,11 +16,11 @@ export default function FormLayout({
   return (
     <div data-component="FormLayout" className={`flex flex-col h-full bg-background ${className}`}>
       {header && <div className="shrink-0">{header}</div>}
-      <div className="flex-1 overflow-y-auto px-[var(--token-spacing-md)] py-[var(--token-spacing-lg)]">
-        <div className="flex flex-col gap-[var(--token-spacing-lg)]">{children}</div>
+      <div className="flex-1 overflow-y-auto px-[var(--token-gap-lg)] py-[var(--token-padding-lg)]">
+        <div className="flex flex-col gap-[var(--token-padding-lg)]">{children}</div>
       </div>
       {submitButton && (
-        <div className="shrink-0 p-[var(--token-spacing-md)] pb-[var(--token-spacing-xl)] bg-surface-primary border-t border-border-default">
+        <div className="shrink-0 p-[var(--token-gap-lg)] pb-[var(--token-gap-xl)] bg-surface-level-0 border-t border-border">
           {submitButton}
         </div>
       )}

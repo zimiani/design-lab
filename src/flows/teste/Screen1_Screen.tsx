@@ -52,7 +52,7 @@ export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps
             className="bg-[#F7931A] text-white"
           />
           <Stack gap="none">
-            <Text variant="heading-md">Bitcoin</Text>
+            <Text variant="h2">Bitcoin</Text>
             <Text variant="body-sm" color="content-secondary">BTC</Text>
           </Stack>
         </div>

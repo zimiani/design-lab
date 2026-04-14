@@ -74,12 +74,12 @@ export default function Screen3_Discovery({ onNext, onBack, onElementTap }: Flow
           return (
             <Stack key={cat} gap="sm">
               <div className="flex items-center justify-between">
-                <Text variant="heading-sm">{CATEGORY_INFO[cat].label}</Text>
+                <Text variant="h3">{CATEGORY_INFO[cat].label}</Text>
                 <button className="text-[var(--color-interactive-primary)] text-[length:var(--token-font-size-body-sm)] font-medium">
                   Ver tudo
                 </button>
               </div>
-              <div className="flex gap-3 overflow-x-auto pb-1 -mx-[var(--token-spacing-6)] px-[var(--token-spacing-6)] scrollbar-hide">
+              <div className="flex gap-3 overflow-x-auto pb-1 -mx-[var(--token-spacing-24)] px-[var(--token-spacing-24)] scrollbar-hide">
                 {assetsInCat.map((asset) => (
                   <AssetCard
                     key={asset.ticker}

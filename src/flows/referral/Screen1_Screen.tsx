@@ -37,11 +37,11 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
   return (
     <BaseLayout className="!bg-[#FAF7F0] !gap-0">
       {/* ══════ DARK HERO SECTION ══════ */}
-      <div className="-mx-[var(--token-spacing-6)] -mt-[var(--token-spacing-6)] px-[24px] pt-[32px] pb-[28px] bg-[#111827] rounded-b-[28px]">
+      <div className="-mx-[var(--token-spacing-24)] -mt-[var(--token-spacing-24)] px-[24px] pt-[32px] pb-[28px] bg-[#111827] rounded-b-[28px]">
         {/* Top bar */}
         <div className="flex items-center justify-between mb-[24px]">
           <span className="text-[18px] font-bold tracking-[-0.5px] text-white">picnic</span>
-          <Badge variant="lime" size="sm">ACESSO VIA INDICAÇÃO</Badge>
+          <Badge variant="positive" size="sm">ACESSO VIA INDICAÇÃO</Badge>
         </div>
 
         {/* Hero headline */}
@@ -51,7 +51,7 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
           </Text>
         </div>
         <div className="mb-[20px]">
-          <Text variant="heading-sm" className="!text-[var(--token-brand-400)]">
+          <Text variant="h3" className="!text-[var(--token-brand-400)]">
             Sem IOF. Sem taxas. Sem pegadinha.
           </Text>
         </div>
@@ -107,7 +107,7 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
         {/* ── Zero Fees Grid ── */}
         <div>
           <div className="flex items-center justify-between mb-[12px]">
-            <Text variant="heading-sm">Taxas? Zero. Todas.</Text>
+            <Text variant="h3">Taxas? Zero. Todas.</Text>
             <Badge variant="warning" size="sm">Só até 30/abr</Badge>
           </div>
           <div className="grid grid-cols-2 gap-[8px]">

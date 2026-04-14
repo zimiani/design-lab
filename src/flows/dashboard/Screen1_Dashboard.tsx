@@ -55,7 +55,7 @@ export default function Screen1_Dashboard({
   return (
     <BaseLayout>
       {/* Custom navbar — full width, breaks out of BaseLayout padding */}
-      <div className="-mx-[var(--token-spacing-6)] px-[var(--token-spacing-6)] flex items-center">
+      <div className="-mx-[var(--token-spacing-24)] px-[var(--token-spacing-24)] flex items-center">
         <Avatar
           size="md"
           icon={<RiUser3Line size={20} />}

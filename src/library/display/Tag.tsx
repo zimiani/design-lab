@@ -18,8 +18,8 @@ export default function Tag({
     <span
       data-component="Tag"
       className={`
-        inline-flex items-center gap-[var(--token-spacing-1)]
-        px-[var(--token-spacing-3)] py-[var(--token-spacing-1)]
+        inline-flex items-center gap-[var(--token-spacing-4)]
+        px-[var(--token-spacing-12)] py-[var(--token-spacing-4)]
         bg-surface-secondary rounded-[var(--token-radius-full)]
         text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]
         text-text-primary

@@ -29,7 +29,7 @@ function DelayNode({ data, selected }: NodeProps) {
       <Handle type="source" position={Position.Left} id="left-source" className="!bg-[#FB923C] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302518]" />
       <Handle type="target" position={Position.Right} id="right-target" className="!bg-[#FB923C] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302518]" />
       <Handle type="source" position={Position.Right} id="right-source" className="!bg-[#FB923C] !w-[8px] !h-[8px] !border-[1.5px] !border-[#302518]" />
-      <div className="flex items-center gap-[var(--token-spacing-2)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)]">
+      <div className="flex items-center gap-[var(--token-spacing-8)] px-[var(--token-spacing-12)] py-[var(--token-spacing-8)]">
         <RiTimerLine size={14} className="text-[#FB923C] shrink-0" />
         <div className="flex-1 min-w-0">
           <span className="text-[length:var(--token-font-size-body-sm)] font-medium text-[#e0e0e0] truncate block">

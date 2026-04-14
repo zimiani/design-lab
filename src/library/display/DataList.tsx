@@ -34,16 +34,16 @@ export interface DataListProps {
 
 function BreakdownTimeline({ items }: { items: DataListBreakdownItem[] }) {
   return (
-    <div className="flex flex-col mt-[var(--token-spacing-3)]">
+    <div className="flex flex-col mt-[var(--token-spacing-12)]">
       {items.map((item, idx) => (
-        <div key={idx} className="flex gap-[var(--token-spacing-3)]">
+        <div key={idx} className="flex gap-[var(--token-spacing-12)]">
           <div className="flex flex-col items-center w-[12px] shrink-0">
             <div className="w-[6px] h-[6px] rounded-full bg-[var(--token-neutral-300)] mt-[7px] shrink-0" />
             {idx < items.length - 1 && (
               <div className="w-[1px] flex-1 bg-[var(--token-neutral-200)] my-[2px]" />
             )}
           </div>
-          <div className="flex items-center justify-between flex-1 pb-[var(--token-spacing-2)] min-h-[28px]">
+          <div className="flex items-center justify-between flex-1 pb-[var(--token-spacing-8)] min-h-[28px]">
             <span className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-content-tertiary">
               {item.label}
             </span>
@@ -78,8 +78,8 @@ function HorizontalRow({ item, isLast }: { item: DataListItem; isLast: boolean }
         isLast && 'border-b-0',
       )}
     >
-      <div className="flex items-center justify-between py-[var(--token-spacing-3)]">
-        <div className="flex items-center gap-[var(--token-spacing-1)]">
+      <div className="flex items-center justify-between py-[var(--token-spacing-12)]">
+        <div className="flex items-center gap-[var(--token-spacing-4)]">
           <span data-text-id={item.label} className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] text-content-secondary">
             {item.label}
           </span>
@@ -94,7 +94,7 @@ function HorizontalRow({ item, isLast }: { item: DataListItem; isLast: boolean }
           )}
         </div>
 
-        <div className="flex items-center gap-[var(--token-spacing-2)]">
+        <div className="flex items-center gap-[var(--token-spacing-8)]">
           <div className="flex flex-col items-end">
             {typeof item.value === 'string' ? (
               <span data-text-id={item.value} className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] font-medium text-content-primary tabular-nums">
@@ -171,9 +171,9 @@ function VerticalCell({ item }: { item: DataListItem }) {
   }
 
   return (
-    <div className="flex flex-col gap-[var(--token-spacing-2)] flex-1 min-w-0">
+    <div className="flex flex-col gap-[var(--token-spacing-8)] flex-1 min-w-0">
       {/* Label */}
-      <div className="flex items-center gap-[var(--token-spacing-1)] pr-[var(--token-spacing-2)]">
+      <div className="flex items-center gap-[var(--token-spacing-4)] pr-[var(--token-spacing-8)]">
         <span data-text-id={item.label} className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] text-content-secondary">
           {item.label}
         </span>
@@ -202,12 +202,12 @@ function VerticalCell({ item }: { item: DataListItem }) {
 
         {/* Action slot: pill button, icon button, or copy button */}
         {(item.action || item.copyable) && (
-          <div className="shrink-0 ml-[var(--token-spacing-3)]">
+          <div className="shrink-0 ml-[var(--token-spacing-12)]">
             {item.copyable && (
               <button
                 type="button"
                 onClick={handleCopy}
-                className="flex items-center justify-center rounded-full bg-[var(--color-interaction-primary)] px-[var(--token-spacing-3)] py-[var(--token-spacing-2)] cursor-pointer border-none"
+                className="flex items-center justify-center rounded-full bg-[var(--color-interaction-primary)] px-[var(--token-spacing-12)] py-[var(--token-spacing-8)] cursor-pointer border-none"
               >
                 <span className="text-[length:var(--token-font-size-caption)] leading-[1.5] font-semibold text-white whitespace-nowrap">
                   Copiar
@@ -233,7 +233,7 @@ function VerticalRow({ items, isLast }: { items: DataListItem[]; isLast: boolean
       )}
     >
       <div className={cn(
-        'flex py-[var(--token-spacing-3)]',
+        'flex py-[var(--token-spacing-12)]',
         isSideBySide ? 'flex-row items-start' : 'flex-col',
       )}>
         {items.map((item, idx) => (

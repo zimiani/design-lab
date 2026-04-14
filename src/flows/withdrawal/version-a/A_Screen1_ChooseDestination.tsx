@@ -13,7 +13,7 @@ export default function A_Screen1_ChooseDestination({ onNext, onBack }: FlowScre
       <Header title="" onClose={onBack} />
 
       <Stack gap="sm">
-        <Text variant="heading-lg">Para onde deseja sacar?</Text>
+        <Text variant="h1">Para onde deseja sacar?</Text>
         <Text variant="body-md" color="content-secondary">
           Escolha o destino da sua transferência
         </Text>

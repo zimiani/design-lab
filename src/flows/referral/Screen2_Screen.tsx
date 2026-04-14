@@ -54,7 +54,7 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
   return (
     <BaseLayout className="!bg-[#FAF7F0] !gap-0">
       {/* ══════ REWARD HERO ══════ */}
-      <div className="-mx-[var(--token-spacing-6)] -mt-[var(--token-spacing-6)] relative overflow-hidden">
+      <div className="-mx-[var(--token-spacing-24)] -mt-[var(--token-spacing-24)] relative overflow-hidden">
         {/* Lime gradient hero */}
         <div className="bg-gradient-to-b from-[#c8f91f] to-[#a8d916] px-[24px] pt-[40px] pb-[32px] text-center relative">
           {/* Decorative circles */}
@@ -113,7 +113,7 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
         <div className="bg-white rounded-[16px] p-[16px] border border-[var(--color-border-default)]">
           <div className="flex items-center justify-between mb-[8px]">
             <Text variant="body-sm" color="content-secondary">Seus ganhos</Text>
-            <Badge variant="lime" size="sm">Meta: US$ 500</Badge>
+            <Badge variant="positive" size="sm">Meta: US$ 500</Badge>
           </div>
           <div className="flex items-baseline gap-[4px] mb-[10px]">
             <span className="text-[28px] font-bold text-[var(--color-content-primary)] leading-none">US$ 30</span>
@@ -138,7 +138,7 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
 
         {/* ── 3 Steps ── */}
         <div>
-          <Text variant="heading-sm" className="mb-[12px]">Como funciona</Text>
+          <Text variant="h3" className="mb-[12px]">Como funciona</Text>
           <div className="flex flex-col gap-[0px]">
             {steps.map((step, i) => (
               <div key={step.num} className="flex gap-[14px]">
@@ -175,7 +175,7 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
 
         {/* ── FAQ Accordion ── */}
         <div>
-          <Text variant="heading-sm" className="mb-[12px]">Perguntas frequentes</Text>
+          <Text variant="h3" className="mb-[12px]">Perguntas frequentes</Text>
           <div className="flex flex-col gap-[8px]">
             {faqs.map((faq, i) => (
               <button

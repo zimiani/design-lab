@@ -83,13 +83,13 @@ export default function Screen9_Statement({ onBack, onElementTap, onNext }: Flow
         <div className="full-bleed mt-4">
           {dateGroups.map(group => (
             <Stack gap="none" key={group.date}>
-              <GroupHeader text={group.date} className="px-[var(--token-spacing-6)]" />
+              <GroupHeader text={group.date} className="px-[var(--token-spacing-24)]" />
               {group.transactions.map(tx => (
                 <ListItem
                   key={tx.id}
                   title={tx.title}
                   subtitle={tx.subtitle}
-                  className="[--token-font-size-body-lg:16px] px-[var(--token-spacing-6)]"
+                  className="[--token-font-size-body-lg:16px] px-[var(--token-spacing-24)]"
                   left={<TxAvatar type={tx.type} asset={tx.asset} />}
                   trailing={null}
                 />

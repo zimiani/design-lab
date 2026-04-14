@@ -98,7 +98,7 @@ export default function Screen4_Amount({ onNext, onBack, onElementTap }: FlowScr
       <BottomSheet open={feeSheetOpen} onClose={() => setFeeSheetOpen(false)}>
         <Stack gap="default">
           <Stack gap="sm">
-            <Text variant="heading-md">Custo de rede</Text>
+            <Text variant="h2">Custo de rede</Text>
             <Text variant="body-sm" color="content-secondary">
               Taxa cobrada pelo protocolo de bridge para processar a transação.
             </Text>

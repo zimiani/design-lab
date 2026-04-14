@@ -13,7 +13,7 @@ export default function Screen2_Review({ onNext, onBack, onElementTap }: FlowScr
     <BaseLayout>
       <Header title="" onBack={onBack} />
 
-      <Text variant="heading-lg">Confirme o resgate</Text>
+      <Text variant="h1">Confirme o resgate</Text>
 
       <Stack gap="none">
         <GroupHeader text="Detalhes do resgate" />

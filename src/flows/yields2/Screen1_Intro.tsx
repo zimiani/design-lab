@@ -14,7 +14,7 @@ export default function Screen1_Intro({ onNext, onBack }: FlowScreenProps) {
       imageSrc="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80"
       imageAlt="Shield protecting savings"
       onClose={onBack}
-      imageOverlay={<Badge variant="lime" size="md">~4,16% a.a.</Badge>}
+      imageOverlay={<Badge variant="positive" size="md">~4,16% a.a.</Badge>}
     >
       <Stack gap="sm">
         <Text variant="display">Renda protegida</Text>

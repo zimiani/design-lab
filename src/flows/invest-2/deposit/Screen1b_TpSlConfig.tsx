@@ -50,7 +50,7 @@ export default function Screen1b_TpSlConfig({ onNext, onBack, onElementTap }: Fl
       <Stack gap="default">
         {/* Current price display */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-[var(--token-spacing-2)]">
+          <div className="flex items-center gap-[var(--token-spacing-8)]">
             <img
               src={asset.icon}
               alt={asset.name}
@@ -93,7 +93,7 @@ export default function Screen1b_TpSlConfig({ onNext, onBack, onElementTap }: Fl
         </div>
 
         {/* Take Profit toggle row */}
-        <div className="flex items-center justify-between py-[var(--token-spacing-2)]">
+        <div className="flex items-center justify-between py-[var(--token-spacing-8)]">
           <div className="flex flex-col gap-[2px] flex-1 min-w-0">
             <Text variant="body-md" className="font-medium text-content-primary">
               Take Profit
@@ -114,7 +114,7 @@ export default function Screen1b_TpSlConfig({ onNext, onBack, onElementTap }: Fl
         </div>
 
         {/* Stop Loss toggle row */}
-        <div className="flex items-center justify-between py-[var(--token-spacing-2)]">
+        <div className="flex items-center justify-between py-[var(--token-spacing-8)]">
           <div className="flex flex-col gap-[2px] flex-1 min-w-0">
             <Text variant="body-md" className="font-medium text-content-primary">
               Stop Loss

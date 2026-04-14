@@ -11,8 +11,8 @@ export interface CardProps {
 }
 
 const variantStyles = {
-  elevated: 'bg-surface-elevated shadow-md border-transparent',
-  flat: 'bg-surface-secondary border-transparent',
+  elevated: 'bg-surface-level-1 border-transparent',
+  flat: 'bg-surface-level-0 border-transparent',
 } as const
 
 export default function Card({
@@ -26,7 +26,7 @@ export default function Card({
     <div
       data-component="Card"
       className={`
-        rounded-[var(--token-radius-lg)] p-[var(--token-spacing-md)]
+        rounded-[var(--token-radius-lg)] p-[var(--token-gap-lg)]
         ${variantStyles[variant]}
         ${pressable ? 'cursor-pointer' : ''}
         ${className}

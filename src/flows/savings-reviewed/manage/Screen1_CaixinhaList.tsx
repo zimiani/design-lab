@@ -38,7 +38,7 @@ export default function Screen1_CaixinhaList({ onNext, onElementTap }: FlowScree
       imageAlt="Savings illustration"
       imageMaxHeight={200}
       imageOverlay={
-        <Badge variant="lime" size="md">Seguro incluso</Badge>
+        <Badge variant="positive" size="md">Seguro incluso</Badge>
       }
     >
       <Stack gap="default">

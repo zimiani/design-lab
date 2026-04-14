@@ -103,7 +103,7 @@ export default function LibraryPage() {
   const tabActiveIndex = libraryTabs.findIndex((t) => t.key === activeTab)
 
   const tabToggle = (
-    <div className="flex items-center gap-[var(--token-spacing-3)]">
+    <div className="flex items-center gap-[var(--token-spacing-12)]">
       <div className="relative flex w-[340px] p-[2px] bg-shell-bg rounded-[var(--token-radius-sm)]">
         <motion.div
           className="absolute top-[2px] bottom-[2px] bg-shell-hover rounded-[6px]"
@@ -120,9 +120,9 @@ export default function LibraryPage() {
             type="button"
             onClick={() => setActiveTab(tab.key)}
             className={`
-              relative z-10 flex items-center justify-center gap-[var(--token-spacing-1)]
+              relative z-10 flex items-center justify-center gap-[var(--token-spacing-4)]
               flex-1 min-w-[80px]
-              px-[var(--token-spacing-3)] py-[var(--token-spacing-1)]
+              px-[var(--token-spacing-12)] py-[var(--token-spacing-4)]
               text-[length:var(--token-font-size-caption)] font-medium
               transition-colors cursor-pointer rounded-[6px]
               ${activeTab === tab.key ? 'text-shell-text' : 'text-shell-text-tertiary hover:text-shell-text-secondary'}
@@ -150,7 +150,13 @@ export default function LibraryPage() {
       <div className="flex-1 flex overflow-hidden">
         <ComponentSidebar selected={selected} onSelect={handleSelect} activeTab={activeTab} />
         {renderContent()}
-        {selected === 'foundation:Colors' && <TokenEditor />}
+        {['foundation:Colors', 'foundation:Typography', 'foundation:Spacing', 'foundation:Radii'].includes(selected ?? '') && (
+          <TokenEditor scrollToGroup={
+            selected === 'foundation:Typography' ? 'Typography' :
+            (selected === 'foundation:Spacing' || selected === 'foundation:Radii') ? 'Measures' :
+            'Colors'
+          } />
+        )}
       </div>
     </motion.div>
   )

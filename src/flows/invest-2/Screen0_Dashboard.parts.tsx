@@ -43,7 +43,7 @@ export function PortfolioHeader({ totalValue, change24h }: PortfolioHeaderProps)
           {formatted}
         </span>
       </Stack>
-      <Badge variant={isPositive ? 'success' : 'error'} size="sm">
+      <Badge variant={isPositive ? 'positive' : 'critical'} size="sm">
         {formatPercentChange(change24h)} (24h)
       </Badge>
     </Stack>

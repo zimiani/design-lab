@@ -31,7 +31,7 @@ export function BalanceHero({ balance, yieldToday }: BalanceHeroProps) {
     >
       <Stack direction="row" align="between">
         <Text variant="caption" className="text-[#8a8a8a]">Caixinha do Dólar</Text>
-        <Badge variant="lime" size="sm">5% a.a.</Badge>
+        <Badge variant="positive" size="sm">5% a.a.</Badge>
       </Stack>
 
       <Amount value={balance} currency="US$" size="lg" className="text-white" />
@@ -97,7 +97,7 @@ export function NewUserPromo({ onActivate }: NewUserPromoProps) {
       onClick={onActivate}
     >
       <Badge variant="neutral" size="sm">5% a.a.</Badge>
-      <Text variant="heading-md" className="text-[#1b1b1b]">
+      <Text variant="h2" className="text-[#1b1b1b]">
         Comece a render seus dólares
       </Text>
       <Text variant="body-sm" className="text-[#1b1b1b] opacity-80">

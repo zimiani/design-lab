@@ -29,7 +29,7 @@ const EARN_PRODUCTS = [
     icon: <RiShieldCheckLine size={20} className="text-[var(--color-feedback-success)]" />,
     title: 'Renda Protegida',
     subtitle: `~${formatPct(NET_APY)} a.a. · Segurado`,
-    badge: <Badge variant="success" size="sm">Segurado</Badge>,
+    badge: <Badge variant="positive" size="sm">Segurado</Badge>,
     balance: 'US$ 2.150,00',
     label: 'Renda Protegida',
   },

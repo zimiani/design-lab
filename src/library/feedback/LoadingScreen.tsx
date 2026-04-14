@@ -92,7 +92,7 @@ export default function LoadingScreen({
       </div>
 
       {/* Bottom messages + progress */}
-      <div className="shrink-0 px-[var(--token-spacing-6)] pb-[24px] mb-[40px]">
+      <div className="shrink-0 px-[var(--token-spacing-24)] pb-[24px] mb-[40px]">
         {/* Scrolling text ticker — shows previous + current, clipped to 2 rows */}
         <div
           className="overflow-hidden relative"
@@ -126,7 +126,7 @@ export default function LoadingScreen({
                   style={{ height: STEP_HEIGHT }}
                   className="flex items-end"
                 >
-                  <span className="text-[length:var(--token-font-size-heading-lg)] leading-[var(--token-line-height-heading-lg)] font-[var(--token-font-weight-heading-lg)] tracking-[-0.6px] text-[var(--color-content-primary)]">
+                  <span className="text-[length:var(--token-font-size-h1)] leading-[var(--token-line-height-h1)] font-[var(--token-font-weight-h1)] tracking-[-0.6px] text-[var(--color-content-primary)]">
                     {step.title}
                   </span>
                 </motion.div>

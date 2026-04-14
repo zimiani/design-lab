@@ -62,7 +62,7 @@ export default function Screen3_PixPayment({ onNext, onBack }: FlowScreenProps) 
         <Stack direction="row" align="between">
           <Countdown seconds={280} />
           <Button variant="primary" size="sm" onPress={() => setShowQrSheet(true)}>
-            <span className="flex items-center gap-[var(--token-spacing-1)]">
+            <span className="flex items-center gap-[var(--token-spacing-4)]">
               <RiQrCodeLine size={20} />
               Ver QR Code
             </span>

@@ -37,7 +37,7 @@ export default function Subheader({ text, description, actionLabel, onAction, so
   const activeSort = sortOptions?.find(o => o.value === sortValue)
 
   return (
-    <div data-component="Subheader" className={cn('flex items-center justify-between px-[var(--token-spacing-6)] pt-[var(--token-spacing-3)] pb-[var(--token-spacing-4)]', className)}>
+    <div data-component="Subheader" className={cn('flex items-center justify-between px-[var(--token-spacing-24)] pt-[var(--token-spacing-12)] pb-[var(--token-spacing-16)]', className)}>
       <div className="flex flex-col">
         <span
           data-text-id={text}
@@ -55,7 +55,7 @@ export default function Subheader({ text, description, actionLabel, onAction, so
           </span>
         )}
       </div>
-      <div className="flex items-center gap-[var(--token-spacing-2)]">
+      <div className="flex items-center gap-[var(--token-spacing-8)]">
         {right}
         {sortOptions && sortOptions.length > 0 && (
           <div className="relative">
@@ -78,7 +78,7 @@ export default function Subheader({ text, description, actionLabel, onAction, so
                     transition={{ duration: 0.15 }}
                     className="absolute right-0 top-full mt-1.5 z-40 rounded-2xl overflow-hidden min-w-[160px]"
                     style={{
-                      background: 'var(--color-surface-primary)',
+                      background: 'var(--color-surface-level-0)',
                       boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
                       border: '1px solid var(--color-neutral-100)',
                       transformOrigin: 'top right',

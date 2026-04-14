@@ -190,7 +190,7 @@ export default function Screen2_CardInfo({ onBack, onNext, onElementTap }: FlowS
         onBackdropPress={() => setShowFreezeModal(false)}
       >
         <Stack gap="sm">
-          <Text variant="heading-md">
+          <Text variant="h2">
             {frozen ? 'Descongelar cartão?' : 'Congelar cartão?'}
           </Text>
           <Text variant="body-md" color="content-secondary">

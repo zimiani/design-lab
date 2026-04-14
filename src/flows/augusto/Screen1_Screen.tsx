@@ -52,10 +52,10 @@ const MATCHES = [
   },
 ]
 
-const MATCH_BADGE: Record<string, { label: string; variant: 'success' | 'warning' | 'error' }> = {
-  high: { label: 'Ótimo match', variant: 'success' },
+const MATCH_BADGE: Record<string, { label: string; variant: 'positive' | 'warning' | 'critical' }> = {
+  high: { label: 'Ótimo match', variant: 'positive' },
   medium: { label: 'Match médio', variant: 'warning' },
-  low: { label: 'Match baixo', variant: 'error' },
+  low: { label: 'Match baixo', variant: 'critical' },
 }
 
 export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps) {
@@ -65,7 +65,7 @@ export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps
       imageMaxHeight={180}
       imageHeader={
         <Stack gap="sm">
-          <Text variant="heading-lg" color="content-inverse">Namoradas do Augusto</Text>
+          <Text variant="h1" color="content-inverse">Namoradas do Augusto</Text>
           <Text variant="body-md" color="content-inverse">Encontre o match perfeito</Text>
         </Stack>
       }

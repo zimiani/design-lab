@@ -12,7 +12,7 @@ export default function Screen({ onNext, onBack, screenTitle, screenDescription 
   return (
     <FeedbackLayout animation={null} onClose={onBack}>
       <Stack>
-        <Text variant="heading-lg">{screenTitle ?? 'Error'}</Text>
+        <Text variant="h1">{screenTitle ?? 'Error'}</Text>
         <Text variant="body-md" color="content-secondary">
           {screenDescription ?? 'Something went wrong. Please try again.'}
         </Text>

@@ -107,26 +107,26 @@ export default function ComponentDetail({ componentName }: ComponentDetailProps)
     <div className="flex-1 overflow-y-auto bg-shell-bg">
       <div className="py-[32px] px-[120px]">
         {/* ─── Hero: Title + Phone Mockup ─── */}
-        <div className="grid grid-cols-[1fr_1fr] gap-[var(--token-spacing-2)] mb-[var(--token-spacing-8)]" style={{ height: '500px' }}>
+        <div className="grid grid-cols-[1fr_1fr] gap-[var(--token-spacing-8)] mb-[var(--token-spacing-32)]" style={{ height: '500px' }}>
           {/* Left: Title block */}
-          <div className="flex flex-col justify-center rounded-[var(--token-radius-lg)] p-[var(--token-spacing-16)]" style={{ backgroundColor: '#141414' }}>
-            <h1 className="text-[64px] leading-[1.05] font-bold text-shell-text mb-[var(--token-spacing-4)]">
+          <div className="flex flex-col justify-center rounded-[var(--token-radius-lg)] p-[var(--token-spacing-64)]" style={{ backgroundColor: '#141414' }}>
+            <h1 className="text-[64px] leading-[1.05] font-bold text-shell-text mb-[var(--token-spacing-16)]">
               {displayName(meta.name)}
             </h1>
-            <p className="text-[length:var(--token-font-size-body-lg)] leading-relaxed mb-[var(--token-spacing-6)]" style={{ color: '#C8C8C8' }}>
+            <p className="text-[length:var(--token-font-size-body-lg)] leading-relaxed mb-[var(--token-spacing-24)]" style={{ color: '#C8C8C8' }}>
               {meta.description}
             </p>
-            <div className="flex items-center gap-[var(--token-spacing-2)] flex-wrap">
-              <span className="px-[var(--token-spacing-3)] py-[2px] bg-shell-surface border border-shell-border rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-mono text-shell-text-secondary">
+            <div className="flex items-center gap-[var(--token-spacing-8)] flex-wrap">
+              <span className="px-[var(--token-spacing-12)] py-[2px] bg-shell-surface border border-shell-border rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-mono text-shell-text-secondary">
                 {meta.category}
               </span>
               {meta.variants && meta.variants.map((v) => (
-                <span key={v} className="px-[var(--token-spacing-3)] py-[2px] bg-shell-surface border border-shell-border rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-mono text-shell-text-secondary">
+                <span key={v} className="px-[var(--token-spacing-12)] py-[2px] bg-shell-surface border border-shell-border rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-mono text-shell-text-secondary">
                   {v}
                 </span>
               ))}
               {meta.sizes && meta.sizes.map((s) => (
-                <span key={s} className="px-[var(--token-spacing-3)] py-[2px] bg-shell-surface border border-shell-border rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-mono text-shell-text-secondary">
+                <span key={s} className="px-[var(--token-spacing-12)] py-[2px] bg-shell-surface border border-shell-border rounded-[var(--token-radius-full)] text-[length:var(--token-font-size-caption)] font-mono text-shell-text-secondary">
                   {s}
                 </span>
               ))}
@@ -181,12 +181,12 @@ export default function ComponentDetail({ componentName }: ComponentDetailProps)
         </div>
 
         {/* ─── Preview ─── */}
-        <div className="mb-[var(--token-spacing-12)]">
-          <h2 className="text-[length:var(--token-font-size-heading-lg)] font-semibold text-shell-text mb-[var(--token-spacing-4)]">
+        <div className="mb-[var(--token-spacing-48)]">
+          <h2 className="text-[length:var(--token-font-size-h1)] font-semibold text-shell-text mb-[var(--token-spacing-16)]">
             Preview
           </h2>
           <div
-            className="rounded-[var(--token-radius-lg)] p-[var(--token-spacing-10)] relative overflow-hidden min-h-[360px] flex items-center justify-center"
+            className="rounded-[var(--token-radius-lg)] p-[var(--token-spacing-40)] relative overflow-hidden min-h-[360px] flex items-center justify-center"
             style={{
               backgroundColor: '#FFFFFF',
               backgroundImage: 'radial-gradient(circle, #D1D5DB 0.5px, transparent 0.5px)',
@@ -194,7 +194,7 @@ export default function ComponentDetail({ componentName }: ComponentDetailProps)
             }}
           >
             {/* View toggle — top right */}
-            <div className="absolute top-[var(--token-spacing-3)] right-[var(--token-spacing-3)] z-20">
+            <div className="absolute top-[var(--token-spacing-12)] right-[var(--token-spacing-12)] z-20">
               <div className="relative flex p-[2px] bg-neutral-200 rounded-[6px]">
                 {['Mobile', 'Expanded'].map((label, i) => (
                   <button
@@ -202,7 +202,7 @@ export default function ComponentDetail({ componentName }: ComponentDetailProps)
                     type="button"
                     onClick={() => setPhoneView(i === 0)}
                     className={`
-                      relative z-10 px-[var(--token-spacing-3)] py-[var(--token-spacing-1)]
+                      relative z-10 px-[var(--token-spacing-12)] py-[var(--token-spacing-4)]
                       text-[length:var(--token-font-size-caption)] font-medium
                       rounded-[5px] cursor-pointer transition-colors
                       ${(i === 0 ? phoneView : !phoneView) ? 'bg-white text-neutral-800 shadow-sm' : 'text-neutral-500'}
@@ -221,12 +221,12 @@ export default function ComponentDetail({ componentName }: ComponentDetailProps)
 
         {/* ─── Usage and Properties ─── */}
         <div>
-          <h2 className="text-[length:var(--token-font-size-heading-lg)] font-semibold text-shell-text mb-[var(--token-spacing-4)]">
+          <h2 className="text-[length:var(--token-font-size-h1)] font-semibold text-shell-text mb-[var(--token-spacing-16)]">
             Usage and Properties
           </h2>
 
           {/* Code snippet */}
-          <div className="relative bg-[#141414] rounded-[var(--token-radius-md)] p-[var(--token-spacing-6)] mb-[var(--token-spacing-4)]">
+          <div className="relative bg-[#141414] rounded-[var(--token-radius-md)] p-[var(--token-spacing-24)] mb-[var(--token-spacing-16)]">
             <pre className="text-[13px] leading-[1.7] font-mono whitespace-pre-wrap break-all m-0">
               {highlightJsx(codeSnippet).map((t, i) => (
                 t.color
@@ -237,7 +237,7 @@ export default function ComponentDetail({ componentName }: ComponentDetailProps)
             <button
               type="button"
               onClick={() => navigator.clipboard.writeText(codeSnippet)}
-              className="absolute top-[var(--token-spacing-3)] right-[var(--token-spacing-3)] px-[var(--token-spacing-3)] py-[var(--token-spacing-1)] text-[length:var(--token-font-size-caption)] text-[#666] hover:text-[#AAA] bg-[#2A2A2A] rounded-[var(--token-radius-sm)] cursor-pointer transition-colors"
+              className="absolute top-[var(--token-spacing-12)] right-[var(--token-spacing-12)] px-[var(--token-spacing-12)] py-[var(--token-spacing-4)] text-[length:var(--token-font-size-caption)] text-[#666] hover:text-[#AAA] bg-[#2A2A2A] rounded-[var(--token-radius-sm)] cursor-pointer transition-colors"
             >
               Copy
             </button>
@@ -248,26 +248,26 @@ export default function ComponentDetail({ componentName }: ComponentDetailProps)
             <table className="w-full text-left text-[13px]">
               <thead>
                 <tr className="border-b border-[#2A2A2A]">
-                  <th className="px-[var(--token-spacing-5)] py-[var(--token-spacing-3)] font-medium text-shell-text-tertiary">Property</th>
-                  <th className="px-[var(--token-spacing-5)] py-[var(--token-spacing-3)] font-medium text-shell-text-tertiary">Description</th>
-                  <th className="px-[var(--token-spacing-5)] py-[var(--token-spacing-3)] font-medium text-shell-text-tertiary">Type</th>
-                  <th className="px-[var(--token-spacing-5)] py-[var(--token-spacing-3)] font-medium text-shell-text-tertiary">Default</th>
+                  <th className="px-[var(--token-spacing-20)] py-[var(--token-spacing-12)] font-medium text-shell-text-tertiary">Property</th>
+                  <th className="px-[var(--token-spacing-20)] py-[var(--token-spacing-12)] font-medium text-shell-text-tertiary">Description</th>
+                  <th className="px-[var(--token-spacing-20)] py-[var(--token-spacing-12)] font-medium text-shell-text-tertiary">Type</th>
+                  <th className="px-[var(--token-spacing-20)] py-[var(--token-spacing-12)] font-medium text-shell-text-tertiary">Default</th>
                 </tr>
               </thead>
               <tbody>
                 {meta.props.map((p) => (
                   <tr key={p.name} className="border-t border-[#2A2A2A]">
-                    <td className="px-[var(--token-spacing-5)] py-[var(--token-spacing-4)] font-mono font-medium text-shell-text align-top whitespace-nowrap">
+                    <td className="px-[var(--token-spacing-20)] py-[var(--token-spacing-16)] font-mono font-medium text-shell-text align-top whitespace-nowrap">
                       {p.name}
                       {p.required && <span className="text-[#CE93D8] ml-[2px]">*</span>}
                     </td>
-                    <td className="px-[var(--token-spacing-5)] py-[var(--token-spacing-4)] font-mono text-shell-text-secondary align-top max-w-[620px]">
+                    <td className="px-[var(--token-spacing-20)] py-[var(--token-spacing-16)] font-mono text-shell-text-secondary align-top max-w-[620px]">
                       {p.description}
                     </td>
-                    <td className="px-[var(--token-spacing-5)] py-[var(--token-spacing-4)] align-top">
+                    <td className="px-[var(--token-spacing-20)] py-[var(--token-spacing-16)] align-top">
                       <TypeCell type={p.type} />
                     </td>
-                    <td className="px-[var(--token-spacing-5)] py-[var(--token-spacing-4)] align-top">
+                    <td className="px-[var(--token-spacing-20)] py-[var(--token-spacing-16)] align-top">
                       <DefaultCell value={p.defaultValue} />
                     </td>
                   </tr>

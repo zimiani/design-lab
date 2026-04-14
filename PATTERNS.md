@@ -10,6 +10,7 @@
 | # | Rule | Wrong | Right |
 |---|------|-------|-------|
 | 1 | **No arbitrary colors** | `bg-green-500`, `color: "#3B82F6"` | Use CSS variable tokens: `var(--color-feedback-success)`, `text-content-primary` |
+| 1a | **Semantic tokens first** | `var(--token-avocado-600)`, `var(--token-brand-500)` | `var(--color-feedback-success)`, `var(--color-action)` — base tokens (`--token-*`) são internos e **nunca** devem aparecer em componentes ou flows |
 | 2 | **No custom typography** | `text-[18px] font-bold` | `<Text variant="heading-sm">` |
 | 3 | **No new layout containers** | Custom `<div>` wrappers with padding/margin | `<BaseLayout>`, `<Stack>`, `<Section>` |
 | 4 | **No re-creating existing components** | Custom card with icon + text + chevron | `<ListItem>` with `left`, `title`, `subtitle`, `onPress` |

@@ -113,7 +113,7 @@ export function PriceInputSheet({
     <BottomSheet open={open} onClose={onClose} title={title}>
       <Stack gap="default">
         {/* Current price reference */}
-        <div className="flex items-center justify-between py-[var(--token-spacing-2)]">
+        <div className="flex items-center justify-between py-[var(--token-spacing-8)]">
           <Text variant="body-sm" className="text-content-secondary">
             Preço atual
           </Text>
@@ -135,7 +135,7 @@ export function PriceInputSheet({
                 type="button"
                 onClick={() => handlePercentTap(pct)}
                 className={cn(
-                  'flex-1 py-[var(--token-spacing-2)] rounded-[var(--token-radius-md)] text-center cursor-pointer',
+                  'flex-1 py-[var(--token-spacing-8)] rounded-[var(--token-radius-md)] text-center cursor-pointer',
                   'text-[length:var(--token-font-size-body-sm)] font-medium leading-[var(--token-line-height-body-sm)]',
                   isSelected
                     ? 'bg-[var(--color-interactive-default)] text-[var(--color-content-primary)]'
@@ -209,7 +209,7 @@ export function TpSlSummaryCard({ tp, sl, currentPrice }: TpSlSummaryCardProps) 
   if (!tp && !sl) return null
 
   return (
-    <div className="rounded-[var(--token-radius-lg)] bg-[var(--color-surface-shade)] p-[var(--token-spacing-4)]">
+    <div className="rounded-[var(--token-radius-lg)] bg-[var(--color-surface-shade)] p-[var(--token-spacing-16)]">
       <Stack gap="sm">
         <Text variant="caption" className="font-medium text-content-secondary">
           Ordens configuradas
@@ -217,13 +217,13 @@ export function TpSlSummaryCard({ tp, sl, currentPrice }: TpSlSummaryCardProps) 
 
         {tp != null && (
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-[var(--token-spacing-2)]">
+            <div className="flex items-center gap-[var(--token-spacing-8)]">
               <div className="w-[8px] h-[8px] rounded-full bg-[var(--color-feedback-success)]" />
               <Text variant="body-sm" className="text-content-primary">
                 Take Profit
               </Text>
             </div>
-            <div className="flex items-center gap-[var(--token-spacing-2)]">
+            <div className="flex items-center gap-[var(--token-spacing-8)]">
               <Text variant="body-sm" className="font-semibold text-content-primary">
                 {formatBRL(tp)}
               </Text>
@@ -236,13 +236,13 @@ export function TpSlSummaryCard({ tp, sl, currentPrice }: TpSlSummaryCardProps) 
 
         {sl != null && (
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-[var(--token-spacing-2)]">
+            <div className="flex items-center gap-[var(--token-spacing-8)]">
               <div className="w-[8px] h-[8px] rounded-full bg-[var(--color-feedback-critical)]" />
               <Text variant="body-sm" className="text-content-primary">
                 Stop Loss
               </Text>
             </div>
-            <div className="flex items-center gap-[var(--token-spacing-2)]">
+            <div className="flex items-center gap-[var(--token-spacing-8)]">
               <Text variant="body-sm" className="font-semibold text-content-primary">
                 {formatBRL(sl)}
               </Text>

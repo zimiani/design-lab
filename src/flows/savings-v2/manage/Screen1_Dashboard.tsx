@@ -65,7 +65,7 @@ export default function Screen1_Dashboard({ onNext, onElementTap }: FlowScreenPr
           />
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(180,60,100,0.75) 0%, rgba(180,60,100,0.35) 30%, transparent 55%)' }} />
           <Stack gap="none" className="relative z-10">
-            <Text variant="heading-lg" className="!text-white">Caixinhas</Text>
+            <Text variant="h1" className="!text-white">Caixinhas</Text>
             <Text variant="body-md" className="!text-white/95 leading-[140%]">
               Rendimento automático e simples
             </Text>
@@ -75,13 +75,13 @@ export default function Screen1_Dashboard({ onNext, onElementTap }: FlowScreenPr
     >
       <Stack gap="lg">
         {/* Total balance */}
-        <Stack gap="none" className="gap-[var(--token-spacing-2)]">
+        <Stack gap="none" className="gap-[var(--token-spacing-8)]">
           <Text variant="body-sm" color="content-secondary">Total guardado</Text>
           <div className={hasPending ? 'opacity-40' : ''}>
             <BalanceDisplay value={usdBalance} symbol="US$" />
           </div>
           {hasPending && (
-            <div className="flex items-center gap-[var(--token-spacing-2)]">
+            <div className="flex items-center gap-[var(--token-spacing-8)]">
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 0.8, repeat: Infinity, ease: 'linear' }}
@@ -140,7 +140,7 @@ export default function Screen1_Dashboard({ onNext, onElementTap }: FlowScreenPr
         {/* Caixinhas list */}
         <Stack gap="none">
           <GroupHeader text="Suas caixinhas" />
-          <Stack gap="none" className="mt-[var(--token-spacing-2)]">
+          <Stack gap="none" className="mt-[var(--token-spacing-8)]">
             <CaixinhaCard currency="USD" name="Caixinha em Dólar" balance={usdBalance} yieldToday={usdYield} onPress={handleTapDolar} />
             <CaixinhaCard currency="EUR" name="Caixinha em Euro" balance={0} yieldToday={0} disabled />
             <CaixinhaCard currency="BRL" name="Caixinha em reais" balance={0} yieldToday={0} disabled />

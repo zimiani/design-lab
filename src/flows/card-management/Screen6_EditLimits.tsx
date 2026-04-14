@@ -26,7 +26,7 @@ export default function Screen6_EditLimits({ onBack, onNext, onElementTap }: Flo
         </Text>
 
         <Stack gap="sm">
-          <Text variant="heading-sm">Limite de compras</Text>
+          <Text variant="h3">Limite de compras</Text>
           <Slider
             value={dailyLimit}
             minimumValue={500}

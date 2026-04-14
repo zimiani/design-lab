@@ -259,8 +259,8 @@ export default function LineChart({
   useEffect(() => {
     if (!containerRef.current || !data.length) return
 
-    const positive = resolveToken('--color-content-number-positive', '#10B981')
-    const negative = resolveToken('--color-content-number-negative', '#F87171')
+    const positive = resolveToken('--color-feedback-success', '#10B981')
+    const negative = resolveToken('--color-feedback-error-accent', '#F87171')
     // Resolve CSS variables — lightweight-charts can only parse hex/rgb, not var()
     const rawColor = colorOverride ?? resolveToken('--color-feedback-success', '#10B981')
     const lineColor = rawColor.startsWith('var(')

@@ -29,7 +29,7 @@ export default function Toast({
   return (
     <AnimatePresence>
       {visible && (
-        <div data-component="Toast" className="absolute bottom-[max(var(--token-spacing-6),var(--safe-area-bottom,0px))] left-[var(--token-spacing-4)] right-[var(--token-spacing-4)] z-50 flex justify-center pointer-events-none">
+        <div data-component="Toast" className="absolute bottom-[max(var(--token-spacing-24),var(--safe-area-bottom,0px))] left-[var(--token-spacing-16)] right-[var(--token-spacing-16)] z-50 flex justify-center pointer-events-none">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -37,8 +37,8 @@ export default function Toast({
             transition={{ duration: 0.2, ease: 'easeOut' }}
             className={`
               pointer-events-auto
-              flex items-center gap-[var(--token-spacing-3)]
-              px-[var(--token-spacing-4)] py-[var(--token-spacing-3)]
+              flex items-center gap-[var(--token-spacing-12)]
+              px-[var(--token-spacing-16)] py-[var(--token-spacing-12)]
               rounded-[var(--token-radius-sm)] shadow-lg
               w-full max-w-[400px]
               ${bg} ${text} ${className}

@@ -20,7 +20,7 @@ export default function Screen1_Intro({ onNext, onBack, onElementTap }: FlowScre
     <FeatureLayout
       imageSrc={savingsPiggy}
       imageAlt="Piggy bank savings"
-      imageOverlay={<Badge variant="lime" size="md" icon={<RiFlashlightFill size={16} />}>Novidade</Badge>}
+      imageOverlay={<Badge variant="positive" size="md" icon={<RiFlashlightFill size={16} />}>Novidade</Badge>}
       onClose={() => {
         const handled = onElementTap?.('IconButton: Fechar')
         if (!handled) onBack?.()

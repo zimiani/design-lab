@@ -16,7 +16,7 @@ export default function Screen5_DeleteConfirm({ onBack, onElementTap }: FlowScre
 
       <Stack gap="lg">
         <Stack gap="sm">
-          <Text variant="heading-lg">Excluir caixinha?</Text>
+          <Text variant="h1">Excluir caixinha?</Text>
           <Text variant="body-md" color="content-secondary">
             Esta ação não pode ser desfeita. Você poderá criar uma nova caixinha a qualquer momento.
           </Text>

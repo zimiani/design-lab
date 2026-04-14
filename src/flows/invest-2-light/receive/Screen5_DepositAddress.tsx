@@ -134,7 +134,7 @@ export default function Screen5_DepositAddress({ onNext, onBack, onElementTap }:
       {/* QR Code BottomSheet */}
       <BottomSheet open={qrOpen} onClose={() => setQrOpen(false)}>
         <Stack gap="default">
-          <Text variant="heading-md" className="text-center">QR Code</Text>
+          <Text variant="h2" className="text-center">QR Code</Text>
           <Text variant="body-sm" color="content-secondary" className="text-center">
             Escaneie o código abaixo com sua carteira ou corretora para enviar {asset.name} na rede Base.
           </Text>

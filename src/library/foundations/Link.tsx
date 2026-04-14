@@ -40,9 +40,9 @@ export default function Link({
       {leadingIcon}
       <span
         className={cn(
-          'font-semibold border-b text-[var(--color-interactive-primary)] border-[var(--color-interactive-primary)] text-center',
+          'font-semibold border-b text-[var(--color-surface-inverse-level-0)] border-[var(--color-surface-inverse-level-0)] text-center',
           typographyClasses[size],
-          disabled && 'text-[var(--color-interactive-disabled)]',
+          disabled && 'text-[var(--color-action-disabled)]',
         )}
       >
         {linkText}

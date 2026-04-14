@@ -38,7 +38,7 @@ export default function StickyFooter({ children }: StickyFooterProps) {
 
   if (isDesktop) {
     return (
-      <div data-component="StickyFooter" className="shrink-0 px-[var(--token-spacing-6)] py-[var(--token-spacing-4)]">
+      <div data-component="StickyFooter" className="shrink-0 px-[var(--token-spacing-24)] py-[var(--token-spacing-16)]">
         {children}
       </div>
     )
@@ -50,7 +50,7 @@ export default function StickyFooter({ children }: StickyFooterProps) {
   return (
     <div
       data-component="StickyFooter"
-      className="relative shrink-0 px-[var(--token-spacing-6)] pt-0 bg-surface-primary"
+      className="relative shrink-0 px-[var(--token-spacing-24)] pt-0 bg-surface-level-0"
       style={{
         paddingBottom: isCompact ? 8 : 32,
         transition: 'padding-bottom 200ms ease-out',
@@ -59,7 +59,7 @@ export default function StickyFooter({ children }: StickyFooterProps) {
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-0 right-0 -top-[32px] h-[32px]"
-        style={{ background: 'linear-gradient(to top, var(--color-surface-primary) 0%, transparent 100%)' }}
+        style={{ background: 'linear-gradient(to top, var(--color-surface-level-0) 0%, transparent 100%)' }}
       />
       {children}
     </div>

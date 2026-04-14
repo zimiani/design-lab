@@ -27,7 +27,7 @@ export default function Slider({
     <div data-component="Slider" className={`w-full ${className}`}>
       <div className="relative">
         {/* Track background */}
-        <div className="w-full h-2 rounded-lg bg-[var(--color-interactive-secondary)]" />
+        <div className="w-full h-2 rounded-lg bg-[var(--color-surface-items)]" />
         {/* Track fill */}
         <div
           className="absolute top-0 left-0 h-2 rounded-lg transition-all duration-200 ease-out"
