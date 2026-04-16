@@ -213,7 +213,7 @@ export default function ComponentDetail({ componentName }: ComponentDetailProps)
                 ))}
               </div>
             </div>
-            <div className={`text-content-primary w-full ${phoneView ? 'max-w-[393px]' : ''}`}>
+            <div className={`text-content-primary w-full ${phoneView ? 'max-w-[640px]' : ''}`}>
               <ComponentPreview meta={meta} />
             </div>
           </div>

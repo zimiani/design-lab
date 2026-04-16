@@ -11,7 +11,7 @@ import Divider from '../../../library/foundations/Divider'
 import ListItem from '../../../library/display/ListItem'
 import Avatar from '../../../library/display/Avatar'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import { DataListSkeleton, BannerSkeleton } from '../../../library/feedback/Skeleton'
 
 const MOCK_RATE = 5.4583
@@ -125,7 +125,7 @@ export default function CurrencyConversionPreview() {
           subtitle={currentMethod.title}
           inverted
           right={
-            <Button variant="primary" size="sm" onPress={() => setSheetOpen(true)}>
+            <Button variant="primary" inverse size="sm" onPress={() => setSheetOpen(true)}>
               Change
             </Button>
           }
@@ -159,7 +159,7 @@ export default function CurrencyConversionPreview() {
               },
             ]}
           />
-          <Banner variant="success" title="Benefit applied: Convert with zero fees" />
+          <Alert variant="success" title="Benefit applied: Convert with zero fees" />
         </Stack>
       )}
 

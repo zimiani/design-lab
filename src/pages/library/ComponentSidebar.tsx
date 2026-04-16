@@ -110,6 +110,7 @@ export default function ComponentSidebar({ selected, onSelect, activeTab }: Comp
                       w-full text-left px-[var(--token-gap-lg)] py-[var(--token-spacing-8)]
                       text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)]
                       transition-colors duration-[var(--token-transition-fast)] cursor-pointer
+                      flex items-center justify-between gap-2
                       ${
                         selected === c.name
                           ? 'bg-shell-selected text-shell-selected-text font-medium'
@@ -117,7 +118,13 @@ export default function ComponentSidebar({ selected, onSelect, activeTab }: Comp
                       }
                     `}
                   >
-                    {c.name}
+                    <span>{c.name}</span>
+                    {c.reviewed && (
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0 text-[#4ade80]">
+                        <circle cx="7" cy="7" r="6.5" stroke="currentColor" strokeOpacity="0.3" />
+                        <path d="M4 7l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
                   </button>
                 ))}
               </div>

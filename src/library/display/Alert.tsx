@@ -8,7 +8,7 @@ import {
 } from '@remixicon/react'
 import { registerComponent } from '../registry'
 
-export interface BannerProps {
+export interface AlertProps {
   title: string
   description?: string
   variant?: 'neutral' | 'success' | 'warning' | 'critical'
@@ -77,7 +77,7 @@ export default function Banner({
   linkText,
   onLinkPress,
   className = '',
-}: BannerProps) {
+}: AlertProps) {
   const [expanded, setExpanded] = useState(defaultExpanded)
   const [dismissed, setDismissed] = useState(false)
 

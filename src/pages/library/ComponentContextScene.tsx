@@ -90,7 +90,7 @@ function getScene(meta: ComponentMeta): ReactNode {
           <SkeletonLines count={2} />
           <SkeletonCard />
           <div className="mt-auto pt-[16px]">
-            <C variant="accent" fullWidth>Confirmar</C>
+            <C variant="primary" fullWidth>Confirmar</C>
           </div>
         </Scene>
       )
@@ -275,7 +275,7 @@ function getScene(meta: ComponentMeta): ReactNode {
           <SkeletonCard />
         </Scene>
       )
-    case 'Banner':
+    case 'Alert':
       return (
         <Scene>
           <C variant="neutral" title="Novidade" description="Agora você pode enviar dólares para outros países." />

@@ -74,7 +74,7 @@ Use `<Stack>` gap presets instead of manual spacing:
 
 | Component | When to use | Key props |
 |-----------|-------------|-----------|
-| **Button** | Primary and secondary actions. One primary per screen, at bottom. | `variant` (`primary`/`secondary`/`ghost`/`destructive`), `size`, `fullWidth`, `loading`, `disabled`, `onPress`, `subtitle` |
+| **Button** | Primary and secondary actions. One primary per screen, at bottom. | `variant` (`primary`/`secondary`/`minimal`/`destructive`), `size` (`xs`/`sm`/`base`), `inverse`, `fullWidth`, `loading`, `disabled`, `onPress`, `icon`, `trailingIcon` |
 | **IconButton** | Icon-only actions: close, back, toolbar. | `icon`, `variant` (`large`/`base`/`small`/`no_background`), `onPress` |
 | **TextInput** | Text field with label, validation, prefix/suffix. | `label`, `value`, `onChange`, `error`, `helperText`, `prefix`, `suffix` |
 | **CurrencyInput** | Large currency entry with token avatar. For deposit/withdrawal/swap amounts. | `label`, `value`, `onChange`, `tokenIcon`, `error`, `helperText`, `disabled`, `readOnly` |

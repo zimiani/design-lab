@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { RiHomeLine, RiWalletLine, RiArrowLeftRightLine, RiLineChartLine, RiUserLine, RiQrCodeLine, RiBankCardLine, RiSearchLine, RiNotificationLine, RiInboxLine, RiSettings3Line, RiShieldLine, RiStarLine, RiFlashlightLine, RiGlobalLine, RiSendPlaneLine, RiArrowRightUpLine, RiArrowLeftDownLine, RiExternalLinkLine, RiAddLine, RiCloseLine } from '@remixicon/react'
+import { cn } from '@/lib/cn'
+import { RiHomeLine, RiWalletLine, RiArrowLeftRightLine, RiLineChartLine, RiUserLine, RiQrCodeLine, RiBankCardLine, RiSearchLine, RiNotificationLine, RiInboxLine, RiSettings3Line, RiShieldLine, RiStarLine, RiFlashlightLine, RiGlobalLine, RiSendPlaneLine, RiArrowRightUpLine, RiArrowLeftDownLine, RiExternalLinkLine, RiAddLine, RiCloseLine, RiArrowRightLine } from '@remixicon/react'
 import { tokenIcons } from '../../library/display/tokenIcons'
 import type { ComponentMeta } from '../../library/registry'
 
@@ -32,7 +33,7 @@ import Toast from '../../library/feedback/Toast'
 import EmptyState from '../../library/feedback/EmptyState'
 import LoadingSpinner from '../../library/feedback/LoadingSpinner'
 import Skeleton from '../../library/feedback/Skeleton'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import LineChart from '../../library/display/LineChart'
 import Tooltip from '../../library/feedback/Tooltip'
 import Countdown from '../../library/feedback/Countdown'
@@ -63,7 +64,7 @@ interface ComponentPreviewProps {
 
 export default function ComponentPreview({ meta }: ComponentPreviewProps) {
   return (
-    <div className="flex flex-col gap-[var(--token-padding-lg)]">
+    <div className="flex flex-col gap-[var(--token-padding-lg)] w-fit max-w-full mx-auto">
       <PreviewContent name={meta.name} />
     </div>
   )
@@ -137,7 +138,7 @@ function PreviewContent({ name }: { name: string }) {
       return <LoadingSpinnerPreview />
     case 'Skeleton':
       return <SkeletonPreview />
-    case 'Banner':
+    case 'Alert':
       return <BannerPreview />
     case 'Tooltip':
       return <TooltipPreview />
@@ -240,26 +241,99 @@ function LinkPreview() {
 /* ===================== INPUTS ===================== */
 
 function ButtonPreview() {
+  const [dark, setDark] = useState(false)
+
+  const variants = [
+    { key: 'primary',     label: 'Primary' },
+    { key: 'secondary',   label: 'Secondary' },
+    { key: 'minimal',     label: 'Minimal' },
+    { key: 'destructive', label: 'Destructive' },
+  ] as const
+
+  const sectionLabelCls = cn(
+    'text-[16px] font-semibold leading-[24px] tracking-[-0.01em] w-[200px] shrink-0 pt-[16px]',
+    dark ? 'text-[var(--color-content-inverse-tertiary)]' : 'text-[var(--color-content-tertiary)]'
+  )
+
+  const dividerCls = cn(
+    'border-t',
+    dark ? 'border-[var(--color-surface-inverse-level-2)]' : 'border-[var(--color-border)]'
+  )
+
   return (
-    <div className="flex flex-col gap-[var(--token-gap-lg)]">
-      {(['accent', 'primary', 'secondary', 'ghost', 'destructive'] as const).map((v) => (
-        <div key={v}>
-          <SectionLabel>{v}</SectionLabel>
-          <div className="flex flex-wrap gap-[var(--token-spacing-8)] items-center">
-            {(['sm', 'md', 'lg'] as const).map((s) => (
-              <Button key={s} variant={v} size={s}>
-                {v} {s}
-              </Button>
-            ))}
-            <Button variant={v} loading>Loading</Button>
-            <Button variant={v} disabled>Disabled</Button>
+    <div className="flex flex-col gap-6">
+
+      {/* ── Toggle light / dark ── */}
+      <div className="flex items-center gap-3">
+        <span className="text-xs text-[var(--color-shell-text-secondary)]">Background</span>
+        <div className="flex rounded-full bg-[var(--color-shell-surface)] p-[3px] gap-[2px]">
+          {(['Light', 'Dark'] as const).map((label) => {
+            const active = label === 'Light' ? !dark : dark
+            return (
+              <button
+                key={label}
+                onClick={() => setDark(label === 'Dark')}
+                className={cn(
+                  'px-3 py-[3px] rounded-full text-xs font-medium transition-all cursor-pointer',
+                  active
+                    ? label === 'Light'
+                      ? 'bg-white text-[#111]'
+                      : 'bg-[var(--token-brand-black)] text-[var(--color-content-inverse-primary)]'
+                    : 'text-[var(--color-shell-text-tertiary)] hover:text-[var(--color-shell-text-secondary)]'
+                )}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* ── All sections in one container ── */}
+      <div
+        className={cn(
+          'rounded-[var(--token-radius-lg)] p-5 transition-colors flex flex-col gap-0',
+          dark
+            ? 'bg-[var(--color-surface-inverse-level-1)]'
+            : 'bg-[var(--color-surface-level-0)] border border-[var(--color-border)]'
+        )}
+      >
+        {/* Variant rows */}
+        {variants.map(({ key, label }, i) => (
+          <div key={key}>
+            {i > 0 && <div className={cn(dividerCls, 'my-8')} />}
+            <div className="flex items-start gap-8 py-[12px]">
+              <p className={sectionLabelCls}>{label}</p>
+              <div className="flex flex-col gap-[16px] w-[393px] shrink-0">
+                <div className="flex items-center gap-[16px] flex-wrap">
+                  <Button variant={key} size="xs" inverse={dark}>Size xs</Button>
+                  <Button variant={key} size="sm" inverse={dark}>Size sm</Button>
+                  <Button variant={key} size="base" inverse={dark}>Size base</Button>
+                </div>
+                <div className="flex items-center gap-[16px] flex-wrap">
+                  <Button variant={key} size="sm" icon={<RiAddLine size={16} />} inverse={dark}>Com ícone</Button>
+                  <Button variant={key} size="sm" trailingIcon={<RiArrowRightLine size={16} />} inverse={dark}>Trailing</Button>
+                  <Button variant={key} size="sm" loading inverse={dark}>Loading</Button>
+                  <Button variant={key} size="sm" disabled inverse={dark}>Disabled</Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {/* Full width */}
+        <div className={cn(dividerCls, 'mt-8')} />
+        <div className="mt-[12px] py-[12px] flex items-start gap-8">
+          <p className={sectionLabelCls}>Full width</p>
+          <div className="flex flex-col gap-[16px] w-[393px] shrink-0">
+            <Button fullWidth size="base" inverse={dark}>Confirmar</Button>
+            <Button fullWidth size="base" variant="secondary" inverse={dark}>Cancelar</Button>
+            <Button fullWidth size="base" subtitle="R$ 150,00" inverse={dark}>Confirmar transferência</Button>
           </div>
         </div>
-      ))}
-      <div>
-        <SectionLabel>with subtitle</SectionLabel>
-        <Button fullWidth subtitle="R$ 150.00">Confirm transfer</Button>
+
       </div>
+
     </div>
   )
 }
@@ -761,7 +835,7 @@ function DataListPreview() {
             {
               label: 'Limite diário de gastos',
               value: 'US$ 5.000,00',
-              action: <Button variant="primary" size="sm" onPress={() => {}}>Editar</Button>,
+              action: <Button variant="primary" inverse size="sm" onPress={() => {}}>Editar</Button>,
             },
             { label: 'Limite por transação', value: 'US$ 5.000,00' },
             { label: 'Instruções para uso', value: 'Escolha sempre o método crédito e a moeda local ao realizar compras.' },
@@ -921,23 +995,23 @@ function BannerPreview() {
   return (
     <div className="flex flex-col gap-[var(--token-padding-lg)] max-w-[400px]">
       {(['neutral', 'success', 'warning', 'critical'] as const).map((v) => (
-        <Banner key={v} title={`${v.charAt(0).toUpperCase() + v.slice(1)} banner`} description="This is the description text for this banner variant." variant={v} />
+        <Alert key={v} title={`${v.charAt(0).toUpperCase() + v.slice(1)} banner`} description="This is the description text for this banner variant." variant={v} />
       ))}
       <div>
         <SectionLabel>collapsable (collapsed)</SectionLabel>
-        <Banner title="Entenda nossas taxas" description="This content is hidden until expanded." collapsable />
+        <Alert title="Entenda nossas taxas" description="This content is hidden until expanded." collapsable />
       </div>
       <div>
         <SectionLabel>collapsable (expanded)</SectionLabel>
-        <Banner title="Entenda nossas taxas" description="Caso contrário o valor será devolvido automaticamente para a mesma conta." collapsable defaultExpanded />
+        <Alert title="Entenda nossas taxas" description="Caso contrário o valor será devolvido automaticamente para a mesma conta." collapsable defaultExpanded />
       </div>
       <div>
         <SectionLabel>dismissible</SectionLabel>
-        <Banner title="Dismissible banner" description="Close me with the X button." dismissible />
+        <Alert title="Dismissible banner" description="Close me with the X button." dismissible />
       </div>
       <div>
         <SectionLabel>with link</SectionLabel>
-        <Banner title="Learn more" description="Read about our fee structure." linkText="View details" onLinkPress={() => {}} />
+        <Alert title="Learn more" description="Read about our fee structure." linkText="View details" onLinkPress={() => {}} />
       </div>
     </div>
   )
@@ -1247,7 +1321,7 @@ function ModalPreview() {
   return (
     <div className="flex gap-[var(--token-spacing-12)]">
       <Button onPress={() => setRegularOpen(true)}>Center Modal</Button>
-      <Button variant="primary" onPress={() => setBottomOpen(true)}>Bottom Modal</Button>
+      <Button variant="primary" inverse onPress={() => setBottomOpen(true)}>Bottom Modal</Button>
       <Modal
         isVisible={regularOpen}
         variant="regular"
@@ -1266,8 +1340,8 @@ function ModalPreview() {
         onBackdropPress={() => setBottomOpen(false)}
       >
         <div className="flex flex-col gap-3 mt-2">
-          <Button variant="ghost" fullWidth onPress={() => setBottomOpen(false)}>Checking •••• 1234</Button>
-          <Button variant="ghost" fullWidth onPress={() => setBottomOpen(false)}>Savings •••• 5678</Button>
+          <Button variant="minimal" fullWidth onPress={() => setBottomOpen(false)}>Checking •••• 1234</Button>
+          <Button variant="minimal" fullWidth onPress={() => setBottomOpen(false)}>Savings •••• 5678</Button>
         </div>
       </Modal>
     </div>
@@ -1286,7 +1360,7 @@ function FeedbackLayoutPreview() {
               Seu saldo ficará disponível para uso em alguns minutos.
             </Text>
           </Stack>
-          <Banner variant="neutral" title="Você economizou R$20.71" description="Valor aproximado de economia" />
+          <Alert variant="neutral" title="Você economizou R$20.71" description="Valor aproximado de economia" />
           <DataList data={[
             { label: 'Você pagou', value: 'R$ 545,83' },
             { label: 'Você recebeu', value: 'US$ 100' },
@@ -1482,7 +1556,7 @@ function FeatureLayoutPreview() {
         ]}
       />
 
-      <Banner variant="neutral" title="Quick Activation" description="We'll run a secure identity check to unlock your banking details." />
+      <Alert variant="neutral" title="Quick Activation" description="We'll run a secure identity check to unlock your banking details." />
     </>
   )
 

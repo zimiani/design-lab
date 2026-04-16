@@ -9,6 +9,7 @@ export interface ComponentMeta {
   variants?: string[]
   sizes?: string[]
   props: PropMeta[]
+  reviewed?: boolean
 }
 
 export interface PropMeta {
