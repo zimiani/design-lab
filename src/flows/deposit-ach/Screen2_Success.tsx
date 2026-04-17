@@ -3,7 +3,7 @@ import FeedbackLayout from '../../library/layout/FeedbackLayout'
 import StickyFooter from '../../library/layout/StickyFooter'
 import Stack from '../../library/layout/Stack'
 import Button from '../../library/inputs/Button'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import Text from '../../library/foundations/Text'
 
 export default function Screen2_Success({ onBack }: FlowScreenProps) {
@@ -16,7 +16,7 @@ export default function Screen2_Success({ onBack }: FlowScreenProps) {
         </Text>
       </Stack>
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Consulte os prazos com seu banco"
         description="Transferências podem levar até 3 dias úteis a depender do seu banco"

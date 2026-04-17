@@ -2,7 +2,7 @@ import type { FlowScreenProps } from '@/pages/simulator/flowRegistry'
 import BaseLayout from '@/library/layout/BaseLayout'
 import Stack from '@/library/layout/Stack'
 import Header from '@/library/navigation/Header'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import Summary from '@/library/display/Summary'
 import GroupHeader from '@/library/navigation/GroupHeader'
 import DataList from '@/library/display/DataList'
@@ -41,7 +41,7 @@ export default function Screen2_InsuranceAbout({ onBack }: FlowScreenProps) {
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="O que não é coberto?"
           description="Quedas normais de mercado, decisões pessoais de resgate e perdas por acesso indevido à sua conta (como phishing)."

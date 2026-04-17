@@ -6,7 +6,7 @@ import Stack from '../../../library/layout/Stack'
 import Button from '../../../library/inputs/Button'
 import Text from '../../../library/foundations/Text'
 import Badge from '../../../library/display/Badge'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import Summary from '../../../library/display/Summary'
 
 import { TAX_DESCRIPTION } from '../shared/data'
@@ -51,7 +51,7 @@ export default function B_Screen1_Intro({ onNext, onBack }: FlowScreenProps) {
         ]}
       />
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Informações fiscais"
         description={TAX_DESCRIPTION}

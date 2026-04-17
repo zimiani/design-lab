@@ -6,7 +6,7 @@ import Stack from '@/library/layout/Stack'
 import Button from '@/library/inputs/Button'
 import DataList from '@/library/display/DataList'
 import GroupHeader from '@/library/navigation/GroupHeader'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import Text from '@/library/foundations/Text'
 
 export default function Screen2_Review({ onNext, onBack, onElementTap }: FlowScreenProps) {
@@ -42,7 +42,7 @@ export default function Screen2_Review({ onNext, onBack, onElementTap }: FlowScr
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Seu saldo começa a render hoje"
           description="O valor depositado entra em rendimento automático no mesmo dia — sem carência e sem burocracia."

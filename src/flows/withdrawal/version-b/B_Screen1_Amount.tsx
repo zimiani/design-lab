@@ -11,7 +11,7 @@ import Divider from '../../../library/foundations/Divider'
 import ListItem from '../../../library/display/ListItem'
 import Avatar from '../../../library/display/Avatar'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import { DataListSkeleton, BannerSkeleton } from '../../../library/feedback/Skeleton'
 import { MOCK_RATE, USD_ICON, BRL_ICON, DESTINATIONS, rawDigitsFromAmount } from '../shared/data'
 
@@ -93,7 +93,7 @@ export default function B_Screen1_Amount({ onNext, onBack }: FlowScreenProps) {
           subtitle={currentDest.title}
           inverted
           right={
-            <Button variant="primary" size="sm" onPress={() => setSheetOpen(true)}>
+            <Button variant="primary" inverse size="sm" onPress={() => setSheetOpen(true)}>
               Mudar
             </Button>
           }
@@ -119,7 +119,7 @@ export default function B_Screen1_Amount({ onNext, onBack }: FlowScreenProps) {
             ]}
           />
 
-          <Banner variant="neutral" title="Prazo estimado: 1-2 dias úteis" />
+          <Alert variant="neutral" title="Prazo estimado: 1-2 dias úteis" />
         </Stack>
       )}
 

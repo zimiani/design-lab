@@ -9,7 +9,7 @@ import { useScreenData } from '@/lib/ScreenDataContext'
 import FeedbackLayout from '@/library/layout/FeedbackLayout'
 import StickyFooter from '@/library/layout/StickyFooter'
 import Button from '@/library/inputs/Button'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import Toast from '@/library/feedback/Toast'
 import Text from '@/library/foundations/Text'
 import Stack from '@/library/layout/Stack'
@@ -46,7 +46,7 @@ export default function Screen6_Awaiting({ onNext, onBack, onElementTap }: FlowS
         </Stack>
 
         {/* Warning banner */}
-        <Banner
+        <Alert
           variant="warning"
           title="Importante"
           description="Risco de perda permanente ao enviar criptomoedas não suportadas ou usar redes diferentes da selecionada."
@@ -55,7 +55,7 @@ export default function Screen6_Awaiting({ onNext, onBack, onElementTap }: FlowS
 
       <StickyFooter>
         <Button
-          variant="accent"
+          variant="primary"
           size="lg"
           fullWidth
           onPress={() => {

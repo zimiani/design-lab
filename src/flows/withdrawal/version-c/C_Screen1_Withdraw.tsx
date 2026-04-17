@@ -11,7 +11,7 @@ import Divider from '../../../library/foundations/Divider'
 import ListItem from '../../../library/display/ListItem'
 import Avatar from '../../../library/display/Avatar'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import SearchBar from '../../../library/inputs/SearchBar'
 import { DataListSkeleton, BannerSkeleton } from '../../../library/feedback/Skeleton'
 import {
@@ -134,7 +134,7 @@ export default function C_Screen1_Withdraw({ onNext, onBack }: FlowScreenProps) 
             ]}
           />
 
-          <Banner variant="neutral" title="Prazo estimado: 1-2 dias úteis" />
+          <Alert variant="neutral" title="Prazo estimado: 1-2 dias úteis" />
         </Stack>
       )}
 

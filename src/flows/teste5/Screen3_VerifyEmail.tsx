@@ -9,7 +9,7 @@ import StickyFooter from '../../library/layout/StickyFooter'
 import Header from '../../library/navigation/Header'
 import Button from '../../library/inputs/Button'
 import PinInput from '../../library/inputs/PinInput'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import Text from '../../library/foundations/Text'
 import Link from '../../library/foundations/Link'
 import Stack from '../../library/layout/Stack'
@@ -22,7 +22,7 @@ export default function Screen3_VerifyEmail({ onNext, onBack, onElementTap }: Fl
       <Header title="Verificar e-mail" onBack={onBack} />
 
       <Stack gap="default">
-        <Banner
+        <Alert
           variant="neutral"
           title="Verifique sua caixa de entrada"
           description="Enviamos um código de 6 dígitos para maria@email.com"
@@ -44,7 +44,7 @@ export default function Screen3_VerifyEmail({ onNext, onBack, onElementTap }: Fl
 
       <StickyFooter>
         <Button
-          variant="accent"
+          variant="primary"
           fullWidth
           disabled={code.length < 6}
           onPress={() => {

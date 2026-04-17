@@ -4,7 +4,7 @@ import StickyFooter from '../../library/layout/StickyFooter'
 import Stack from '../../library/layout/Stack'
 import Button from '../../library/inputs/Button'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import GroupHeader from '../../library/navigation/GroupHeader'
 import Text from '../../library/foundations/Text'
 
@@ -18,7 +18,7 @@ export default function Screen5_Success({ onBack }: FlowScreenProps) {
         </Text>
       </Stack>
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Você economizou R$20.71"
         description="Valor aproximado de economia em taxas e impostos"

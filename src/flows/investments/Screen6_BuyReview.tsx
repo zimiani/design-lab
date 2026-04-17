@@ -5,7 +5,7 @@ import StickyFooter from '@/library/layout/StickyFooter'
 import Stack from '@/library/layout/Stack'
 import Button from '@/library/inputs/Button'
 import DataList from '@/library/display/DataList'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import GroupHeader from '@/library/navigation/GroupHeader'
 
 export default function Screen6_BuyReview({ onNext, onBack, onElementTap }: FlowScreenProps) {
@@ -26,7 +26,7 @@ export default function Screen6_BuyReview({ onNext, onBack, onElementTap }: Flow
         />
       </Stack>
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Ativos de renda variável podem valorizar ou desvalorizar"
         description="O valor final pode variar conforme a cotação no momento da execução."

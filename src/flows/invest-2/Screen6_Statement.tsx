@@ -155,7 +155,7 @@ export default function Screen6_Statement({ onBack, onNext, onElementTap }: Flow
       </Stack>
 
       <StickyFooter>
-        <Button variant="primary" fullWidth onPress={() => {
+        <Button variant="primary" inverse fullWidth onPress={() => {
           const handled = onElementTap?.('Button: Gerar PDF')
           if (!handled) onNext()
         }}>

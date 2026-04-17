@@ -12,7 +12,7 @@ import Divider from '../../library/foundations/Divider'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import { DataListSkeleton, BannerSkeleton } from '../../library/feedback/Skeleton'
 
 import {
@@ -87,7 +87,7 @@ export default function Screen4_DepositAmount({ onNext, onBack, onElementTap, on
             left={<Avatar src={currentSource.icon} size="sm" />}
             inverted
             right={
-              <Button variant="primary" size="sm" onPress={() => setSheetOpen(true)}>
+              <Button variant="primary" inverse size="sm" onPress={() => setSheetOpen(true)}>
                 Mudar
               </Button>
             }
@@ -116,7 +116,7 @@ export default function Screen4_DepositAmount({ onNext, onBack, onElementTap, on
                 { label: 'Taxa', value: 'Grátis' },
               ]}
             />
-            <Banner variant="success" title="Protegido por seguro — 97,5% via OpenCover" />
+            <Alert variant="success" title="Protegido por seguro — 97,5% via OpenCover" />
           </Stack>
         )}
       </Stack>

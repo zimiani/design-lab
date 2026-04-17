@@ -3,7 +3,7 @@ import FeatureLayout from '@/library/layout/FeatureLayout'
 import Stack from '@/library/layout/Stack'
 import Button from '@/library/inputs/Button'
 import Text from '@/library/foundations/Text'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import Summary from '@/library/display/Summary'
 import GroupHeader from '@/library/navigation/GroupHeader'
 import { RiLineChartLine, RiPercentLine, RiShieldCheckLine } from '@remixicon/react'
@@ -45,7 +45,7 @@ export default function Screen1_Intro({ onNext, onElementTap }: FlowScreenProps)
           />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Investimentos envolvem riscos"
           description="Rentabilidade passada não garante retorno futuro. Avalie seu perfil antes de investir."

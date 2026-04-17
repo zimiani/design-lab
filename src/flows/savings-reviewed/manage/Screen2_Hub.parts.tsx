@@ -5,7 +5,7 @@
 import { RiArrowUpLine, RiArrowDownLine } from '@remixicon/react'
 import Stack from '../../../library/layout/Stack'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import ListItem from '../../../library/display/ListItem'
 import Avatar from '../../../library/display/Avatar'
 import Badge from '../../../library/display/Badge'
@@ -69,12 +69,11 @@ export function DetailsTab({ currency, balance, onViewPolicy }: DetailsTabProps)
         ]} />
       </Stack>
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Investimento assegurado"
         description="Seu investimento é protegido pela OpenCover contra riscos operacionais de smart contracts."
-        linkText="Ver apólice"
-        onLinkPress={onViewPolicy}
+        action={<button type="button" className="text-[length:var(--token-font-size-body-sm)] font-semibold underline text-[var(--color-content-primary)] cursor-pointer hover:opacity-70 w-fit" onClick={onViewPolicy}>Ver apólice</button>}
       />
     </Stack>
   )

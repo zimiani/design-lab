@@ -7,7 +7,7 @@ import Stack from '../../library/layout/Stack'
 import Text from '../../library/foundations/Text'
 import Amount from '../../library/display/Amount'
 import Badge from '../../library/display/Badge'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import DataList from '../../library/display/DataList'
 import ShortcutButton from '../../library/inputs/ShortcutButton'
 
@@ -73,12 +73,11 @@ export default function Screen1_Hub({ onNext, onBack, onElementTap }: FlowScreen
           />
         </Stack>
 
-        <Banner
+        <Alert
           variant="success"
           collapsable
           title="Seus fundos são segurados"
-          linkText="Saiba mais"
-          onLinkPress={() => setCoverageOpen(true)}
+          action={<button type="button" className="text-[length:var(--token-font-size-body-sm)] font-semibold underline text-[var(--color-content-primary)] cursor-pointer hover:opacity-70 w-fit" onClick={() => setCoverageOpen(true)}>Saiba mais</button>}
         />
 
         <DataList

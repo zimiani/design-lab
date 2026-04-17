@@ -46,10 +46,10 @@ const badgeConfig = {
 } as const
 
 const toneStyles: Record<AvatarTone, { bg: string; color: string }> = {
-  neutral:  { bg: 'var(--color-surface-level-1)',          color: 'var(--color-content-secondary)' },
-  success:  { bg: 'var(--color-surface-feedback-success)', color: 'var(--color-feedback-success)' },
-  warning:  { bg: 'var(--color-surface-feedback-warning)', color: 'var(--color-feedback-warning)' },
-  critical: { bg: 'var(--color-surface-feedback-error)',   color: 'var(--color-feedback-error)' },
+  neutral:  { bg: 'var(--token-neutral-400)',        color: 'var(--color-content-primary)' },
+  success:  { bg: 'var(--color-feedback-success)',   color: 'var(--token-avocado-900)' },
+  warning:  { bg: 'var(--color-feedback-warning)',   color: 'var(--token-banana-900)' },
+  critical: { bg: 'var(--color-feedback-error)',     color: 'var(--token-apple-50)' },
 }
 
 export default function Avatar({

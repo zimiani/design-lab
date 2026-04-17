@@ -4,7 +4,7 @@
 import { RiArrowUpLine, RiArrowDownLine, RiLineChartLine } from '@remixicon/react'
 import Stack from '@/library/layout/Stack'
 import DataList from '@/library/display/DataList'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import ListItem from '@/library/display/ListItem'
 import Avatar from '@/library/display/Avatar'
 import Badge from '@/library/display/Badge'
@@ -95,7 +95,7 @@ export function DetailsTab({ asset, position }: DetailsTabProps) {
         />
       </Stack>
 
-      <Banner
+      <Alert
         variant="neutral"
         title=""
         description={
@@ -137,7 +137,7 @@ export function InfoTab({ asset }: InfoTabProps) {
         }
       />
 
-      <Banner
+      <Alert
         variant="neutral"
         title=""
         description={

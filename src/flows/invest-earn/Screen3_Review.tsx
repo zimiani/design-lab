@@ -6,7 +6,7 @@ import Stack from '../../library/layout/Stack'
 import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import GroupHeader from '../../library/navigation/GroupHeader'
 import Amount from '../../library/display/Amount'
 
@@ -45,7 +45,7 @@ export default function Screen3_Review({ onNext, onBack }: FlowScreenProps) {
           />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="You can withdraw anytime"
           description="There is no lock-up period. Your funds and accrued interest are always available."

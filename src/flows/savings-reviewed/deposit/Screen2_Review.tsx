@@ -11,7 +11,7 @@ import Stack from '../../../library/layout/Stack'
 import Button from '../../../library/inputs/Button'
 import DataList from '../../../library/display/DataList'
 import GroupHeader from '../../../library/navigation/GroupHeader'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import { type CaixinhaCurrency, CURRENCIES } from '../shared/data'
 
 export default function Screen2_Review({ onNext, onBack, onElementTap }: FlowScreenProps) {
@@ -60,7 +60,7 @@ export default function Screen2_Review({ onNext, onBack, onElementTap }: FlowScr
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Resgate imediato"
           description="Você pode resgatar a qualquer momento, sem carência e sem penalidade."

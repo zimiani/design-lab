@@ -5,7 +5,7 @@ import BaseLayout from '../../library/layout/BaseLayout'
 import Header from '../../library/navigation/Header'
 import Stack from '../../library/layout/Stack'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import LineChart from '../../library/display/LineChart'
 
 import { BalanceHero, HubActions } from './Screen3_Hub.parts'
@@ -56,7 +56,7 @@ export default function Screen3_Hub({ onNext, onBack, onElementTap }: FlowScreen
               ]}
             />
 
-            <Banner
+            <Alert
               variant="neutral"
               collapsable
               title="Informações fiscais"

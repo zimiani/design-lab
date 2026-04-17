@@ -7,7 +7,7 @@ import Text from '../../library/foundations/Text'
 import Badge from '../../library/display/Badge'
 import Button from '../../library/inputs/Button'
 import Summary from '../../library/display/Summary'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 
 export default function Screen1_PerksHome({ onNext, onBack }: FlowScreenProps) {
   return (
@@ -37,7 +37,7 @@ export default function Screen1_PerksHome({ onNext, onBack }: FlowScreenProps) {
         ]}
       />
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Aproveite todos os benefícios"
         description="Quanto mais você usa o Picnic, mais vantagens desbloqueia."

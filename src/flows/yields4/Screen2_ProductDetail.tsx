@@ -11,7 +11,7 @@ import Badge from '../../library/display/Badge'
 import DataList from '../../library/display/DataList'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import Divider from '../../library/foundations/Divider'
 
 import {
@@ -119,7 +119,7 @@ export default function Screen2_ProductDetail({ onNext, onBack }: FlowScreenProp
           ))}
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Informação importante"
           description="Rendimentos passados não garantem resultados futuros. O seguro cobre eventos específicos de protocolo, não flutuações de mercado."

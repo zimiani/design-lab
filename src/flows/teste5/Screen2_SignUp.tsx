@@ -65,7 +65,7 @@ export default function Screen2_SignUp({ onNext, onBack, onElementTap }: FlowScr
 
       <StickyFooter>
         <Button
-          variant="accent"
+          variant="primary"
           fullWidth
           disabled={!termsAccepted}
           onPress={() => {

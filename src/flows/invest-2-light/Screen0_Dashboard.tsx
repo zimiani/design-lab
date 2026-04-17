@@ -216,7 +216,7 @@ export default function Screen0_Dashboard({ onNext, onElementTap }: FlowScreenPr
 
         <StickyFooter>
           <Button
-            variant="accent"
+            variant="primary"
             size="lg"
             fullWidth
             onPress={() => {
@@ -317,7 +317,7 @@ export default function Screen0_Dashboard({ onNext, onElementTap }: FlowScreenPr
                   Invista em ativos globais. Comece com qualquer quantia.
                 </p>
               </div>
-              <Button variant="primary" size="sm" onPress={handleExplore}>
+              <Button variant="primary" inverse size="sm" onPress={handleExplore}>
                 Explorar ativos
               </Button>
               <SocialProofCounter />
@@ -389,7 +389,7 @@ export default function Screen0_Dashboard({ onNext, onElementTap }: FlowScreenPr
           {/* CTA */}
           <motion.div {...fadeUp(0.35)} className="page-pad">
             <Button
-              variant="primary"
+              variant="primary" inverse
               size="lg"
               fullWidth
               onPress={handleExplore}
@@ -517,7 +517,7 @@ export default function Screen0_Dashboard({ onNext, onElementTap }: FlowScreenPr
 
           {/* Explore */}
           <motion.div {...fadeUp(0.4)} className="page-pad mb-6">
-            <Button variant="primary" size="lg" fullWidth onPress={handleExplore}>Explorar mais ativos</Button>
+            <Button variant="primary" inverse size="lg" fullWidth onPress={handleExplore}>Explorar mais ativos</Button>
           </motion.div>
 
           <div style={{ paddingBottom: 'max(var(--safe-area-bottom), 20px)' }} />
@@ -689,7 +689,7 @@ export default function Screen0_Dashboard({ onNext, onElementTap }: FlowScreenPr
 
           {/* Explore */}
           <motion.div {...fadeUp(0.4)} className="page-pad mb-6">
-            <Button variant="primary" size="lg" fullWidth onPress={handleExplore}>Explorar mais ativos</Button>
+            <Button variant="primary" inverse size="lg" fullWidth onPress={handleExplore}>Explorar mais ativos</Button>
           </motion.div>
 
           <div style={{ paddingBottom: 'max(var(--safe-area-bottom), 20px)' }} />
@@ -901,7 +901,7 @@ export default function Screen0_Dashboard({ onNext, onElementTap }: FlowScreenPr
         {/* Explore More */}
         <motion.div {...fadeUp(0.4)} className="page-pad mb-6">
           <Button
-            variant="primary"
+            variant="primary" inverse
             size="lg"
             fullWidth
             onPress={handleExplore}

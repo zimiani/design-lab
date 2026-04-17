@@ -55,7 +55,7 @@ export default function Screen10_ExportStatement({ onBack, onElementTap }: FlowS
       </Stack>
 
       <StickyFooter>
-        <Button variant="accent" size="lg" fullWidth loading={loading} onPress={handleExport}>
+        <Button variant="primary" size="lg" fullWidth loading={loading} onPress={handleExport}>
           Gerar extrato
         </Button>
       </StickyFooter>

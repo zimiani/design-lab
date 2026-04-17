@@ -3,7 +3,7 @@ import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
 import BaseLayout from '../../library/layout/BaseLayout'
 import Stack from '../../library/layout/Stack'
 import Header from '../../library/navigation/Header'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
 import Text from '../../library/foundations/Text'
@@ -25,7 +25,7 @@ export default function Screen12_ReportLoss({ onBack, onNext, onElementTap }: Fl
         </Text>
       </Stack>
 
-      <Banner
+      <Alert
         variant="warning"
         title="O cartão será desativado imediatamente"
         description="Não será possível reverter esta ação. Um novo cartão será enviado automaticamente."

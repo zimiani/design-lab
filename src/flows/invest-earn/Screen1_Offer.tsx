@@ -8,7 +8,7 @@ import Card from '../../library/display/Card'
 import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
 import Amount from '../../library/display/Amount'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import DataList from '../../library/display/DataList'
 import Badge from '../../library/display/Badge'
 import LineChart from '../../library/display/LineChart'
@@ -63,7 +63,7 @@ export default function Screen1_Offer({ onNext, onBack }: FlowScreenProps) {
           />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Your funds are protected"
           description="Deposits are held by our regulated partner and backed by US Treasury bonds."

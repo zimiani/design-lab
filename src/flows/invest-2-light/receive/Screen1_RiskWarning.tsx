@@ -84,7 +84,7 @@ export default function Screen1_RiskWarning({ onNext, onBack, onElementTap }: Fl
               Voltar
             </Button>
             <Button
-              variant="accent"
+              variant="primary"
               size="lg"
               fullWidth
               disabled={!accepted}

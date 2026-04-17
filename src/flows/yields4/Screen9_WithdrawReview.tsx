@@ -8,7 +8,7 @@ import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
 import Amount from '../../library/display/Amount'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 
 import { MOCK_BALANCE, TAX_DESCRIPTION } from '../yields2/shared/data'
 
@@ -43,7 +43,7 @@ export default function Screen9_WithdrawReview({ onNext, onBack }: FlowScreenPro
             ]}
           />
         </Stack>
-        <Banner variant="neutral" title="Informações fiscais" description={TAX_DESCRIPTION} />
+        <Alert variant="neutral" title="Informações fiscais" description={TAX_DESCRIPTION} />
       </Stack>
       <StickyFooter>
         <Button fullWidth onPress={onNext}>Confirmar resgate</Button>

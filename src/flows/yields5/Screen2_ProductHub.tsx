@@ -10,7 +10,7 @@ import Text from '../../library/foundations/Text'
 import Badge from '../../library/display/Badge'
 import Amount from '../../library/display/Amount'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import LineChart from '../../library/display/LineChart'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
@@ -130,12 +130,11 @@ export default function Screen2_ProductHub({ onNext, onBack, onElementTap }: Flo
         </Stack>
 
         {/* Insurance */}
-        <Banner
+        <Alert
           variant="success"
           title={`Segurado — ${COVERAGE_PERCENT}% cobertura`}
           description={`Via ${INSURANCE_PROVIDER}. Custo de ${formatPct(INSURANCE_COST)} a.a. já incluso.`}
-          linkText="Ver detalhes da cobertura"
-          onLinkPress={() => setCoverageOpen(true)}
+          action={<button type="button" className="text-[length:var(--token-font-size-body-sm)] font-semibold underline text-[var(--color-content-primary)] cursor-pointer hover:opacity-70 w-fit" onClick={() => setCoverageOpen(true)}>Ver detalhes da cobertura</button>}
         />
       </Stack>
 

@@ -2,7 +2,7 @@ import type { FlowScreenProps } from '../../pages/simulator/flowRegistry'
 import BaseLayout from '../../library/layout/BaseLayout'
 import Stack from '../../library/layout/Stack'
 import Header from '../../library/navigation/Header'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import Summary from '../../library/display/Summary'
 import GroupHeader from '../../library/navigation/GroupHeader'
 import DataList from '../../library/display/DataList'
@@ -14,7 +14,7 @@ export default function Screen2_InsurancePolicy({ onBack }: FlowScreenProps) {
       <Header title="Apólice de seguro" onBack={onBack} />
 
       <Stack gap="lg">
-        <Banner
+        <Alert
           variant="neutral"
           title="Proteção para seu rendimento"
           description="Seu saldo é protegido por um seguro automático que cobre riscos operacionais dos smart contracts. Você não precisa contratar nada — a proteção já está inclusa."

@@ -45,7 +45,7 @@ export default function Screen4_SignIn({ onNext, onBack, onElementTap }: FlowScr
       <StickyFooter>
         <Stack gap="sm">
           <Button
-            variant="accent"
+            variant="primary"
             fullWidth
             onPress={() => {
               const handled = onElementTap?.('Button: Entrar')

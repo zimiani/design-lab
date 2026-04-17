@@ -13,7 +13,7 @@ import Button from '@/library/inputs/Button'
 import CurrencyInput from '@/library/inputs/CurrencyInput'
 import Divider from '@/library/foundations/Divider'
 import DataList from '@/library/display/DataList'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import { DataListSkeleton, BannerSkeleton } from '@/library/feedback/Skeleton'
 
 import { USD_ICON, NET_APY, formatUsd, formatPct } from '../yields2/shared/data'
@@ -77,7 +77,7 @@ export default function Screen({ onNext, onBack, onElementTap, onStateChange }: 
                 { label: 'Taxa', value: 'Grátis' },
               ]}
             />
-            <Banner variant="success" title="Protegido por seguro automático" />
+            <Alert variant="success" title="Protegido por seguro automático" />
           </Stack>
         )}
       </Stack>

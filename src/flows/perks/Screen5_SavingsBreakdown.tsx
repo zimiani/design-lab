@@ -99,7 +99,7 @@ export default function Screen5_SavingsBreakdown({ onNext, onBack }: FlowScreenP
       </Stack>
 
       <StickyFooter>
-        <Button variant="ghost" fullWidth onPress={onNext}>
+        <Button variant="minimal" fullWidth onPress={onNext}>
           Entendi
         </Button>
       </StickyFooter>

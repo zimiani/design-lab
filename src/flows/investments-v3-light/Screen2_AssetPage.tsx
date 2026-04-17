@@ -251,7 +251,7 @@ export default function Screen2_AssetPage({ onNext, onBack, onElementTap }: Flow
         </div>
       </div>
 
-      {/* Risk Banner */}
+      {/* Risk Alert */}
       <div className="px-5 pb-4">
         <div className="rounded-xl px-4 py-3 text-[12px] text-gray-400 bg-gray-50 border border-gray-100">
           {isFixed

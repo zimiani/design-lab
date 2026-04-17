@@ -32,7 +32,7 @@ import Toast from '../../library/feedback/Toast'
 import EmptyState from '../../library/feedback/EmptyState'
 import LoadingSpinner from '../../library/feedback/LoadingSpinner'
 import Skeleton from '../../library/feedback/Skeleton'
-import Alert from '../../library/display/Alert'
+import Alert, { AlertLink } from '../../library/display/Alert'
 import LineChart from '../../library/display/LineChart'
 import Tooltip from '../../library/feedback/Tooltip'
 import Countdown from '../../library/feedback/Countdown'
@@ -136,7 +136,7 @@ function PreviewContent({ name }: { name: string }) {
     case 'Skeleton':
       return <SkeletonPreview />
     case 'Alert':
-      return <BannerPreview />
+      return <AlertPreview />
     case 'Tooltip':
       return <TooltipPreview />
     case 'Countdown':
@@ -979,28 +979,43 @@ function SkeletonPreview() {
   )
 }
 
-function BannerPreview() {
+function AlertPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-padding-lg)] max-w-[400px]">
-      {(['neutral', 'success', 'warning', 'critical'] as const).map((v) => (
-        <Alert key={v} title={`${v.charAt(0).toUpperCase() + v.slice(1)} banner`} description="This is the description text for this banner variant." variant={v} />
-      ))}
+    <div className="flex flex-col gap-[var(--token-gap-lg)] max-w-[400px]">
+
       <div>
-        <SectionLabel>collapsable (collapsed)</SectionLabel>
-        <Alert title="Entenda nossas taxas" description="This content is hidden until expanded." collapsable />
+        <SectionLabel>variants</SectionLabel>
+        <div className="flex flex-col gap-[8px]">
+          <Alert variant="neutral"  title="Informação"   description="Seu depósito está sendo processado." />
+          <Alert variant="success"  title="Confirmado"   description="Transferência realizada com sucesso." />
+          <Alert variant="warning"  title="Atenção"      description="Esta operação pode levar até 3 dias úteis." />
+          <Alert variant="critical" title="Erro"         description="Não foi possível concluir a operação." />
+        </div>
       </div>
+
       <div>
-        <SectionLabel>collapsable (expanded)</SectionLabel>
-        <Alert title="Entenda nossas taxas" description="Caso contrário o valor será devolvido automaticamente para a mesma conta." collapsable defaultExpanded />
+        <SectionLabel>with action (AlertLink)</SectionLabel>
+        <div className="flex flex-col gap-[8px]">
+          <Alert variant="neutral"  title="Entenda as taxas"  description="Confira nossa estrutura de tarifas." action={<AlertLink>Ver detalhes</AlertLink>} />
+          <Alert variant="warning"  title="Limite próximo"    description="Você usou 80% do seu limite mensal."  action={<AlertLink>Aumentar limite</AlertLink>} />
+          <Alert variant="success"  title="Depósito recebido" description="R$ 1.200 foram creditados na sua conta." action={<AlertLink>Ver extrato</AlertLink>} />
+          <Alert variant="critical" title="Falha no envio"    description="Verifique seus dados e tente novamente." action={<AlertLink>Tentar novamente</AlertLink>} />
+        </div>
       </div>
+
       <div>
         <SectionLabel>dismissible</SectionLabel>
-        <Alert title="Dismissible banner" description="Close me with the X button." dismissible />
+        <Alert variant="neutral" title="Dica" description="Você pode usar o PIX para depósitos instantâneos." dismissible />
       </div>
+
       <div>
-        <SectionLabel>with link</SectionLabel>
-        <Alert title="Learn more" description="Read about our fee structure." linkText="View details" onLinkPress={() => {}} />
+        <SectionLabel>collapsable</SectionLabel>
+        <div className="flex flex-col gap-[8px]">
+          <Alert title="Entenda nossas taxas" description="Caso contrário o valor será devolvido automaticamente para a mesma conta." collapsable />
+          <Alert title="Entenda nossas taxas" description="Caso contrário o valor será devolvido automaticamente para a mesma conta." collapsable defaultExpanded />
+        </div>
       </div>
+
     </div>
   )
 }

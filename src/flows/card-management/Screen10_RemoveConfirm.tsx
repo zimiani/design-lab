@@ -3,7 +3,7 @@ import BaseLayout from '../../library/layout/BaseLayout'
 import StickyFooter from '../../library/layout/StickyFooter'
 import Stack from '../../library/layout/Stack'
 import Header from '../../library/navigation/Header'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import DataList from '../../library/display/DataList'
 import Text from '../../library/foundations/Text'
 import Button from '../../library/inputs/Button'
@@ -25,7 +25,7 @@ export default function Screen10_RemoveConfirm({ onBack, onNext, onElementTap }:
         ]}
       />
 
-      <Banner
+      <Alert
         variant="warning"
         title="Ação irreversível"
         description="Todas as assinaturas vinculadas a este cartão precisarão ser atualizadas."
@@ -39,7 +39,7 @@ export default function Screen10_RemoveConfirm({ onBack, onNext, onElementTap }:
           }}>
             Remover cartão
           </Button>
-          <Button fullWidth variant="ghost" onPress={onBack}>
+          <Button fullWidth variant="minimal" onPress={onBack}>
             Cancelar
           </Button>
         </Stack>

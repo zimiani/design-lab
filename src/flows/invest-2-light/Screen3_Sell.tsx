@@ -222,7 +222,7 @@ export default function Screen3_Sell({ onNext, onBack, onElementTap, onStateChan
           subtitle={currentPayment.title}
           inverted
           right={
-            <Button variant="primary" size="sm" onPress={() => setPaymentSheetOpen(true)}>
+            <Button variant="primary" inverse size="sm" onPress={() => setPaymentSheetOpen(true)}>
               Mudar
             </Button>
           }

@@ -6,7 +6,7 @@ import Stack from '../../library/layout/Stack'
 import Header from '../../library/navigation/Header'
 import Slider from '../../library/inputs/Slider'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
 
@@ -45,7 +45,7 @@ export default function Screen6_EditLimits({ onBack, onNext, onElementTap }: Flo
         ]}
       />
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Limites compartilhados"
         description="O limite diário vale para a soma de todas as compras em todos os seus cartões."

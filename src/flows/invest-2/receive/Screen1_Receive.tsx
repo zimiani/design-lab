@@ -9,7 +9,7 @@ import Stack from '@/library/layout/Stack'
 import Text from '@/library/foundations/Text'
 import Select from '@/library/inputs/Select'
 import DataList from '@/library/display/DataList'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import GroupHeader from '@/library/navigation/GroupHeader'
 
 const NETWORK_OPTIONS = [
@@ -87,7 +87,7 @@ export default function Screen1_Receive({ onBack }: FlowScreenProps) {
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="warning"
           title="Atenção"
           description="Envie apenas ativos compatíveis com a rede selecionada. Ativos enviados em redes incompatíveis podem ser perdidos."

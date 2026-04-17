@@ -13,7 +13,7 @@ import Divider from '../../library/foundations/Divider'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import { DataListSkeleton, BannerSkeleton } from '../../library/feedback/Skeleton'
 
 const MOCK_RATE = 5.4583
@@ -146,7 +146,7 @@ export default function Screen1_AmountEntry({ onNext, onBack, onElementTap, onSt
           subtitle={currentMethod.title}
           inverted
           right={
-            <Button variant="primary" size="sm" onPress={() => setSheetOpen(true)}>
+            <Button variant="primary" inverse size="sm" onPress={() => setSheetOpen(true)}>
               Mudar
             </Button>
           }
@@ -154,7 +154,7 @@ export default function Screen1_AmountEntry({ onNext, onBack, onElementTap, onSt
         />
       </Stack>
 
-      {/* Transaction details — loading skeleton (mirrors DataList + Banner layout) */}
+      {/* Transaction details — loading skeleton (mirrors DataList + Alert layout) */}
       {calcState === 'loading' && (
         <Stack gap="none">
           <DataListSkeleton rows={5} />
@@ -165,7 +165,7 @@ export default function Screen1_AmountEntry({ onNext, onBack, onElementTap, onSt
       {/* Transaction details — error */}
       {calcState === 'error' && (
         <Stack gap="none">
-          <Banner
+          <Alert
             variant="critical"
             title="Valor mínimo de depósito é US$ 5,00"
           />
@@ -203,7 +203,7 @@ export default function Screen1_AmountEntry({ onNext, onBack, onElementTap, onSt
             ]}
           />
 
-          <Banner
+          <Alert
             variant="success"
             title="Benefício aplicado: Converta sem taxas"
           />

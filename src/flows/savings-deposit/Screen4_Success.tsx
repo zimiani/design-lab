@@ -4,7 +4,7 @@ import StickyFooter from '../../library/layout/StickyFooter'
 import Stack from '../../library/layout/Stack'
 import Button from '../../library/inputs/Button'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import GroupHeader from '../../library/navigation/GroupHeader'
 import Text from '../../library/foundations/Text'
 
@@ -35,7 +35,7 @@ export default function Screen4_Success({ onBack, onElementTap }: FlowScreenProp
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Seu saldo está protegido"
           description="Seu rendimento é coberto por um seguro automático contra falhas técnicas — sem custo adicional."

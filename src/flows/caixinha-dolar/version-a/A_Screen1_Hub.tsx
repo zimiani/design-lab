@@ -10,7 +10,7 @@ import CurrencyInput from '../../../library/inputs/CurrencyInput'
 import ListItem from '../../../library/display/ListItem'
 import Avatar from '../../../library/display/Avatar'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import LineChart from '../../../library/display/LineChart'
 import Text from '../../../library/foundations/Text'
 
@@ -61,7 +61,7 @@ export default function A_Screen1_Hub({ onNext, onBack, onElementTap }: FlowScre
             ]}
           />
 
-          <Banner
+          <Alert
             variant="neutral"
             title="Seus fundos são protegidos"
             description="Depósitos são mantidos por nosso parceiro regulado e lastreados em títulos do Tesouro americano."
@@ -79,7 +79,7 @@ export default function A_Screen1_Hub({ onNext, onBack, onElementTap }: FlowScre
               left={<Avatar src={currentSource.icon} size="sm" />}
               inverted
               right={
-                <Button variant="primary" size="sm" onPress={() => setSourceSheetOpen(true)}>
+                <Button variant="primary" inverse size="sm" onPress={() => setSourceSheetOpen(true)}>
                   Mudar
                 </Button>
               }
@@ -145,7 +145,7 @@ export default function A_Screen1_Hub({ onNext, onBack, onElementTap }: FlowScre
         />
 
         {/* Tax info */}
-        <Banner
+        <Alert
           variant="neutral"
           title="Informações fiscais"
           description={TAX_DESCRIPTION}
@@ -154,7 +154,7 @@ export default function A_Screen1_Hub({ onNext, onBack, onElementTap }: FlowScre
         />
 
         {/* Trust signal */}
-        <Banner
+        <Alert
           variant="neutral"
           title="Seus fundos são protegidos"
           description="Depósitos lastreados em títulos do Tesouro americano."
@@ -172,7 +172,7 @@ export default function A_Screen1_Hub({ onNext, onBack, onElementTap }: FlowScre
             left={<Avatar src={currentSource.icon} size="sm" />}
             inverted
             right={
-              <Button variant="primary" size="sm" onPress={() => setSourceSheetOpen(true)}>
+              <Button variant="primary" inverse size="sm" onPress={() => setSourceSheetOpen(true)}>
                 Mudar
               </Button>
             }
@@ -198,11 +198,11 @@ export default function A_Screen1_Hub({ onNext, onBack, onElementTap }: FlowScre
 
           <Stack direction="row" gap="sm">
             {WITHDRAW_QUICK_PICKS.map((pick) => (
-              <Button key={pick.label} variant="primary" size="sm" onPress={() => {}}>
+              <Button key={pick.label} variant="primary" inverse size="sm" onPress={() => {}}>
                 {pick.label}
               </Button>
             ))}
-            <Button variant="primary" size="sm" onPress={() => {}}>
+            <Button variant="primary" inverse size="sm" onPress={() => {}}>
               Outro
             </Button>
           </Stack>

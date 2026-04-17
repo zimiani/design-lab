@@ -1,6 +1,6 @@
 import Stack from '../../../library/layout/Stack'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import Text from '../../../library/foundations/Text'
 import { RiAddLine, RiSubtractLine } from '@remixicon/react'
 
@@ -76,12 +76,11 @@ export function DetailsTab({ hasBalance = true, yieldAmount, onViewPolicy }: Det
         />
       </Stack>
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Seu dinheiro protegido"
         description="Seu saldo é coberto contra falhas técnicas e fraudes — sem custo adicional."
-        linkText="Ver certificado"
-        onLinkPress={onViewPolicy}
+        action={<button type="button" className="text-[length:var(--token-font-size-body-sm)] font-semibold underline text-[var(--color-content-primary)] cursor-pointer hover:opacity-70 w-fit" onClick={onViewPolicy}>Ver certificado</button>}
       />
     </Stack>
   )

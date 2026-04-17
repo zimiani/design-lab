@@ -18,7 +18,7 @@ import Divider from '@/library/foundations/Divider'
 import Amount from '@/library/display/Amount'
 import Badge from '@/library/display/Badge'
 import DataList from '@/library/display/DataList'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import Card from '@/library/display/Card'
 
 import {
@@ -87,7 +87,7 @@ export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps
             />
           </Stack>
 
-          <Banner
+          <Alert
             variant="success"
             collapsable
             title="Seus fundos são segurados"
@@ -138,7 +138,7 @@ export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps
           />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Informação importante"
           description="Rendimentos passados não garantem resultados futuros. O seguro cobre eventos específicos de protocolo, não flutuações de mercado."

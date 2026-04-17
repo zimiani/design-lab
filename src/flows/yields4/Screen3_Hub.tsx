@@ -8,7 +8,7 @@ import Text from '../../library/foundations/Text'
 import Badge from '../../library/display/Badge'
 import Amount from '../../library/display/Amount'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import LineChart from '../../library/display/LineChart'
 import ShortcutButton from '../../library/inputs/ShortcutButton'
 
@@ -88,7 +88,7 @@ export default function Screen3_Hub({ onNext, onBack, onElementTap }: FlowScreen
           ]}
         />
 
-        <Banner
+        <Alert
           variant="neutral"
           collapsable
           title="Informações fiscais"

@@ -16,7 +16,7 @@ import CurrencyInput from '@/library/inputs/CurrencyInput'
 import Divider from '@/library/foundations/Divider'
 import ListItem from '@/library/display/ListItem'
 import DataList from '@/library/display/DataList'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import { DataListSkeleton } from '@/library/feedback/Skeleton'
 import {
   getAsset, isVolatile, formatUSD, rawDigitsFromAmount,
@@ -173,7 +173,7 @@ export default function Screen3_Trade({ onNext, onBack, onElementTap, onStateCha
           subtitle={orderType.title}
           inverted
           right={
-            <Button variant="primary" size="sm" onPress={() => setOrderSheetOpen(true)}>
+            <Button variant="primary" inverse size="sm" onPress={() => setOrderSheetOpen(true)}>
               Mudar
             </Button>
           }
@@ -181,9 +181,9 @@ export default function Screen3_Trade({ onNext, onBack, onElementTap, onStateCha
         />
       </Stack>
 
-      {/* Banner for programmed orders */}
+      {/* Alert for programmed orders */}
       {isProgrammed && (
-        <Banner
+        <Alert
           variant="neutral"
           title="Na próxima etapa, você define o preço de entrada e pode configurar ordens de saída automáticas."
         />

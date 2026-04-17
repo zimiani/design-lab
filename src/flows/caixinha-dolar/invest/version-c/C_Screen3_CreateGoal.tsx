@@ -8,7 +8,7 @@ import Button from '../../../../library/inputs/Button'
 import CurrencyInput from '../../../../library/inputs/CurrencyInput'
 import RadioGroup from '../../../../library/inputs/RadioGroup'
 import DataList from '../../../../library/display/DataList'
-import Banner from '../../../../library/display/Banner'
+import Alert from '../../../../library/display/Alert'
 import Text from '../../../../library/foundations/Text'
 
 import { USD_ICON, TIME_HORIZONS, formatUsd, projectedYield } from '../../shared/data'
@@ -55,7 +55,7 @@ export default function C_Screen3_CreateGoal({ onNext, onBack }: FlowScreenProps
           />
         )}
 
-        <Banner
+        <Alert
           variant="neutral"
           title="A meta é flexível"
           description="Você pode alterar o valor e o prazo a qualquer momento. A caixinha continua rendendo independente da meta."

@@ -12,7 +12,7 @@ import Stack from '@/library/layout/Stack'
 import Button from '@/library/inputs/Button'
 import DataList from '@/library/display/DataList'
 import GroupHeader from '@/library/navigation/GroupHeader'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 // Text available via library but unused in this screen
 import {
   getAsset, isVolatile, formatUSD, formatQuantity,
@@ -101,7 +101,7 @@ export default function Screen4_Review({ onNext, onBack, onElementTap }: FlowScr
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title={payWith ? `Você receberá em ${payAsset?.name ?? 'criptomoeda'}` : 'Você receberá em Dólar'}
           description={payWith
@@ -165,7 +165,7 @@ export default function Screen4_Review({ onNext, onBack, onElementTap }: FlowScr
             ]} />
           </Stack>
 
-          <Banner
+          <Alert
             variant="neutral"
             title="Ordens automáticas ativas"
             description="A compra será executada quando o preço atingir o valor definido. As ordens de saída serão ativadas automaticamente após a compra."
@@ -199,7 +199,7 @@ export default function Screen4_Review({ onNext, onBack, onElementTap }: FlowScr
             ]} />
           </Stack>
 
-          <Banner
+          <Alert
             variant="neutral"
             title="O valor final pode variar"
             description="A ordem será executada ao melhor preço disponível. Para ativos voláteis, o preço final pode diferir ligeiramente do exibido."

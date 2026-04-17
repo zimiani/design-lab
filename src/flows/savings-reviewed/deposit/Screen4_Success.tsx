@@ -10,7 +10,7 @@ import Stack from '../../../library/layout/Stack'
 import Button from '../../../library/inputs/Button'
 import DataList from '../../../library/display/DataList'
 import GroupHeader from '../../../library/navigation/GroupHeader'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import Text from '../../../library/foundations/Text'
 import { type CaixinhaCurrency, CURRENCIES } from '../shared/data'
 
@@ -55,7 +55,7 @@ export default function Screen4_Success({ onBack, onElementTap }: FlowScreenProp
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Seu saldo está protegido"
           description="Seu rendimento é coberto contra falhas técnicas — sem custo adicional."

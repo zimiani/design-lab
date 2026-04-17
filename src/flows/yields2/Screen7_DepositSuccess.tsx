@@ -38,7 +38,7 @@ export default function Screen7_DepositSuccess({ onBack, onElementTap, onNext }:
           }}>
             Ver rendimentos
           </Button>
-          <Button variant="ghost" fullWidth onPress={onBack}>
+          <Button variant="minimal" fullWidth onPress={onBack}>
             Início
           </Button>
         </Stack>

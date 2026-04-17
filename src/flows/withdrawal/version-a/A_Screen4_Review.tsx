@@ -7,7 +7,7 @@ import Button from '../../../library/inputs/Button'
 import ListItem from '../../../library/display/ListItem'
 import Avatar from '../../../library/display/Avatar'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import GroupHeader from '../../../library/navigation/GroupHeader'
 
 export default function A_Screen4_Review({ onNext, onBack }: FlowScreenProps) {
@@ -34,7 +34,7 @@ export default function A_Screen4_Review({ onNext, onBack }: FlowScreenProps) {
         />
       </Stack>
 
-      <Banner variant="neutral" title="Prazo estimado: 1-2 dias úteis" />
+      <Alert variant="neutral" title="Prazo estimado: 1-2 dias úteis" />
 
       <StickyFooter>
         <Button fullWidth onPress={onNext}>

@@ -5,7 +5,7 @@ import Stack from '../../../library/layout/Stack'
 import Button from '../../../library/inputs/Button'
 import Text from '../../../library/foundations/Text'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import GroupHeader from '../../../library/navigation/GroupHeader'
 
 export default function SharedDepositSuccess({ onBack }: FlowScreenProps) {
@@ -18,7 +18,7 @@ export default function SharedDepositSuccess({ onBack }: FlowScreenProps) {
         </Text>
       </Stack>
 
-      <Banner
+      <Alert
         variant="success"
         title="Rendimento estimado: ~US$ 62,18 por ano"
         description="Baseado no seu saldo atual de US$ 1.243,57"
@@ -41,7 +41,7 @@ export default function SharedDepositSuccess({ onBack }: FlowScreenProps) {
           <Button fullWidth onPress={onBack}>
             Ver meus rendimentos
           </Button>
-          <Button fullWidth variant="ghost" onPress={onBack}>
+          <Button fullWidth variant="minimal" onPress={onBack}>
             Voltar ao início
           </Button>
         </Stack>

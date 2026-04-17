@@ -12,7 +12,7 @@ import Button from '@/library/inputs/Button'
 import CurrencyInput from '@/library/inputs/CurrencyInput'
 import RadioGroup from '@/library/inputs/RadioGroup'
 import DataList from '@/library/display/DataList'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import Text from '@/library/foundations/Text'
 import { RiArrowUpLine, RiArrowDownLine, RiFlagLine, RiEditLine, RiCheckLine } from '@remixicon/react'
 import { BalanceDisplay, DetailsTab, HistoryTab } from '@/flows/savings-manage/version-a/A_Screen1_Hub.parts'
@@ -323,7 +323,7 @@ export default function B_Screen1_Hub({ onNext, onElementTap }: FlowScreenProps)
             />
           )}
 
-          <Banner
+          <Alert
             variant="neutral"
             title="A meta é flexível"
             description="Você pode alterar o valor e o prazo a qualquer momento. A caixinha continua rendendo independente da meta."

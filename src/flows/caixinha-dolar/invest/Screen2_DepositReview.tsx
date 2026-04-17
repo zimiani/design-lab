@@ -7,7 +7,7 @@ import Button from '../../../library/inputs/Button'
 import Text from '../../../library/foundations/Text'
 import Amount from '../../../library/display/Amount'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import GroupHeader from '../../../library/navigation/GroupHeader'
 
 export default function Screen2_DepositReview({ onNext, onBack }: FlowScreenProps) {
@@ -45,7 +45,7 @@ export default function Screen2_DepositReview({ onNext, onBack }: FlowScreenProp
           />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Sem prazo mínimo"
           description="Você pode resgatar a qualquer momento. Seu saldo e rendimentos estão sempre disponíveis."

@@ -11,7 +11,7 @@ import TextInput from '@/library/inputs/TextInput'
 import CurrencyInput from '@/library/inputs/CurrencyInput'
 import Select from '@/library/inputs/Select'
 import DataList from '@/library/display/DataList'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import GroupHeader from '@/library/navigation/GroupHeader'
 import Button from '@/library/inputs/Button'
 
@@ -73,7 +73,7 @@ export default function Screen1_Send({ onBack, onNext, onElementTap }: FlowScree
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Verifique o endereço"
           description="Verifique o endereço antes de enviar. Transações são irreversíveis."

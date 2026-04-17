@@ -12,7 +12,7 @@ import Divider from '../../library/foundations/Divider'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import { DataListSkeleton, BannerSkeleton } from '../../library/feedback/Skeleton'
 
 import { USD_ICON, MOCK_RATE, FUNDING_SOURCES, NET_APY, formatUsd, formatPct } from '../yields2/shared/data'
@@ -69,7 +69,7 @@ export default function Screen3_DepositAmount({ onNext, onBack, onElementTap, on
             subtitle={currentSource.title}
             left={<Avatar src={currentSource.icon} size="sm" />}
             inverted
-            right={<Button variant="primary" size="sm" onPress={() => setSheetOpen(true)}>Mudar</Button>}
+            right={<Button variant="primary" inverse size="sm" onPress={() => setSheetOpen(true)}>Mudar</Button>}
             trailing={null}
           />
         </Stack>
@@ -86,7 +86,7 @@ export default function Screen3_DepositAmount({ onNext, onBack, onElementTap, on
                 { label: 'Taxa', value: 'Grátis' },
               ]}
             />
-            <Banner variant="success" title="Protegido por seguro automático" />
+            <Alert variant="success" title="Protegido por seguro automático" />
           </Stack>
         )}
       </Stack>

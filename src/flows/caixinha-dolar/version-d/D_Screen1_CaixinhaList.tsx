@@ -66,7 +66,7 @@ export default function D_Screen1_CaixinhaList({ onNext, onBack, onElementTap }:
         {/* Create new */}
         <Button
           fullWidth
-          variant={caixinhas.length > 0 ? 'primary' : 'accent'}
+          variant="primary"
           onPress={handleCreate}
         >
           <Stack direction="row" gap="sm" align="center">

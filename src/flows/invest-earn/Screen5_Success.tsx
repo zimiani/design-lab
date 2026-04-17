@@ -5,7 +5,7 @@ import Stack from '../../library/layout/Stack'
 import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import GroupHeader from '../../library/navigation/GroupHeader'
 
 export default function Screen5_Success({ onBack }: FlowScreenProps) {
@@ -18,7 +18,7 @@ export default function Screen5_Success({ onBack }: FlowScreenProps) {
         </Text>
       </Stack>
 
-      <Banner
+      <Alert
         variant="success"
         title="You'll earn ~US$ 25.00 this year"
         description="Based on your current deposit of US$ 500.00"
@@ -41,7 +41,7 @@ export default function Screen5_Success({ onBack }: FlowScreenProps) {
           <Button fullWidth onPress={onBack}>
             View my earnings
           </Button>
-          <Button fullWidth variant="ghost" onPress={onBack}>
+          <Button fullWidth variant="minimal" onPress={onBack}>
             Back to home
           </Button>
         </Stack>

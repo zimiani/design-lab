@@ -4,7 +4,7 @@
 import { RiArrowDownLine, RiArrowUpLine, RiPercentLine } from '@remixicon/react'
 import Stack from '@/library/layout/Stack'
 import DataList from '@/library/display/DataList'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import ListItem from '@/library/display/ListItem'
 import Avatar from '@/library/display/Avatar'
 import Badge from '@/library/display/Badge'
@@ -77,7 +77,7 @@ export function DetailsTabInvested({ asset, position }: DetailsTabInvestedProps)
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Ativos de renda variável podem valorizar ou desvalorizar"
           description="Rentabilidade passada não garante retorno futuro."
@@ -102,7 +102,7 @@ export function DetailsTabInvested({ asset, position }: DetailsTabInvestedProps)
         ]} />
       </Stack>
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Investimento protegido"
         description="Seu rendimento é coberto contra falhas técnicas — sem custo adicional."
@@ -130,7 +130,7 @@ export function DetailsTabInfo({ asset }: DetailsTabInfoProps) {
           ]} />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Ativos de renda variável podem valorizar ou desvalorizar"
           description="Rentabilidade passada não garante retorno futuro."
@@ -154,7 +154,7 @@ export function DetailsTabInfo({ asset }: DetailsTabInfoProps) {
         ]} />
       </Stack>
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Seu investimento é protegido por cobertura automática"
         description="Em caso de falha técnica, você é reembolsado integralmente."

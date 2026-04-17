@@ -280,7 +280,7 @@ export default function Screen3_AssetHub({ onNext, onBack, onElementTap }: FlowS
             <Button fullWidth onPress={handleInvest}>
               {volatile ? 'Comprar' : 'Investir'}
             </Button>
-            <Button fullWidth variant="primary" onPress={handleReceive}>
+            <Button fullWidth variant="primary" inverse onPress={handleReceive}>
               Depositar
             </Button>
           </Stack>

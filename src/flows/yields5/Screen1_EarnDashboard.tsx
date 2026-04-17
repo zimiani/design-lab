@@ -10,7 +10,7 @@ import Badge from '../../library/display/Badge'
 import Card from '../../library/display/Card'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 
 import { NET_APY, GROSS_APY, formatPct } from '../yields2/shared/data'
 
@@ -75,7 +75,7 @@ export default function Screen1_EarnDashboard({ onNext, onBack, onElementTap }: 
           </Stack>
         </Card>
 
-        <Banner
+        <Alert
           variant="success"
           title="Seus fundos são segurados"
           description="97,5% de cobertura via OpenCover / Nexus Mutual no produto Renda Protegida."
@@ -103,7 +103,7 @@ export default function Screen1_EarnDashboard({ onNext, onBack, onElementTap }: 
           ))}
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           collapsable
           title="Como funcionam os rendimentos?"

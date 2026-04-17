@@ -12,7 +12,7 @@ import CurrencyInput from '../../library/inputs/CurrencyInput'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import Text from '../../library/foundations/Text'
 import Divider from '../../library/foundations/Divider'
 import { DataListSkeleton, BannerSkeleton } from '../../library/feedback/Skeleton'
@@ -105,7 +105,7 @@ export default function Screen2_Amount({ onNext, onBack }: FlowScreenProps) {
           left={<Avatar src={currentSource.icon} size="sm" />}
           inverted
           right={
-            <Button variant="primary" size="sm" onPress={() => setSheetOpen(true)}>
+            <Button variant="primary" inverse size="sm" onPress={() => setSheetOpen(true)}>
               Change
             </Button>
           }
@@ -132,7 +132,7 @@ export default function Screen2_Amount({ onNext, onBack }: FlowScreenProps) {
               { label: 'Fee', value: 'Free' },
             ]}
           />
-          <Banner
+          <Alert
             variant="success"
             title={`You'll earn ~US$ ${(usdAmount * 0.05).toFixed(2)} per year`}
           />

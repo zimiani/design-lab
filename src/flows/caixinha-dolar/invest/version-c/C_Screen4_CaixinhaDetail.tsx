@@ -7,7 +7,7 @@ import ShortcutButton from '../../../../library/inputs/ShortcutButton'
 import Amount from '../../../../library/display/Amount'
 import Badge from '../../../../library/display/Badge'
 import DataList from '../../../../library/display/DataList'
-import Banner from '../../../../library/display/Banner'
+import Alert from '../../../../library/display/Alert'
 import ProgressBar from '../../../../library/display/ProgressBar'
 import LineChart from '../../../../library/display/LineChart'
 import Text from '../../../../library/foundations/Text'
@@ -76,7 +76,7 @@ export default function C_Screen4_CaixinhaDetail({ onNext, onBack, onElementTap 
           ]}
         />
 
-        <Banner
+        <Alert
           variant="neutral"
           title="Informações fiscais"
           description={TAX_DESCRIPTION}

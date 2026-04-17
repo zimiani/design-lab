@@ -9,7 +9,7 @@ import BottomSheet from '../../../library/layout/BottomSheet'
 import ShortcutButton from '../../../library/inputs/ShortcutButton'
 import Amount from '../../../library/display/Amount'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import GroupHeader from '../../../library/navigation/GroupHeader'
 import Text from '../../../library/foundations/Text'
 
@@ -101,7 +101,7 @@ export default function C_Screen1_Portfolio({ onNext, onBack, onElementTap }: Fl
             />
           </Stack>
 
-          <Banner
+          <Alert
             variant="neutral"
             title="Informações fiscais"
             description={TAX_DESCRIPTION}

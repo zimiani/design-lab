@@ -9,7 +9,7 @@ import ShortcutButton from '../../../../library/inputs/ShortcutButton'
 import Badge from '../../../../library/display/Badge'
 import Amount from '../../../../library/display/Amount'
 import DataList from '../../../../library/display/DataList'
-import Banner from '../../../../library/display/Banner'
+import Alert from '../../../../library/display/Alert'
 import LineChart from '../../../../library/display/LineChart'
 import Text from '../../../../library/foundations/Text'
 
@@ -84,7 +84,7 @@ export default function B_Screen2_Hub({ onNext, onBack, onElementTap }: FlowScre
               ]}
             />
 
-            <Banner
+            <Alert
               variant="neutral"
               title="Informações fiscais"
               description={TAX_DESCRIPTION}
@@ -92,7 +92,7 @@ export default function B_Screen2_Hub({ onNext, onBack, onElementTap }: FlowScre
               defaultExpanded={false}
             />
 
-            <Banner
+            <Alert
               variant="neutral"
               title="Seus fundos são protegidos"
               description="Depósitos lastreados em títulos do Tesouro americano."

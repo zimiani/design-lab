@@ -14,7 +14,7 @@ import Button from '../../../library/inputs/Button'
 import CurrencyInput from '../../../library/inputs/CurrencyInput'
 import Divider from '../../../library/foundations/Divider'
 import DataList from '../../../library/display/DataList'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import { DataListSkeleton } from '../../../library/feedback/Skeleton'
 import {
   type CaixinhaCurrency,
@@ -164,7 +164,7 @@ export default function Screen1_AmountEntry({ onNext, onBack, onElementTap, onSt
         )}
 
         <motion.div layout transition={{ duration: 0.3, ease: 'easeOut' }}>
-          <Banner
+          <Alert
             variant="neutral"
             title={isEurMode ? 'Conversão automática' : 'Resgate imediato'}
             description={isEurMode

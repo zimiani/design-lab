@@ -12,7 +12,7 @@ import Stack from '../../../library/layout/Stack'
 import Text from '../../../library/foundations/Text'
 import GroupHeader from '../../../library/navigation/GroupHeader'
 import ShortcutButton from '../../../library/inputs/ShortcutButton'
-import Banner from '../../../library/display/Banner'
+import Alert from '../../../library/display/Alert'
 import { motion } from 'framer-motion'
 import { CaixinhaCard } from './Screen1_Dashboard.parts'
 import { BalanceDisplay } from '../../savings-reviewed/manage/Screen2_Hub.parts'
@@ -113,7 +113,7 @@ export default function Screen1_Dashboard({ onNext, onElementTap }: FlowScreenPr
         </Stack>
 
         {!hasBalance && (
-          <Banner
+          <Alert
             variant="neutral"
             title="Seu dinheiro rende em moeda forte"
             description="Planeje sua próxima viagem, monte uma reserva em dólar ou euro e veja seu saldo crescer com rendimento automático."

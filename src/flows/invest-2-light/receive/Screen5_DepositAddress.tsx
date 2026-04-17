@@ -1,6 +1,6 @@
 /**
  * Deposit Address — matches Figma "Crypto Deposit Code" pattern.
- * Banner warning, payment data, address via vertical DataList, QR bottomsheet.
+ * Alert warning, payment data, address via vertical DataList, QR bottomsheet.
  */
 import { useState } from 'react'
 import { RiFileCopyLine, RiCheckLine, RiQrCodeLine } from '@remixicon/react'
@@ -13,7 +13,7 @@ import Stack from '@/library/layout/Stack'
 import Button from '@/library/inputs/Button'
 import DataList from '@/library/display/DataList'
 import GroupHeader from '@/library/navigation/GroupHeader'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import BottomSheet from '@/library/layout/BottomSheet'
 import Text from '@/library/foundations/Text'
 import { NetworkBase } from '@web3icons/react'
@@ -41,7 +41,7 @@ export default function Screen5_DepositAddress({ onNext, onBack, onElementTap }:
       <Header title="Continue em sua carteira ou corretora" onBack={onBack} />
 
       {/* Warning banner — attached to header */}
-      <Banner
+      <Alert
         variant="warning"
         title="Importante"
         description="Risco de perda permanente ao enviar criptomoedas não suportadas ou usar redes diferentes da selecionada."
@@ -99,7 +99,7 @@ export default function Screen5_DepositAddress({ onNext, onBack, onElementTap }:
         />
         {/* QR Code button — inline, no gap to table above */}
         <div className="pt-0">
-          <Button variant="primary" size="sm" onPress={() => setQrOpen(true)}>
+          <Button variant="primary" inverse size="sm" onPress={() => setQrOpen(true)}>
             <span className="inline-flex items-center gap-1.5">
               <RiQrCodeLine size={14} />
               Ver QR Code
@@ -111,7 +111,7 @@ export default function Screen5_DepositAddress({ onNext, onBack, onElementTap }:
       <StickyFooter>
         <Stack gap="sm">
           <Button
-            variant="accent"
+            variant="primary"
             size="lg"
             fullWidth
             onPress={() => {

@@ -3,7 +3,7 @@ import BaseLayout from '@/library/layout/BaseLayout'
 import Stack from '@/library/layout/Stack'
 import Header from '@/library/navigation/Header'
 import Button from '@/library/inputs/Button'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import Summary from '@/library/display/Summary'
 import GroupHeader from '@/library/navigation/GroupHeader'
 import DataList from '@/library/display/DataList'
@@ -15,7 +15,7 @@ export default function Screen2_InsuranceAbout({ onBack }: FlowScreenProps) {
       <Header title="Sobre o seguro" onBack={onBack} />
 
       <Stack gap="lg">
-        <Banner
+        <Alert
           variant="neutral"
           title="Proteção para seu rendimento"
           description="Seu saldo é protegido por um seguro automático que cobre riscos operacionais dos smart contracts. Você não precisa contratar nada — a proteção já está inclusa."
@@ -44,7 +44,7 @@ export default function Screen2_InsuranceAbout({ onBack }: FlowScreenProps) {
           ]} />
         </Stack>
 
-        <Button variant="ghost" fullWidth onPress={() => onBack?.()}>
+        <Button variant="minimal" fullWidth onPress={() => onBack?.()}>
           Consultar a apólice de seguro
         </Button>
       </Stack>

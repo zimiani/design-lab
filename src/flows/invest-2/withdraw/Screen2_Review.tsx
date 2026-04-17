@@ -11,7 +11,7 @@ import Stack from '@/library/layout/Stack'
 import Button from '@/library/inputs/Button'
 import DataList from '@/library/display/DataList'
 import GroupHeader from '@/library/navigation/GroupHeader'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import type { AssetTicker } from '../shared/data'
 import { getAsset, isVolatile } from '../shared/data'
 
@@ -73,7 +73,7 @@ export default function Screen2_Review({ onNext, onBack, onElementTap }: FlowScr
           </Stack>
         )}
 
-        <Banner
+        <Alert
           variant="neutral"
           title={volatile ? 'Preço pode variar' : 'Resgate imediato'}
           description={volatile

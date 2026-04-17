@@ -106,7 +106,7 @@ export default function Subheader({ text, description, actionLabel, onAction, so
           </div>
         )}
         {actionLabel && onAction && (
-          <Button variant="primary" size="sm" onPress={onAction}>
+          <Button variant="primary" inverse size="sm" onPress={onAction}>
             {actionLabel}
           </Button>
         )}

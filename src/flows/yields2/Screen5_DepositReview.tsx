@@ -8,7 +8,7 @@ import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
 import Amount from '../../library/display/Amount'
 import DataList from '../../library/display/DataList'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 
 import { GROSS_APY, INSURANCE_COST, NET_APY, COVERAGE_PERCENT, INSURANCE_PROVIDER, formatPct } from './shared/data'
 
@@ -54,7 +54,7 @@ export default function Screen5_DepositReview({ onNext, onBack, onElementTap }: 
           />
         </Stack>
 
-        <Banner
+        <Alert
           variant="neutral"
           title={`Protegido por seguro — ${COVERAGE_PERCENT}% via ${INSURANCE_PROVIDER}`}
         />

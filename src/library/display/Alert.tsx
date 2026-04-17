@@ -2,71 +2,37 @@ import { useState, useCallback, type ReactNode } from 'react'
 import {
   RiInformationLine,
   RiCheckLine,
+  RiAlertLine,
   RiErrorWarningLine,
   RiCloseLine,
   RiArrowDownSLine,
 } from '@remixicon/react'
+import Avatar, { type AvatarTone } from './Avatar'
 import { registerComponent } from '../registry'
+import { cn } from '../../lib/cn'
+
+export type AlertVariant = 'neutral' | 'success' | 'warning' | 'critical'
 
 export interface AlertProps {
   title: string
   description?: string
-  variant?: 'neutral' | 'success' | 'warning' | 'critical'
+  variant?: AlertVariant
   collapsable?: boolean
   defaultExpanded?: boolean
   dismissible?: boolean
   onDismiss?: () => void
-  linkText?: string
-  onLinkPress?: () => void
+  action?: ReactNode
   className?: string
 }
 
-const variantConfig: Record<
-  string,
-  { icon: ReactNode; bg: string; avatarBg: string; titleColor: string; descColor: string; linkColor: string }
-> = {
-  neutral: {
-    icon: <RiInformationLine size={24} />,
-    bg: 'bg-[var(--color-surface-level-1)]',
-    avatarBg: 'bg-[var(--color-surface-level-1)]',
-    titleColor: 'text-[var(--color-content-primary)]',
-    descColor: 'text-[var(--color-content-secondary)]',
-    linkColor: 'text-[var(--color-content-primary)]',
-  },
-  success: {
-    icon: <RiCheckLine size={24} />,
-    bg: 'bg-[var(--color-surface-level-1)]',
-    avatarBg: 'bg-[var(--color-surface-level-1)]',
-    titleColor: 'text-[var(--color-content-primary)]',
-    descColor: 'text-[var(--color-content-secondary)]',
-    linkColor: 'text-[var(--color-content-primary)]',
-  },
-  warning: {
-    icon: <RiErrorWarningLine size={24} />,
-    bg: 'bg-[var(--color-surface-level-1)]',
-    avatarBg: 'bg-[var(--token-warning-light)]',
-    titleColor: 'text-[var(--color-content-primary)]',
-    descColor: 'text-[var(--color-content-secondary)]',
-    linkColor: 'text-[var(--color-content-primary)]',
-  },
-  critical: {
-    icon: <RiCloseLine size={24} />,
-    bg: 'bg-[var(--color-feedback-error)]',
-    avatarBg: 'bg-[var(--color-surface-level-1)]',
-    titleColor: 'text-white',
-    descColor: 'text-white',
-    linkColor: 'text-white',
-  },
+const variantConfig: Record<AlertVariant, { bg: string; border: string; tone: AvatarTone | undefined; icon: ReactNode }> = {
+  neutral:  { bg: 'bg-[var(--color-surface-level-1)]',          border: 'border border-[var(--token-neutral-300)]',  tone: 'neutral',  icon: <RiInformationLine size={24} /> },
+  success:  { bg: 'bg-[var(--color-surface-feedback-success)]', border: 'border border-[var(--token-avocado-200)]', tone: 'success',  icon: <RiCheckLine size={24} /> },
+  warning:  { bg: 'bg-[var(--color-surface-feedback-warning)]', border: 'border border-[var(--token-banana-200)]',  tone: 'warning',  icon: <RiAlertLine size={24} /> },
+  critical: { bg: 'bg-[var(--color-surface-feedback-error)]',   border: 'border border-[var(--token-apple-100)]',   tone: 'critical', icon: <RiErrorWarningLine size={24} /> },
 }
 
-const iconColors: Record<string, string> = {
-  neutral: 'text-[var(--color-content-primary)]',
-  success: 'text-[var(--color-feedback-success)]',
-  warning: 'text-[var(--token-warning)]',
-  critical: 'text-[var(--color-content-primary)]',
-}
-
-export default function Banner({
+export default function Alert({
   title,
   description,
   variant = 'neutral',
@@ -74,14 +40,13 @@ export default function Banner({
   defaultExpanded = false,
   dismissible = false,
   onDismiss,
-  linkText,
-  onLinkPress,
-  className = '',
+  action,
+  className,
 }: AlertProps) {
   const [expanded, setExpanded] = useState(defaultExpanded)
   const [dismissed, setDismissed] = useState(false)
 
-  const config = variantConfig[variant]
+  const { bg, border, tone, icon } = variantConfig[variant]
 
   const handleDismiss = useCallback(() => {
     setDismissed(true)
@@ -90,120 +55,101 @@ export default function Banner({
 
   if (dismissed) return null
 
-  if (collapsable) {
-    return (
-      <div
-        data-component="Banner"
-        className={`
-          bg-white border border-[var(--color-border)]
-          flex gap-[12px] items-start p-[16px] rounded-[12px] w-full
-          cursor-pointer overflow-hidden
-          ${expanded ? '' : 'h-[56px]'}
-          ${className}
-        `}
-        onClick={() => setExpanded(!expanded)}
-      >
-        <span className={`shrink-0 ${iconColors.neutral}`}>
-          <RiInformationLine size={24} />
-        </span>
-
-        <div className="flex-1 flex flex-col gap-[8px]">
-          <div className="flex items-center justify-between h-[24px]">
-            <span data-text-id={title} className="text-[16px] leading-[24px] font-semibold text-[var(--color-content-primary)] tracking-[-0.16px]">
-              {title}
-            </span>
-            <span
-              className="shrink-0 text-[var(--color-content-primary)] transition-transform duration-200"
-              style={{ transform: expanded ? 'rotate(180deg)' : undefined }}
-            >
-              <RiArrowDownSLine size={24} />
-            </span>
-          </div>
-
-          {expanded && description && (
-            <p data-text-id={description} className="text-[14px] leading-[1.4] font-medium text-[var(--color-content-secondary)]">
-              {description}
-            </p>
-          )}
-
-          {expanded && linkText && onLinkPress && (
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); onLinkPress() }}
-              data-text-id={linkText}
-              className="text-[14px] leading-[22px] font-semibold underline text-[var(--color-content-primary)] hover:opacity-70 cursor-pointer w-fit"
-            >
-              {linkText}
-            </button>
-          )}
-        </div>
-      </div>
-    )
-  }
+  const showContent = !collapsable || expanded
 
   return (
     <div
-      data-component="Banner"
-      className={`
-        flex gap-[12px] items-start p-[16px] rounded-[12px] w-full
-        ${config.bg} ${className}
-      `}
+      data-component="Alert"
+      className={cn(
+        'flex gap-[12px] items-start p-[12px] rounded-[var(--token-radius-lg)] w-full',
+        bg,
+        border,
+        collapsable && 'cursor-pointer',
+        className,
+      )}
+      onClick={collapsable ? () => setExpanded(!expanded) : undefined}
     >
-      <div
-        className={`shrink-0 w-[32px] h-[32px] rounded-full ${config.avatarBg} flex items-center justify-center ${iconColors[variant]}`}
-      >
-        {config.icon}
-      </div>
+      {/* Icon slot — md Avatar (40px) with 24px icon */}
+      <Avatar size="md" tone={tone} icon={icon} />
 
-      <div className="flex-1 flex flex-col gap-[4px]">
-        <span data-text-id={title} className={`text-[16px] leading-[24px] font-semibold tracking-[-0.16px] ${config.titleColor}`}>
-          {title}
-        </span>
-        {description && (
-          <p data-text-id={description} className={`text-[14px] leading-[1.5] ${config.descColor}`}>
-            {description}
-          </p>
-        )}
-        {linkText && onLinkPress && (
-          <button
-            type="button"
-            onClick={onLinkPress}
-            data-text-id={linkText}
-            className={`text-[14px] leading-[22px] font-semibold underline ${config.linkColor} hover:opacity-70 cursor-pointer w-fit`}
+      {/* Content */}
+      <div className="flex-1 flex flex-col gap-[8px] min-w-0 py-[2px]">
+        <div className="flex flex-col gap-[2px]">
+          <span
+            data-text-id={title}
+            className="text-[length:var(--token-font-size-body-md)] leading-[var(--token-line-height-body-md)] font-semibold text-[var(--color-content-primary)] tracking-[var(--token-letter-spacing-body-md)]"
           >
-            {linkText}
-          </button>
+            {title}
+          </span>
+
+          {showContent && description && (
+            <p
+              data-text-id={description}
+              className="text-[length:var(--token-font-size-body-sm)] leading-[var(--token-line-height-body-sm)] text-[var(--color-content-secondary)] m-0"
+            >
+              {description}
+            </p>
+          )}
+        </div>
+
+        {showContent && action && (
+          <div onClick={(e) => e.stopPropagation()}>
+            {action}
+          </div>
         )}
       </div>
 
-      {dismissible && (
+      {/* Right slot */}
+      {collapsable && (
+        <span
+          className="shrink-0 text-[var(--color-content-secondary)] transition-transform duration-[var(--token-transition-normal)] mt-[8px]"
+          style={{ transform: expanded ? 'rotate(180deg)' : undefined }}
+        >
+          <RiArrowDownSLine size={24} />
+        </span>
+      )}
+
+      {!collapsable && dismissible && (
         <button
           type="button"
           onClick={handleDismiss}
-          className="shrink-0 w-[32px] h-[32px] rounded-full bg-interactive-secondary flex items-center justify-center cursor-pointer hover:opacity-80"
+          className="shrink-0 text-[var(--color-content-secondary)] hover:text-[var(--color-content-primary)] transition-colors cursor-pointer mt-[8px]"
         >
-          <RiCloseLine size={24} className="text-[var(--color-content-primary)]" />
+          <RiCloseLine size={24} />
         </button>
       )}
     </div>
   )
 }
 
+/** Inline link style matching Figma Alert prompt slot — XS Bold, brand underline */
+export function AlertLink({ children, onPress }: { children: ReactNode; onPress?: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onPress}
+      className="text-[length:var(--token-font-size-caption)] leading-[var(--token-line-height-caption)] font-semibold text-[var(--color-content-primary)] cursor-pointer w-fit border-b-2 border-[var(--token-brand-500)]"
+    >
+      {children}
+    </button>
+  )
+}
+
 registerComponent({
-  name: 'Banner',
+  name: 'Alert',
   category: 'presentation',
-  description: 'Contextual message banner with variants for neutral, success, warning, and critical states. Supports collapsible content and dismissal.',
-  component: Banner,
+  reviewed: true,
+  description: 'Contextual message with semantic variants. Neutral uses surface-level-1; success/warning/critical use their respective feedback surface tokens. Supports collapsible content, dismissal (mutually exclusive with collapsable), and a custom action slot.',
+  component: Alert,
   variants: ['neutral', 'success', 'warning', 'critical'],
   props: [
-    { name: 'title', type: 'string', required: true, description: 'Banner title' },
-    { name: 'description', type: 'string', required: false, description: 'Description text' },
-    { name: 'variant', type: '"neutral" | "success" | "warning" | "critical"', required: false, defaultValue: 'neutral', description: 'Color variant' },
-    { name: 'collapsable', type: 'boolean', required: false, defaultValue: 'false', description: 'Enable collapse toggle (neutral variant only)' },
-    { name: 'defaultExpanded', type: 'boolean', required: false, defaultValue: 'false', description: 'Initial expanded state when collapsable' },
-    { name: 'dismissible', type: 'boolean', required: false, defaultValue: 'false', description: 'Show close button' },
-    { name: 'onDismiss', type: '() => void', required: false, description: 'Dismiss handler' },
-    { name: 'linkText', type: 'string', required: false, description: 'Link text' },
-    { name: 'onLinkPress', type: '() => void', required: false, description: 'Link click handler' },
+    { name: 'title',           type: 'string',                                          required: true,  description: 'Alert title' },
+    { name: 'description',     type: 'string',                                          required: false, description: 'Body text below the title' },
+    { name: 'variant',         type: '"neutral" | "success" | "warning" | "critical"',  required: false, defaultValue: 'neutral', description: 'Drives icon circle color — background is always surface-level-1' },
+    { name: 'collapsable',     type: 'boolean',                                         required: false, defaultValue: 'false', description: 'Tapping the alert toggles description/action visibility' },
+    { name: 'defaultExpanded', type: 'boolean',                                         required: false, defaultValue: 'false', description: 'Initial expanded state when collapsable' },
+    { name: 'dismissible',     type: 'boolean',                                         required: false, defaultValue: 'false', description: 'Show close button — hides the alert on press' },
+    { name: 'onDismiss',       type: '() => void',                                      required: false, description: 'Called after the alert is dismissed' },
+    { name: 'action',          type: 'ReactNode',                                       required: false, description: 'Custom action slot — use AlertLink for the standard inline link style' },
   ],
 })

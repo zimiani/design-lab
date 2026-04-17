@@ -6,7 +6,7 @@ import Header from '@/library/navigation/Header'
 import StickyFooter from '@/library/layout/StickyFooter'
 import Stack from '@/library/layout/Stack'
 import Button from '@/library/inputs/Button'
-import Banner from '@/library/display/Banner'
+import Alert from '@/library/display/Alert'
 import DataList from '@/library/display/DataList'
 import GroupHeader from '@/library/navigation/GroupHeader'
 import SegmentedControl from '@/library/navigation/SegmentedControl'
@@ -52,7 +52,7 @@ export default function Screen3_AssetDetail_Variable({ onNext, onBack, onElement
 
       <LineChart data={chartData} variant="line" height={200} />
 
-      <Banner
+      <Alert
         variant="neutral"
         title="Ativos de renda variável podem valorizar ou desvalorizar"
         description="Rentabilidade passada não garante retorno futuro."
@@ -71,7 +71,7 @@ export default function Screen3_AssetDetail_Variable({ onNext, onBack, onElement
           }}>
             Comprar
           </Button>
-          <Button fullWidth variant="ghost" onPress={() => {
+          <Button fullWidth variant="minimal" onPress={() => {
             const handled = onElementTap?.('Button: Vender')
             if (!handled) onNext()
           }}>
