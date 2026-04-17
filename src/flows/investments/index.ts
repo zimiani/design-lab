@@ -34,7 +34,7 @@ const screenDefs = [
     id: 'investments-dashboard',
     title: 'Dashboard',
     description: 'Portfolio overview with total balance, line chart, positions list, and Explorar tab for browsing assets.',
-    componentsUsed: ['BaseLayout', 'Header', 'SegmentedControl', 'Text', 'Badge', 'LineChart', 'ShortcutButton', 'GroupHeader', 'ListItem', 'Avatar', 'SearchBar', 'Button', 'StickyFooter', 'Stack'] as const,
+    componentsUsed: ['BaseLayout', 'Header', 'SegmentedControl', 'Text', 'Chip', 'LineChart', 'ShortcutButton', 'GroupHeader', 'ListItem', 'Avatar', 'SearchBar', 'Button', 'StickyFooter', 'Stack'] as const,
     component: Screen2_Dashboard,
     states: [
       { id: 'with-positions', name: 'Com posições', description: 'User has investments', isDefault: true, data: { initialState: 'with-positions' } },
@@ -60,7 +60,7 @@ const screenDefs = [
     id: 'investments-asset-variable',
     title: 'Asset Detail (Variable)',
     description: 'Volatile asset detail page with price chart, time range selector, risk banner, and buy/sell CTAs.',
-    componentsUsed: ['BaseLayout', 'Header', 'Avatar', 'Badge', 'Text', 'SegmentedControl', 'LineChart', 'Banner', 'DataList', 'GroupHeader', 'Button', 'StickyFooter', 'Stack'] as const,
+    componentsUsed: ['BaseLayout', 'Header', 'Avatar', 'Chip', 'Text', 'SegmentedControl', 'LineChart', 'Banner', 'DataList', 'GroupHeader', 'Button', 'StickyFooter', 'Stack'] as const,
     component: Screen3_AssetDetail_Variable,
     states: [
       { id: 'btc', name: 'Bitcoin', description: 'BTC detail', isDefault: true, data: { assetTicker: 'BTC' } },
@@ -77,7 +77,7 @@ const screenDefs = [
     id: 'investments-asset-fixed',
     title: 'Asset Detail (Fixed)',
     description: 'Fixed income detail page with APY display, benefits summary, and invest CTA.',
-    componentsUsed: ['BaseLayout', 'Header', 'Avatar', 'Badge', 'Text', 'Summary', 'DataList', 'GroupHeader', 'Banner', 'Button', 'StickyFooter', 'Stack'] as const,
+    componentsUsed: ['BaseLayout', 'Header', 'Avatar', 'Chip', 'Text', 'Summary', 'DataList', 'GroupHeader', 'Banner', 'Button', 'StickyFooter', 'Stack'] as const,
     component: Screen4_AssetDetail_Fixed,
     states: [
       { id: 'usd', name: 'Renda em Dólar', description: 'USD yield', isDefault: true, data: { assetTicker: 'RENDA-USD' } },

@@ -10,7 +10,7 @@ const screenDefs = [
     title: 'Dashboard',
     description: 'Main home screen showing balance card, quick actions, promo carousel, pending tasks, and transaction history.',
     componentsUsed: [
-      'BaseLayout', 'Stack', 'Text', 'Avatar', 'Badge', 'IconButton',
+      'BaseLayout', 'Stack', 'Text', 'Avatar', 'Chip', 'IconButton',
       'ListItem', 'Card', 'BottomSheet', 'GroupHeader', 'Button', 'ShortcutButton',
     ],
     component: Screen1_Dashboard,

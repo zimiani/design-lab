@@ -2,7 +2,7 @@
  * Dashboard parts — screen-local sub-components for the investments dashboard.
  */
 import Avatar from '@/library/display/Avatar'
-import Badge from '@/library/display/Badge'
+import Badge from '@/library/display/Chip'
 import Text from '@/library/foundations/Text'
 import Stack from '@/library/layout/Stack'
 import { cn } from '@/lib/cn'
@@ -43,7 +43,7 @@ export function PortfolioHeader({ totalValue, change24h }: PortfolioHeaderProps)
           {formatted}
         </span>
       </Stack>
-      <Badge variant={isPositive ? 'positive' : 'critical'} size="sm">
+      <Badge variant={isPositive ? 'positive' : 'critical'}>
         {formatPercentChange(change24h)} (24h)
       </Badge>
     </Stack>
@@ -70,7 +70,7 @@ export function HoldingRow({ asset, position, onPress }: HoldingRowProps) {
         'hover:bg-[var(--token-bg-secondary)] transition-colors rounded-xl',
       )}
     >
-      <Avatar src={asset.icon} size="md" />
+      <Avatar src={asset.icon} />
 
       <div className="flex-1 min-w-0">
         <Text variant="body-md" className="font-semibold truncate">{asset.name}</Text>
@@ -110,14 +110,14 @@ export function FeaturedAssetCard({ asset, onPress }: FeaturedAssetCardProps) {
       )}
     >
       <Stack gap="sm">
-        <Avatar src={asset.icon} size="md" />
+        <Avatar src={asset.icon} />
         <Stack gap="none">
           <Text variant="body-sm" className="font-medium">{asset.name}</Text>
           <Text variant="caption" color="content-secondary">
             {volatile ? formatBRL(asset.price!) : asset.apyDisplay}
           </Text>
         </Stack>
-        <Badge variant={CATEGORY_BADGE_VARIANT[asset.category]} size="sm">
+        <Badge variant={CATEGORY_BADGE_VARIANT[asset.category]}>
           {volatile
             ? formatPercentChange(asset.change24h!)
             : asset.apyDisplay ?? ''

@@ -25,7 +25,7 @@ const mainScreenDefs = [
     id: 'yields2-intro',
     title: 'Feature Intro',
     description: 'FeatureLayout intro with insured yield value prop, ~4.16% APY badge, and benefits summary.',
-    componentsUsed: ['FeatureLayout', 'StickyFooter', 'Stack', 'Button', 'Text', 'Badge', 'Summary'],
+    componentsUsed: ['FeatureLayout', 'StickyFooter', 'Stack', 'Button', 'Text', 'Chip', 'Summary'],
     component: Screen1_Intro,
     interactiveElements: [
       { id: 'btn-activate', component: 'Button', label: 'Ativar' },
@@ -45,7 +45,7 @@ const mainScreenDefs = [
     id: 'yields2-hub',
     title: 'Insured Yield Hub',
     description: 'Balance hero with "Protegido" badge, yield chart, rate breakdown with insurance line items.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ShortcutButton', 'Badge', 'Amount', 'DataList', 'Banner', 'LineChart', 'Text'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ShortcutButton', 'Chip', 'Amount', 'DataList', 'Banner', 'LineChart', 'Text'],
     component: Screen3_Hub,
     states: [
       { id: 'default', name: 'Has balance', isDefault: true, data: {} },
@@ -100,7 +100,7 @@ const depositScreenDefs = [
     id: 'yields2-deposit-success',
     title: 'Deposit Success',
     description: 'FeedbackLayout with "Protegido" badge, coverage summary, and navigation options.',
-    componentsUsed: ['FeedbackLayout', 'Button', 'DataList', 'Badge', 'GroupHeader', 'Text', 'StickyFooter', 'Stack'],
+    componentsUsed: ['FeedbackLayout', 'Button', 'DataList', 'Chip', 'GroupHeader', 'Text', 'StickyFooter', 'Stack'],
     component: Screen7_DepositSuccess,
     interactiveElements: [
       { id: 'btn-view', component: 'Button', label: 'Ver rendimentos' },

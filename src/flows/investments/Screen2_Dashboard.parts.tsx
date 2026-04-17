@@ -1,5 +1,5 @@
 import Avatar from '@/library/display/Avatar'
-import Badge from '@/library/display/Badge'
+import Badge from '@/library/display/Chip'
 import ListItem from '@/library/display/ListItem'
 import Text from '@/library/foundations/Text'
 import Stack from '@/library/layout/Stack'
@@ -15,16 +15,16 @@ export function AssetRow({ asset, onPress }: { asset: Asset; onPress?: () => voi
     <ListItem
       title={asset.name}
       subtitle={isFixed ? getCategoryLabel(asset.category) : asset.ticker}
-      left={<Avatar src={asset.icon} size="md" />}
+      left={<Avatar src={asset.icon} />}
       right={
         isFixed ? (
-          <Badge variant="positive" size="sm">{asset.apyDisplay}</Badge>
+          <Badge variant="positive">{asset.apyDisplay}</Badge>
         ) : (
           <Stack gap="none" align="end">
             <Text variant="body-sm">{formatBRL(asset.price!)}</Text>
             <Badge
               variant={asset.change24h! >= 0 ? 'positive' : 'critical'}
-              size="sm"
+             
             >
               {formatPercentChange(asset.change24h!)}
             </Badge>
@@ -46,11 +46,11 @@ export function PositionRow({ position, onPress }: { position: Position; onPress
     <ListItem
       title={asset.name}
       subtitle={asset.ticker}
-      left={<Avatar src={asset.icon} size="md" />}
+      left={<Avatar src={asset.icon} />}
       right={
         <Stack gap="none" align="end">
           <Text variant="body-sm">{formatBRL(position.currentValue)}</Text>
-          <Badge variant={pnl >= 0 ? 'positive' : 'critical'} size="sm">
+          <Badge variant={pnl >= 0 ? 'positive' : 'critical'}>
             {formatPercentChange(pnl)}
           </Badge>
         </Stack>

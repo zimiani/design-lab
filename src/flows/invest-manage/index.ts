@@ -16,7 +16,7 @@ const screenDefs = [
     id: 'invest-manage-dashboard',
     title: 'Investments Dashboard',
     description: 'Portfolio overview with total value, P&L, chart, positions list, and explore shortcut.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Amount', 'Badge', 'LineChart', 'ShortcutButton', 'GroupHeader', 'ListItem', 'Avatar', 'Text', 'Button', 'StickyFooter'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Amount', 'Chip', 'LineChart', 'ShortcutButton', 'GroupHeader', 'ListItem', 'Avatar', 'Text', 'Button', 'StickyFooter'],
     component: Screen1_Dashboard,
     states: [
       { id: 'default', name: 'Com posições', description: 'User has active investments', isDefault: true, data: {} },
@@ -58,7 +58,7 @@ const screenDefs = [
     id: 'invest-manage-discovery',
     title: 'Investment Discovery',
     description: 'Browse and search assets by category with price/APY info.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'SearchBar', 'SegmentedControl', 'GroupHeader', 'ListItem', 'Avatar', 'Badge', 'Text'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'SearchBar', 'SegmentedControl', 'GroupHeader', 'ListItem', 'Avatar', 'Chip', 'Text'],
     component: Screen3_Discovery,
     interactiveElements: [
       { id: 'li-btc', component: 'ListItem', label: 'BTC' },
@@ -78,7 +78,7 @@ const screenDefs = [
     id: 'invest-manage-asset-page',
     title: 'Asset Page',
     description: 'Asset detail with chart, shortcuts, details/history tabs (invested) or info + CTA (not invested).',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'StickyFooter', 'Avatar', 'Badge', 'LineChart', 'SegmentedControl', 'ShortcutButton', 'Button', 'GroupHeader', 'DataList', 'Banner', 'ListItem', 'Text'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'StickyFooter', 'Avatar', 'Chip', 'LineChart', 'SegmentedControl', 'ShortcutButton', 'Button', 'GroupHeader', 'DataList', 'Banner', 'ListItem', 'Text'],
     component: Screen4_AssetPage,
     states: [
       { id: 'btc-invested', name: 'Bitcoin (investido)', description: 'BTC with active position', isDefault: true, data: { ticker: 'BTC', invested: true } },

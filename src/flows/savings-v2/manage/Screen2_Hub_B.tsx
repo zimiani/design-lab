@@ -15,7 +15,7 @@ import LineChart from '../../../library/display/LineChart'
 import Stack from '../../../library/layout/Stack'
 import SegmentedControl from '../../../library/navigation/SegmentedControl'
 import Avatar from '../../../library/display/Avatar'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 import Text from '../../../library/foundations/Text'
 import {
   RiArrowLeftLine,
@@ -83,7 +83,7 @@ export default function Screen2_Hub_B({ onNext, onBack, onElementTap }: FlowScre
           <div className="relative pt-[calc(var(--safe-area-top,12px)+8px)] px-[var(--token-spacing-16)]">
             {onBack && (
               <Avatar
-                size="md"
+               
                 inverted
                 icon={<RiArrowLeftLine size={24} />}
                 onPress={onBack}
@@ -125,8 +125,8 @@ export default function Screen2_Hub_B({ onNext, onBack, onElementTap }: FlowScre
 
               {/* Badges row */}
               <Stack direction="row" gap="sm" align="center" className="mt-1">
-                <Badge variant="positive" size="md">{currInfo.apyDisplay}</Badge>
-                <Badge variant="positive" size="md">Resgate imediato</Badge>
+                <Badge variant="positive">{currInfo.apyDisplay}</Badge>
+                <Badge variant="positive">Resgate imediato</Badge>
               </Stack>
             </Stack>
           </motion.div>

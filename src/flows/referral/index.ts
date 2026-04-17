@@ -14,7 +14,7 @@ const screenDefs = [
     id: 'referral-claim-a',
     title: 'Referral A — Value Proposition',
     description: 'Marketing landing page focused on zero-fees value proposition with email capture. Warm cream background, dark comparison card, feature list.',
-    componentsUsed: ['BaseLayout', 'Text', 'Badge', 'Card', 'DataList', 'Stack', 'StickyFooter', 'Button', 'TextInput', 'GroupHeader', 'Avatar'],
+    componentsUsed: ['BaseLayout', 'Text', 'Chip', 'Card', 'DataList', 'Stack', 'StickyFooter', 'Button', 'TextInput', 'GroupHeader', 'Avatar'],
     component: Screen1,
     interactiveElements: [
       { id: 'btn-claim', component: 'Button', label: 'Quero meu bônus de US$ 10' },
@@ -24,7 +24,7 @@ const screenDefs = [
     id: 'referral-claim-b',
     title: 'Referral B — Reward First',
     description: 'Marketing landing page leading with the US$ 10 bonus reward. Bolder, more visual with numbered steps and feature pills.',
-    componentsUsed: ['BaseLayout', 'Text', 'Badge', 'Card', 'Stack', 'StickyFooter', 'Button', 'Avatar'],
+    componentsUsed: ['BaseLayout', 'Text', 'Chip', 'Card', 'Stack', 'StickyFooter', 'Button', 'Avatar'],
     component: Screen2,
     interactiveElements: [
       { id: 'btn-share', component: 'Button', label: 'Compartilhar convite' },

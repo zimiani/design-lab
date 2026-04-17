@@ -42,7 +42,7 @@ const patternData: Record<string, PatternInfo> = {
   SettingsGroup: {
     title: 'Settings Group',
     description: 'A grouped list of toggleable or navigable settings. Used for app preferences, notification settings, and security options.',
-    recipe: ['BaseLayout', 'Header', 'Section', 'Stack', 'ListItem', 'Toggle', 'Checkbox', 'Badge'],
+    recipe: ['BaseLayout', 'Header', 'Section', 'Stack', 'ListItem', 'Toggle', 'Checkbox', 'Chip'],
     usage: 'Each settings group is a Section with a title. Stack gap="none" holds flush ListItem rows with Toggle or Checkbox on the right. ListItem with chevron for drill-down navigation. Badge for status indicators (e.g., "New", "Beta"). BaseLayout provides 24px gap between Sections.',
   },
   CurrencyConversion: {

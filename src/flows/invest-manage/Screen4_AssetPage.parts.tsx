@@ -7,7 +7,7 @@ import DataList from '@/library/display/DataList'
 import Alert from '@/library/display/Alert'
 import ListItem from '@/library/display/ListItem'
 import Avatar from '@/library/display/Avatar'
-import Badge from '@/library/display/Badge'
+import Badge from '@/library/display/Chip'
 import Text from '@/library/foundations/Text'
 import type { Asset, Position, Transaction } from './shared/data'
 import { formatBRL, formatQuantity, formatPercentChange, isVolatile } from './shared/data'
@@ -174,14 +174,14 @@ export function HistoryTab({ transactions }: HistoryTabProps) {
             key={tx.id}
             title={tx.title}
             subtitle={tx.status === 'processing' ? 'Processando...' : tx.date}
-            left={<Avatar icon={<Icon size={20} />} size="md" />}
+            left={<Avatar icon={<Icon size={20} />} />}
             right={
               <Stack gap="none" align="end">
                 <Text variant="body-sm" className={tx.status === 'processing' ? 'text-content-tertiary' : ''}>
                   {tx.amount}
                 </Text>
                 {tx.status === 'processing' && (
-                  <Badge variant="warning" size="sm">Processando</Badge>
+                  <Badge variant="warning">Processando</Badge>
                 )}
               </Stack>
             }

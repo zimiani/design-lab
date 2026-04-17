@@ -15,7 +15,7 @@ const screenDefs = [
     id: 'perks-home',
     title: 'Perks Home',
     description: 'Hero landing page showcasing Picnic benefits with CTA to explore more.',
-    componentsUsed: ['FeatureLayout', 'Stack', 'Text', 'Badge', 'Summary', 'Banner', 'Button', 'StickyFooter'],
+    componentsUsed: ['FeatureLayout', 'Stack', 'Text', 'Chip', 'Summary', 'Banner', 'Button', 'StickyFooter'],
     component: Screen1_PerksHome,
     interactiveElements: [
       { id: 'btn-explore', component: 'Button', label: 'Explorar benefícios' },
@@ -25,7 +25,7 @@ const screenDefs = [
     id: 'perks-benefits-promos',
     title: 'Benefits & Promos',
     description: 'Segmented list of highlights (fee-free conversion, cashback) and referral program.',
-    componentsUsed: ['Header', 'BaseLayout', 'SegmentedControl', 'ListItem', 'Divider', 'Badge', 'Text'],
+    componentsUsed: ['Header', 'BaseLayout', 'SegmentedControl', 'ListItem', 'Divider', 'Chip', 'Text'],
     component: Screen2_BenefitsPromos,
     interactiveElements: [
       { id: 'seg-highlights', component: 'SegmentedControl', label: 'Destaques' },
@@ -67,7 +67,7 @@ const screenDefs = [
     id: 'perks-share',
     title: 'Share',
     description: 'Share savings and referral code via WhatsApp, Instagram, email, or link.',
-    componentsUsed: ['Header', 'BaseLayout', 'Text', 'Card', 'Badge', 'Amount', 'Toast', 'Spacer'],
+    componentsUsed: ['Header', 'BaseLayout', 'Text', 'Card', 'Chip', 'Amount', 'Toast', 'Spacer'],
     component: Screen6_Share,
     interactiveElements: [
       { id: 'btn-whatsapp', component: 'Button', label: 'WhatsApp' },

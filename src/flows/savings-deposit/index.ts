@@ -14,7 +14,7 @@ const screenDefs = [
     id: 'savings-deposit-usd',
     title: 'Amount Entry – Card Balance',
     description: 'Amount entry for depositing with card balance (USD→USD). Has BottomSheet for switching payment method.',
-    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'StickyFooter', 'Button', 'BottomSheet', 'ListItem', 'Avatar', 'Badge', 'DataList', 'Banner', 'DataListSkeleton', 'BannerSkeleton'],
+    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'StickyFooter', 'Button', 'BottomSheet', 'ListItem', 'Avatar', 'Chip', 'DataList', 'Banner', 'DataListSkeleton', 'BannerSkeleton'],
     component: Screen1_AmountEntry,
     interactiveElements: [
       { id: 'btn-continuar', component: 'Button', label: 'Continuar' },
@@ -32,7 +32,7 @@ const screenDefs = [
     id: 'savings-deposit-pix',
     title: 'Amount Entry – PIX',
     description: 'Amount entry for depositing via PIX (BRL→USD). Direct entry for users without card balance.',
-    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'Divider', 'StickyFooter', 'Button', 'BottomSheet', 'ListItem', 'Avatar', 'Badge', 'DataList', 'Banner', 'DataListSkeleton', 'BannerSkeleton'],
+    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'Divider', 'StickyFooter', 'Button', 'BottomSheet', 'ListItem', 'Avatar', 'Chip', 'DataList', 'Banner', 'DataListSkeleton', 'BannerSkeleton'],
     component: Screen1_AmountEntry,
     interactiveElements: [
       { id: 'btn-continuar', component: 'Button', label: 'Continuar' },
@@ -46,7 +46,7 @@ const screenDefs = [
     id: 'savings-deposit-ach',
     title: 'Amount Entry – ACH',
     description: 'Amount entry for depositing via ACH (USD→USD). Requires Noah registration.',
-    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'StickyFooter', 'Button', 'BottomSheet', 'ListItem', 'Avatar', 'Badge', 'DataList', 'Banner', 'DataListSkeleton', 'BannerSkeleton'],
+    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'StickyFooter', 'Button', 'BottomSheet', 'ListItem', 'Avatar', 'Chip', 'DataList', 'Banner', 'DataListSkeleton', 'BannerSkeleton'],
     component: Screen1_AmountEntry,
     interactiveElements: [
       { id: 'btn-continuar', component: 'Button', label: 'Continuar' },

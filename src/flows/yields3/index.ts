@@ -23,7 +23,7 @@ const mainScreenDefs = [
     id: 'yields3-hub',
     title: 'Minimalist Hub',
     description: 'Hub with balance hero, insurance Banner (collapsible), coverage BottomSheet. No intro screen.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ShortcutButton', 'Badge', 'Amount', 'DataList', 'Banner', 'BottomSheet', 'ListItem', 'Avatar', 'GroupHeader', 'Text'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ShortcutButton', 'Chip', 'Amount', 'DataList', 'Banner', 'BottomSheet', 'ListItem', 'Avatar', 'GroupHeader', 'Text'],
     component: Screen1_Hub,
     interactiveElements: [
       { id: 'btn-deposit', component: 'ShortcutButton', label: 'Depositar' },
@@ -57,7 +57,7 @@ const depositScreenDefs = [
     id: 'yields3-deposit-review',
     title: 'Deposit Review',
     description: 'Simpler review with Badge "Protegido por seguro" instead of full coverage Banner.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Text', 'Amount', 'Badge', 'DataList', 'GroupHeader', 'StickyFooter'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Text', 'Amount', 'Chip', 'DataList', 'GroupHeader', 'StickyFooter'],
     component: Screen3_DepositReview,
     interactiveElements: [
       { id: 'btn-confirm', component: 'Button', label: 'Confirmar' },

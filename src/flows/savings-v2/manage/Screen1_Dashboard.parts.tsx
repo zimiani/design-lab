@@ -4,7 +4,7 @@
 
 import { RiArrowRightSLine, RiLock2Line } from '@remixicon/react'
 import Avatar from '../../../library/display/Avatar'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 import Text from '../../../library/foundations/Text'
 import Stack from '../../../library/layout/Stack'
 import type { CaixinhaCurrency } from '../../savings-reviewed/shared/data'
@@ -34,7 +34,7 @@ export function CurrencyCard({ currency, balance, yieldToday, disabled, onPress 
         <Stack gap="none" className="flex-1 min-w-0">
           <Stack direction="row" gap="sm" align="center">
             <Text variant="body-md" className="font-medium">{curr.name}</Text>
-            <Badge variant="neutral" size="sm">Em breve</Badge>
+            <Badge variant="neutral">Em breve</Badge>
           </Stack>
           <Text variant="body-sm" color="content-tertiary">{curr.apyDisplay}</Text>
         </Stack>
@@ -58,7 +58,7 @@ export function CurrencyCard({ currency, balance, yieldToday, disabled, onPress 
       <Stack gap="none" className="flex-1 min-w-0">
         <Stack direction="row" gap="sm" align="center">
           <Text variant="body-md" className="font-medium">{curr.name}</Text>
-          <Badge variant="positive" size="sm">{curr.apyDisplay}</Badge>
+          <Badge variant="positive">{curr.apyDisplay}</Badge>
         </Stack>
         {hasBalance ? (
           <Text variant="body-md" className="font-semibold tabular-nums">

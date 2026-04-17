@@ -279,7 +279,7 @@ const versionAScreenDefs = [
     id: 'caixinha-a-hub',
     title: 'Hub (A)',
     description: 'Minimalist hub with balance card, yield ticker, quick actions, chart, and inline deposit/withdraw BottomSheets.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'BottomSheet', 'Button', 'CurrencyInput', 'ListItem', 'Avatar', 'DataList', 'Banner', 'LineChart', 'Text', 'Badge', 'Amount', 'ShortcutButton'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'BottomSheet', 'Button', 'CurrencyInput', 'ListItem', 'Avatar', 'DataList', 'Banner', 'LineChart', 'Text', 'Chip', 'Amount', 'ShortcutButton'],
     component: A_Screen1_Hub,
     states: [
       { id: 'default', name: 'Has balance', isDefault: true, data: {} },
@@ -297,7 +297,7 @@ const versionBScreenDefs = [
     id: 'caixinha-b-intro',
     title: 'Feature Intro (B)',
     description: 'FeatureLayout introduction with hero image, benefits summary, tax info, and activation CTA.',
-    componentsUsed: ['FeatureLayout', 'StickyFooter', 'Stack', 'Button', 'Text', 'Badge', 'Banner', 'Summary'],
+    componentsUsed: ['FeatureLayout', 'StickyFooter', 'Stack', 'Button', 'Text', 'Chip', 'Banner', 'Summary'],
     component: B_Screen1_Intro,
     interactiveElements: [
       { id: 'btn-activate', component: 'Button', label: 'Ativar Caixinha' },
@@ -307,7 +307,7 @@ const versionBScreenDefs = [
     id: 'caixinha-b-hub',
     title: 'Hub (B)',
     description: 'Detailed hub with SegmentedControl tabs (Resumo/Histórico), balance, chart, metrics, and history.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'SegmentedControl', 'ShortcutButton', 'Badge', 'Amount', 'DataList', 'Banner', 'LineChart', 'Text', 'ListItem', 'Avatar', 'GroupHeader'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'SegmentedControl', 'ShortcutButton', 'Chip', 'Amount', 'DataList', 'Banner', 'LineChart', 'Text', 'ListItem', 'Avatar', 'GroupHeader'],
     component: B_Screen2_Hub,
     interactiveElements: [
       { id: 'btn-deposit', component: 'ShortcutButton', label: 'Depositar' },
@@ -322,7 +322,7 @@ const versionCScreenDefs = [
     id: 'caixinha-c-portfolio',
     title: 'Portfolio (C)',
     description: 'Multi-product portfolio with caixinha as one product. Detail BottomSheet with balance, metrics, and actions.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'BottomSheet', 'ShortcutButton', 'Amount', 'DataList', 'Banner', 'ListItem', 'Avatar', 'Badge', 'GroupHeader', 'Text'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'BottomSheet', 'ShortcutButton', 'Amount', 'DataList', 'Banner', 'ListItem', 'Avatar', 'Chip', 'GroupHeader', 'Text'],
     component: C_Screen1_Portfolio,
     states: [
       { id: 'default', name: 'Active', isDefault: true, data: {} },
@@ -341,7 +341,7 @@ const versionDScreenDefs = [
     id: 'caixinha-d-list',
     title: 'Caixinha List (D)',
     description: 'List of user caixinhas with emoji, name, progress bar toward goal, and create new button.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Amount', 'Badge', 'Text', 'Card', 'ProgressBar'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Amount', 'Chip', 'Text', 'Card', 'ProgressBar'],
     component: D_Screen1_CaixinhaList,
     states: [
       { id: 'default', name: 'Has caixinhas', isDefault: true, data: {} },
@@ -379,7 +379,7 @@ const versionDScreenDefs = [
     id: 'caixinha-d-detail',
     title: 'Caixinha Detail (D)',
     description: 'Per-caixinha detail: emoji hero, goal progress bar, balance, yield chart, deposit/withdraw actions.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ShortcutButton', 'Amount', 'Badge', 'DataList', 'Banner', 'ProgressBar', 'LineChart', 'Text'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ShortcutButton', 'Amount', 'Chip', 'DataList', 'Banner', 'ProgressBar', 'LineChart', 'Text'],
     component: D_Screen4_CaixinhaDetail,
     interactiveElements: [
       { id: 'btn-deposit', component: 'ShortcutButton', label: 'Depositar' },

@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { RiArrowRightSLine, RiLock2Line, RiShieldCheckLine } from '@remixicon/react'
 import Text from '../../../library/foundations/Text'
 import Stack from '../../../library/layout/Stack'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 import type { CaixinhaCurrency } from '../../savings-reviewed/shared/data'
 import { CURRENCIES, formatCurrency, formatBrlEquivalent } from '../../savings-reviewed/shared/data'
 
@@ -43,7 +43,7 @@ export function GlassCurrencyCard({ currency, balance, yieldToday, disabled, onP
         <Stack gap="none" className="flex-1 min-w-0">
           <Stack direction="row" gap="sm" align="center">
             <Text variant="body-md" className="font-medium text-white/50">{curr.name}</Text>
-            <Badge variant="neutral" size="sm">Em breve</Badge>
+            <Badge variant="neutral">Em breve</Badge>
           </Stack>
           <Text variant="body-sm" className="text-white/40">{curr.apyDisplay}</Text>
         </Stack>
@@ -68,7 +68,7 @@ export function GlassCurrencyCard({ currency, balance, yieldToday, disabled, onP
       <Stack gap="none" className="flex-1 min-w-0">
         <Stack direction="row" gap="sm" align="center">
           <Text variant="body-md" className="font-medium text-white">{curr.name}</Text>
-          <Badge variant="positive" size="sm">{curr.apyDisplay}</Badge>
+          <Badge variant="positive">{curr.apyDisplay}</Badge>
         </Stack>
         {hasBalance ? (
           <>

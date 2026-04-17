@@ -1,6 +1,6 @@
 import { RiStarLine, RiStarFill } from '@remixicon/react'
 import Avatar from '@/library/display/Avatar'
-import Badge from '@/library/display/Badge'
+import Badge from '@/library/display/Chip'
 import ListItem from '@/library/display/ListItem'
 import Text from '@/library/foundations/Text'
 import Stack from '@/library/layout/Stack'
@@ -24,17 +24,17 @@ export function AssetRow({ asset, onPress, showFavorite, onToggleFavorite }: Ass
     <ListItem
       title={asset.name}
       subtitle={isFixed ? CATEGORY_INFO[asset.category].label : asset.ticker}
-      left={<Avatar src={asset.icon} size="md" />}
+      left={<Avatar src={asset.icon} />}
       right={
         <Stack direction="row" gap="sm" align="center">
           {isFixed ? (
-            <Badge variant="positive" size="sm">{asset.apyDisplay}</Badge>
+            <Badge variant="positive">{asset.apyDisplay}</Badge>
           ) : (
             <Stack gap="none" align="end">
               <Text variant="body-sm">{formatBRL(asset.price!)}</Text>
               <Badge
                 variant={asset.change24h! >= 0 ? 'positive' : 'critical'}
-                size="sm"
+               
               >
                 {formatPercentChange(asset.change24h!)}
               </Badge>
@@ -69,7 +69,7 @@ export function DiscoveryCard({ asset, onPress }: { asset: Asset; onPress?: () =
       className="flex-shrink-0 w-[140px] rounded-xl bg-[var(--token-bg-secondary)] p-3 text-left"
     >
       <Stack gap="sm">
-        <Avatar src={asset.icon} size="md" />
+        <Avatar src={asset.icon} />
         <Stack gap="none">
           <Text variant="body-sm">{asset.name}</Text>
           <Text variant="caption" color="content-secondary">
@@ -79,13 +79,13 @@ export function DiscoveryCard({ asset, onPress }: { asset: Asset; onPress?: () =
         {!isFixed && asset.change24h !== undefined && (
           <Badge
             variant={asset.change24h >= 0 ? 'positive' : 'critical'}
-            size="sm"
+           
           >
             {formatPercentChange(asset.change24h)}
           </Badge>
         )}
         {isFixed && (
-          <Badge variant={CATEGORY_BADGE_VARIANT[asset.category]} size="sm">
+          <Badge variant={CATEGORY_BADGE_VARIANT[asset.category]}>
             Renda Fixa
           </Badge>
         )}

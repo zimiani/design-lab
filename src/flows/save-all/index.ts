@@ -34,7 +34,7 @@ const screenDefs = [
     id: 'save-all-onboarding-intro',
     title: 'Onboarding – Intro',
     description: 'FeatureLayout introducing yields. Highlights automatic earnings, instant withdrawal, and insurance.',
-    componentsUsed: ['FeatureLayout', 'Stack', 'Button', 'Text', 'Badge', 'Summary', 'GroupHeader', 'Link'],
+    componentsUsed: ['FeatureLayout', 'Stack', 'Button', 'Text', 'Chip', 'Summary', 'GroupHeader', 'Link'],
     component: Onboarding_Intro,
     interactiveElements: [
       { id: 'btn-ativar', component: 'Button', label: 'Ativar minha Caixinha' },
@@ -55,7 +55,7 @@ const screenDefs = [
     id: 'save-all-manage-dashboard',
     title: 'Manage – Dashboard',
     description: 'Three pre-existing currency caixinhas. Only USD active, EUR/BRL disabled.',
-    componentsUsed: ['FeatureLayout', 'Stack', 'Amount', 'Badge', 'GroupHeader', 'Banner', 'Text', 'Avatar'],
+    componentsUsed: ['FeatureLayout', 'Stack', 'Amount', 'Chip', 'GroupHeader', 'Banner', 'Text', 'Avatar'],
     component: Manage_Dashboard,
     interactiveElements: [
       { id: 'cc-usd', component: 'CurrencyCard', label: 'Dólar americano' },
@@ -149,7 +149,7 @@ const screenDefs = [
     id: 'save-all-withdraw-amount',
     title: 'Withdraw – Amount Entry',
     description: 'USD withdrawal with instant redemption badge.',
-    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'DataList', 'Badge', 'StickyFooter', 'Button', 'Text', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'DataList', 'Chip', 'StickyFooter', 'Button', 'Text', 'Stack'],
     component: Withdraw_Amount,
     interactiveElements: [
       { id: 'btn-continuar', component: 'Button', label: 'Continuar' },

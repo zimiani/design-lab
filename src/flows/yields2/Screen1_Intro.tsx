@@ -5,7 +5,7 @@ import StickyFooter from '../../library/layout/StickyFooter'
 import Stack from '../../library/layout/Stack'
 import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import Summary from '../../library/display/Summary'
 
 export default function Screen1_Intro({ onNext, onBack }: FlowScreenProps) {
@@ -14,7 +14,7 @@ export default function Screen1_Intro({ onNext, onBack }: FlowScreenProps) {
       imageSrc="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80"
       imageAlt="Shield protecting savings"
       onClose={onBack}
-      imageOverlay={<Badge variant="positive" size="md">~4,16% a.a.</Badge>}
+      imageOverlay={<Badge variant="positive">~4,16% a.a.</Badge>}
     >
       <Stack gap="sm">
         <Text variant="display">Renda protegida</Text>

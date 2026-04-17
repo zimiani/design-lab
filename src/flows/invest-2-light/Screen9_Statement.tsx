@@ -72,7 +72,7 @@ export default function Screen9_Statement({ onBack, onElementTap, onNext }: Flow
           onBack={onBack}
           rightAction={
             <Avatar
-              size="md"
+             
               icon={<RiDownloadCloud2Line size={22} className="text-content-primary" />}
               onPress={handleExport}
             />

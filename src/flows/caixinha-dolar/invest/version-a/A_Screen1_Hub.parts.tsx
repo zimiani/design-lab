@@ -7,7 +7,7 @@ import { RiArrowDownLine, RiArrowUpLine } from '@remixicon/react'
 import Stack from '../../../../library/layout/Stack'
 import Card from '../../../../library/display/Card'
 import Text from '../../../../library/foundations/Text'
-import Badge from '../../../../library/display/Badge'
+import Badge from '../../../../library/display/Chip'
 import Amount from '../../../../library/display/Amount'
 import ShortcutButton from '../../../../library/inputs/ShortcutButton'
 
@@ -24,7 +24,7 @@ export function BalanceHero({ balance, yieldToday }: BalanceHeroProps) {
       <Stack gap="sm">
         <Stack direction="row" align="between">
           <Text variant="caption" color="content-secondary">Caixinha do Dólar</Text>
-          <Badge variant="positive" size="sm">5% a.a.</Badge>
+          <Badge variant="positive">5% a.a.</Badge>
         </Stack>
         <Amount value={balance} currency="US$" size="lg" />
         <Text variant="caption" className="text-[#22c55e]">

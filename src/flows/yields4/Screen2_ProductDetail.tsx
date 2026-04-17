@@ -7,7 +7,7 @@ import Header from '../../library/navigation/Header'
 import GroupHeader from '../../library/navigation/GroupHeader'
 import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import DataList from '../../library/display/DataList'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
@@ -37,7 +37,7 @@ export default function Screen2_ProductDetail({ onNext, onBack }: FlowScreenProp
 
       <Stack gap="default">
         <Stack gap="sm" align="center">
-          <Badge variant="positive" size="md">Segurado</Badge>
+          <Badge variant="positive">Segurado</Badge>
           <Text variant="display">~{formatPct(NET_APY)} a.a.</Text>
           <Text variant="body-sm" color="content-secondary">
             sDAI na Gnosis Chain com seguro automático
@@ -93,7 +93,7 @@ export default function Screen2_ProductDetail({ onNext, onBack }: FlowScreenProp
               left={
                 <Avatar
                   icon={<RiCheckLine size={16} />}
-                  size="sm"
+                 
                   className="bg-[var(--color-feedback-success-light)] text-[var(--color-feedback-success)]"
                 />
               }
@@ -111,7 +111,7 @@ export default function Screen2_ProductDetail({ onNext, onBack }: FlowScreenProp
               left={
                 <Avatar
                   icon={<RiCloseLine size={16} />}
-                  size="sm"
+                 
                   className="bg-[var(--color-feedback-error-light)] text-[var(--color-feedback-error)]"
                 />
               }

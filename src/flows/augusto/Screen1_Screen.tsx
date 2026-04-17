@@ -10,7 +10,7 @@ import Stack from '@/library/layout/Stack'
 import Text from '@/library/foundations/Text'
 import ListItem from '@/library/display/ListItem'
 import Avatar from '@/library/display/Avatar'
-import Badge from '@/library/display/Badge'
+import Badge from '@/library/display/Chip'
 import GroupHeader from '@/library/navigation/GroupHeader'
 import Button from '@/library/inputs/Button'
 
@@ -80,8 +80,8 @@ export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps
               key={person.id}
               title={person.name}
               subtitle={person.desc}
-              left={<Avatar src={person.avatar} size="md" />}
-              right={<Badge variant={badge.variant} size="sm">{badge.label}</Badge>}
+              left={<Avatar src={person.avatar} />}
+              right={<Badge variant={badge.variant}>{badge.label}</Badge>}
               onPress={() => {
                 const handled = onElementTap?.(`ListItem: ${person.name}`)
                 if (!handled) onNext()

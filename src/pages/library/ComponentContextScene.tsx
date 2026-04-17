@@ -196,7 +196,15 @@ function getScene(meta: ComponentMeta): ReactNode {
           <C title="Mercado Livre" subtitle="28 mar" right={<Text variant="body-sm" color="content-primary">-US$ 32,00</Text>} left={<Avatar size="sm" initials="ML" />} />
         </Scene>
       )
-    case 'Badge':
+    case 'Badge': // legacy fallback
+      return (
+        <Scene>
+          <ListItem title="Cartão físico" right={<C variant="positive">Ativo</C>} />
+          <ListItem title="Verificação" right={<C variant="warning">Pendente</C>} />
+          <ListItem title="Conta virtual" right={<C variant="neutral">Novo</C>} />
+        </Scene>
+      )
+    case 'Chip':
       return (
         <Scene>
           <ListItem title="Cartão físico" right={<C variant="positive">Ativo</C>} />

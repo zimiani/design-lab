@@ -32,7 +32,7 @@ const manageScreenDefs = [
     id: 'caixinha-mvp-dashboard',
     title: 'MVP – Dashboard',
     description: 'Three pre-existing currency caixinhas. Only USD active, EUR/BRL disabled with "Em breve" tag.',
-    componentsUsed: ['FeatureLayout', 'Stack', 'Amount', 'Badge', 'GroupHeader', 'Banner', 'Text', 'Avatar'],
+    componentsUsed: ['FeatureLayout', 'Stack', 'Amount', 'Chip', 'GroupHeader', 'Banner', 'Text', 'Avatar'],
     component: MVP_Screen1_Dashboard,
     interactiveElements: [
       { id: 'cc-usd', component: 'CurrencyCard', label: 'Dólar americano' },
@@ -78,7 +78,7 @@ const manageScreenDefs_B = [
     id: 'caixinha-mvp-b-dashboard',
     title: 'MVP B – Dashboard (Visual)',
     description: 'Dark gradient canvas with glassmorphism currency cards, animated piggy hero, and oversized balance.',
-    componentsUsed: ['Stack', 'Text', 'Badge', 'GlassCurrencyCard', 'InsurancePill', 'BalanceDisplay'],
+    componentsUsed: ['Stack', 'Text', 'Chip', 'GlassCurrencyCard', 'InsurancePill', 'BalanceDisplay'],
     component: MVP_Screen1_Dashboard_B,
     interactiveElements: [
       { id: 'cc-usd', component: 'CurrencyCard', label: 'Dólar americano' },
@@ -92,7 +92,7 @@ const manageScreenDefs_B = [
     id: 'caixinha-mvp-b-hub',
     title: 'MVP B – Hub (Visual)',
     description: 'Full-bleed gradient hero with chart flowing behind balance, circular FABs, pull-up white card.',
-    componentsUsed: ['Stack', 'Text', 'Badge', 'LineChart', 'SegmentedControl', 'IconButton', 'BalanceDisplay'],
+    componentsUsed: ['Stack', 'Text', 'Chip', 'LineChart', 'SegmentedControl', 'IconButton', 'BalanceDisplay'],
     component: MVP_Screen2_Hub_B,
     interactiveElements: [
       { id: 'sc-adicionar', component: 'ShortcutButton', label: 'Adicionar' },
@@ -170,7 +170,7 @@ const withdrawScreenDefs = [
     id: 'caixinha-mvp-withdraw-amount',
     title: 'MVP Withdraw – Amount',
     description: 'USD withdrawal with instant redemption badge and BRL equivalent.',
-    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'DataList', 'Badge', 'StickyFooter', 'Button', 'Text', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'DataList', 'Chip', 'StickyFooter', 'Button', 'Text', 'Stack'],
     component: Withdraw_Screen1,
     interactiveElements: [
       { id: 'btn-continuar', component: 'Button', label: 'Continuar' },

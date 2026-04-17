@@ -5,7 +5,7 @@
 import { RiPercentLine, RiSparklingLine } from '@remixicon/react'
 import Stack from '../../../library/layout/Stack'
 import Text from '../../../library/foundations/Text'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 import Avatar from '../../../library/display/Avatar'
 import ListItem from '../../../library/display/ListItem'
 import GroupHeader from '../../../library/navigation/GroupHeader'
@@ -25,7 +25,7 @@ export function ProductListItem({ onPress }: ProductListItemProps) {
       subtitle={formatUsd(MOCK_BALANCE)}
       left={
         <Avatar
-          size="md"
+         
           icon={<RiPercentLine size={16} />}
           bgColor="#dcfce7"
           iconColor="#22c55e"
@@ -33,7 +33,7 @@ export function ProductListItem({ onPress }: ProductListItemProps) {
       }
       right={
         <Stack gap="none" align="end">
-          <Badge variant="positive" size="sm">5% a.a.</Badge>
+          <Badge variant="positive">5% a.a.</Badge>
           <Text variant="caption" className="text-[#22c55e] mt-1">
             +{formatUsd(YIELD_TODAY)}/dia
           </Text>
@@ -59,13 +59,13 @@ export function DiscoverSection({ onActivate }: DiscoverSectionProps) {
         subtitle="Ganhe 5% a.a. sobre seus dólares parados"
         left={
           <Avatar
-            size="md"
+           
             icon={<RiSparklingLine size={16} />}
             bgColor="#fef3c7"
             iconColor="#f59e0b"
           />
         }
-        right={<Badge variant="positive" size="sm">Novo</Badge>}
+        right={<Badge variant="positive">Novo</Badge>}
         onPress={onActivate}
       />
     </Stack>

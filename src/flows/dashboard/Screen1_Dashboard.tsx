@@ -13,7 +13,7 @@ import BaseLayout from '../../library/layout/BaseLayout'
 import Stack from '../../library/layout/Stack'
 import Text from '../../library/foundations/Text'
 import Avatar from '../../library/display/Avatar'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import ListItem from '../../library/display/ListItem'
 import Button from '../../library/inputs/Button'
 import BottomSheet from '../../library/layout/BottomSheet'
@@ -56,21 +56,21 @@ export default function Screen1_Dashboard({
       {/* Custom navbar — full width, breaks out of BaseLayout padding */}
       <div className="-mx-[var(--token-spacing-24)] px-[var(--token-spacing-24)] flex items-center">
         <Avatar
-          size="md"
+         
           icon={<RiUser3Line size={20} />}
           bgColor="#9747ff"
           iconColor="#fff"
         />
         <Stack direction="row" gap="sm" align="center" className="ml-auto">
-          <Badge variant="neutral" size="sm">R$ 5,45</Badge>
+          <Badge variant="neutral">R$ 5,45</Badge>
           <Avatar
             icon={hidden ? <RiEyeOffLine size={20} /> : <RiEyeLine size={20} />}
-            size="md"
+           
             onPress={handleEyeToggle}
           />
           <Avatar
             icon={<RiQuestionLine size={20} />}
-            size="md"
+           
           />
         </Stack>
       </div>
@@ -94,7 +94,7 @@ export default function Screen1_Dashboard({
           subtitle="Resgate seu cashback"
           left={
             <Avatar
-              size="md"
+             
               icon={<RiAlertLine size={16} />}
               bgColor="#fef3c7"
               iconColor="#f59e0b"

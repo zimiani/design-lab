@@ -13,7 +13,7 @@ const screenDefs = [
     id: 'screen-1772804298368',
     title: 'Investimentos',
     description: 'Dashboard de acompanhamento de investimentos com gráficos. Dois estados: sem investimentos (empty) e com investimentos (invested).',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Card', 'Amount', 'LineChart', 'SegmentedControl', 'GroupHeader', 'ListItem', 'Avatar', 'Badge', 'EmptyState', 'Divider', 'Text'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Card', 'Amount', 'LineChart', 'SegmentedControl', 'GroupHeader', 'ListItem', 'Avatar', 'Chip', 'EmptyState', 'Divider', 'Text'],
     component: Screen1_NewScreen,
     states: [
       { id: 'default', name: 'Sem investimentos', description: 'Usuário ainda não investiu', isDefault: true, data: {} },
@@ -27,7 +27,7 @@ const screenDefs = [
     id: 'screen-1772804352514',
     title: 'Detalhes do Investimento',
     description: 'Detalhes do produto de investimento. Dois estados: não investido (info + CTA) e investido (saldo + ações).',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Card', 'Amount', 'Badge', 'DataList', 'GroupHeader', 'Banner', 'Button', 'ShortcutButton', 'Divider', 'Text', 'StickyFooter'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Card', 'Amount', 'Chip', 'DataList', 'GroupHeader', 'Banner', 'Button', 'ShortcutButton', 'Divider', 'Text', 'StickyFooter'],
     component: Screen3_NewScreen,
     states: [
       { id: 'default', name: 'Não investido', description: 'Produto ainda não ativado', isDefault: true, data: {} },

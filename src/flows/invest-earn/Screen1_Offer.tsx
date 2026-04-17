@@ -10,7 +10,7 @@ import Text from '../../library/foundations/Text'
 import Amount from '../../library/display/Amount'
 import Alert from '../../library/display/Alert'
 import DataList from '../../library/display/DataList'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import LineChart from '../../library/display/LineChart'
 
 // 12-month projected balance at 5% APY compounded monthly, starting at $500

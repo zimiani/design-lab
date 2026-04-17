@@ -6,7 +6,7 @@ import BaseLayout from '../../library/layout/BaseLayout'
 import Stack from '../../library/layout/Stack'
 import SegmentedControl from '../../library/navigation/SegmentedControl'
 import ListItem from '../../library/display/ListItem'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import Text from '../../library/foundations/Text'
 
 const highlights = [
@@ -79,7 +79,7 @@ export default function Screen2_BenefitsPromos({ onNext, onBack }: FlowScreenPro
                 left={item.icon}
                 title={item.title}
                 subtitle={item.subtitle}
-                right={item.badge ? <Badge variant="positive" size="sm">{item.badge}</Badge> : undefined}
+                right={item.badge ? <Badge variant="positive">{item.badge}</Badge> : undefined}
                 onPress={onNext}
               />
             ))}

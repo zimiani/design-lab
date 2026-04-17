@@ -5,7 +5,7 @@ import BaseLayout from '../../library/layout/BaseLayout'
 import Header from '../../library/navigation/Header'
 import Stack from '../../library/layout/Stack'
 import Text from '../../library/foundations/Text'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import Amount from '../../library/display/Amount'
 import DataList from '../../library/display/DataList'
 import Alert from '../../library/display/Alert'
@@ -45,7 +45,7 @@ export default function Screen3_Hub({ onNext, onBack, onElementTap }: FlowScreen
         >
           <Stack direction="row" align="between">
             <Text variant="caption" className="text-[#8a8a8a]">Renda Protegida</Text>
-            <Badge variant="positive" size="sm">Protegido</Badge>
+            <Badge variant="positive">Protegido</Badge>
           </Stack>
 
           <Amount value={MOCK_BALANCE} currency="US$" size="lg" className="text-white" />

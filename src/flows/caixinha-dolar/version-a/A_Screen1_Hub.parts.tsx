@@ -5,7 +5,7 @@
 
 import Stack from '../../../library/layout/Stack'
 import Text from '../../../library/foundations/Text'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 import Amount from '../../../library/display/Amount'
 import ShortcutButton from '../../../library/inputs/ShortcutButton'
 import { RiArrowDownLine, RiArrowUpLine } from '@remixicon/react'
@@ -31,7 +31,7 @@ export function BalanceHero({ balance, yieldToday }: BalanceHeroProps) {
     >
       <Stack direction="row" align="between">
         <Text variant="caption" className="text-[#8a8a8a]">Caixinha do Dólar</Text>
-        <Badge variant="positive" size="sm">5% a.a.</Badge>
+        <Badge variant="positive">5% a.a.</Badge>
       </Stack>
 
       <Amount value={balance} currency="US$" size="lg" className="text-white" />
@@ -96,7 +96,7 @@ export function NewUserPromo({ onActivate }: NewUserPromoProps) {
       }}
       onClick={onActivate}
     >
-      <Badge variant="neutral" size="sm">5% a.a.</Badge>
+      <Badge variant="neutral">5% a.a.</Badge>
       <Text variant="h2" className="text-[#1b1b1b]">
         Comece a render seus dólares
       </Text>

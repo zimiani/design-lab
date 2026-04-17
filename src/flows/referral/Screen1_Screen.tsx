@@ -15,7 +15,7 @@ import Button from '@/library/inputs/Button'
 import TextInput from '@/library/inputs/TextInput'
 import Text from '@/library/foundations/Text'
 import Stack from '@/library/layout/Stack'
-import Badge from '@/library/display/Badge'
+import Badge from '@/library/display/Chip'
 import Avatar from '@/library/display/Avatar'
 
 // ── Zero-fee items ──
@@ -41,7 +41,7 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
         {/* Top bar */}
         <div className="flex items-center justify-between mb-[24px]">
           <span className="text-[18px] font-bold tracking-[-0.5px] text-white">picnic</span>
-          <Badge variant="positive" size="sm">ACESSO VIA INDICAÇÃO</Badge>
+          <Badge variant="positive">ACESSO VIA INDICAÇÃO</Badge>
         </div>
 
         {/* Hero headline */}
@@ -108,7 +108,7 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
         <div>
           <div className="flex items-center justify-between mb-[12px]">
             <Text variant="h3">Taxas? Zero. Todas.</Text>
-            <Badge variant="warning" size="sm">Só até 30/abr</Badge>
+            <Badge variant="warning">Só até 30/abr</Badge>
           </div>
           <div className="grid grid-cols-2 gap-[8px]">
             {zeroFees.map((item) => (
@@ -134,7 +134,7 @@ export default function Screen({ onNext, onElementTap }: FlowScreenProps) {
         <div className="flex flex-col items-center gap-[8px]">
           <div className="flex -space-x-3">
             {['Ana', 'Pedro', 'Carla', 'Lucas', 'Bia', 'Gui'].map((name) => (
-              <Avatar key={name} initials={name.slice(0, 2)} size="sm" />
+              <Avatar key={name} initials={name.slice(0, 2)} />
             ))}
           </div>
           <div className="flex items-center gap-[4px]">

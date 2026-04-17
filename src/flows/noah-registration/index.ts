@@ -9,7 +9,7 @@ const screenDefs = [
     id: 'noah-registration-first-access',
     title: 'First Access',
     description: 'Onboarding screen for US bank account feature powered by Noah/GnosisPay. Explains zero fees, transfer limits, and estimated timelines. User activates their USD account to receive ACH/Wire transfers.',
-    componentsUsed: ['FeatureLayout', 'Stack', 'Button', 'Badge', 'Banner', 'Summary', 'GroupHeader', 'Text', 'StickyFooter'],
+    componentsUsed: ['FeatureLayout', 'Stack', 'Button', 'Chip', 'Banner', 'Summary', 'GroupHeader', 'Text', 'StickyFooter'],
     component: Screen1_FirstAccess,
     interactiveElements: [
       { id: 'btn-activate', component: 'Button', label: 'Ativar minha conta em USD' },

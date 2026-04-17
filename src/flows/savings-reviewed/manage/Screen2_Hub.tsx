@@ -7,7 +7,7 @@ import Stack from '../../../library/layout/Stack'
 import Header from '../../../library/navigation/Header'
 import SegmentedControl from '../../../library/navigation/SegmentedControl'
 import ShortcutButton from '../../../library/inputs/ShortcutButton'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 import Avatar from '../../../library/display/Avatar'
 import LineChart from '../../../library/display/LineChart'
 import Text from '../../../library/foundations/Text'
@@ -96,8 +96,8 @@ export default function Screen2_Hub({ onNext, onBack, onElementTap }: FlowScreen
               <Stack gap="none" className="flex-1">
                 <Text variant="h2" className="text-white">{caixinhaName}</Text>
                 <Stack direction="row" gap="sm" align="center" className="mt-1">
-                  <Badge variant="positive" size="md">{currInfo.apyDisplay}</Badge>
-                  <Badge variant="positive" size="md">Resgate imediato</Badge>
+                  <Badge variant="positive">{currInfo.apyDisplay}</Badge>
+                  <Badge variant="positive">Resgate imediato</Badge>
                 </Stack>
               </Stack>
             </Stack>

@@ -7,7 +7,7 @@ import Stack from '../../library/layout/Stack'
 import Section from '../../library/layout/Section'
 import Text from '../../library/foundations/Text'
 import Card from '../../library/display/Card'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import Amount from '../../library/display/Amount'
 import Avatar from '../../library/display/Avatar'
 import ShortcutButton from '../../library/inputs/ShortcutButton'
@@ -37,7 +37,7 @@ export default function Screen6_Share({ onBack }: FlowScreenProps) {
         <Stack gap="sm" className="items-center text-center">
           <div className="flex items-center gap-[var(--token-spacing-8)]">
             <RiShareLine size={20} className="text-interactive-foreground" />
-            <Badge variant="positive" size="md">Economia</Badge>
+            <Badge variant="positive">Economia</Badge>
           </div>
           <Amount value={1250} size="display" />
           <Text variant="body-sm" color="content-secondary">de economia</Text>
@@ -70,7 +70,7 @@ export default function Screen6_Share({ onBack }: FlowScreenProps) {
             <Text variant="body-md" className="font-mono">PICNIC-AB12</Text>
           </Stack>
           <Avatar
-            size="sm"
+           
             icon={<RiFileCopyLine size={18} className="text-interactive-foreground" />}
             onPress={handleShare}
           />

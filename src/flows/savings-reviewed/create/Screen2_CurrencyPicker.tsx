@@ -4,7 +4,7 @@ import Stack from '../../../library/layout/Stack'
 import Header from '../../../library/navigation/Header'
 import ListItem from '../../../library/display/ListItem'
 import Avatar from '../../../library/display/Avatar'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 import Text from '../../../library/foundations/Text'
 import { CURRENCIES, type CaixinhaCurrency } from '../shared/data'
 
@@ -41,8 +41,8 @@ export default function Screen2_CurrencyPicker({ onNext, onBack, onElementTap }:
                 key={code}
                 title={c.name}
                 subtitle={subtitle}
-                left={<Avatar src={c.flagIcon} size="md" />}
-                right={<Badge variant="positive" size="md">{c.apyDisplay}</Badge>}
+                left={<Avatar src={c.flagIcon} />}
+                right={<Badge variant="positive">{c.apyDisplay}</Badge>}
                 onPress={() => handleSelect(code)}
               />
             )

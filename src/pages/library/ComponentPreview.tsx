@@ -21,7 +21,6 @@ import Slider from '../../library/inputs/Slider'
 import RadioGroup from '../../library/inputs/RadioGroup'
 import Card from '../../library/display/Card'
 import ListItem from '../../library/display/ListItem'
-import Badge from '../../library/display/Badge'
 import Avatar from '../../library/display/Avatar'
 import Tag from '../../library/display/Tag'
 import ProgressBar from '../../library/display/ProgressBar'
@@ -33,6 +32,7 @@ import EmptyState from '../../library/feedback/EmptyState'
 import LoadingSpinner from '../../library/feedback/LoadingSpinner'
 import Skeleton from '../../library/feedback/Skeleton'
 import Alert, { AlertLink } from '../../library/display/Alert'
+import Chip from '../../library/display/Chip'
 import LineChart from '../../library/display/LineChart'
 import Tooltip from '../../library/feedback/Tooltip'
 import Countdown from '../../library/feedback/Countdown'
@@ -111,8 +111,8 @@ function PreviewContent({ name }: { name: string }) {
       return <CardPreview />
     case 'ListItem':
       return <ListItemPreview />
-    case 'Badge':
-      return <BadgePreview />
+    case 'Chip':
+      return <ChipPreview />
     case 'Avatar':
       return <AvatarPreview />
     case 'Tag':
@@ -304,14 +304,14 @@ function ButtonPreview() {
               <div className="flex flex-col gap-[16px] w-[393px] shrink-0">
                 <div className="flex items-center gap-[16px] flex-wrap">
                   <Button variant={key} size="xs" inverse={dark}>Size xs</Button>
-                  <Button variant={key} size="sm" inverse={dark}>Size sm</Button>
+                  <Button variant={key} inverse={dark}>Size sm</Button>
                   <Button variant={key} size="base" inverse={dark}>Size base</Button>
                 </div>
                 <div className="flex items-center gap-[16px] flex-wrap">
-                  <Button variant={key} size="sm" icon={<RiAddLine size={16} />} inverse={dark}>Com ícone</Button>
-                  <Button variant={key} size="sm" trailingIcon={<RiArrowRightLine size={16} />} inverse={dark}>Trailing</Button>
-                  <Button variant={key} size="sm" loading inverse={dark}>Loading</Button>
-                  <Button variant={key} size="sm" disabled inverse={dark}>Disabled</Button>
+                  <Button variant={key} icon={<RiAddLine size={16} />} inverse={dark}>Com ícone</Button>
+                  <Button variant={key} trailingIcon={<RiArrowRightLine size={16} />} inverse={dark}>Trailing</Button>
+                  <Button variant={key} loading inverse={dark}>Loading</Button>
+                  <Button variant={key} disabled inverse={dark}>Disabled</Button>
                 </div>
               </div>
             </div>
@@ -543,14 +543,14 @@ function ListItemPreview() {
           <ListItem
             title="Rewards"
             subtitle="View your cashback and perks"
-            left={<Avatar size="md" icon={<RiStarLine size={20} />} />}
-            right={<Badge variant="positive" size="sm">3 new</Badge>}
+            left={<Avatar icon={<RiStarLine size={20} />} />}
+            right={<Chip variant="positive">3 new</Chip>}
             onPress={() => {}}
           />
           <ListItem
             title="Bitcoin"
             subtitle="BTC"
-            left={<Avatar size="md" src={tokenIcons.BTC} />}
+            left={<Avatar src={tokenIcons.BTC} />}
             right={<div className="flex flex-col items-end"><span className="text-base font-semibold text-[var(--color-content-primary)]">R$ 5,280</span><span className="text-sm text-[var(--color-content-secondary)]">+2.4%</span></div>}
             onPress={() => {}}
           />
@@ -565,7 +565,7 @@ function ListItemPreview() {
             inverted
             title="Picnic Account"
             subtitle="R$ 12,450.00"
-            left={<Avatar size="md" initials="PA" />}
+            left={<Avatar initials="PA" />}
             onPress={() => {}}
           />
         </div>
@@ -591,33 +591,6 @@ function ListItemPreview() {
   )
 }
 
-function BadgePreview() {
-  return (
-    <div className="flex flex-col gap-[var(--token-gap-lg)]">
-      <div>
-        <SectionLabel>filled</SectionLabel>
-        <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
-          {(['neutral', 'neutral-light', 'inverse', 'inverse-light', 'positive', 'warning', 'critical'] as const).map((v) => (
-            <Badge key={v} variant={v} size="md">{v}</Badge>
-          ))}
-        </div>
-      </div>
-      <div>
-        <SectionLabel>outline</SectionLabel>
-        <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
-          {(['neutral', 'neutral-light', 'inverse', 'inverse-light', 'positive', 'warning', 'critical'] as const).map((v) => (
-            <Badge key={v} variant={v} size="md" outline>{v}</Badge>
-          ))}
-        </div>
-      </div>
-      <div>
-        <SectionLabel>with icon</SectionLabel>
-        <Badge variant="positive" size="md" icon={<RiStarLine size={12} />}>Featured</Badge>
-        <Badge variant="critical" size="md" outline icon={<RiStarLine size={12} />}>Error</Badge>
-      </div>
-    </div>
-  )
-}
 
 const overlayImg = <img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />
 
@@ -625,28 +598,91 @@ const avatarGridRows = [
   {
     type: 'Icon',
     cells: {
-      sm: <Avatar size="sm" badge overlay={overlayImg} />,
-      md: <Avatar size="md" badge overlay={overlayImg} />,
+      sm: <Avatar badge overlay={overlayImg} />,
+      md: <Avatar badge overlay={overlayImg} />,
       lg: <Avatar size="lg" badge overlay={overlayImg} />,
     },
   },
   {
     type: 'Image',
     cells: {
-      sm: <Avatar size="sm" src="https://i.pravatar.cc/80?u=alice" badge overlay={overlayImg} />,
-      md: <Avatar size="md" src="https://i.pravatar.cc/80?u=alice" badge overlay={overlayImg} />,
+      sm: <Avatar src="https://i.pravatar.cc/80?u=alice" badge overlay={overlayImg} />,
+      md: <Avatar src="https://i.pravatar.cc/80?u=alice" badge overlay={overlayImg} />,
       lg: <Avatar size="lg" src="https://i.pravatar.cc/80?u=alice" badge overlay={overlayImg} />,
     },
   },
   {
     type: 'Text',
     cells: {
-      sm: <Avatar size="sm" initials="PN" badge overlay={overlayImg} />,
-      md: <Avatar size="md" initials="PN" badge overlay={overlayImg} />,
+      sm: <Avatar initials="PN" badge overlay={overlayImg} />,
+      md: <Avatar initials="PN" badge overlay={overlayImg} />,
       lg: <Avatar size="lg" initials="PN" badge overlay={overlayImg} />,
     },
   },
 ] as const
+
+const CHIP_VARIANTS = ['neutral', 'neutral-light', 'inverse', 'inverse-light', 'positive', 'warning', 'critical'] as const
+
+function ChipPreview() {
+  const [dark, setDark] = useState(false)
+
+  return (
+    <div className="flex flex-col gap-6">
+
+      {/* Toggle */}
+      <div className="flex items-center gap-3">
+        <span className="text-xs text-[var(--color-shell-text-secondary)]">Background</span>
+        <div className="flex rounded-full bg-[var(--color-shell-surface)] p-[3px] gap-[2px]">
+          {(['Light', 'Dark'] as const).map((label) => {
+            const active = label === 'Light' ? !dark : dark
+            return (
+              <button
+                key={label}
+                onClick={() => setDark(label === 'Dark')}
+                className={cn(
+                  'px-3 py-[3px] rounded-full text-xs font-medium transition-all cursor-pointer',
+                  active
+                    ? label === 'Light'
+                      ? 'bg-white text-[#111]'
+                      : 'bg-[var(--token-brand-black)] text-[var(--color-content-inverse-primary)]'
+                    : 'text-[var(--color-shell-text-tertiary)] hover:text-[var(--color-shell-text-secondary)]'
+                )}
+              >
+                {label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Swatchboard */}
+      <div className={cn(
+        'rounded-[var(--token-radius-lg)] p-5 flex flex-col gap-6 transition-colors',
+        dark
+          ? 'bg-[var(--color-surface-inverse-level-1)]'
+          : 'bg-[var(--color-surface-level-0)] border border-[var(--color-border)]'
+      )}>
+        <div>
+          <SectionLabel>filled</SectionLabel>
+          <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
+            {CHIP_VARIANTS.map((v) => (
+              <Chip key={v} variant={v}>{v}</Chip>
+            ))}
+          </div>
+        </div>
+        <div>
+          <SectionLabel>outline</SectionLabel>
+          <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
+            {CHIP_VARIANTS.map((v) => (
+              <Chip key={v} variant={v} outline>{v}</Chip>
+            ))}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  )
+}
 
 function AvatarPreview() {
   return (
@@ -752,8 +788,8 @@ function AmountPreview() {
     <div className="flex flex-col gap-[var(--token-spacing-12)] bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)]">
       <Amount value={12450.0} size="display" />
       <Amount value={5280.5} size="lg" />
-      <Amount value={150.0} size="md" />
-      <Amount value={-42.99} size="sm" />
+      <Amount value={150.0} />
+      <Amount value={-42.99} />
       <Amount value={1000} currency="$" size="lg" />
     </div>
   )
@@ -823,7 +859,7 @@ function DataListPreview() {
             {
               label: 'Limite diário de gastos',
               value: 'US$ 5.000,00',
-              action: <Button variant="primary" inverse size="sm" onPress={() => {}}>Editar</Button>,
+              action: <Button variant="primary" inverse onPress={() => {}}>Editar</Button>,
             },
             { label: 'Limite por transação', value: 'US$ 5.000,00' },
             { label: 'Instruções para uso', value: 'Escolha sempre o método crédito e a moeda local ao realizar compras.' },
@@ -943,7 +979,7 @@ function EmptyStatePreview() {
         icon={<RiInboxLine size={48} />}
         title="No transactions yet"
         description="Your transactions will appear here once you make your first deposit."
-        action={<Button size="sm">Make a deposit</Button>}
+        action={<Button>Make a deposit</Button>}
       />
     </div>
   )
@@ -1030,14 +1066,14 @@ function TooltipPreview() {
         <Tooltip visible={visible1} onClose={() => setVisible1(!visible1)} position="top">
           <span><span className="font-semibold">Novidade:</span> deposite e receba dólares de qualquer banco internacional via ACH</span>
         </Tooltip>
-        {!visible1 && <Button size="sm" onPress={() => setVisible1(true)}>Show again</Button>}
+        {!visible1 && <Button onPress={() => setVisible1(true)}>Show again</Button>}
       </div>
       <div>
         <SectionLabel>arrow bottom</SectionLabel>
         <Tooltip visible={visible2} onClose={() => setVisible2(!visible2)} position="bottom">
           Você pode digitar um valor em <span className="font-semibold">dólares ou reais</span> para depositar
         </Tooltip>
-        {!visible2 && <Button size="sm" onPress={() => setVisible2(true)}>Show again</Button>}
+        {!visible2 && <Button onPress={() => setVisible2(true)}>Show again</Button>}
       </div>
       <div>
         <SectionLabel>no close button</SectionLabel>
@@ -1079,7 +1115,7 @@ function HeaderPreview() {
             title="Limites e taxas"
             onBack={() => {}}
             rightAction={
-              <Avatar icon={<RiSettings3Line size={24} />} size="md" onPress={() => {}} />
+              <Avatar icon={<RiSettings3Line size={24} />} onPress={() => {}} />
             }
           />
         </div>
@@ -1193,9 +1229,9 @@ function StackPreview() {
         <SectionLabel>none (0px) — flush list rows</SectionLabel>
         <div className="bg-surface-primary rounded-[var(--token-radius-md)] max-w-[400px]">
           <Stack gap="none">
-            <ListItem title="Bitcoin" subtitle="BTC" left={<Avatar size="md" src={tokenIcons.BTC} />} onPress={() => {}} />
-            <ListItem title="Ethereum" subtitle="ETH" left={<Avatar size="md" src={tokenIcons.ETH} />} onPress={() => {}} />
-            <ListItem title="Solana" subtitle="SOL" left={<Avatar size="md" src={tokenIcons.SOL} />} onPress={() => {}} />
+            <ListItem title="Bitcoin" subtitle="BTC" left={<Avatar src={tokenIcons.BTC} />} onPress={() => {}} />
+            <ListItem title="Ethereum" subtitle="ETH" left={<Avatar src={tokenIcons.ETH} />} onPress={() => {}} />
+            <ListItem title="Solana" subtitle="SOL" left={<Avatar src={tokenIcons.SOL} />} onPress={() => {}} />
           </Stack>
         </div>
       </div>
@@ -1203,9 +1239,9 @@ function StackPreview() {
         <SectionLabel>sm (8px)</SectionLabel>
         <div className="bg-surface-primary p-[var(--token-gap-lg)] rounded-[var(--token-radius-md)] max-w-[400px]">
           <Stack gap="sm">
-            <Badge variant="positive" size="md">Completed</Badge>
-            <Badge variant="neutral" size="md">Processing</Badge>
-            <Badge variant="warning" size="md">Pending</Badge>
+            <Chip variant="positive">Completed</Chip>
+            <Chip variant="neutral">Processing</Chip>
+            <Chip variant="warning">Pending</Chip>
           </Stack>
         </div>
       </div>
@@ -1574,7 +1610,7 @@ function FeatureLayoutPreview() {
               imageAlt="Feature preview"
               onClose={() => {}}
               imageOverlay={
-                <Badge variant="positive" icon={<RiFlashlightLine size={16} />}>New</Badge>
+                <Chip variant="positive" icon={<RiFlashlightLine size={16} />}>New</Chip>
               }
             >
               {featureContent}
@@ -1594,7 +1630,7 @@ function FeatureLayoutPreview() {
               imageAlt="Feature preview"
               onClose={() => {}}
               imageOverlay={
-                <Badge variant="positive" icon={<RiFlashlightLine size={16} />}>New</Badge>
+                <Chip variant="positive" icon={<RiFlashlightLine size={16} />}>New</Chip>
               }
             >
               {featureContent}

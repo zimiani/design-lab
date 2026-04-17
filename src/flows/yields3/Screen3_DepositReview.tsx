@@ -7,7 +7,7 @@ import GroupHeader from '../../library/navigation/GroupHeader'
 import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
 import Amount from '../../library/display/Amount'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import DataList from '../../library/display/DataList'
 
 import { NET_APY, formatPct } from '../yields2/shared/data'
@@ -26,7 +26,7 @@ export default function Screen3_DepositReview({ onNext, onBack, onElementTap }: 
           <Text variant="body-sm" color="content-secondary">
             na Renda Protegida a ~{formatPct(NET_APY)} a.a.
           </Text>
-          <Badge variant="positive" size="sm">Protegido por seguro</Badge>
+          <Badge variant="positive">Protegido por seguro</Badge>
         </Stack>
 
         <Stack gap="none">

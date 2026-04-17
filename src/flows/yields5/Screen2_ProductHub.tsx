@@ -7,7 +7,7 @@ import Stack from '../../library/layout/Stack'
 import BottomSheet from '../../library/layout/BottomSheet'
 import GroupHeader from '../../library/navigation/GroupHeader'
 import Text from '../../library/foundations/Text'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import Amount from '../../library/display/Amount'
 import DataList from '../../library/display/DataList'
 import Alert from '../../library/display/Alert'
@@ -59,7 +59,7 @@ export default function Screen2_ProductHub({ onNext, onBack, onElementTap }: Flo
         >
           <Stack direction="row" align="between">
             <Text variant="caption" className="text-[#8a8a8a]">Saldo alocado</Text>
-            <Badge variant="positive" size="sm">Protegido</Badge>
+            <Badge variant="positive">Protegido</Badge>
           </Stack>
 
           <Amount value={MOCK_BALANCE} currency="US$" size="lg" className="text-white" />
@@ -151,7 +151,7 @@ export default function Screen2_ProductHub({ onNext, onBack, onElementTap }: Flo
                 left={
                   <Avatar
                     icon={<RiCheckLine size={16} />}
-                    size="sm"
+                   
                     className="bg-[var(--color-feedback-success-light)] text-[var(--color-feedback-success)]"
                   />
                 }
@@ -168,7 +168,7 @@ export default function Screen2_ProductHub({ onNext, onBack, onElementTap }: Flo
                 left={
                   <Avatar
                     icon={<RiCloseLine size={16} />}
-                    size="sm"
+                   
                     className="bg-[var(--color-feedback-error-light)] text-[var(--color-feedback-error)]"
                   />
                 }

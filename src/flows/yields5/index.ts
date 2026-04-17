@@ -25,7 +25,7 @@ const mainScreenDefs = [
     id: 'yields5-dashboard',
     title: 'Earn Dashboard',
     description: 'Multi-product earn dashboard. Total portfolio balance, product cards (insured yield, standard yield, staking). Insurance surfaced as a product differentiator.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Card', 'Text', 'Amount', 'Badge', 'Banner', 'ListItem', 'Avatar', 'GroupHeader'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Card', 'Text', 'Amount', 'Chip', 'Banner', 'ListItem', 'Avatar', 'GroupHeader'],
     component: Screen1_EarnDashboard,
     interactiveElements: [
       { id: 'li-insured', component: 'ListItem', label: 'Renda Protegida' },
@@ -37,7 +37,7 @@ const mainScreenDefs = [
     id: 'yields5-product-hub',
     title: 'Product Hub',
     description: 'Detailed insured yield view: balance hero, performance chart, yield breakdown, protocol info, coverage BottomSheet.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'BottomSheet', 'ShortcutButton', 'Badge', 'Amount', 'DataList', 'Banner', 'LineChart', 'ListItem', 'Avatar', 'GroupHeader', 'Text'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'BottomSheet', 'ShortcutButton', 'Chip', 'Amount', 'DataList', 'Banner', 'LineChart', 'ListItem', 'Avatar', 'GroupHeader', 'Text'],
     component: Screen2_ProductHub,
     interactiveElements: [
       { id: 'btn-deposit', component: 'ShortcutButton', label: 'Depositar' },
@@ -70,7 +70,7 @@ const depositScreenDefs = [
     id: 'yields5-deposit-review',
     title: 'Deposit Review',
     description: 'Review with Badge "Protegido por seguro".',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Text', 'Amount', 'Badge', 'DataList', 'GroupHeader', 'StickyFooter'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Text', 'Amount', 'Chip', 'DataList', 'GroupHeader', 'StickyFooter'],
     component: Screen4_DepositReview,
     interactiveElements: [
       { id: 'btn-confirm', component: 'Button', label: 'Confirmar' },

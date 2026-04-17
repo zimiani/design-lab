@@ -7,7 +7,7 @@ import Stack from '../../../library/layout/Stack'
 import Button from '../../../library/inputs/Button'
 import Text from '../../../library/foundations/Text'
 import Amount from '../../../library/display/Amount'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 
 import { CaixinhaListCard, EmptyState, PendingDepositBanner } from './Screen1_CaixinhaList.parts'
 import { MOCK_REVIEWED_CAIXINHAS, MOCK_FX_TO_BRL } from '../shared/data'
@@ -38,7 +38,7 @@ export default function Screen1_CaixinhaList({ onNext, onElementTap }: FlowScree
       imageAlt="Savings illustration"
       imageMaxHeight={200}
       imageOverlay={
-        <Badge variant="positive" size="md">Seguro incluso</Badge>
+        <Badge variant="positive">Seguro incluso</Badge>
       }
     >
       <Stack gap="default">

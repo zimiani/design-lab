@@ -6,7 +6,7 @@ import Stack from '../../library/layout/Stack'
 import Header from '../../library/navigation/Header'
 import Button from '../../library/inputs/Button'
 import Text from '../../library/foundations/Text'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import Card from '../../library/display/Card'
 import DataList from '../../library/display/DataList'
 
@@ -49,7 +49,7 @@ function YieldOption({ title, rate, badge, icon, features, recommended, onPress 
           data={features.map((f) => ({ label: f, value: '' }))}
         />
         {recommended && (
-          <Badge variant="positive" size="sm">Recomendado</Badge>
+          <Badge variant="positive">Recomendado</Badge>
         )}
       </Stack>
     </Card>
@@ -76,7 +76,7 @@ export default function Screen1_Compare({ onNext, onBack, onElementTap }: FlowSc
         <YieldOption
           title="Protegido"
           rate={`~${formatPct(NET_APY)} a.a.`}
-          badge={<Badge variant="positive" size="sm">Segurado</Badge>}
+          badge={<Badge variant="positive">Segurado</Badge>}
           icon={<RiShieldCheckLine size={20} className="text-[var(--color-feedback-success)]" />}
           features={['97,5% cobertura de seguro', 'OpenCover / Nexus Mutual', 'Liquidez imediata']}
           recommended
@@ -86,7 +86,7 @@ export default function Screen1_Compare({ onNext, onBack, onElementTap }: FlowSc
         <YieldOption
           title="Padrão"
           rate={`${formatPct(GROSS_APY)} a.a.`}
-          badge={<Badge variant="neutral" size="sm">Sem seguro</Badge>}
+          badge={<Badge variant="neutral">Sem seguro</Badge>}
           icon={<RiFlashlightLine size={20} className="text-content-secondary" />}
           features={['Maior rendimento bruto', 'Sem custo de seguro', 'Liquidez imediata']}
           onPress={() => handleSelect('Padrão')}
@@ -95,7 +95,7 @@ export default function Screen1_Compare({ onNext, onBack, onElementTap }: FlowSc
         <YieldOption
           title="Conservador"
           rate="3,20% a.a."
-          badge={<Badge variant="neutral" size="sm">USDC</Badge>}
+          badge={<Badge variant="neutral">USDC</Badge>}
           icon={<RiStarLine size={20} className="text-content-secondary" />}
           features={['Stablecoin mais conservadora', 'Aave v3 na Ethereum', 'Liquidez imediata']}
           onPress={() => handleSelect('Conservador')}

@@ -13,7 +13,7 @@ const screenDefs = [
     id: 'invest-earn-offer',
     title: 'Earn Offer',
     description: 'Landing screen presenting the 5% APY USD savings product with key details and fund protection info.',
-    componentsUsed: ['BaseLayout', 'Header', 'Card', 'Button', 'Text', 'Amount', 'Banner', 'DataList', 'Badge', 'StickyFooter', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'Card', 'Button', 'Text', 'Amount', 'Banner', 'DataList', 'Chip', 'StickyFooter', 'Stack'],
     component: Screen1_Offer,
     states: [
       { id: 'default', name: 'New user', description: 'User has no existing balance', isDefault: true, data: { currentBalance: 0 } },

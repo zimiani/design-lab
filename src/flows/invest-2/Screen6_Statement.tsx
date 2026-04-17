@@ -12,7 +12,7 @@ import GroupHeader from '@/library/navigation/GroupHeader'
 import ListItem from '@/library/display/ListItem'
 import Avatar from '@/library/display/Avatar'
 import Text from '@/library/foundations/Text'
-import Badge from '@/library/display/Badge'
+import Badge from '@/library/display/Chip'
 import Button from '@/library/inputs/Button'
 import EmptyState from '@/library/feedback/EmptyState'
 import { RiArrowDownLine, RiArrowUpLine, RiPercentLine, RiFileListLine } from '@remixicon/react'
@@ -137,12 +137,12 @@ export default function Screen6_Statement({ onBack, onNext, onElementTap }: Flow
                   key={`${tx.assetName}-${tx.id}`}
                   title={`${TYPE_LABEL[tx.type]} — ${tx.assetName}`}
                   subtitle={tx.date}
-                  left={<Avatar icon={<Icon size={20} />} size="md" />}
+                  left={<Avatar icon={<Icon size={20} />} />}
                   right={
                     <Stack gap="none" align="end">
                       <Text variant="body-sm">{tx.amount}</Text>
                       {tx.status === 'processing' && (
-                        <Badge variant="warning" size="sm">Processando</Badge>
+                        <Badge variant="warning">Processando</Badge>
                       )}
                     </Stack>
                   }

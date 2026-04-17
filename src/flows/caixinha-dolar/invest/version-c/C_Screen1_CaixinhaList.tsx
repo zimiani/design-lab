@@ -6,7 +6,7 @@ import BaseLayout from '../../../../library/layout/BaseLayout'
 import Stack from '../../../../library/layout/Stack'
 import Button from '../../../../library/inputs/Button'
 import Amount from '../../../../library/display/Amount'
-import Badge from '../../../../library/display/Badge'
+import Badge from '../../../../library/display/Chip'
 import Text from '../../../../library/foundations/Text'
 import EmptyState from '../../../../library/feedback/EmptyState'
 
@@ -38,7 +38,7 @@ export default function C_Screen1_CaixinhaList({ onNext, onBack, onElementTap }:
         <Stack gap="sm" align="center">
           <Stack direction="row" gap="sm" align="center">
             <Text variant="caption" color="content-secondary">Total investido</Text>
-            <Badge variant="positive" size="sm">5% a.a.</Badge>
+            <Badge variant="positive">5% a.a.</Badge>
           </Stack>
           <Amount value={totalBalance} currency="US$" size="lg" />
           {totalYield > 0 && (

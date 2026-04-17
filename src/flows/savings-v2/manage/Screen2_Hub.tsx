@@ -12,7 +12,7 @@ import Header from '../../../library/navigation/Header'
 import SegmentedControl from '../../../library/navigation/SegmentedControl'
 import ShortcutButton from '../../../library/inputs/ShortcutButton'
 import Text from '../../../library/foundations/Text'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 import { motion } from 'framer-motion'
 import { RiArrowDownLine, RiArrowRightUpLine, RiTimeLine, RiShieldCheckLine } from '@remixicon/react'
 import { DetailsTab, HistoryTab } from './Screen2_Hub.parts'
@@ -56,8 +56,8 @@ export default function Screen2_Hub({ onNext, onBack, onElementTap }: FlowScreen
 
       <Stack gap="lg">
         <Stack direction="row" gap="sm" align="center" className="-mt-2">
-          <Badge variant="positive" size="md" icon={<RiTimeLine size={14} />}>Resgate imediato</Badge>
-          <Badge variant="positive" size="md" icon={<RiShieldCheckLine size={14} />}>Cobertura inclusa</Badge>
+          <Badge variant="positive" icon={<RiTimeLine size={14} />}>Resgate imediato</Badge>
+          <Badge variant="positive" icon={<RiShieldCheckLine size={14} />}>Cobertura inclusa</Badge>
         </Stack>
 
         <Stack gap="none" className="gap-1">

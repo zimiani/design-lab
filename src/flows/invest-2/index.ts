@@ -34,7 +34,7 @@ const exploreScreenDefs = [
     id: 'inv2-dashboard',
     title: 'Dashboard',
     description: 'Portfolio overview: total value chart, shortcuts, favorites, holdings list. Empty state with featured assets.',
-    componentsUsed: ['BaseLayout', 'Header', 'LineChart', 'ShortcutButton', 'GroupHeader', 'ListItem', 'Avatar', 'Badge', 'Text', 'Button', 'StickyFooter', 'BottomSheet', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'LineChart', 'ShortcutButton', 'GroupHeader', 'ListItem', 'Avatar', 'Chip', 'Text', 'Button', 'StickyFooter', 'BottomSheet', 'Stack'],
     component: Screen0_Dashboard,
     interactiveElements: [
       { id: 'sc-negociar', component: 'ShortcutButton', label: 'Negociar' },
@@ -66,7 +66,7 @@ const exploreScreenDefs = [
     id: 'inv2-explore',
     title: 'Explore',
     description: 'Category-filtered asset browser with search, favorites, trending, popular sections, sort dropdown, and favorite toggles.',
-    componentsUsed: ['BaseLayout', 'Header', 'SearchBar', 'SegmentedControl', 'Select', 'GroupHeader', 'ListItem', 'Avatar', 'Badge', 'Text', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'SearchBar', 'SegmentedControl', 'Select', 'GroupHeader', 'ListItem', 'Avatar', 'Chip', 'Text', 'Stack'],
     component: Screen2_Explore,
     interactiveElements: [
       { id: 'li-btc', component: 'ListItem', label: 'Bitcoin' },
@@ -89,7 +89,7 @@ const exploreScreenDefs = [
     id: 'inv2-asset-hub',
     title: 'Asset Hub',
     description: 'Hub-style asset page: gradient card, balance/price, chart, shortcuts (invested) or info + CTA (not invested). Favorite toggle, More BottomSheet.',
-    componentsUsed: ['BaseLayout', 'Header', 'Avatar', 'Badge', 'Text', 'SegmentedControl', 'LineChart', 'ShortcutButton', 'GroupHeader', 'DataList', 'Banner', 'Summary', 'Button', 'StickyFooter', 'BottomSheet', 'ListItem', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'Avatar', 'Chip', 'Text', 'SegmentedControl', 'LineChart', 'ShortcutButton', 'GroupHeader', 'DataList', 'Banner', 'Summary', 'Button', 'StickyFooter', 'BottomSheet', 'ListItem', 'Stack'],
     component: Screen3_AssetHub,
     interactiveElements: [
       { id: 'sc-comprar', component: 'ShortcutButton', label: 'Comprar' },
@@ -132,7 +132,7 @@ const exploreScreenDefs = [
     id: 'inv2-favorites',
     title: 'Favorites',
     description: 'Favorited assets list with asset prices and navigation.',
-    componentsUsed: ['BaseLayout', 'Header', 'GroupHeader', 'ListItem', 'Avatar', 'Badge', 'Text', 'EmptyState', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'GroupHeader', 'ListItem', 'Avatar', 'Chip', 'Text', 'EmptyState', 'Stack'],
     component: Screen5_Favorites,
     interactiveElements: [
       { id: 'li-fav-asset', component: 'ListItem', label: 'Bitcoin' },
@@ -142,7 +142,7 @@ const exploreScreenDefs = [
     id: 'inv2-statement',
     title: 'Statement',
     description: 'Filterable transaction history across all assets with PDF export.',
-    componentsUsed: ['BaseLayout', 'Header', 'Select', 'GroupHeader', 'ListItem', 'Avatar', 'Text', 'Badge', 'Button', 'StickyFooter', 'EmptyState', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'Select', 'GroupHeader', 'ListItem', 'Avatar', 'Text', 'Chip', 'Button', 'StickyFooter', 'EmptyState', 'Stack'],
     component: Screen6_Statement,
     interactiveElements: [
       { id: 'btn-pdf', component: 'Button', label: 'Gerar PDF' },

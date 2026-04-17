@@ -28,7 +28,7 @@ const cardsListScreens = [
     id: 'cards-list',
     title: 'Cards List',
     description: 'Level-1 tab screen listing all user cards (physical + virtual) with contextual action buttons.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ListItem', 'Avatar', 'Badge', 'Text', 'GroupHeader', 'ShortcutButton'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ListItem', 'Avatar', 'Chip', 'Text', 'GroupHeader', 'ShortcutButton'],
     component: Screen1_CardsList,
     states: [
       { id: 'default', name: 'One Virtual Card', description: 'User has only the default virtual card', isDefault: true, data: { cards: [{ id: 'v1', type: 'virtual', name: 'Cartão Virtual', last4: '7328', frozen: false }] } },

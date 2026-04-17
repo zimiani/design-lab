@@ -15,7 +15,7 @@ import SegmentedControl from '@/library/navigation/SegmentedControl'
 import Text from '@/library/foundations/Text'
 import Divider from '@/library/foundations/Divider'
 import Amount from '@/library/display/Amount'
-import Badge from '@/library/display/Badge'
+import Badge from '@/library/display/Chip'
 import Card from '@/library/display/Card'
 import ListItem from '@/library/display/ListItem'
 import Avatar from '@/library/display/Avatar'
@@ -32,7 +32,7 @@ const AVAILABLE_PRODUCTS = [
     icon: <RiShieldCheckLine size={20} className="text-[var(--color-feedback-success)]" />,
     title: 'Renda Protegida',
     subtitle: `~${formatPct(NET_APY)} a.a. · Segurado`,
-    badge: <Badge variant="positive" size="sm">Segurado</Badge>,
+    badge: <Badge variant="positive">Segurado</Badge>,
     balance: `US$ ${MOCK_BALANCE.toFixed(2).replace('.', ',')}`,
     label: 'Renda Protegida',
     enabled: true,
@@ -52,7 +52,7 @@ const AVAILABLE_PRODUCTS = [
     icon: <RiCoinLine size={20} className="text-content-secondary" />,
     title: 'Staking',
     subtitle: 'Até 8% a.a. · Vários tokens',
-    badge: <Badge variant="neutral" size="sm">Em breve</Badge>,
+    badge: <Badge variant="neutral">Em breve</Badge>,
     balance: null,
     label: 'Staking',
     enabled: false,
@@ -88,7 +88,7 @@ export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps
                 key={product.id}
                 title={product.title}
                 subtitle={product.subtitle}
-                left={<Avatar icon={product.icon} size="md" />}
+                left={<Avatar icon={product.icon} />}
                 right={product.badge}
                 trailing={<RiArrowRightSLine size={20} className="text-content-tertiary" />}
                 disabled={!product.enabled}
@@ -132,7 +132,7 @@ export default function Screen({ onNext, onBack, onElementTap }: FlowScreenProps
               key={product.id}
               title={product.title}
               subtitle={product.subtitle}
-              left={<Avatar icon={product.icon} size="md" />}
+              left={<Avatar icon={product.icon} />}
               right={<Text variant="body-sm">{product.balance}</Text>}
               trailing={<RiArrowRightSLine size={20} className="text-content-tertiary" />}
               onPress={() => handleProductTap(product.label)}

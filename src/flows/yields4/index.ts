@@ -25,7 +25,7 @@ const mainScreenDefs = [
     id: 'yields4-compare',
     title: 'Rate Comparison',
     description: 'Three yield options as cards: Insured (~4.16%), Standard (4.86%), Conservative (3.20%). User picks one.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Card', 'Text', 'Badge', 'DataList', 'StickyFooter'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Card', 'Text', 'Chip', 'DataList', 'StickyFooter'],
     component: Screen1_Compare,
     interactiveElements: [
       { id: 'card-protected', component: 'Card', label: 'Protegido' },
@@ -38,7 +38,7 @@ const mainScreenDefs = [
     id: 'yields4-product-detail',
     title: 'Product Detail',
     description: 'Long-scroll product info: yield breakdown, protocol & risk, coverage lists, terms. Inspired by Nubank CDB detail.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Text', 'Badge', 'DataList', 'ListItem', 'Avatar', 'Banner', 'GroupHeader', 'Divider', 'StickyFooter'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'Button', 'Text', 'Chip', 'DataList', 'ListItem', 'Avatar', 'Banner', 'GroupHeader', 'Divider', 'StickyFooter'],
     component: Screen2_ProductDetail,
     interactiveElements: [
       { id: 'btn-activate', component: 'Button', label: 'Ativar Renda Protegida' },
@@ -48,7 +48,7 @@ const mainScreenDefs = [
     id: 'yields4-hub',
     title: 'Insured Yield Hub',
     description: 'Balance hero with Protegido badge, yield chart, rate breakdown with insurance line items.',
-    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ShortcutButton', 'Badge', 'Amount', 'DataList', 'Banner', 'LineChart', 'Text'],
+    componentsUsed: ['BaseLayout', 'Header', 'Stack', 'ShortcutButton', 'Chip', 'Amount', 'DataList', 'Banner', 'LineChart', 'Text'],
     component: Screen3_Hub,
     interactiveElements: [
       { id: 'btn-deposit', component: 'ShortcutButton', label: 'Depositar' },
@@ -98,7 +98,7 @@ const depositScreenDefs = [
     id: 'yields4-deposit-success',
     title: 'Deposit Success',
     description: 'FeedbackLayout with Protegido badge.',
-    componentsUsed: ['FeedbackLayout', 'Button', 'DataList', 'Badge', 'GroupHeader', 'Text', 'StickyFooter', 'Stack'],
+    componentsUsed: ['FeedbackLayout', 'Button', 'DataList', 'Chip', 'GroupHeader', 'Text', 'StickyFooter', 'Stack'],
     component: Screen7_DepositSuccess,
     interactiveElements: [
       { id: 'btn-view', component: 'Button', label: 'Ver rendimentos' },

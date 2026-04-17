@@ -8,7 +8,7 @@ import Header from '../../library/navigation/Header'
 import GroupHeader from '../../library/navigation/GroupHeader'
 import ListItem from '../../library/display/ListItem'
 import Avatar from '../../library/display/Avatar'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 
 interface CardData {
   id: string
@@ -49,7 +49,7 @@ export default function Screen1_CardsList({ onNext, onElementTap }: FlowScreenPr
       left={
         <Avatar
           icon={card.frozen ? <RiSnowflakeLine size={20} /> : <RiBankCardLine size={20} />}
-          size="md"
+         
         />
       }
       right={card.frozen ? <Badge variant="neutral">Congelado</Badge> : undefined}
@@ -79,21 +79,21 @@ export default function Screen1_CardsList({ onNext, onElementTap }: FlowScreenPr
         <ListItem
           title="Criar cartão virtual"
           subtitle="Crie um cartão para compras online"
-          left={<Avatar icon={<RiAddLine size={20} />} size="md" />}
+          left={<Avatar icon={<RiAddLine size={20} />} />}
           onPress={() => handleAction('Criar cartão virtual')}
           disabled={virtualCount >= 10}
         />
         <ListItem
           title="Pedir cartão físico"
           subtitle="Receba um cartão em seu endereço"
-          left={<Avatar icon={<RiBankCardLine size={20} />} size="md" />}
+          left={<Avatar icon={<RiBankCardLine size={20} />} />}
           onPress={() => handleAction('Pedir cartão físico')}
           disabled={hasPhysical}
         />
         <ListItem
           title="Atualizar meu telefone"
           subtitle="Altere o número vinculado aos seus cartões"
-          left={<Avatar icon={<RiSmartphoneLine size={20} />} size="md" />}
+          left={<Avatar icon={<RiSmartphoneLine size={20} />} />}
           onPress={() => handleAction('Atualizar meu telefone')}
         />
       </Stack>

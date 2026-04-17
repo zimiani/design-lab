@@ -13,7 +13,7 @@ import {
 import Stack from '../../../library/layout/Stack'
 import Text from '../../../library/foundations/Text'
 import Avatar from '../../../library/display/Avatar'
-import Badge from '../../../library/display/Badge'
+import Badge from '../../../library/display/Chip'
 
 import LoadingSpinner from '../../../library/feedback/LoadingSpinner'
 import { type CaixinhaData, type CaixinhaIconId, CURRENCIES, formatCurrency, formatBrlEquivalent } from '../shared/data'
@@ -38,7 +38,7 @@ const ICON_MAP: Record<CaixinhaIconId, typeof RiPlaneLine> = {
 export function PendingDepositBanner() {
   return (
     <div className="flex items-center gap-3 p-4 rounded-[var(--token-radius-lg)] bg-surface-secondary">
-      <LoadingSpinner size="sm" />
+      <LoadingSpinner />
       <Stack gap="none">
         <Text variant="body-md" className="font-semibold">Processando seu depósito</Text>
         <Text variant="body-sm" color="content-secondary">
@@ -76,7 +76,7 @@ export function CaixinhaListCard({ caixinha, onPress }: CaixinhaListCardProps) {
       <Stack gap="none" className="flex-1 min-w-0">
         <Stack direction="row" gap="sm" align="center">
           <Text variant="body-md" className="font-semibold truncate">{caixinha.name}</Text>
-          <Badge variant="neutral" size="sm">{curr.apyDisplay}</Badge>
+          <Badge variant="neutral">{curr.apyDisplay}</Badge>
         </Stack>
         <Text variant="body-sm" color="content-secondary">
           {formatCurrency(caixinha.balance, caixinha.currency)}

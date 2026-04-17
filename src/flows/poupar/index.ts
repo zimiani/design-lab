@@ -12,7 +12,7 @@ const screenDefs = [
     id: 'poupar-intro',
     title: 'Savings Intro',
     description: 'FeatureLayout introducing the yields feature. Highlights automatic earnings, instant withdrawal, and insurance protection with inline "Saiba mais" button to insurance details.',
-    componentsUsed: ['FeatureLayout', 'Stack', 'Button', 'Text', 'Badge', 'Summary', 'GroupHeader', 'Link'],
+    componentsUsed: ['FeatureLayout', 'Stack', 'Button', 'Text', 'Chip', 'Summary', 'GroupHeader', 'Link'],
     component: Screen1_Intro,
     interactiveElements: [
       { id: 'btn-ativar', component: 'Button', label: 'Ativar minha Caixinha' },

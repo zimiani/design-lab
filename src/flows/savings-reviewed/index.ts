@@ -48,7 +48,7 @@ const createScreenDefs = [
     id: 'caixinha-create-currency',
     title: 'Create – Currency Picker',
     description: 'Select USD/BRL/EUR with APY display. Tapping a currency navigates directly to confirmation.',
-    componentsUsed: ['BaseLayout', 'Header', 'ListItem', 'Avatar', 'Badge', 'Text', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'ListItem', 'Avatar', 'Chip', 'Text', 'Stack'],
     component: Create_Screen2_CurrencyPicker,
     interactiveElements: [
       { id: 'li-usd', component: 'ListItem', label: 'Dólar americano' },
@@ -88,7 +88,7 @@ const manageScreenDefs = [
     id: 'caixinha-manage-list',
     title: 'Manage – Caixinha List',
     description: 'Multi-currency caixinha dashboard with total BRL, per-caixinha cards, and create button.',
-    componentsUsed: ['BaseLayout', 'Header', 'Card', 'Badge', 'Button', 'Text', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'Card', 'Chip', 'Button', 'Text', 'Stack'],
     component: Manage_Screen1_CaixinhaList,
     interactiveElements: [
       { id: 'btn-nova', component: 'Button', label: 'Nova Caixinha' },
@@ -107,7 +107,7 @@ const manageScreenDefs = [
     id: 'caixinha-manage-hub',
     title: 'Manage – Hub',
     description: 'Single caixinha detail: chart, currency-aware balance, BRL equivalent, shortcuts, tabs.',
-    componentsUsed: ['BaseLayout', 'Header', 'LineChart', 'Badge', 'ShortcutButton', 'SegmentedControl', 'DataList', 'Banner', 'Text', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'LineChart', 'Chip', 'ShortcutButton', 'SegmentedControl', 'DataList', 'Banner', 'Text', 'Stack'],
     component: Manage_Screen2_Hub,
     interactiveElements: [
       { id: 'sc-adicionar', component: 'ShortcutButton', label: 'Adicionar' },
@@ -217,7 +217,7 @@ const withdrawScreenDefs = [
     id: 'caixinha-withdraw-r-amount',
     title: 'Withdraw – Amount Entry',
     description: 'Currency-aware withdrawal with instant redemption badge and BRL equivalent.',
-    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'DataList', 'Badge', 'StickyFooter', 'Button', 'Text', 'Stack'],
+    componentsUsed: ['BaseLayout', 'Header', 'CurrencyInput', 'DataList', 'Chip', 'StickyFooter', 'Button', 'Text', 'Stack'],
     component: Withdraw_Screen1_AmountEntry,
     interactiveElements: [
       { id: 'btn-continuar', component: 'Button', label: 'Continuar' },

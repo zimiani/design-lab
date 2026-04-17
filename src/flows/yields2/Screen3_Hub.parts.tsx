@@ -5,7 +5,7 @@
 
 import Stack from '../../library/layout/Stack'
 import Text from '../../library/foundations/Text'
-import Badge from '../../library/display/Badge'
+import Badge from '../../library/display/Chip'
 import Amount from '../../library/display/Amount'
 import ShortcutButton from '../../library/inputs/ShortcutButton'
 import { RiArrowDownLine, RiArrowUpLine } from '@remixicon/react'
@@ -31,7 +31,7 @@ export function BalanceHero({ balance, yieldToday }: BalanceHeroProps) {
     >
       <Stack direction="row" align="between">
         <Text variant="caption" className="text-[#8a8a8a]">Renda Protegida</Text>
-        <Badge variant="positive" size="sm">Protegido</Badge>
+        <Badge variant="positive">Protegido</Badge>
       </Stack>
 
       <Amount value={balance} currency="US$" size="lg" className="text-white" />

@@ -3,7 +3,7 @@ import FeatureLayout from '@/library/layout/FeatureLayout'
 import Stack from '@/library/layout/Stack'
 import Button from '@/library/inputs/Button'
 import Text from '@/library/foundations/Text'
-import Badge from '@/library/display/Badge'
+import Badge from '@/library/display/Chip'
 import Summary from '@/library/display/Summary'
 import GroupHeader from '@/library/navigation/GroupHeader'
 import Link from '@/library/foundations/Link'
@@ -14,7 +14,7 @@ export default function Screen1_Intro({ onNext, onElementTap }: FlowScreenProps)
     <FeatureLayout
       imageSrc="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=800&q=80"
       imageAlt="Growing savings"
-      imageOverlay={<Badge variant="positive" size="md">5% a.a.</Badge>}
+      imageOverlay={<Badge variant="positive">5% a.a.</Badge>}
     >
       <Stack gap="lg">
         <Stack gap="sm">
