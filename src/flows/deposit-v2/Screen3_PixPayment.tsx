@@ -7,11 +7,11 @@ import StickyFooter from '../../library/layout/StickyFooter'
 import Stack from '../../library/layout/Stack'
 import BottomSheet from '../../library/layout/BottomSheet'
 import Button from '../../library/inputs/Button'
-import IconButton from '../../library/inputs/IconButton'
+import Avatar from '../../library/display/Avatar'
 import DataList from '../../library/display/DataList'
 import ListItem from '../../library/display/ListItem'
 import GroupHeader from '../../library/navigation/GroupHeader'
-import Banner from '../../library/display/Banner'
+import Alert from '../../library/display/Alert'
 import Text from '../../library/foundations/Text'
 import Toast from '../../library/feedback/Toast'
 import Countdown from '../../library/feedback/Countdown'
@@ -33,7 +33,7 @@ export default function Screen3_PixPayment({ onNext, onBack }: FlowScreenProps) 
     <BaseLayout>
       <Header title="Pague com Pix" onBack={onBack} />
 
-      <Banner
+      <Alert
         variant="warning"
         title="Pague de uma conta em seu nome"
         description="Caso contrário o valor será devolvido automaticamente para a mesma conta"
@@ -49,8 +49,8 @@ export default function Screen3_PixPayment({ onNext, onBack }: FlowScreenProps) 
         <ListItem
           title={`${MOCK_PIX_CODE.substring(0, 30)}...`}
           right={
-            <IconButton
-              variant="small"
+            <Avatar
+              size="sm"
               icon={<RiFileCopyLine size={16} className="text-content-primary" />}
               onPress={handleCopy}
             />
@@ -61,7 +61,7 @@ export default function Screen3_PixPayment({ onNext, onBack }: FlowScreenProps) 
 
         <Stack direction="row" align="between">
           <Countdown seconds={280} />
-          <Button variant="primary" size="sm" onPress={() => setShowQrSheet(true)}>
+          <Button variant="primary" inverse size="sm" onPress={() => setShowQrSheet(true)}>
             <span className="flex items-center gap-[var(--token-spacing-4)]">
               <RiQrCodeLine size={20} />
               Ver QR Code
@@ -89,7 +89,7 @@ export default function Screen3_PixPayment({ onNext, onBack }: FlowScreenProps) 
           <Button fullWidth onPress={handleCopy}>
             Copiar código de pagamento
           </Button>
-          <Button variant="ghost" fullWidth onPress={onNext}>
+          <Button variant="minimal" fullWidth onPress={onNext}>
             Cancelar pagamento
           </Button>
         </Stack>

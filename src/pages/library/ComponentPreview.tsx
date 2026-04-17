@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { cn } from '@/lib/cn'
-import { RiHomeLine, RiWalletLine, RiArrowLeftRightLine, RiLineChartLine, RiUserLine, RiQrCodeLine, RiBankCardLine, RiSearchLine, RiNotificationLine, RiInboxLine, RiSettings3Line, RiShieldLine, RiStarLine, RiFlashlightLine, RiGlobalLine, RiSendPlaneLine, RiArrowRightUpLine, RiArrowLeftDownLine, RiExternalLinkLine, RiAddLine, RiCloseLine, RiArrowRightLine } from '@remixicon/react'
+import { RiHomeLine, RiWalletLine, RiArrowLeftRightLine, RiLineChartLine, RiUserLine, RiQrCodeLine, RiBankCardLine, RiInboxLine, RiSettings3Line, RiShieldLine, RiStarLine, RiFlashlightLine, RiGlobalLine, RiSendPlaneLine, RiArrowRightUpLine, RiArrowLeftDownLine, RiExternalLinkLine, RiAddLine, RiArrowRightLine, RiInformationLine, RiCheckLine, RiErrorWarningLine, RiAlertLine } from '@remixicon/react'
 import { tokenIcons } from '../../library/display/tokenIcons'
 import type { ComponentMeta } from '../../library/registry'
 
@@ -14,7 +14,6 @@ import PinInput from '../../library/inputs/PinInput'
 import Checkbox from '../../library/inputs/Checkbox'
 import Toggle from '../../library/inputs/Toggle'
 import Select from '../../library/inputs/Select'
-import IconButton from '../../library/inputs/IconButton'
 // ButtonNavigation removed — merged into ListItem
 import SearchBar from '../../library/inputs/SearchBar'
 import ShortcutButton from '../../library/inputs/ShortcutButton'
@@ -100,8 +99,6 @@ function PreviewContent({ name }: { name: string }) {
       return <TogglePreview />
     case 'Select':
       return <SelectPreview />
-    case 'IconButton':
-      return <IconButtonPreview />
     case 'SearchBar':
       return <SearchBarPreview />
     case 'ShortcutButton':
@@ -424,38 +421,6 @@ function SelectPreview() {
   )
 }
 
-function IconButtonPreview() {
-  return (
-    <div className="flex flex-col gap-[var(--token-gap-lg)]">
-      {(['large', 'base', 'small', 'no_background'] as const).map((v) => (
-        <div key={v}>
-          <SectionLabel>{v}</SectionLabel>
-          <div className="flex gap-[var(--token-spacing-12)] items-end">
-            <IconButton icon={<RiSettings3Line size={v === 'small' ? 16 : 20} />} variant={v} backgroundColor="#ECEFEB" />
-            <IconButton icon={<RiNotificationLine size={v === 'small' ? 16 : 20} />} variant={v} backgroundColor="#ECEFEB" />
-            <IconButton icon={<RiSearchLine size={v === 'small' ? 16 : 20} />} variant={v} backgroundColor="#ECEFEB" />
-          </div>
-        </div>
-      ))}
-      <div>
-        <SectionLabel>inverted (on image)</SectionLabel>
-        <div className="relative w-fit rounded-[var(--token-radius-md)] overflow-hidden">
-          <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=300&h=80&fit=crop&q=80" alt="" className="w-[300px] h-[80px] object-cover" />
-          <div className="absolute top-2 right-2 flex gap-[var(--token-spacing-8)]">
-            <IconButton icon={<RiCloseLine size={20} />} variant="base" inverted />
-            <IconButton icon={<RiSettings3Line size={20} />} variant="base" inverted />
-          </div>
-        </div>
-      </div>
-      <div>
-        <SectionLabel>disabled</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-12)]">
-          <IconButton icon={<RiSettings3Line size={20} />} variant="base" disabled />
-        </div>
-      </div>
-    </div>
-  )
-}
 
 function SearchBarPreview() {
   const [val, setVal] = useState('')
@@ -654,83 +619,106 @@ function BadgePreview() {
   )
 }
 
+const overlayImg = <img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />
+
+const avatarGridRows = [
+  {
+    type: 'Icon',
+    cells: {
+      sm: <Avatar size="sm" badge overlay={overlayImg} />,
+      md: <Avatar size="md" badge overlay={overlayImg} />,
+      lg: <Avatar size="lg" badge overlay={overlayImg} />,
+    },
+  },
+  {
+    type: 'Image',
+    cells: {
+      sm: <Avatar size="sm" src="https://i.pravatar.cc/80?u=alice" badge overlay={overlayImg} />,
+      md: <Avatar size="md" src="https://i.pravatar.cc/80?u=alice" badge overlay={overlayImg} />,
+      lg: <Avatar size="lg" src="https://i.pravatar.cc/80?u=alice" badge overlay={overlayImg} />,
+    },
+  },
+  {
+    type: 'Text',
+    cells: {
+      sm: <Avatar size="sm" initials="PN" badge overlay={overlayImg} />,
+      md: <Avatar size="md" initials="PN" badge overlay={overlayImg} />,
+      lg: <Avatar size="lg" initials="PN" badge overlay={overlayImg} />,
+    },
+  },
+] as const
+
 function AvatarPreview() {
   return (
-    <div className="flex flex-col gap-[var(--token-gap-lg)]">
+    <div className="flex flex-col gap-[32px]">
+
+      {/* Type × Size grid */}
       <div>
-        <SectionLabel>sizes (initials)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-12)] items-end">
-          {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
-            <Avatar key={size} size={size} initials="RP" />
+        <SectionLabel>type × size</SectionLabel>
+        <div className="grid gap-[1px] rounded-[8px] overflow-hidden border border-[var(--color-border,#E5E7EB)]"
+          style={{ gridTemplateColumns: '120px repeat(3, 1fr)' }}
+        >
+          {/* Header */}
+          <div className="bg-[var(--color-surface-level-0,#FAFAFA)] p-[16px]" />
+          {(['SM', 'Base', 'LG'] as const).map((label) => (
+            <div key={label} className="bg-[var(--color-surface-level-0,#FAFAFA)] p-[16px] flex flex-col gap-[2px]">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-content-secondary)]">SIZE</span>
+              <span className="text-[16px] font-semibold text-[var(--color-content-primary)]">{label}</span>
+            </div>
+          ))}
+
+          {/* Data rows */}
+          {avatarGridRows.map((row) => (
+            <>
+              <div key={`${row.type}-label`} className="bg-white border-t border-[var(--color-border,#E5E7EB)] p-[16px] flex flex-col gap-[2px] justify-center">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-content-secondary)]">TYPE</span>
+                <span className="text-[16px] font-semibold text-[var(--color-content-primary)]">{row.type}</span>
+              </div>
+              {(['sm', 'md', 'lg'] as const).map((size) => (
+                <div key={`${row.type}-${size}`} className="bg-white border-t border-[var(--color-border,#E5E7EB)] p-[24px] flex items-center justify-center">
+                  {row.cells[size]}
+                </div>
+              ))}
+            </>
           ))}
         </div>
       </div>
+
+      {/* Tone */}
       <div>
-        <SectionLabel>initials</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-12)]">
-          <Avatar initials="AB" />
-          <Avatar initials="JD" />
-          <Avatar initials="MK" />
+        <SectionLabel>tone (semantic — Alert icon slot)</SectionLabel>
+        <div className="flex flex-col gap-[12px]">
+          {([
+            { tone: 'neutral',  Icon: RiInformationLine,  label: 'neutral' },
+            { tone: 'success',  Icon: RiCheckLine,        label: 'success' },
+            { tone: 'warning',  Icon: RiAlertLine,        label: 'warning' },
+            { tone: 'critical', Icon: RiErrorWarningLine, label: 'critical' },
+          ] as const).map(({ tone, Icon, label }) => (
+            <div key={tone} className="flex items-center gap-[16px]">
+              <span className="w-[72px] text-[12px] text-[var(--color-content-secondary)] font-mono">{label}</span>
+              {([{ size: 'sm', iconSize: 16 }, { size: 'md', iconSize: 20 }, { size: 'lg', iconSize: 32 }] as const).map(({ size, iconSize }) => (
+                <Avatar key={size} size={size} tone={tone} icon={<Icon size={iconSize} />} />
+              ))}
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* Image variants note */}
       <div>
-        <SectionLabel>src (crypto tokens via coingecko)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-12)]">
+        <SectionLabel>image variants (photo · crypto · custom)</SectionLabel>
+        <div className="flex gap-[12px] flex-wrap items-center">
+          <Avatar src="https://i.pravatar.cc/80?u=alice" />
+          <Avatar src="https://i.pravatar.cc/80?u=bob" />
           <Avatar src={tokenIcons.BTC} />
           <Avatar src={tokenIcons.ETH} />
           <Avatar src={tokenIcons.SOL} />
           <Avatar src={tokenIcons.USDC} />
-          <Avatar src={tokenIcons.AVAX} />
-          <Avatar src={tokenIcons.LINK} />
-        </div>
-      </div>
-      <div>
-        <SectionLabel>src (photo)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-12)]">
-          <Avatar src="https://i.pravatar.cc/80?u=alice" />
-          <Avatar src="https://i.pravatar.cc/80?u=bob" />
-          <Avatar src="https://i.pravatar.cc/80?u=carol" />
-        </div>
-      </div>
-      <div>
-        <SectionLabel>icon</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-12)]">
-          <Avatar icon={<RiWalletLine size={18} />} />
-          <Avatar icon={<RiGlobalLine size={18} />} />
-          <Avatar />
-        </div>
-      </div>
-      <div>
-        <SectionLabel>bgColor + iconColor</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-12)]">
           <Avatar icon={<RiWalletLine size={18} />} bgColor="#EFF6FF" iconColor="#3B82F6" />
-          <Avatar icon={<RiGlobalLine size={18} />} bgColor="#F0FDF4" iconColor="#22C55E" />
-          <Avatar initials="RP" bgColor="#2F289F" iconColor="#FFFFFF" />
+          <Avatar initials="AB" bgColor="#2F289F" iconColor="#FFFFFF" />
         </div>
       </div>
-      <div>
-        <SectionLabel>with overlay (chain logo, bottom-right)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-16)] items-end">
-          <Avatar size="xl" src={tokenIcons.ETH} overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} />
-          <Avatar size="lg" src="https://i.pravatar.cc/80?u=alice" overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} />
-          <Avatar size="md" src={tokenIcons.USDC} overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} />
-        </div>
-      </div>
-      <div>
-        <SectionLabel>with badge (notification, top-right)</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-16)] items-end">
-          <Avatar size="xl" src="https://i.pravatar.cc/80?u=bob" badge />
-          <Avatar size="lg" initials="JD" badge />
-          <Avatar size="md" src={tokenIcons.BTC} badge badgeColor="#10B981" />
-        </div>
-      </div>
-      <div>
-        <SectionLabel>overlay + badge combined</SectionLabel>
-        <div className="flex gap-[var(--token-spacing-16)] items-end">
-          <Avatar size="xl" src="https://i.pravatar.cc/80?u=carol" overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} badge />
-          <Avatar size="lg" icon={<RiWalletLine size={24} />} overlay={<img src={tokenIcons.LINK} alt="" className="w-full h-full object-cover" />} badge badgeColor="#EAB308" />
-        </div>
-      </div>
+
     </div>
   )
 }
@@ -1076,7 +1064,7 @@ function HeaderPreview() {
             title="Limites e taxas"
             onBack={() => {}}
             rightAction={
-              <IconButton icon={<RiSettings3Line size={24} />} variant="base" onPress={() => {}} />
+              <Avatar icon={<RiSettings3Line size={24} />} size="md" onPress={() => {}} />
             }
           />
         </div>

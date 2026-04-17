@@ -22,7 +22,7 @@ export default function Screen1_Intro({ onNext, onBack, onElementTap }: FlowScre
       imageAlt="Piggy bank savings"
       imageOverlay={<Badge variant="positive" size="md" icon={<RiFlashlightFill size={16} />}>Novidade</Badge>}
       onClose={() => {
-        const handled = onElementTap?.('IconButton: Fechar')
+        const handled = onElementTap?.('Avatar: Fechar')
         if (!handled) onBack?.()
       }}
     >

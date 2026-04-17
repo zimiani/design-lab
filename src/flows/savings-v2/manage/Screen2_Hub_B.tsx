@@ -14,7 +14,7 @@ import type { LineChartCrosshairData } from '../../../library/display/LineChart'
 import LineChart from '../../../library/display/LineChart'
 import Stack from '../../../library/layout/Stack'
 import SegmentedControl from '../../../library/navigation/SegmentedControl'
-import IconButton from '../../../library/inputs/IconButton'
+import Avatar from '../../../library/display/Avatar'
 import Badge from '../../../library/display/Badge'
 import Text from '../../../library/foundations/Text'
 import {
@@ -82,8 +82,8 @@ export default function Screen2_Hub_B({ onNext, onBack, onElementTap }: FlowScre
           {/* Back button */}
           <div className="relative pt-[calc(var(--safe-area-top,12px)+8px)] px-[var(--token-spacing-16)]">
             {onBack && (
-              <IconButton
-                variant="base"
+              <Avatar
+                size="md"
                 inverted
                 icon={<RiArrowLeftLine size={24} />}
                 onPress={onBack}

@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import {
   RiArrowLeftLine, RiSearchLine,
 } from '@remixicon/react'
-import IconButton from '@/library/inputs/IconButton'
+import Avatar from '@/library/display/Avatar'
 import { stagger } from './shared/animations'
 import type { FlowScreenProps } from '@/pages/simulator/flowRegistry'
 import {
@@ -117,8 +117,8 @@ export default function Screen1_Discover({ onBack, onElementTap, onNext }: FlowS
 
       {/* Top bar: back + search — padded */}
       <motion.div {...fadeUp(0)} className="flex items-center gap-3 page-pad pt-3 pb-2">
-        <IconButton
-          variant="base"
+        <Avatar
+          size="md"
           icon={<RiArrowLeftLine size={24} className="text-content-primary" />}
           onPress={onBack}
         />

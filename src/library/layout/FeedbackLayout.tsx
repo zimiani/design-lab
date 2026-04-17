@@ -4,7 +4,7 @@ import { registerComponent } from '../registry'
 import { cn } from '../../lib/cn'
 import { useLayout } from './LayoutProvider'
 import StickyFooter from './StickyFooter'
-import IconButton from '../inputs/IconButton'
+import Avatar from '../display/Avatar'
 import { RiCloseLine } from '@remixicon/react'
 
 import successPendingAnimation from '../../assets/lottie/success-pending.json'
@@ -56,8 +56,8 @@ export default function FeedbackLayout({
           {/* Close button — top-right */}
           {onClose && (
             <div className="flex justify-end">
-              <IconButton
-                variant="base"
+              <Avatar
+                size="md"
                 icon={<RiCloseLine size={24} className="text-content-primary" />}
                 onPress={onClose}
               />

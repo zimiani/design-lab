@@ -16,7 +16,7 @@ import { TokenLogoCircle } from './shared/TokenLogo'
 import Header from '@/library/navigation/Header'
 import GroupHeader from '@/library/navigation/GroupHeader'
 import ListItem from '@/library/display/ListItem'
-import IconButton from '@/library/inputs/IconButton'
+import Avatar from '@/library/display/Avatar'
 import Stack from '@/library/layout/Stack'
 
 // ── Overlay badge config ──
@@ -71,8 +71,8 @@ export default function Screen9_Statement({ onBack, onElementTap, onNext }: Flow
           description="Histórico de todas as suas operações de investimento."
           onBack={onBack}
           rightAction={
-            <IconButton
-              variant="base"
+            <Avatar
+              size="md"
               icon={<RiDownloadCloud2Line size={22} className="text-content-primary" />}
               onPress={handleExport}
             />

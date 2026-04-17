@@ -5,7 +5,7 @@ import ListItem from '../../library/display/ListItem'
 import Text from '../../library/foundations/Text'
 import Avatar from '../../library/display/Avatar'
 import LoadingSpinner from '../../library/feedback/LoadingSpinner'
-import { RiHomeLine, RiWalletLine, RiUserLine, RiSendPlaneLine, RiAddLine, RiInformationLine } from '@remixicon/react'
+import { RiHomeLine, RiWalletLine, RiUserLine, RiSendPlaneLine, RiAddLine } from '@remixicon/react'
 
 interface Props {
   meta: ComponentMeta
@@ -149,17 +149,6 @@ function getScene(meta: ComponentMeta): ReactNode {
         <Scene>
           <C placeholder="Pesquisar..." />
           <SkeletonListItems count={3} />
-        </Scene>
-      )
-    case 'IconButton':
-      return (
-        <Scene>
-          <SkeletonLines count={2} />
-          <div className="flex gap-[12px] justify-center py-[8px]">
-            <C icon={<RiSendPlaneLine size={20} />} />
-            <C icon={<RiAddLine size={20} />} />
-            <C icon={<RiInformationLine size={20} />} />
-          </div>
         </Scene>
       )
     case 'ShortcutButton':

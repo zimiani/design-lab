@@ -4,7 +4,7 @@ import { registerComponent } from '../registry'
 import { cn } from '../../lib/cn'
 import { useLayout } from './LayoutProvider'
 import StickyFooter from './StickyFooter'
-import IconButton from '../inputs/IconButton'
+import Avatar from '../display/Avatar'
 
 export interface FeatureLayoutProps {
   /** Full-bleed header image URL */
@@ -104,8 +104,8 @@ export default function FeatureLayout({
 
           {onClose && (
             <div className="absolute top-[var(--token-spacing-32)] right-[var(--token-spacing-32)]">
-              <IconButton
-                variant="base"
+              <Avatar
+                size="md"
                 inverted
                 icon={<RiCloseLine size={24} />}
                 onPress={onClose}
@@ -166,8 +166,8 @@ export default function FeatureLayout({
 
       {onClose && (
         <div className="absolute top-[var(--safe-area-top,12px)] right-[var(--token-spacing-24)]">
-          <IconButton
-            variant="base"
+          <Avatar
+            size="md"
             inverted
             icon={<RiCloseLine size={24} />}
             onPress={onClose}

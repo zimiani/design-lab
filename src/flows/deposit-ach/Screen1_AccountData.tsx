@@ -6,7 +6,7 @@ import StickyFooter from '../../library/layout/StickyFooter'
 import Stack from '../../library/layout/Stack'
 import BottomSheet from '../../library/layout/BottomSheet'
 import Button from '../../library/inputs/Button'
-import IconButton from '../../library/inputs/IconButton'
+import Avatar from '../../library/display/Avatar'
 import ListItem from '../../library/display/ListItem'
 import DataList from '../../library/display/DataList'
 import GroupHeader from '../../library/navigation/GroupHeader'
@@ -39,8 +39,8 @@ export default function Screen1_AccountData({ onNext, onBack, onElementTap }: Fl
   return (
     <BaseLayout>
       <Stack gap="sm">
-        <IconButton
-          variant="base"
+        <Avatar
+          size="md"
           icon={<RiArrowLeftSLine size={24} className="text-content-primary" />}
           onPress={onBack}
         />
@@ -56,8 +56,8 @@ export default function Screen1_AccountData({ onNext, onBack, onElementTap }: Fl
       <ListItem
         title="Prazos, limites e taxas"
         left={
-          <IconButton
-            variant="base"
+          <Avatar
+            size="md"
             icon={<RiPercentLine size={24} className="text-content-primary" />}
           />
         }
@@ -71,7 +71,7 @@ export default function Screen1_AccountData({ onNext, onBack, onElementTap }: Fl
           <Button fullWidth onPress={handleShare}>
             Compartilhar
           </Button>
-          <Button fullWidth variant="primary" onPress={onNext}>
+          <Button fullWidth variant="primary" inverse onPress={onNext}>
             Pronto
           </Button>
         </Stack>
@@ -140,8 +140,8 @@ export default function Screen1_AccountData({ onNext, onBack, onElementTap }: Fl
             title="itau_extrato_102025"
             subtitle="Documento PDF · 174 KB"
             left={
-              <IconButton
-                variant="base"
+              <Avatar
+                size="md"
                 icon={<RiFileCopyLine size={24} className="text-content-primary" />}
               />
             }
@@ -153,8 +153,8 @@ export default function Screen1_AccountData({ onNext, onBack, onElementTap }: Fl
               <ListItem
                 title="Copiar"
                 left={
-                  <IconButton
-                    variant="base"
+                  <Avatar
+                    size="md"
                     icon={<RiFileCopyLine size={20} className="text-content-primary" />}
                   />
                 }
@@ -168,8 +168,8 @@ export default function Screen1_AccountData({ onNext, onBack, onElementTap }: Fl
               <ListItem
                 title="Salvar em Arquivos"
                 left={
-                  <IconButton
-                    variant="base"
+                  <Avatar
+                    size="md"
                     icon={<RiFileCopyLine size={20} className="text-content-primary" />}
                   />
                 }

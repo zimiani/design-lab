@@ -14,7 +14,6 @@ import Stack from '../../library/layout/Stack'
 import Text from '../../library/foundations/Text'
 import Avatar from '../../library/display/Avatar'
 import Badge from '../../library/display/Badge'
-import IconButton from '../../library/inputs/IconButton'
 import ListItem from '../../library/display/ListItem'
 import Button from '../../library/inputs/Button'
 import BottomSheet from '../../library/layout/BottomSheet'
@@ -48,7 +47,7 @@ export default function Screen1_Dashboard({
   }, [hidden, hasPendingTask, balanceUpdating, onStateChange])
 
   const handleEyeToggle = () => {
-    onElementTap?.('IconButton: Mostrar/Ocultar')
+    onElementTap?.('Avatar: Mostrar/Ocultar')
     setHidden((prev) => !prev)
   }
 
@@ -64,14 +63,14 @@ export default function Screen1_Dashboard({
         />
         <Stack direction="row" gap="sm" align="center" className="ml-auto">
           <Badge variant="neutral" size="sm">R$ 5,45</Badge>
-          <IconButton
+          <Avatar
             icon={hidden ? <RiEyeOffLine size={20} /> : <RiEyeLine size={20} />}
-            variant="base"
+            size="md"
             onPress={handleEyeToggle}
           />
-          <IconButton
+          <Avatar
             icon={<RiQuestionLine size={20} />}
-            variant="base"
+            size="md"
           />
         </Stack>
       </div>

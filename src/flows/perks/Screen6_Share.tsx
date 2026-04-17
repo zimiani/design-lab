@@ -9,7 +9,7 @@ import Text from '../../library/foundations/Text'
 import Card from '../../library/display/Card'
 import Badge from '../../library/display/Badge'
 import Amount from '../../library/display/Amount'
-import IconButton from '../../library/inputs/IconButton'
+import Avatar from '../../library/display/Avatar'
 import ShortcutButton from '../../library/inputs/ShortcutButton'
 import Toast from '../../library/feedback/Toast'
 
@@ -69,8 +69,8 @@ export default function Screen6_Share({ onBack }: FlowScreenProps) {
             <Text variant="body-sm" color="content-secondary">Seu código de indicação</Text>
             <Text variant="body-md" className="font-mono">PICNIC-AB12</Text>
           </Stack>
-          <IconButton
-            variant="small"
+          <Avatar
+            size="sm"
             icon={<RiFileCopyLine size={18} className="text-interactive-foreground" />}
             onPress={handleShare}
           />

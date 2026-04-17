@@ -12,11 +12,10 @@ import LineChart from '@/library/display/LineChart'
 import DataList from '@/library/display/DataList'
 import GroupHeader from '@/library/navigation/GroupHeader'
 import Button from '@/library/inputs/Button'
-import IconButton from '@/library/inputs/IconButton'
+import Avatar from '@/library/display/Avatar'
 import SegmentedControl from '@/library/navigation/SegmentedControl'
 import BottomSheet from '@/library/layout/BottomSheet'
 import ListItem from '@/library/display/ListItem'
-import Avatar from '@/library/display/Avatar'
 import Stack from '@/library/layout/Stack'
 import Text from '@/library/foundations/Text'
 import Badge from '@/library/display/Badge'
@@ -155,13 +154,13 @@ export default function Screen2_AssetPage({ onNext, onBack, onElementTap }: Flow
 
         {/* Top bar — back + favorite */}
         <motion.div className="flex items-center justify-between px-5 pt-2 mb-2" {...fadeUp(0)}>
-          <IconButton
-            variant="base"
+          <Avatar
+            size="md"
             icon={<RiArrowLeftLine size={24} className="text-content-primary" />}
             onPress={onBack}
           />
-          <IconButton
-            variant="no_background"
+          <Avatar
+            size="sm"
             icon={isFav
               ? <RiHeartFill size={24} color="#F43F5E" />
               : <RiHeartLine size={24} className="text-content-tertiary" />
@@ -457,7 +456,7 @@ export default function Screen2_AssetPage({ onNext, onBack, onElementTap }: Flow
         }}
       >
         <Button
-          variant="accent"
+          variant="primary"
           size="lg"
           fullWidth
           onPress={() => {

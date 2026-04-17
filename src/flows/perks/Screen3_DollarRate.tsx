@@ -6,7 +6,7 @@ import StickyFooter from '../../library/layout/StickyFooter'
 import Stack from '../../library/layout/Stack'
 import Text from '../../library/foundations/Text'
 import Button from '../../library/inputs/Button'
-import IconButton from '../../library/inputs/IconButton'
+import Avatar from '../../library/display/Avatar'
 import Link from '../../library/foundations/Link'
 import BottomSheet from '../../library/layout/BottomSheet'
 import ListItem from '../../library/display/ListItem'
@@ -71,8 +71,8 @@ export default function Screen3_DollarRate({ onNext, onBack }: FlowScreenProps) 
           <img src={savingsBg} alt="" className="absolute h-full left-[-47%] top-0 w-[157%] max-w-none object-cover" />
         </div>
         <div className="absolute top-[var(--token-spacing-16)] right-[var(--token-spacing-16)]">
-          <IconButton
-            variant="base"
+          <Avatar
+            size="md"
             inverted
             icon={<RiInformationLine size={24} />}
             onPress={() => setSheetOpen(true)}
@@ -84,7 +84,7 @@ export default function Screen3_DollarRate({ onNext, onBack }: FlowScreenProps) 
             {MOCK_SAVINGS}
           </span>
         </div>
-        <Button variant="accent" size="sm" onPress={() => setSheetOpen(true)} className="relative mt-auto w-fit">
+        <Button variant="primary" size="sm" onPress={() => setSheetOpen(true)} className="relative mt-auto w-fit">
           Compartilhar
         </Button>
       </div>

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { RiArrowLeftLine, RiCloseLine } from '@remixicon/react'
-import IconButton from '../inputs/IconButton'
+import Avatar from '../display/Avatar'
 import { registerComponent } from '../registry'
 import { cn } from '../../lib/cn'
 import { useLayout } from '../layout/LayoutProvider'
@@ -31,8 +31,8 @@ export default function Header({
       <div className="flex items-center justify-between w-full">
         <div className="flex flex-1 items-center">
           {showLeftButton && (
-            <IconButton
-              variant="base"
+            <Avatar
+              size="md"
               icon={onBack
                 ? <RiArrowLeftLine size={24} className="text-content-primary" />
                 : <RiCloseLine size={24} className="text-content-primary" />
@@ -67,13 +67,13 @@ export default function Header({
 registerComponent({
   name: 'Header',
   category: 'presentation',
-  description: 'Screen header with back or close button, large title, and optional right action. Back and close are mutually exclusive. Right action should use IconButton variant="base".',
+  description: 'Screen header with back or close button, large title, and optional right action. Back and close are mutually exclusive. Right action should use Avatar size="md".',
   component: Header,
   props: [
     { name: 'title', type: 'string', required: true, description: 'Screen title (30px semibold)' },
     { name: 'description', type: 'string', required: false, description: 'Page description below the title' },
     { name: 'onBack', type: '() => void', required: false, description: 'Back arrow handler — mutually exclusive with onClose' },
     { name: 'onClose', type: '() => void', required: false, description: 'Close (X) handler — mutually exclusive with onBack' },
-    { name: 'rightAction', type: 'ReactNode', required: false, description: 'Additional action element on the right — use IconButton variant="base"' },
+    { name: 'rightAction', type: 'ReactNode', required: false, description: 'Additional action element on the right — use Avatar size="md"' },
   ],
 })
