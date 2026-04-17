@@ -621,65 +621,65 @@ const avatarGridRows = [
   },
 ] as const
 
-const CHIP_VARIANTS = ['neutral', 'neutral-light', 'inverse', 'inverse-light', 'positive', 'warning', 'critical'] as const
+const CHIP_VARIANTS = ['neutral', 'inverse', 'positive', 'warning', 'critical', 'grape', 'guava'] as const
 
 function ChipPreview() {
-  const [dark, setDark] = useState(false)
-
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex gap-4">
+      {(['light', 'dark'] as const).map((surface) => (
+        <div
+          key={surface}
+          className={cn(
+            'flex-1 rounded-[var(--token-radius-lg)] p-5 flex flex-col gap-5 transition-colors',
+            surface === 'dark'
+              ? 'bg-[var(--color-surface-inverse-level-1)]'
+              : 'bg-[var(--color-surface-level-0)] border border-[var(--color-border)]'
+          )}
+        >
+          <p className={cn(
+            'text-[length:var(--token-font-size-caption)] font-semibold uppercase tracking-wider',
+            surface === 'dark' ? 'text-[var(--color-content-inverse-secondary)]' : 'text-[var(--color-content-tertiary)]'
+          )}>
+            {surface}
+          </p>
 
-      {/* Toggle */}
-      <div className="flex items-center gap-3">
-        <span className="text-xs text-[var(--color-shell-text-secondary)]">Background</span>
-        <div className="flex rounded-full bg-[var(--color-shell-surface)] p-[3px] gap-[2px]">
-          {(['Light', 'Dark'] as const).map((label) => {
-            const active = label === 'Light' ? !dark : dark
-            return (
-              <button
-                key={label}
-                onClick={() => setDark(label === 'Dark')}
-                className={cn(
-                  'px-3 py-[3px] rounded-full text-xs font-medium transition-all cursor-pointer',
-                  active
-                    ? label === 'Light'
-                      ? 'bg-white text-[#111]'
-                      : 'bg-[var(--token-brand-black)] text-[var(--color-content-inverse-primary)]'
-                    : 'text-[var(--color-shell-text-tertiary)] hover:text-[var(--color-shell-text-secondary)]'
-                )}
-              >
-                {label}
-              </button>
-            )
-          })}
-        </div>
-      </div>
+          <div className="flex flex-col gap-[var(--token-spacing-8)]">
+            <p className={cn(
+              'text-[length:var(--token-font-size-caption)]',
+              surface === 'dark' ? 'text-[var(--color-content-inverse-secondary)]' : 'text-[var(--color-content-tertiary)]'
+            )}>solid</p>
+            <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
+              {CHIP_VARIANTS.map((v) => (
+                <Chip key={v} variant={v} surface={surface}>{v}</Chip>
+              ))}
+            </div>
+          </div>
 
-      {/* Swatchboard */}
-      <div className={cn(
-        'rounded-[var(--token-radius-lg)] p-5 flex flex-col gap-6 transition-colors',
-        dark
-          ? 'bg-[var(--color-surface-inverse-level-1)]'
-          : 'bg-[var(--color-surface-level-0)] border border-[var(--color-border)]'
-      )}>
-        <div>
-          <SectionLabel>filled</SectionLabel>
-          <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
-            {CHIP_VARIANTS.map((v) => (
-              <Chip key={v} variant={v}>{v}</Chip>
-            ))}
+          <div className="flex flex-col gap-[var(--token-spacing-8)]">
+            <p className={cn(
+              'text-[length:var(--token-font-size-caption)]',
+              surface === 'dark' ? 'text-[var(--color-content-inverse-secondary)]' : 'text-[var(--color-content-tertiary)]'
+            )}>outline</p>
+            <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
+              {CHIP_VARIANTS.map((v) => (
+                <Chip key={v} variant={v} outline surface={surface}>{v}</Chip>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-[var(--token-spacing-8)]">
+            <p className={cn(
+              'text-[length:var(--token-font-size-caption)]',
+              surface === 'dark' ? 'text-[var(--color-content-inverse-secondary)]' : 'text-[var(--color-content-tertiary)]'
+            )}>with icon</p>
+            <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
+              {CHIP_VARIANTS.map((v) => (
+                <Chip key={v} variant={v} surface={surface} icon={<RiFlashlightLine size={12} />}>{v}</Chip>
+              ))}
+            </div>
           </div>
         </div>
-        <div>
-          <SectionLabel>outline</SectionLabel>
-          <div className="flex flex-wrap gap-[var(--token-spacing-8)]">
-            {CHIP_VARIANTS.map((v) => (
-              <Chip key={v} variant={v} outline>{v}</Chip>
-            ))}
-          </div>
-        </div>
-      </div>
-
+      ))}
     </div>
   )
 }
